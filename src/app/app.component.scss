@@ -1,0 +1,17 @@
+#tab-menu .tab-selected {
+  border-top: 0.3rem solid;
+  margin-top: -0.3rem;
+}
+
+#main-header {
+  .logo-img {
+    width: 45px;
+    margin: .5rem .5rem .5rem 1rem;
+    vertical-align: middle;
+  }
+
+  .logo-name {
+    vertical-align: middle;
+    width: 150px;
+  }
+}
