@@ -4,23 +4,23 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'melhores',
-    loadChildren: () => import('./melhores/melhores.module').then( m => m.MelhoresPageModule)
+    loadChildren: () => import('./pages/melhores/melhores.module').then( m => m.MelhoresPageModule)
   },
   {
     path: 'busca',
-    loadChildren: () => import('./busca/busca.module').then( m => m.BuscaPageModule)
+    loadChildren: () => import('./pages/busca/busca.module').then( m => m.BuscaPageModule)
   },
   {
     path: 'comparar',
-    loadChildren: () => import('./comparar/comparar.module').then( m => m.CompararPageModule)
+    loadChildren: () => import('./pages/comparar/comparar.module').then( m => m.CompararPageModule)
   },
   {
     path: 'favoritos',
-    loadChildren: () => import('./favoritos/favoritos.module').then( m => m.FavoritosPageModule)
+    loadChildren: () => import('./pages/favoritos/favoritos.module').then( m => m.FavoritosPageModule)
   },
   {
     path: 'garagem',
-    loadChildren: () => import('./garagem/garagem.module').then( m => m.GaragemPageModule)
+    loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
     path: '',

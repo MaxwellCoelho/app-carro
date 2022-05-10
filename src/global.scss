@@ -25,16 +25,20 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+body {
+  font-family: calibri, arial, verdana;
+}
+
 .main-container {
+  font-family: calibri, arial, verdana;
   padding-top: 5rem;
   padding-bottom: 1rem;
 }
 
 .main-title {
-  text-align: center;
+  text-align: left;
   border-bottom: 1px dashed var(--ion-tab-bar-background-focused, #e0e0e0);
   padding-bottom: 1rem;
-  padding-top: 0.1rem;
 
   ion-label {
     vertical-align: middle;
