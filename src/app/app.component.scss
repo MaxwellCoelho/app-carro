@@ -1,17 +1,3 @@
-#tab-menu .tab-selected {
-  border-top: 0.3rem solid;
-  margin-top: -0.3rem;
-}
-
-#main-header {
-  .logo-img {
-    width: 40px;
-    margin: 0.7rem 0.7rem 0.7rem 1rem;
-    vertical-align: middle;
-  }
-
-  .logo-name {
-    vertical-align: middle;
-    width: 130px;
-  }
+app-side-menu {
+  height: 100%;
 }

@@ -23,6 +23,26 @@ const routes: Routes = [
     loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
+    path: 'ajuda',
+    loadChildren: () => import('./pages/ajuda/ajuda.module').then( m => m.AjudaPageModule)
+  },
+  {
+    path: 'termo-de-uso',
+    loadChildren: () => import('./pages/termo-de-uso/termo-de-uso.module').then( m => m.TermoDeUsoPageModule)
+  },
+  {
+    path: 'configuracoes',
+    loadChildren: () => import('./pages/configuracoes/configuracoes.module').then( m => m.ConfiguracoesPageModule)
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
     path: '',
     redirectTo: 'melhores',
     pathMatch: 'full'

@@ -25,13 +25,12 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-body {
+body, .main-container, #menu-list ion-label, #menu-header ion-label {
   font-family: calibri, arial, verdana;
 }
 
 .main-container {
-  font-family: calibri, arial, verdana;
-  padding-top: 5rem;
+  padding-top: 4.4rem;
   padding-bottom: 1rem;
 }
 

@@ -1,44 +1,15 @@
 <ion-app>
-  <ion-header [collapse]="condense" id="main-header">
-    <ion-toolbar color="primary">
-      <ion-buttons slot="primary">
-        <ion-button size="large">
-          <ion-icon name="menu" size="large"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <img src="assets/logo-img.svg" alt="Car Reputation" title="Car Reputation" class="logo-img">
-      <img src="assets/logo-name.svg" alt="Car Reputation" title="Car Reputation" class="logo-name">
-    </ion-toolbar>
-  </ion-header>
+  <ion-split-pane when="(min-width: 40000rem)" contentId="main-content">
+    <ion-menu class="main-menu" contentId="main-content" type="overlay" side="end">
+      <app-side-menu></app-side-menu>
+    </ion-menu>
 
-  <ion-router-outlet></ion-router-outlet>
+    <ion-content id="main-content">
+      <app-header></app-header>
 
-  <ion-tabs id="tab-menu">
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="melhores">
-        <ion-icon name="trophy"></ion-icon>
-        <ion-label>Melhores</ion-label>
-      </ion-tab-button>
+      <ion-router-outlet></ion-router-outlet>
 
-      <ion-tab-button tab="busca">
-        <ion-icon name="search"></ion-icon>
-        <ion-label>Busca</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="comparar">
-        <ion-icon name="git-compare"></ion-icon>
-        <ion-label>Comparar</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="favoritos">
-        <ion-icon name="heart"></ion-icon>
-        <ion-label>Favoritos</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="garagem">
-        <ion-icon name="car-sport"></ion-icon>
-        <ion-label>Garagem</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+      <app-tab-menu></app-tab-menu>
+    </ion-content>
+  </ion-split-pane>
 </ion-app>
