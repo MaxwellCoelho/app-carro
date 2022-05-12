@@ -1,3 +1,15 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane when="(min-width: 40000rem)" contentId="main-content">
+    <ion-menu class="main-menu" contentId="main-content" type="overlay" side="end">
+      <app-side-menu></app-side-menu>
+    </ion-menu>
+
+    <ion-content id="main-content">
+      <app-header></app-header>
+
+      <ion-router-outlet></ion-router-outlet>
+
+      <app-tab-menu></app-tab-menu>
+    </ion-content>
+  </ion-split-pane>
 </ion-app>
