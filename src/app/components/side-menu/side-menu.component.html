@@ -4,13 +4,13 @@
     <ion-menu-toggle auto-hide="false">
       <ion-item color="primary" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" lines="none" detail="false">
         <ion-icon slot="start" [name]="nav.perfil.icon + '-outline'"></ion-icon>
-        <ion-label>Perfil</ion-label>
+        <ion-label>{{nav.perfil.title}}</ion-label>
       </ion-item>
     </ion-menu-toggle>
     <ion-buttons slot="primary">
       <ion-menu-toggle auto-hide="false">
         <ion-button routerDirection="root" [routerLink]="'/'+ nav.settings.route">
-          <ion-icon slot="start" name="settings-outline"></ion-icon>
+          <ion-icon slot="start" [name]="nav.settings.icon + '-outline'"></ion-icon>
         </ion-button>
       </ion-menu-toggle>
     </ion-buttons>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
   selector: 'app-comparar',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['comparar.page.scss'],
 })
 export class CompararPage {
+
+  public nav = NAVIGATION;
 
   constructor() {}
 

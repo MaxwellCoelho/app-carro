@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
   selector: 'app-busca',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['busca.page.scss'],
 })
 export class BuscaPage {
+
+  public nav = NAVIGATION;
 
   constructor() {}
 

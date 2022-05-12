@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
   selector: 'app-garagem',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['garagem.page.scss'],
 })
 export class GaragemPage {
+
+  public nav = NAVIGATION;
 
   constructor() {}
 
