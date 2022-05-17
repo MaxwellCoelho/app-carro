@@ -54,6 +54,11 @@
         <ion-label>{{nav.term.title}}</ion-label>
       </ion-item>
 
+      <ion-item routerDirection="root" [routerLink]="'/'+ nav.admin.route" lines="full" detail="false" routerLinkActive="selected">
+        <ion-icon slot="start" [name]="nav.admin.icon + '-outline'"></ion-icon>
+        <ion-label>{{nav.admin.title}}</ion-label>
+      </ion-item>
+
       <ion-item routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.login.title}}</ion-label>

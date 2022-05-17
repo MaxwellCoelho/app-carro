@@ -1,0 +1,76 @@
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    <ion-title size="large" color="primary" class="main-title">
+      <ion-icon [name]="nav.admin.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.admin.title}}</ion-label>
+    </ion-title>
+
+    <div class="main-body">
+      <p>Administração da base de dados</p>
+
+      <ion-accordion-group>
+        <ion-accordion value="user-roles">
+          <ion-item slot="header" lines="none">
+              <ion-label>Permissões de usuários</ion-label>
+          </ion-item>
+
+          <ion-grid slot="content">
+            <ion-row>
+              <ion-col><ion-label>Permissões:</ion-label></ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4"><ion-label>Id</ion-label></ion-col>
+              <ion-col size="4"><ion-label>Nome</ion-label></ion-col>
+              <ion-col size="4"><ion-label>Nível</ion-label></ion-col>
+            </ion-row>
+            <ion-row *ngFor="let role of roles">
+              <ion-col size="4"><ion-label>{{role._id}}</ion-label></ion-col>
+              <ion-col size="4"><ion-label>{{role.name}}</ion-label></ion-col>
+              <ion-col size="4"><ion-label>{{role.level}}</ion-label></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-accordion>
+
+        <ion-accordion value="users">
+          <ion-item slot="header" lines="none">
+              <ion-label>Usuários</ion-label>
+          </ion-item>
+
+          <ion-grid slot="content">
+            <ion-row>
+              <ion-col><ion-label>Permissões:</ion-label></ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="2"><ion-label>Id</ion-label></ion-col>
+              <ion-col size="2"><ion-label>Nome</ion-label></ion-col>
+              <ion-col size="2"><ion-label>Permissão</ion-label></ion-col>
+              <ion-col size="2"><ion-label>Ativo</ion-label></ion-col>
+              <ion-col size="2"><ion-label>Criado em</ion-label></ion-col>
+            </ion-row>
+            <ion-row *ngFor="let user of users">
+              <ion-col size="2"><ion-label>{{user._id}}</ion-label></ion-col>
+              <ion-col size="2"><ion-label>{{user.name}}</ion-label></ion-col>
+              <ion-col size="2"><ion-label>{{user.role}}</ion-label></ion-col>
+              <ion-col size="2"><ion-label>{{user.active}}</ion-label></ion-col>
+              <ion-col size="2"><ion-label>{{user.created_when}}</ion-label></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-accordion>
+
+        <ion-accordion value="cars">
+          <ion-item slot="header" lines="none">
+            <ion-label>Carros</ion-label>
+          </ion-item>
+
+          <ion-grid slot="content">
+            <ion-row>
+              <ion-col>
+                <p>Exemplo de usuários</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-accordion>
+      </ion-accordion-group>
+    </div>
+  </div>
+</ion-content>

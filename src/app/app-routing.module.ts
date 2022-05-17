@@ -40,6 +40,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
+    path: NAVIGATION.admin.route,
+    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule)
+  },
+  {
     path: NAVIGATION.login.route,
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
