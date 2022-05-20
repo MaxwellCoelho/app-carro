@@ -11,14 +11,30 @@ export class AdminPage implements OnInit {
 
   public nav = NAVIGATION;
   public roles: Array<any>;
-  public users: Array<any>;;
+  public users: Array<any>;
 
   constructor(
     public customerService: CustomerService
   ) { }
 
-  ngOnInit() {
-    this.getRoles();
+  ngOnInit() { }
+
+  public accordionChange($event): void {
+    const value = $event && $event.detail && $event.detail.value;
+
+    switch (value) {
+      case 'roles':
+        this.getRoles();
+        break;
+      case 'users':
+        this.getUsers();
+        break;
+      case 'cars':
+        this.getCars();
+        break;
+    }
+
+    console.log(value);
   }
 
   public getRoles(): void {
@@ -32,6 +48,14 @@ export class AdminPage implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  public getUsers(): void {
+    console.log('users');
+  }
+
+  public getCars(): void {
+    console.log('cars');
   }
 
 }

@@ -1,0 +1,25 @@
+.content-spinner {
+  margin: 2rem auto;
+  display: none;
+  width: 100%;
+}
+
+.content-spinner.show-spinner {
+  display: block;
+}
+
+ion-accordion {
+  .grid-header {
+    background-color: #d7d8da;
+    font-weight: bold;
+  }
+  .grid-content {
+    background-color: #efeded;
+  }
+
+  .grid-header, .grid-content {
+    margin: 5px;
+    border-radius: 5px;
+    padding: 2px 0.5rem;
+  }
+}
