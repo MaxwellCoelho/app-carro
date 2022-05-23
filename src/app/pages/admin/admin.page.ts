@@ -58,4 +58,16 @@ export class AdminPage implements OnInit {
     console.log('cars');
   }
 
+  public deleteRole(roleId: string) {
+    const subRoles = this.customerService.deleteRole(roleId).subscribe(
+      res => {
+        if (!subRoles.closed) { subRoles.unsubscribe(); }
+        console.log(res);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
 }

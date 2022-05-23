@@ -12,10 +12,15 @@ export class CustomerService {
     private http: HttpClient,
   ) { }
 
-
   public getRoles(): any {
     const action = 'roles';
     const url = `${environment.middlewareEndpoint}/${action}`;
     return this.http.get(url);
+  }
+
+  public deleteRole(roleId: string): any {
+    const action = `roles/${roleId}`;
+    const url = `${environment.middlewareEndpoint}/${action}`;
+    return this.http.delete(url);
   }
 }
