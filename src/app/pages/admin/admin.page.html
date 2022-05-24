@@ -20,23 +20,26 @@
               <ion-col><ion-label>Criar nova permissão:</ion-label></ion-col>
             </ion-row>
             <ion-row class="grid-content">
-              <ion-col size="5">
-                <ion-item>
-                  <ion-label position="floating">Nome</ion-label>
-                  <ion-input type="text" required="true"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="5">
-                <ion-item>
-                  <ion-label position="floating">Nível</ion-label>
-                  <ion-input type="number" min="0" max="100" required="true"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="2">
-                <ion-button size="large" title="Criar" color="success">
-                  <ion-icon name="add-circle-outline"></ion-icon>
-                </ion-button>
-              </ion-col>
+              <form name="roles" [formGroup]="formRoles" (submit)="createRole()">
+                <ion-input type="hidden" formControlName="editRoleId"></ion-input>
+                <ion-col size="5">
+                  <ion-item>
+                    <ion-label position="floating">Nome</ion-label>
+                    <ion-input type="text" formControlName="newRoleName"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="5">
+                  <ion-item>
+                    <ion-label position="floating">Nível</ion-label>
+                    <ion-input type="number" min="0" max="100" formControlName="newRoleLevel"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-button size="large" title="Criar" color="success" type="submit" [disabled]="formRoles.status === 'INVALID'">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </form>
             </ion-row>
 
             <ion-row><ion-col><br></ion-col></ion-row>
@@ -55,7 +58,7 @@
               <ion-col size="3"><ion-label>{{role.name}}</ion-label></ion-col>
               <ion-col size="3"><ion-label>{{role.level}}</ion-label></ion-col>
               <ion-col size="2">
-                <ion-button size="small" title="Editar" color="warning">
+                <ion-button size="small" title="Editar" color="warning" (click)="editRole(role)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" color="danger" (click)="deleteRole(role._id)">

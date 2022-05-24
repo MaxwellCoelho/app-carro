@@ -23,4 +23,11 @@ export class CustomerService {
     const url = `${environment.middlewareEndpoint}/${action}`;
     return this.http.delete(url);
   }
+
+  public createRole(data: any, roleId: string): any {
+    const action = roleId ? `roles/${roleId}` : 'roles';
+
+    const url = `${environment.middlewareEndpoint}/${action}`;
+    return this.http.post(url, data);
+  }
 }
