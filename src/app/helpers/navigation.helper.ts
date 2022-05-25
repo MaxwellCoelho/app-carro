@@ -8,5 +8,7 @@ export const NAVIGATION = {
   best: { title: 'Melhores', icon: 'trophy', route: 'melhores' },
   perfil: { title: 'Perfil', icon: 'person-circle', route: 'perfil' },
   term: { title: 'Termo de uso', icon: 'document', route: 'termo-de-uso' },
-  login: { title: 'Login', icon: 'power', route: 'login' }
+  login: { title: 'Login', icon: 'power', route: 'login' },
+  admin: { title: 'Admin', icon: 'hammer', route: 'admin' },
+  permission: { title: 'Permissões de usuários', icon: 'lock-open', route: 'permissao' }
 };
