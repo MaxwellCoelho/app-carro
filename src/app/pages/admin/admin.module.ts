@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { AdminPage } from './admin.page';
+import { PermissionPage } from './permission/permission.page';
 
 import { AdminPageRoutingModule } from './admin-routing.module';
 
@@ -18,6 +19,9 @@ import { AdminPageRoutingModule } from './admin-routing.module';
   providers: [
     FormBuilder
   ],
-  declarations: [AdminPage]
+  declarations: [
+    AdminPage,
+    PermissionPage
+  ]
 })
 export class AdminPageModule {}
