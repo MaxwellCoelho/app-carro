@@ -7,18 +7,19 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.page.html',
-  styleUrls: ['./customer.page.scss'],
+  selector: 'app-car-model',
+  templateUrl: './car-model.page.html',
+  styleUrls: ['./car-model.page.scss'],
 })
-export class CustomerPage implements OnInit {
+export class CarModelPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public users: Array<any>;
-  public roles: Array<any>;
+  public models: Array<any>;
+  public categories: Array<any>;
+  public brands: Array<any>;
   public showLoader: boolean;
-  public formCustomers: FormGroup;
+  public formModels: FormGroup;
   public activeChecked = true;
 
   constructor(
@@ -30,24 +31,26 @@ export class CustomerPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getRoles();
-    this.getCustomers();
+    this.getCategories();
+    this.getBrands();
+    this.getModels();
   }
 
   public initForm() {
-    this.formCustomers = this.fb.group({
-      editUserId: this.fb.control(''),
-      newUserName: this.fb.control('', [Validators.required]),
-      newUserLevel: this.fb.control('', [Validators.required])
+    this.formModels = this.fb.group({
+      editModelId: this.fb.control(''),
+      newModelName: this.fb.control('', [Validators.required]),
+      newModelCategory: this.fb.control('', [Validators.required]),
+      newModelBrand: this.fb.control('', [Validators.required])
     });
   }
 
-  public getRoles(): void {
+  public getCategories(): void {
     this.showLoader = true;
-    const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
+    const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subCategories.closed) { subCategories.unsubscribe(); }
+        this.categories = res.categories;
         this.showLoader = false;
       },
       err => {
@@ -57,12 +60,12 @@ export class CustomerPage implements OnInit {
     );
   }
 
-  public getCustomers(): void {
+  public getBrands(): void {
     this.showLoader = true;
-    const subCustomers = this.dbService.getItens(environment.customersAction).subscribe(
+    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
-        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.users = res.customers;
+        if (!subBrands.closed) { subBrands.unsubscribe(); }
+        this.brands = res.brands;
         this.showLoader = false;
       },
       err => {
@@ -72,20 +75,36 @@ export class CustomerPage implements OnInit {
     );
   }
 
-  public createCustomer(action: string) {
+  public getModels(): void {
     this.showLoader = true;
-    const userId = this.formCustomers.value.editUserId;
+    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+      res => {
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.models = res.models;
+        this.showLoader = false;
+      },
+      err => {
+        this.showLoader = false;
+        console.error(err);
+      }
+    );
+  }
+
+  public createModel(action: string) {
+    this.showLoader = true;
+    const modelId = this.formModels.value.editModelId;
     const data = {
-      name: this.formCustomers.value.newUserName,
-      role: this.formCustomers.value.newUserLevel,
+      name: this.formModels.value.newModelName,
+      category: this.formModels.value.newModelCategory,
+      brand: this.formModels.value.newModelBrand,
       active: this.activeChecked
     };
 
-    const subCustomers = this.dbService.createItem(environment.customersAction, data, userId).subscribe(
+    const subModels = this.dbService.createItem(environment.modelsAction, data, modelId).subscribe(
       res => {
-        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.formCustomers.reset();
-        this.users = res.customers;
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.formModels.reset();
+        this.models = res.models;
         this.showLoader = false;
         this.activeChecked = true;
         this.showToast(action, res.saved);
@@ -96,24 +115,25 @@ export class CustomerPage implements OnInit {
     );
   }
 
-  public editCustomer(user) {
-    this.formCustomers.reset({
-      editUserId: user['_id'],
-      newUserName: user.name,
-      newUserLevel: user.role['_id']
+  public editModel(model) {
+    this.formModels.reset({
+      editModelId: model['_id'],
+      newModelName: model.name,
+      newModelCategory: model.category['_id'],
+      newModelBrand: model.brand['_id']
     });
 
-    this.activeChecked = user.active;
+    this.activeChecked = model.active;
 
     this.content.scrollToTop(700);
   }
 
-  public deleteCustomer(userId: string, action: string) {
+  public deleteModel(modelId: string, action: string) {
     this.showLoader = true;
-    const subCustomers = this.dbService.deleteItem(environment.customersAction, userId).subscribe(
+    const subModels = this.dbService.deleteItem(environment.modelsAction, modelId).subscribe(
       res => {
-        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.users = res.customers;
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.models = res.models;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -123,28 +143,28 @@ export class CustomerPage implements OnInit {
     );
   }
 
-  public showConfirmAlert(action: string, user: any) {
+  public showConfirmAlert(action: string, model: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${user.newUserName || user.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${model.newModelName || model.name || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
         case 'excluir':
-          this.deleteCustomer(user['_id'], 'Item excluído');
+          this.deleteModel(model['_id'], 'Item excluído');
           break;
         case 'criar':
-          this.createCustomer('Item criado');
+          this.createModel('Item criado');
           break;
         case 'editar':
-          this.createCustomer('Item editado');
+          this.createModel('Item editado');
           break;
         case 'limpar':
-          this.formCustomers.reset();
+          this.formModels.reset();
           this.activeChecked = true;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
-          this.formCustomers.reset();
+          this.formModels.reset();
           this.activeChecked = true;
           this.showToast('Edição descartada');
           break;
@@ -197,15 +217,15 @@ export class CustomerPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    let savedRole;
+    let savedBrand;
 
     if (item) {
-      savedRole = this.roles.find(role => role['_id'] === item.role);
+      savedBrand = this.brands.find(brand => brand['_id'] === item.brand);
     }
 
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}, nível: ${savedRole.level} - ${savedRole.name}` : '',
+      message: item ? `Marca: ${savedBrand.name}, Modelo: ${item.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

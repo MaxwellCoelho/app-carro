@@ -5,6 +5,11 @@
 export const environment = {
   production: false,
   middlewareEndpoint: 'http://localhost:3001/api',
+  rolesAction: 'roles',
+  customersAction: 'customers',
+  categoriesAction: 'cars/categories',
+  brandsAction: 'cars/brands',
+  modelsAction: 'cars/models'
 };
 
 /*

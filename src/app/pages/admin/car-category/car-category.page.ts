@@ -7,17 +7,18 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-permission',
-  templateUrl: './permission.page.html',
-  styleUrls: ['./permission.page.scss'],
+  selector: 'app-car-category',
+  templateUrl: './car-category.page.html',
+  styleUrls: ['./car-category.page.scss'],
 })
-export class PermissionPage implements OnInit {
+export class CarCategoryPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public roles: Array<any>;
+  public categories: Array<any>;
   public showLoader: boolean;
-  public formRoles: FormGroup;
+  public formCategories: FormGroup;
+  public activeChecked = true;
 
   constructor(
     public dbService: DataBaseService,
@@ -28,23 +29,22 @@ export class PermissionPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getRoles();
+    this.getCategories();
   }
 
   public initForm() {
-    this.formRoles = this.fb.group({
-      editRoleId: this.fb.control(''),
-      newRoleName: this.fb.control('', [Validators.required]),
-      newRoleLevel: this.fb.control('', [Validators.required])
+    this.formCategories = this.fb.group({
+      editCategoryId: this.fb.control(''),
+      newCategoryName: this.fb.control('', [Validators.required])
     });
   }
 
-  public getRoles(): void {
+  public getCategories(): void {
     this.showLoader = true;
-    const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
+    const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subCategories.closed) { subCategories.unsubscribe(); }
+        this.categories = res.categories;
         this.showLoader = false;
       },
       err => {
@@ -54,20 +54,21 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public createRole(action: string) {
+  public createCategory(action: string) {
     this.showLoader = true;
-    const roleId = this.formRoles.value.editRoleId;
+    const categoryId = this.formCategories.value.editCategoryId;
     const data = {
-      name: this.formRoles.value.newRoleName,
-      level: this.formRoles.value.newRoleLevel
+      name: this.formCategories.value.newCategoryName,
+      active: this.activeChecked
     };
 
-    const subRoles = this.dbService.createItem(environment.rolesAction, data, roleId).subscribe(
+    const subCategories = this.dbService.createItem(environment.categoriesAction, data, categoryId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.formRoles.reset();
-        this.roles = res.roles;
+        if (!subCategories.closed) { subCategories.unsubscribe(); }
+        this.formCategories.reset();
+        this.categories = res.categories;
         this.showLoader = false;
+        this.activeChecked = true;
         this.showToast(action, res.saved);
       },
       err => {
@@ -76,22 +77,23 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public editRole(role) {
-    this.formRoles.reset({
-      editRoleId: role['_id'],
-      newRoleName: role.name,
-      newRoleLevel: role.level
+  public editCategory(category) {
+    this.formCategories.reset({
+      editCategoryId: category['_id'],
+      newCategoryName: category.name
     });
+
+    this.activeChecked = category.active;
 
     this.content.scrollToTop(700);
   }
 
-  public deleteRole(roleId: string, action: string) {
+  public deleteCategory(categoryId: string, action: string) {
     this.showLoader = true;
-    const subRoles = this.dbService.deleteItem(environment.rolesAction, roleId).subscribe(
+    const subCategories = this.dbService.deleteItem(environment.categoriesAction, categoryId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subCategories.closed) { subCategories.unsubscribe(); }
+        this.categories = res.categories;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -101,27 +103,29 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public showConfirmAlert(action: string, role: any) {
+  public showConfirmAlert(action: string, category: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${role.newRoleName || role.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${category.newCategoryName || category.name || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
         case 'excluir':
-          this.deleteRole(role['_id'], 'Item excluído');
+          this.deleteCategory(category['_id'], 'Item excluído');
           break;
         case 'criar':
-          this.createRole('Item criado');
+          this.createCategory('Item criado');
           break;
         case 'editar':
-          this.createRole('Item editado');
+          this.createCategory('Item editado');
           break;
         case 'limpar':
-          this.formRoles.reset();
+          this.formCategories.reset();
+          this.activeChecked = true;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
-          this.formRoles.reset();
+          this.formCategories.reset();
+          this.activeChecked = true;
           this.showToast('Edição descartada');
           break;
       }
@@ -175,7 +179,7 @@ export class PermissionPage implements OnInit {
   public showToast(action: string, item?: any) {
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}, nível: ${item.level}` : '',
+      message: item ? `Nome: ${item.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',
