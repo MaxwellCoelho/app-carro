@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { CustomerService } from 'src/app/services/customer.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
@@ -18,7 +17,6 @@ export class AdminPage implements OnInit {
   public formRoles: FormGroup;
 
   constructor(
-    public customerService: CustomerService,
     public fb: FormBuilder,
   ) { }
 

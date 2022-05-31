@@ -1,0 +1,36 @@
+.content-spinner {
+  margin-left: -3rem;
+  display: none;
+  position: fixed;
+  width: 3rem;
+  left: 50%;
+  height: 100%;
+  z-index: 10;
+}
+
+.content-spinner.show-spinner {
+  display: block;
+}
+
+.grid-header {
+  background-color: #d7d8da;
+  font-weight: bold;
+}
+.grid-content {
+  background-color: #efeded;
+}
+
+.grid-content-edit {
+  background-color: antiquewhite;
+}
+
+.grid-header, .grid-content, .grid-content-edit {
+  margin: 5px;
+  border-radius: 5px;
+  padding: 2px 0.5rem;
+  align-items: center;
+}
+
+form {
+  display: inherit;
+}

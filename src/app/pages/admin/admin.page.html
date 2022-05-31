@@ -7,14 +7,65 @@
 
     <ion-grid>
       <ion-row>
-        <ion-col size="12">
-          <ion-button size="large" title="Editar" color="light" [routerLink]="'/' + nav.admin.route + '/' + nav.permission.route">
-            <ion-icon [name]="nav.permission.icon + '-outline'"></ion-icon>
-            <ion-label>{{nav.permission.title}}</ion-label>
-          </ion-button>
+        <ion-col>
+          <h1>Configurações de usuários</h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.customer.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.customer.icon"></ion-icon>
+              <ion-card-title>{{nav.customer.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col>
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.permission.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.permission.icon"></ion-icon>
+              <ion-card-title>{{nav.permission.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <h1>Configurações de carros</h1>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carmodels.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.carmodels.icon"></ion-icon>
+              <ion-card-title>{{nav.carmodels.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col>
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carbrands.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.carbrands.icon"></ion-icon>
+              <ion-card-title>{{nav.carbrands.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col>
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carcategories.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.carcategories.icon"></ion-icon>
+              <ion-card-title>{{nav.carcategories.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
-    
+
   </div>
 </ion-content>

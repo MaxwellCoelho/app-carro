@@ -7,17 +7,18 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-permission',
-  templateUrl: './permission.page.html',
-  styleUrls: ['./permission.page.scss'],
+  selector: 'app-car-brand',
+  templateUrl: './car-brand.page.html',
+  styleUrls: ['./car-brand.page.scss'],
 })
-export class PermissionPage implements OnInit {
+export class CarBrandPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public roles: Array<any>;
+  public brands: Array<any>;
   public showLoader: boolean;
-  public formRoles: FormGroup;
+  public formBrands: FormGroup;
+  public activeChecked = true;
 
   constructor(
     public dbService: DataBaseService,
@@ -28,23 +29,23 @@ export class PermissionPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getRoles();
+    this.getBrands();
   }
 
   public initForm() {
-    this.formRoles = this.fb.group({
-      editRoleId: this.fb.control(''),
-      newRoleName: this.fb.control('', [Validators.required]),
-      newRoleLevel: this.fb.control('', [Validators.required])
+    this.formBrands = this.fb.group({
+      editBrandId: this.fb.control(''),
+      newBrandName: this.fb.control('', [Validators.required]),
+      newBrandImage: this.fb.control('', [Validators.required])
     });
   }
 
-  public getRoles(): void {
+  public getBrands(): void {
     this.showLoader = true;
-    const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
+    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subBrands.closed) { subBrands.unsubscribe(); }
+        this.brands = res.brands;
         this.showLoader = false;
       },
       err => {
@@ -54,20 +55,22 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public createRole(action: string) {
+  public createBrand(action: string) {
     this.showLoader = true;
-    const roleId = this.formRoles.value.editRoleId;
+    const brandId = this.formBrands.value.editBrandId;
     const data = {
-      name: this.formRoles.value.newRoleName,
-      level: this.formRoles.value.newRoleLevel
+      name: this.formBrands.value.newBrandName,
+      image: this.formBrands.value.newBrandImage,
+      active: this.activeChecked
     };
 
-    const subRoles = this.dbService.createItem(environment.rolesAction, data, roleId).subscribe(
+    const subBrands = this.dbService.createItem(environment.brandsAction, data, brandId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.formRoles.reset();
-        this.roles = res.roles;
+        if (!subBrands.closed) { subBrands.unsubscribe(); }
+        this.formBrands.reset();
+        this.brands = res.brands;
         this.showLoader = false;
+        this.activeChecked = true;
         this.showToast(action, res.saved);
       },
       err => {
@@ -76,22 +79,24 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public editRole(role) {
-    this.formRoles.reset({
-      editRoleId: role['_id'],
-      newRoleName: role.name,
-      newRoleLevel: role.level
+  public editBrand(brand) {
+    this.formBrands.reset({
+      editBrandId: brand['_id'],
+      newBrandName: brand.name,
+      newBrandImage: brand.image
     });
+
+    this.activeChecked = brand.active;
 
     this.content.scrollToTop(700);
   }
 
-  public deleteRole(roleId: string, action: string) {
+  public deleteBrand(brandId: string, action: string) {
     this.showLoader = true;
-    const subRoles = this.dbService.deleteItem(environment.rolesAction, roleId).subscribe(
+    const subBrands = this.dbService.deleteItem(environment.brandsAction, brandId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subBrands.closed) { subBrands.unsubscribe(); }
+        this.brands = res.brands;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -101,27 +106,29 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public showConfirmAlert(action: string, role: any) {
+  public showConfirmAlert(action: string, brand: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${role.newRoleName || role.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${brand.newBrandName || brand.name || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
         case 'excluir':
-          this.deleteRole(role['_id'], 'Item excluído');
+          this.deleteBrand(brand['_id'], 'Item excluído');
           break;
         case 'criar':
-          this.createRole('Item criado');
+          this.createBrand('Item criado');
           break;
         case 'editar':
-          this.createRole('Item editado');
+          this.createBrand('Item editado');
           break;
         case 'limpar':
-          this.formRoles.reset();
+          this.formBrands.reset();
+          this.activeChecked = true;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
-          this.formRoles.reset();
+          this.formBrands.reset();
+          this.activeChecked = true;
           this.showToast('Edição descartada');
           break;
       }
@@ -175,7 +182,7 @@ export class PermissionPage implements OnInit {
   public showToast(action: string, item?: any) {
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}, nível: ${item.level}` : '',
+      message: item ? `Nome: ${item.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',
