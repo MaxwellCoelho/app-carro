@@ -30,4 +30,23 @@ export class CustomerService {
     const url = `${environment.middlewareEndpoint}/${action}`;
     return this.http.post(url, data);
   }
+
+  public getCustomers(): any {
+    const action = 'customers';
+    const url = `${environment.middlewareEndpoint}/${action}`;
+    return this.http.get(url);
+  }
+
+  public deleteCustomer(roleId: string): any {
+    const action = `customers/${roleId}`;
+    const url = `${environment.middlewareEndpoint}/${action}`;
+    return this.http.delete(url);
+  }
+
+  public createCustomer(data: any, roleId: string): any {
+    const action = roleId ? `customers/${roleId}` : 'customers';
+
+    const url = `${environment.middlewareEndpoint}/${action}`;
+    return this.http.post(url, data);
+  }
 }

@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { AdminPage } from './admin.page';
 import { PermissionPage } from './permission/permission.page';
+import { CustomerPage } from './customer/customer.page';
 
 import { AdminPageRoutingModule } from './admin-routing.module';
 
@@ -21,7 +22,8 @@ import { AdminPageRoutingModule } from './admin-routing.module';
   ],
   declarations: [
     AdminPage,
-    PermissionPage
+    PermissionPage,
+    CustomerPage
   ]
 })
 export class AdminPageModule {}

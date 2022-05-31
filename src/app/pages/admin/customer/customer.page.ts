@@ -6,17 +6,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-permission',
-  templateUrl: './permission.page.html',
-  styleUrls: ['./permission.page.scss'],
+  selector: 'app-customer',
+  templateUrl: './customer.page.html',
+  styleUrls: ['./customer.page.scss'],
 })
-export class PermissionPage implements OnInit {
+export class CustomerPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
+  public users: Array<any>;
   public roles: Array<any>;
   public showLoader: boolean;
-  public formRoles: FormGroup;
+  public formCustomers: FormGroup;
+  public activeChecked = true;
 
   constructor(
     public customerService: CustomerService,
@@ -28,13 +30,14 @@ export class PermissionPage implements OnInit {
   ngOnInit() {
     this.initForm();
     this.getRoles();
+    this.getCustomers();
   }
 
   public initForm() {
-    this.formRoles = this.fb.group({
-      editRoleId: this.fb.control(''),
-      newRoleName: this.fb.control('', [Validators.required]),
-      newRoleLevel: this.fb.control('', [Validators.required])
+    this.formCustomers = this.fb.group({
+      editUserId: this.fb.control(''),
+      newUserName: this.fb.control('', [Validators.required]),
+      newUserLevel: this.fb.control('', [Validators.required])
     });
   }
 
@@ -53,19 +56,35 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public createRole(action: string) {
+  public getCustomers(): void {
     this.showLoader = true;
-    const roleId = this.formRoles.value.editRoleId;
+    const subCustomers = this.customerService.getCustomers().subscribe(
+      res => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.users = res.customers;
+        this.showLoader = false;
+      },
+      err => {
+        this.showLoader = false;
+        console.error(err);
+      }
+    );
+  }
+
+  public createCustomer(action: string) {
+    this.showLoader = true;
+    const userId = this.formCustomers.value.editUserId;
     const data = {
-      name: this.formRoles.value.newRoleName,
-      level: this.formRoles.value.newRoleLevel
+      name: this.formCustomers.value.newUserName,
+      role: this.formCustomers.value.newUserLevel,
+      active: this.activeChecked
     };
 
-    const subRoles = this.customerService.createRole(data, roleId).subscribe(
+    const subCustomers = this.customerService.createCustomer(data, userId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.formRoles.reset();
-        this.roles = res.roles;
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.formCustomers.reset();
+        this.users = res.customers;
         this.showLoader = false;
         this.showToast(action, res.saved);
       },
@@ -75,22 +94,24 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public editRole(role) {
-    this.formRoles.reset({
-      editRoleId: role['_id'],
-      newRoleName: role.name,
-      newRoleLevel: role.level
+  public editCustomer(user) {
+    this.formCustomers.reset({
+      editUserId: user['_id'],
+      newUserName: user.name,
+      newUserLevel: user.role['_id']
     });
+
+    this.activeChecked = user.active;
 
     this.content.scrollToTop(700);
   }
 
-  public deleteRole(roleId: string, action: string) {
+  public deleteCustomer(userId: string, action: string) {
     this.showLoader = true;
-    const subRoles = this.customerService.deleteRole(roleId).subscribe(
+    const subCustomers = this.customerService.deleteCustomer(userId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.users = res.customers;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -100,27 +121,29 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public showConfirmAlert(action: string, role: any) {
+  public showConfirmAlert(action: string, user: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${role.newRoleName || role.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${user.newUserName || user.name || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
         case 'excluir':
-          this.deleteRole(role['_id'], 'Item excluído');
+          this.deleteCustomer(user['_id'], 'Item excluído');
           break;
         case 'criar':
-          this.createRole('Item criado');
+          this.createCustomer('Item criado');
           break;
         case 'editar':
-          this.createRole('Item editado');
+          this.createCustomer('Item editado');
           break;
         case 'limpar':
-          this.formRoles.reset();
+          this.formCustomers.reset();
+          this.activeChecked = true;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
-          this.formRoles.reset();
+          this.formCustomers.reset();
+          this.activeChecked = true;
           this.showToast('Edição descartada');
           break;
       }
@@ -172,9 +195,15 @@ export class PermissionPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
+    let savedRole;
+
+    if (item) {
+      savedRole = this.roles.find(role => role['_id'] === item.role);
+    }
+
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}, nível: ${item.level}` : '',
+      message: item ? `Nome: ${item.name}, nível: ${savedRole.level} - ${savedRole.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

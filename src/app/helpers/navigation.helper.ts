@@ -10,5 +10,9 @@ export const NAVIGATION = {
   term: { title: 'Termo de uso', icon: 'document', route: 'termo-de-uso' },
   login: { title: 'Login', icon: 'power', route: 'login' },
   admin: { title: 'Admin', icon: 'hammer', route: 'admin' },
-  permission: { title: 'Permissões de usuários', icon: 'lock-open', route: 'permissao' }
+  permission: { title: 'Permissões de usuários', icon: 'lock-open', route: 'permissao' },
+  customer: { title: 'Usuários', icon: 'person', route: 'usuario' },
+  carcategories: { title: 'Categorias de carro', icon: 'shapes', route: 'carro-categoria' },
+  carbrands: { title: 'Marcas de carro', icon: 'pricetag', route: 'carro-marca' },
+  carmodels: { title: 'Modelos de carro', icon: 'car', route: 'carro-modelo' }
 };
