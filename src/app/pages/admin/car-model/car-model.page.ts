@@ -39,7 +39,7 @@ export class CarModelPage implements OnInit {
   public initForm() {
     this.formModels = this.fb.group({
       editModelId: this.fb.control(''),
-      newModelName: this.fb.control('', [Validators.required]),
+      newModelName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
       newModelCategory: this.fb.control('', [Validators.required]),
       newModelBrand: this.fb.control('', [Validators.required])
     });
@@ -56,6 +56,10 @@ export class CarModelPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }
@@ -71,6 +75,10 @@ export class CarModelPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }
@@ -86,6 +94,10 @@ export class CarModelPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }

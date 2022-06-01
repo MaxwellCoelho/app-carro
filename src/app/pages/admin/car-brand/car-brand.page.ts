@@ -35,8 +35,8 @@ export class CarBrandPage implements OnInit {
   public initForm() {
     this.formBrands = this.fb.group({
       editBrandId: this.fb.control(''),
-      newBrandName: this.fb.control('', [Validators.required]),
-      newBrandImage: this.fb.control('', [Validators.required])
+      newBrandName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newBrandImage: this.fb.control('', [Validators.required, Validators.minLength(3)])
     });
   }
 
@@ -51,6 +51,10 @@ export class CarBrandPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }

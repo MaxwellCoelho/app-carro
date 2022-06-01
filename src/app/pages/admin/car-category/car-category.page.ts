@@ -35,7 +35,7 @@ export class CarCategoryPage implements OnInit {
   public initForm() {
     this.formCategories = this.fb.group({
       editCategoryId: this.fb.control(''),
-      newCategoryName: this.fb.control('', [Validators.required])
+      newCategoryName: this.fb.control('', [Validators.required, Validators.minLength(3)])
     });
   }
 
@@ -50,6 +50,10 @@ export class CarCategoryPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }

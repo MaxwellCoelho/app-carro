@@ -37,7 +37,9 @@ export class CustomerPage implements OnInit {
   public initForm() {
     this.formCustomers = this.fb.group({
       editUserId: this.fb.control(''),
-      newUserName: this.fb.control('', [Validators.required]),
+      newUserName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newUserEmail: this.fb.control('', [Validators.required]),
+      newUserPassword: this.fb.control('', [Validators.required, Validators.minLength(4)]),
       newUserLevel: this.fb.control('', [Validators.required])
     });
   }
@@ -53,6 +55,10 @@ export class CustomerPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }
@@ -68,6 +74,10 @@ export class CustomerPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }
@@ -77,6 +87,8 @@ export class CustomerPage implements OnInit {
     const userId = this.formCustomers.value.editUserId;
     const data = {
       name: this.formCustomers.value.newUserName,
+      email: this.formCustomers.value.newUserEmail,
+      password: this.formCustomers.value.newUserPassword,
       role: this.formCustomers.value.newUserLevel,
       active: this.activeChecked
     };
@@ -100,6 +112,8 @@ export class CustomerPage implements OnInit {
     this.formCustomers.reset({
       editUserId: user['_id'],
       newUserName: user.name,
+      newUserEmail: user.email,
+      newUserPassword: user.password,
       newUserLevel: user.role['_id']
     });
 

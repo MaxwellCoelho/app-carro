@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -34,9 +35,14 @@ export class PermissionPage implements OnInit {
   public initForm() {
     this.formRoles = this.fb.group({
       editRoleId: this.fb.control(''),
-      newRoleName: this.fb.control('', [Validators.required]),
+      newRoleName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
       newRoleLevel: this.fb.control('', [Validators.required])
     });
+  }
+
+  public onlyNumbers($event): void {
+    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
+    $event.srcElement.value = onlyNumbers;
   }
 
   public getRoles(): void {
@@ -50,6 +56,10 @@ export class PermissionPage implements OnInit {
       err => {
         this.showLoader = false;
         console.error(err);
+
+        if (err.status !== 404) {
+          this.showErrorAlert(err);
+        }
       }
     );
   }

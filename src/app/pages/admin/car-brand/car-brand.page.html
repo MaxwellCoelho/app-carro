@@ -1,5 +1,5 @@
 <ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
-  <ion-spinner name="crescent" color="primary" class="content-spinner" [ngClass]="{'show-spinner': showLoader }"></ion-spinner>
+  <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
     <ion-title size="large" color="primary" class="main-title">
@@ -29,7 +29,7 @@
             <ion-col size-md="5" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Nome</ion-label>
-                <ion-input type="text" formControlName="newBrandName"></ion-input>
+                <ion-input type="text" maxlength="50" formControlName="newBrandName"></ion-input>
               </ion-item>
             </ion-col>
             <ion-col size-md="4" size-sm="12" size-xs="12">
