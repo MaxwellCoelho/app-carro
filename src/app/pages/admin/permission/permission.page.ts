@@ -5,6 +5,7 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,6 +23,7 @@ export class PermissionPage implements OnInit {
 
   constructor(
     public dbService: DataBaseService,
+    public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -72,7 +74,9 @@ export class PermissionPage implements OnInit {
       level: this.formRoles.value.newRoleLevel
     };
 
-    const subRoles = this.dbService.createItem(environment.rolesAction, data, roleId).subscribe(
+    const jwtData = { roleData: this.cryptoService.encondeJwt(data)};
+
+    const subRoles = this.dbService.createItem(environment.rolesAction, jwtData, roleId).subscribe(
       res => {
         if (!subRoles.closed) { subRoles.unsubscribe(); }
         this.formRoles.reset();

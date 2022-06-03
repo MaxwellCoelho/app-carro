@@ -1,8 +1,54 @@
-<ion-content [fullscreen]="true">
+<ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+
   <div class="main-container">
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="nav.login.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.login.title}}</ion-label>
     </ion-title>
+
+    <div class="main-body">
+      <ion-grid slot="content">
+        <ion-row>
+          <ion-col>
+            <h1>Entrar</h1>
+          </ion-col>
+        </ion-row>
+
+        <form name="login" [formGroup]="formLogin" (submit)="authUser()">
+          <ion-row class="grid-content">
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" maxlength="50" formControlName="userEmail"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Senha</ion-label>
+                <ion-input type="password" maxlength="80" formControlName="userPasseord"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content">
+            <ion-col size-md="3" size-sm="6" size-xs="12">
+              <ion-button size="default" title="Entrar" expand="block" color="success" type="submit" [disabled]="formLogin.status === 'INVALID'">
+                <ion-icon name="enter-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Entrar</ion-label>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="6" size-xs="12">
+              <ion-button size="default" title="Esqueci a senha" expand="block" color="medium" type="button" (click)="forgotPassword()">
+                <ion-icon name="skull-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Esqueci a senha</ion-label>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </form>
+      </ion-grid>
+
+    </div>
   </div>
 </ion-content>

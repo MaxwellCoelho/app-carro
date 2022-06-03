@@ -4,6 +4,7 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,6 +23,7 @@ export class CarCategoryPage implements OnInit {
 
   constructor(
     public dbService: DataBaseService,
+    public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -66,7 +68,9 @@ export class CarCategoryPage implements OnInit {
       active: this.activeChecked
     };
 
-    const subCategories = this.dbService.createItem(environment.categoriesAction, data, categoryId).subscribe(
+    const jwtData = { categoryData: this.cryptoService.encondeJwt(data)};
+
+    const subCategories = this.dbService.createItem(environment.categoriesAction, jwtData, categoryId).subscribe(
       res => {
         if (!subCategories.closed) { subCategories.unsubscribe(); }
         this.formCategories.reset();

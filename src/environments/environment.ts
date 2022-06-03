@@ -9,7 +9,8 @@ export const environment = {
   customersAction: 'customers',
   categoriesAction: 'cars/categories',
   brandsAction: 'cars/brands',
-  modelsAction: 'cars/models'
+  modelsAction: 'cars/models',
+  jstSecret: '-M@x-caRro$*_+'
 };
 
 /*

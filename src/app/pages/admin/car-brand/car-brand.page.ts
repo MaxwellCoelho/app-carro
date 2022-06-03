@@ -4,6 +4,7 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,6 +23,7 @@ export class CarBrandPage implements OnInit {
 
   constructor(
     public dbService: DataBaseService,
+    public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -68,7 +70,9 @@ export class CarBrandPage implements OnInit {
       active: this.activeChecked
     };
 
-    const subBrands = this.dbService.createItem(environment.brandsAction, data, brandId).subscribe(
+    const jwtData = { brandData: this.cryptoService.encondeJwt(data)};
+
+    const subBrands = this.dbService.createItem(environment.brandsAction, jwtData, brandId).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
         this.formBrands.reset();

@@ -2,6 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
@@ -20,9 +21,11 @@ export class CustomerPage implements OnInit {
   public showLoader: boolean;
   public formCustomers: FormGroup;
   public activeChecked = true;
+  public passwordLastContent: string;
 
   constructor(
     public dbService: DataBaseService,
+    public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -93,7 +96,9 @@ export class CustomerPage implements OnInit {
       active: this.activeChecked
     };
 
-    const subCustomers = this.dbService.createItem(environment.customersAction, data, userId).subscribe(
+    const jwtData = { customerData: this.cryptoService.encondeJwt(data)};
+
+    const subCustomers = this.dbService.createItem(environment.customersAction, jwtData, userId).subscribe(
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
         this.formCustomers.reset();
@@ -227,5 +232,17 @@ export class CustomerPage implements OnInit {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public clearField($event): void {
+    this.passwordLastContent = $event.srcElement.value;
+    $event.srcElement.value = '';
+  }
+
+  public recoverField($event): void {
+    if ($event.srcElement.value === '') {
+      $event.srcElement.value = this.passwordLastContent;
+      this.passwordLastContent = null;
+    }
   }
 }
