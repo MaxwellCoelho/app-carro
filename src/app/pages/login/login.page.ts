@@ -33,7 +33,7 @@ export class LoginPage implements OnInit {
   public initForm() {
     this.formLogin = this.fb.group({
       userEmail: this.fb.control('', [Validators.required]),
-      userPasseord: this.fb.control('', [Validators.required, Validators.minLength(4)])
+      userPassword: this.fb.control('', [Validators.required, Validators.minLength(4)])
     });
   }
 
@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
 
     const data = {
       email: this.formLogin.value.userEmail,
-      password: this.formLogin.value.userPasseord
+      password: this.formLogin.value.userPassword
     };
 
     const jwtData = { authData: this.cryptoService.encondeJwt(data)};
@@ -54,7 +54,13 @@ export class LoginPage implements OnInit {
         this.showLoader = false;
       },
       err => {
-        this.showErrorAlert(err);
+        this.showLoader = false;
+
+        if (err.status === 401) {
+          this.showNonAuthorizedToast();
+        } else {
+          this.showErrorAlert(err);
+        }
       }
     );
   }
@@ -85,6 +91,41 @@ export class LoginPage implements OnInit {
     this.alertController.create(alertObj).then(alert => {
       alert.present();
     });
+  }
+
+  public showNonAuthorizedToast() {
+    this.toastController.create({
+      header: `Atenção!`,
+      message: 'Email ou senha incorreto!',
+      duration: 4000,
+      position: 'middle',
+      icon: 'warning-outline',
+      color: 'danger'
+    }).then(toast => {
+      toast.present();
+    });
+  }
+
+  public checkUser() {
+    this.authService.checkUser().subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  public logoutUser() {
+    this.authService.logoutUser().subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
 }

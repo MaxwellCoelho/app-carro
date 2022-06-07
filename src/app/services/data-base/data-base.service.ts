@@ -13,19 +13,19 @@ export class DataBaseService {
 
   public getItens(action: string): any {
     const url = `${environment.middlewareEndpoint}/${action}`;
-    return this.http.get(url);
+    return this.http.get(url, { withCredentials: true });
   }
 
   public deleteItem(action: string, itemId: string): any {
     const myAction = `${action}/${itemId}`;
     const url = `${environment.middlewareEndpoint}/${myAction}`;
-    return this.http.delete(url);
+    return this.http.delete(url, { withCredentials: true });
   }
 
   public createItem(action: string, data: any, itemId: string): any {
     const myAction = itemId ? `${action}/${itemId}` : action;
 
     const url = `${environment.middlewareEndpoint}/${myAction}`;
-    return this.http.post(url, data);
+    return this.http.post(url, data, { withCredentials: true });
   }
 }

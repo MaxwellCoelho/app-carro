@@ -12,9 +12,23 @@ export class AuthService {
   ) { }
 
   public authUser(data: any): any {
-    const myAction = 'auth';
+    const myAction = 'login';
 
     const url = `${environment.middlewareEndpoint}/${myAction}`;
-    return this.http.post(url, data);
+    return this.http.post(url, data, { withCredentials: true });
+  }
+
+  public checkUser(): any {
+    const myAction = 'me';
+    const url = `${environment.middlewareEndpoint}/${myAction}`;
+
+    return this.http.post(url, null, { withCredentials: true });
+  }
+
+  public logoutUser(): any {
+    const myAction = 'logout';
+    const url = `${environment.middlewareEndpoint}/${myAction}`;
+
+    return this.http.post(url, null, { withCredentials: true });
   }
 }
