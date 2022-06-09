@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { LoginPage } from './login.page';
-import { LoaderComponent } from '../../components/loader/loader.component';
+import { SharedModule } from '../../shared/shared.module';
 
 import { LoginPageRoutingModule } from './login-routing.module';
 
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -20,8 +21,7 @@ import { LoginPageRoutingModule } from './login-routing.module';
     FormBuilder
   ],
   declarations: [
-    LoginPage,
-    LoaderComponent
+    LoginPage
   ]
 })
 export class LoginPageModule {}

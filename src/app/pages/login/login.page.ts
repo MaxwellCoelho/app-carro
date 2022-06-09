@@ -4,7 +4,8 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { environment } from 'src/environments/environment';
+import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,8 @@ export class LoginPage implements OnInit {
   constructor(
     public authService: AuthService,
     public cryptoService: CryptoService,
+    public utils: UtilsService,
+    public router: Router,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -50,17 +53,14 @@ export class LoginPage implements OnInit {
     const subCustomers = this.authService.authUser(jwtData).subscribe(
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.formLogin.reset();
-        this.showLoader = false;
-      },
-      err => {
         this.showLoader = false;
 
-        if (err.status === 401) {
-          this.showNonAuthorizedToast();
-        } else {
-          this.showErrorAlert(err);
-        }
+        this.formLogin.reset();
+        this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+        this.router.navigate([`/${this.nav.garage.route}`]);
+      },
+      err => {
+        this.showErrorToast(err);
       }
     );
   }
@@ -93,10 +93,29 @@ export class LoginPage implements OnInit {
     });
   }
 
-  public showNonAuthorizedToast() {
+  public showErrorToast(err) {
+    const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
+    const notFoundError = 'Email ou senha incorreto!';
+    const nonAuthorizedError = 'Seu usuário foi inativado!';
+    let response;
+
+    switch (err.status) {
+      case 404:
+        response = notFoundError;
+        break;
+      case 401:
+        response = nonAuthorizedError;
+        break;
+      default:
+        response = genericError;
+    }
+
+    this.showLoader = false;
+    console.error(err);
+
     this.toastController.create({
-      header: `Atenção!`,
-      message: 'Email ou senha incorreto!',
+      header: 'Atenção!',
+      message: response,
       duration: 4000,
       position: 'middle',
       icon: 'warning-outline',
@@ -110,17 +129,7 @@ export class LoginPage implements OnInit {
     this.authService.checkUser().subscribe(
       res => {
         console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
-  public logoutUser() {
-    this.authService.logoutUser().subscribe(
-      res => {
-        console.log(res);
+        this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
       },
       err => {
         console.log(err);

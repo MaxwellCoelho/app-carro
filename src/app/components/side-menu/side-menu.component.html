@@ -2,14 +2,19 @@
 <ion-header id="menu-header">
   <ion-toolbar color="primary">
     <ion-menu-toggle auto-hide="false">
-      <ion-item color="primary" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" lines="none" detail="false">
+      <ion-item *ngIf="loggedUser" (click)="clickItem(nav.perfil.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" lines="none" detail="false">
         <ion-icon slot="start" [name]="nav.perfil.icon + '-outline'"></ion-icon>
-        <ion-label>{{nav.perfil.title}}</ion-label>
+        <ion-label>{{loggedUser.name}}</ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="!loggedUser" (click)="clickItem(nav.login.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="none" detail="false">
+        <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
+        <ion-label>{{nav.login.title}}</ion-label>
       </ion-item>
     </ion-menu-toggle>
     <ion-buttons slot="primary">
       <ion-menu-toggle auto-hide="false">
-        <ion-button routerDirection="root" [routerLink]="'/'+ nav.settings.route">
+        <ion-button *ngIf="loggedUser" (click)="clickItem(nav.settings.route)" routerDirection="root" [routerLink]="'/'+ nav.settings.route">
           <ion-icon slot="start" [name]="nav.settings.icon + '-outline'"></ion-icon>
         </ion-button>
       </ion-menu-toggle>
@@ -19,49 +24,49 @@
 <ion-content>
   <ion-list id="menu-list">
     <ion-menu-toggle auto-hide="false">
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.best.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.best.route)" routerDirection="root" [routerLink]="'/'+ nav.best.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.best.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.best.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.search.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.search.route)" routerDirection="root" [routerLink]="'/'+ nav.search.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.search.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.search.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.compare.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.compare.route)" routerDirection="root" [routerLink]="'/'+ nav.compare.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.compare.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.compare.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.favorite.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.favorite.route)" routerDirection="root" [routerLink]="'/'+ nav.favorite.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.favorite.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.favorite.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.garage.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item *ngIf="loggedUser" (click)="clickItem(nav.garage.route)" routerDirection="root" [routerLink]="'/'+ nav.garage.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.garage.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.garage.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.help.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.help.route)" routerDirection="root" [routerLink]="'/'+ nav.help.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.help.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.help.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.term.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.term.route)" routerDirection="root" [routerLink]="'/'+ nav.term.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.term.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.term.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.admin.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item *ngIf="loggedUser && loggedUser.role?.level <= 1" (click)="clickItem(nav.admin.route)" routerDirection="root" [routerLink]="'/'+ nav.admin.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.admin.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.admin.title}}</ion-label>
       </ion-item>
 
-      <ion-item routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="full" detail="false" routerLinkActive="selected">
-        <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
-        <ion-label>{{nav.login.title}}</ion-label>
+      <ion-item button *ngIf="loggedUser" (click)="clickItem(nav.logout.route)" routerDirection="root" lines="full" detail="false" routerLinkActive="selected">
+        <ion-icon slot="start" [name]="nav.logout.icon + '-outline'"></ion-icon>
+        <ion-label>{{nav.logout.title}}</ion-label>
       </ion-item>
     </ion-menu-toggle>
   </ion-list>

@@ -1,4 +1,4 @@
-<ion-tabs id="tab-menu">
+<ion-tabs id="tab-menu" (ionTabsWillChange)="checkUser()">
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="{{nav.best.route}}">
       <ion-icon name="{{nav.best.icon}}"></ion-icon>
@@ -20,7 +20,7 @@
       <ion-label>{{nav.favorite.title}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="{{nav.garage.route}}">
+    <ion-tab-button tab="{{nav.garage.route}}" [style.display]="loggedUser ? 'block' : 'none'">
       <ion-icon name="{{nav.garage.icon}}"></ion-icon>
       <ion-label>{{nav.garage.title}}</ion-label>
     </ion-tab-button>

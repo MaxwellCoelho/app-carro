@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-tab-menu',
@@ -8,10 +9,18 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 })
 export class TabMenuComponent implements OnInit {
 
-  public nav = NAVIGATION;
+  @Input() loggedUser;
 
-  constructor() { }
+  public nav = NAVIGATION;
+  public tabSelected: string;
+
+  constructor(
+    public utils: UtilsService,
+  ) { }
 
   ngOnInit() {}
 
+  public checkUser() {
+    this.loggedUser = this.utils.returnLoggedUser();
+  }
 }
