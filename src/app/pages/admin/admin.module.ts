@@ -8,13 +8,13 @@ import { CustomerPage } from './customer/customer.page';
 import { CarCategoryPage } from './car-category/car-category.page';
 import { CarBrandPage } from './car-brand/car-brand.page';
 import { CarModelPage } from './car-model/car-model.page';
-import { LoaderComponent } from '../../components/loader/loader.component';
-
+import { SharedModule } from '../../shared/shared.module';
 import { AdminPageRoutingModule } from './admin-routing.module';
 
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -30,8 +30,7 @@ import { AdminPageRoutingModule } from './admin-routing.module';
     CustomerPage,
     CarCategoryPage,
     CarBrandPage,
-    CarModelPage,
-    LoaderComponent
+    CarModelPage
   ]
 })
 export class AdminPageModule {}

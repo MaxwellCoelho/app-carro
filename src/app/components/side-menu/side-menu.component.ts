@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
@@ -8,10 +8,17 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 })
 export class SideMenuComponent implements OnInit {
 
+  @Input() loggedUser;
+  @Output() clickedItem = new EventEmitter<any>();
+
   public nav = NAVIGATION;
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
+  public clickItem(itemRoute): void {
+    this.clickedItem.emit(itemRoute);
+  }
 
 }

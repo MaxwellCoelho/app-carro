@@ -2,6 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
@@ -20,9 +21,11 @@ export class CustomerPage implements OnInit {
   public showLoader: boolean;
   public formCustomers: FormGroup;
   public activeChecked = true;
+  public passwordLastContent: string;
 
   constructor(
     public dbService: DataBaseService,
+    public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -53,12 +56,7 @@ export class CustomerPage implements OnInit {
         this.showLoader = false;
       },
       err => {
-        this.showLoader = false;
-        console.error(err);
-
-        if (err.status !== 404) {
-          this.showErrorAlert(err);
-        }
+        this.showErrorToast(err);
       }
     );
   }
@@ -72,12 +70,7 @@ export class CustomerPage implements OnInit {
         this.showLoader = false;
       },
       err => {
-        this.showLoader = false;
-        console.error(err);
-
-        if (err.status !== 404) {
-          this.showErrorAlert(err);
-        }
+        this.showErrorToast(err);
       }
     );
   }
@@ -93,7 +86,9 @@ export class CustomerPage implements OnInit {
       active: this.activeChecked
     };
 
-    const subCustomers = this.dbService.createItem(environment.customersAction, data, userId).subscribe(
+    const jwtData = { customerData: this.cryptoService.encondeJwt(data)};
+
+    const subCustomers = this.dbService.createItem(environment.customersAction, jwtData, userId).subscribe(
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
         this.formCustomers.reset();
@@ -103,7 +98,7 @@ export class CustomerPage implements OnInit {
         this.showToast(action, res.saved);
       },
       err => {
-        this.showErrorAlert(err);
+        this.showErrorToast(err);
       }
     );
   }
@@ -132,7 +127,7 @@ export class CustomerPage implements OnInit {
         this.showToast(action, res.removed);
       },
       err => {
-        this.showErrorAlert(err);
+        this.showErrorToast(err);
       }
     );
   }
@@ -186,27 +181,35 @@ export class CustomerPage implements OnInit {
     });
   }
 
-  public showErrorAlert(err) {
-    console.error(err);
+  public showErrorToast(err) {
     const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
     const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
+    const nonAuthorizedError = 'Você não está autorizado a fazer esse tipo de ação!';
+    let response;
 
-    const alertObj = {
-      header: 'Ops...',
-      message: err.status === 404 ? notFoundError : genericError,
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'cancel',
-          id: 'cancel-button'
-        }
-      ]
-    };
+    switch (err.status) {
+      case 404:
+        response = notFoundError;
+        break;
+      case 401:
+        response = nonAuthorizedError;
+        break;
+      default:
+        response = genericError;
+    }
 
     this.showLoader = false;
+    console.error(err);
 
-    this.alertController.create(alertObj).then(alert => {
-      alert.present();
+    this.toastController.create({
+      header: 'Atenção!',
+      message: response,
+      duration: 4000,
+      position: 'middle',
+      icon: 'warning-outline',
+      color: 'danger'
+    }).then(toast => {
+      toast.present();
     });
   }
 
@@ -223,9 +226,21 @@ export class CustomerPage implements OnInit {
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',
-      color: 'primary'
+      color: 'success'
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public clearField($event): void {
+    this.passwordLastContent = $event.srcElement.value;
+    $event.srcElement.value = '';
+  }
+
+  public recoverField($event): void {
+    if ($event.srcElement.value === '') {
+      $event.srcElement.value = this.passwordLastContent;
+      this.passwordLastContent = null;
+    }
   }
 }

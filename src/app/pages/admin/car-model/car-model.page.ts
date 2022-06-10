@@ -4,6 +4,7 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -24,6 +25,7 @@ export class CarModelPage implements OnInit {
 
   constructor(
     public dbService: DataBaseService,
+    public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
     public toastController: ToastController
@@ -54,12 +56,7 @@ export class CarModelPage implements OnInit {
         this.showLoader = false;
       },
       err => {
-        this.showLoader = false;
-        console.error(err);
-
-        if (err.status !== 404) {
-          this.showErrorAlert(err);
-        }
+        this.showErrorToast(err);
       }
     );
   }
@@ -73,12 +70,7 @@ export class CarModelPage implements OnInit {
         this.showLoader = false;
       },
       err => {
-        this.showLoader = false;
-        console.error(err);
-
-        if (err.status !== 404) {
-          this.showErrorAlert(err);
-        }
+        this.showErrorToast(err);
       }
     );
   }
@@ -92,12 +84,7 @@ export class CarModelPage implements OnInit {
         this.showLoader = false;
       },
       err => {
-        this.showLoader = false;
-        console.error(err);
-
-        if (err.status !== 404) {
-          this.showErrorAlert(err);
-        }
+        this.showErrorToast(err);
       }
     );
   }
@@ -112,7 +99,9 @@ export class CarModelPage implements OnInit {
       active: this.activeChecked
     };
 
-    const subModels = this.dbService.createItem(environment.modelsAction, data, modelId).subscribe(
+    const jwtData = { modelData: this.cryptoService.encondeJwt(data)};
+
+    const subModels = this.dbService.createItem(environment.modelsAction, jwtData, modelId).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
         this.formModels.reset();
@@ -122,7 +111,7 @@ export class CarModelPage implements OnInit {
         this.showToast(action, res.saved);
       },
       err => {
-        this.showErrorAlert(err);
+        this.showErrorToast(err);
       }
     );
   }
@@ -150,7 +139,7 @@ export class CarModelPage implements OnInit {
         this.showToast(action, res.removed);
       },
       err => {
-        this.showErrorAlert(err);
+        this.showErrorToast(err);
       }
     );
   }
@@ -204,27 +193,35 @@ export class CarModelPage implements OnInit {
     });
   }
 
-  public showErrorAlert(err) {
-    console.error(err);
+  public showErrorToast(err) {
     const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
     const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
+    const nonAuthorizedError = 'Você não está autorizado a fazer esse tipo de ação!';
+    let response;
 
-    const alertObj = {
-      header: 'Ops...',
-      message: err.status === 404 ? notFoundError : genericError,
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'cancel',
-          id: 'cancel-button'
-        }
-      ]
-    };
+    switch (err.status) {
+      case 404:
+        response = notFoundError;
+        break;
+      case 401:
+        response = nonAuthorizedError;
+        break;
+      default:
+        response = genericError;
+    }
 
     this.showLoader = false;
+    console.error(err);
 
-    this.alertController.create(alertObj).then(alert => {
-      alert.present();
+    this.toastController.create({
+      header: 'Atenção!',
+      message: response,
+      duration: 4000,
+      position: 'middle',
+      icon: 'warning-outline',
+      color: 'danger'
+    }).then(toast => {
+      toast.present();
     });
   }
 
@@ -241,7 +238,7 @@ export class CarModelPage implements OnInit {
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',
-      color: 'primary'
+      color: 'success'
     }).then(toast => {
       toast.present();
     });
