@@ -86,7 +86,7 @@ export class CustomerPage implements OnInit {
       active: this.activeChecked
     };
 
-    const jwtData = { customerData: this.cryptoService.encondeJwt(data)};
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
     const subCustomers = this.dbService.createItem(environment.customersAction, jwtData, userId).subscribe(
       res => {

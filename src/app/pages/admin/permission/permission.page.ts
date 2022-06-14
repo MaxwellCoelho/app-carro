@@ -69,7 +69,7 @@ export class PermissionPage implements OnInit {
       level: this.formRoles.value.newRoleLevel
     };
 
-    const jwtData = { roleData: this.cryptoService.encondeJwt(data)};
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
     const subRoles = this.dbService.createItem(environment.rolesAction, jwtData, roleId).subscribe(
       res => {

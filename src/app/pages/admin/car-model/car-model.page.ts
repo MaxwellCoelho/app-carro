@@ -99,7 +99,7 @@ export class CarModelPage implements OnInit {
       active: this.activeChecked
     };
 
-    const jwtData = { modelData: this.cryptoService.encondeJwt(data)};
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
     const subModels = this.dbService.createItem(environment.modelsAction, jwtData, modelId).subscribe(
       res => {

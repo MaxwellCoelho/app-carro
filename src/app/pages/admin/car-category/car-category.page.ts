@@ -63,7 +63,7 @@ export class CarCategoryPage implements OnInit {
       active: this.activeChecked
     };
 
-    const jwtData = { categoryData: this.cryptoService.encondeJwt(data)};
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
     const subCategories = this.dbService.createItem(environment.categoriesAction, jwtData, categoryId).subscribe(
       res => {
