@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
       password: this.formLogin.value.userPassword
     };
 
-    const jwtData = { authData: this.cryptoService.encondeJwt(data)};
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
     const subCustomers = this.authService.authUser(jwtData).subscribe(
       res => {

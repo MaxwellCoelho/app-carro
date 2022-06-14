@@ -65,7 +65,7 @@ export class CarBrandPage implements OnInit {
       active: this.activeChecked
     };
 
-    const jwtData = { brandData: this.cryptoService.encondeJwt(data)};
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
     const subBrands = this.dbService.createItem(environment.brandsAction, jwtData, brandId).subscribe(
       res => {
