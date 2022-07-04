@@ -101,3 +101,15 @@ body, .main-container, #menu-list ion-label, #menu-header ion-label {
 form {
   display: inherit;
 }
+
+.searchbar-input-container.sc-ion-searchbar-ios {
+  height: 40px;
+
+  input {
+    padding-left: 2.5rem !important;
+  }
+}
+
+.searchbar-search-icon.sc-ion-searchbar-ios {
+  left: 10px;
+}

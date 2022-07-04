@@ -125,16 +125,4 @@ export class LoginPage implements OnInit {
     });
   }
 
-  public checkUser() {
-    this.authService.checkUser().subscribe(
-      res => {
-        console.log(res);
-        this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
 }

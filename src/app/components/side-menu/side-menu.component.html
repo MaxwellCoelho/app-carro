@@ -7,10 +7,10 @@
         <ion-label>{{loggedUser.name}}</ion-label>
       </ion-item>
 
-      <ion-item *ngIf="!loggedUser" (click)="clickItem(nav.login.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="none" detail="false">
+      <!-- <ion-item *ngIf="!loggedUser" (click)="clickItem(nav.login.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="none" detail="false">
         <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.login.title}}</ion-label>
-      </ion-item>
+      </ion-item> -->
     </ion-menu-toggle>
     <ion-buttons slot="primary">
       <ion-menu-toggle auto-hide="false">
