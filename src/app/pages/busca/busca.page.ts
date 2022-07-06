@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -12,8 +13,12 @@ import { environment } from 'src/environments/environment';
 export class BuscaPage implements OnInit {
 
   public nav = NAVIGATION;
-  public brands: Array<any>;
-  public filteredBrands: Array<any>;
+  public brands = [];
+  public filteredBrands = [];
+  public selectedBrand: object;
+  public models = [];
+  public filteredModels = [];
+  public selectedModel: object;
   public showLoader: boolean;
 
   constructor(
@@ -30,8 +35,14 @@ export class BuscaPage implements OnInit {
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
-        this.filteredBrands = res.brands;
+        this.brands = [];
+        for (const brand of res.brands) {
+          if (brand.active) {
+            this.brands.push(brand);
+          }
+        }
+
+        this.filteredBrands = this.brands;
         this.showLoader = false;
       },
       err => {
@@ -40,11 +51,17 @@ export class BuscaPage implements OnInit {
     );
   }
 
-  public clickItem(brand) {
-    console.log(brand);
+  public selectBrand(brand) {
+    this.selectedBrand = brand;
+    this.getModel();
   }
 
-  public searchInput($event) {
+  public clearBrand() {
+    this.filteredBrands = this.brands;
+    this.selectedBrand = null;
+  }
+
+  public searchBrandInput($event) {
     const query = $event.target.value.toLowerCase();
     this.filteredBrands = [];
 
@@ -52,6 +69,47 @@ export class BuscaPage implements OnInit {
       this.brands.forEach((item) => {
         if (item.name.toLowerCase().indexOf(query) > -1) {
           this.filteredBrands.push(item);
+        }
+      });
+    });
+  }
+
+  public getModel(): void {
+    this.showLoader = true;
+
+    const myFilter = { brand: this.selectedBrand['_id'] };
+    const subModels = this.dbService.filterItem(environment.filterModelsAction, myFilter).subscribe(
+      res => {
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.models = [];
+        for (const model of res.models) {
+          if (model.active) {
+            this.models.push(model);
+          }
+        }
+
+        this.filteredModels = this.models;
+        this.showLoader = false;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public selectModel(model) {
+    this.selectedModel = model;
+    console.log(this.selectedModel);
+  }
+
+  public searchModelInput($event) {
+    const query = $event.target.value.toLowerCase();
+    this.filteredModels = [];
+
+    requestAnimationFrame(() => {
+      this.models.forEach((item) => {
+        if (item.name.toLowerCase().indexOf(query) > -1) {
+          this.filteredModels.push(item);
         }
       });
     });

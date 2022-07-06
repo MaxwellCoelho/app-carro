@@ -28,4 +28,9 @@ export class DataBaseService {
     const url = `${environment.middlewareEndpoint}/${myAction}`;
     return this.http.post(url, data, { withCredentials: true });
   }
+
+  public filterItem(action: string, data: any): any {
+    const url = `${environment.middlewareEndpoint}/${action}`;
+    return this.http.post(url, data, { withCredentials: true });
+  }
 }
