@@ -48,7 +48,25 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: '',
+    path: 'opiniao/:marca/:modelo',
+    loadChildren: () => import('./pages/opiniao/opiniao.module').then( m => m.OpiniaoPageModule)
+  },
+  {
+    path: 'opinar/:marca/:modelo',
+    loadChildren: () => import('./pages/opinar/opinar.module').then( m => m.OpinarPageModule)
+  },
+  {
+    path: 'opinar',
+    pathMatch: 'full',
+    redirectTo: NAVIGATION.search.route
+  },
+  {
+    path: 'opiniao',
+    pathMatch: 'full',
+    redirectTo: NAVIGATION.search.route
+  },
+  {
+    path: '**',
     redirectTo: NAVIGATION.best.route,
     pathMatch: 'full'
   },

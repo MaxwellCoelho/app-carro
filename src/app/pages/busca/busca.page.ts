@@ -2,8 +2,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
+import { SearchService } from 'src/app/services/search/search.service';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-busca',
@@ -23,7 +26,10 @@ export class BuscaPage implements OnInit {
 
   constructor(
     public dbService: DataBaseService,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public cryptoService: CryptoService,
+    public searchService: SearchService,
+    public router: Router,
   ) {}
 
   ngOnInit() {
@@ -78,7 +84,8 @@ export class BuscaPage implements OnInit {
     this.showLoader = true;
 
     const myFilter = { brand: this.selectedBrand['_id'] };
-    const subModels = this.dbService.filterItem(environment.filterModelsAction, myFilter).subscribe(
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
         this.models = [];
@@ -97,11 +104,6 @@ export class BuscaPage implements OnInit {
     );
   }
 
-  public selectModel(model) {
-    this.selectedModel = model;
-    console.log(this.selectedModel);
-  }
-
   public searchModelInput($event) {
     const query = $event.target.value.toLowerCase();
     this.filteredModels = [];
@@ -113,6 +115,21 @@ export class BuscaPage implements OnInit {
         }
       });
     });
+  }
+
+  public clickCarItem($event, brand, model) {
+    const id = $event.target.id;
+    const page = id && !id.includes('item-img') && !id.includes('item-label') ? 'opinar' : 'opiniao';
+    const pageUrl = `/${page}/${brand.toLowerCase()}/${model.toLowerCase()}`;
+
+    this.saveSelectedModel(model);
+    this.clearBrand();
+    this.router.navigate([pageUrl]);
+  }
+
+  public saveSelectedModel(modelName: string): void{
+    const selectedModel = this.filteredModels.find(mod => mod.name.toLowerCase() === modelName.toLowerCase());
+    this.searchService.saveModel(selectedModel);
   }
 
   public showErrorToast(err) {

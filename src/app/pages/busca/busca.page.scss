@@ -10,9 +10,22 @@
 
 .brand-image-title {
   max-width: 100px;
-  margin: 0.5rem 1.5rem 0.5rem 0.5rem;
+  margin: 0.5rem 1.5rem 0.5rem 0;
 }
 
 .brand-label-title {
   font-size: xx-large;
+  text-transform: capitalize;
+}
+
+.item-button {
+  text-transform: capitalize;
+}
+
+ion-searchbar {
+  padding: 1rem 0;
+}
+
+ion-item.item-button::part(native) {
+  padding-left: 0 !important;
 }
