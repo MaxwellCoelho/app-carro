@@ -1,6 +1,6 @@
 .brand-image-title {
   max-width: 100px;
-  margin: 0.5rem 1.5rem 0.5rem 0rem;
+  margin: 0 1.5rem 0 0rem;
 }
 
 .brand-label-title {
@@ -18,24 +18,136 @@
 }
 
 .category-image {
-  margin-right: 0.5rem;;
+  margin-right: 0.5rem;
+  margin-top: -0.2rem;
+  vertical-align: middle;
+}
+
+.selected-model-grid {
+  .model-logo {
+    text-align: right;
+  }
+
+  .model-name {
+    padding-top: 2.2rem;
+  }
+
+  .model-category {
+    text-align: right;
+    padding-top: 2.6rem;
+    font-size: larger;
+  }
+
+  @media (max-width: 576px) {
+    .model-name {
+      text-align: center;
+      padding-top: 0;
+    }
+
+    .model-logo {
+      text-align: center;
+
+      .brand-image-title {
+        margin: 0 0 -1rem 0;
+      }
+    }
+
+    .model-category {
+      text-align: center;
+      padding: 0.5rem 0 1rem 0;
+    }
+  }
 }
 
 .valuation-itens {
   .item-title {
     text-align: right;
 
+    @media (max-width: 576px) {
+      text-align: left;
+    }
+
     h1 {
       font-weight: 500;
-      font-size: larger;
+      font-size: x-large;
     }
   }
 
   .item-subtitle {
     text-align: right;
 
-    p {
-      margin-top: -8px;
+    @media (max-width: 576px) {
+      text-align: left;
     }
+
+    p {
+      margin-top: -4px;
+    }
+  }
+
+  .valuation-row {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+  }
+
+  ion-segment.ion-color {
+    background: rgba(255, 255, 255, .5);
+  }
+
+  .item-col-val {
+    margin: 0.5rem 0;
+
+    @media (max-width: 576px) {
+      margin: 0 1rem;
+    }
+  }
+
+  .segment-button-checked.otimo::part(indicator-background) {
+    background: var(--ion-color-primary);
+  }
+
+  .segment-button-checked.bom::part(indicator-background) {
+    background: var(--ion-color-success);
+  }
+
+  .segment-button-checked.regular::part(indicator-background) {
+    background: var(--ion-color-secondary);
+  }
+
+  .segment-button-checked.ruim::part(indicator-background) {
+    background: var(--ion-color-danger);
+  }
+
+  .segment-button-checked.pessimo::part(indicator-background) {
+    background: var(--ion-color-danger-secondary);
+  }
+
+  .segment-button-checked ion-label {
+    color: #fff;
+  }
+
+  ion-row.item-medium {
+    background-color: rgba(var(--ion-color-medium-rgb), 0.2);
+  }
+
+  ion-row.item-otimo {
+    background-color: rgba(var(--ion-color-primary-rgb), 0.2);
+  }
+
+  ion-row.item-bom {
+    background-color: rgba(var(--ion-color-success-rgb), 0.2);
+  }
+
+  ion-row.item-regular {
+    background-color: rgba(var(--ion-color-secondary-rgb), 0.2);
+  }
+
+  ion-row.item-ruim {
+    background-color: rgba(var(--ion-color-danger-rgb), 0.2);
+  }
+
+  ion-row.item-pessimo {
+    background-color: rgba(var(--ion-color-danger-secondary-rgb), 0.2);
   }
 }

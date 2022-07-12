@@ -119,3 +119,12 @@ form {
 .searchbar-search-icon.sc-ion-searchbar-ios {
   left: 10px;
 }
+
+ion-segment-button {
+  min-width: 0px !important;
+  padding: 1rem 0;
+
+  @media (max-width: 576px) {
+    padding: .5rem 0;
+  }
+}

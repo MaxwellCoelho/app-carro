@@ -47,13 +47,13 @@ export class OpiniaoPage implements OnInit {
     this.showLoader = true;
 
     const urlParams = this.getUrlParams();
-    const myFilter = { name: urlParams['model'] };
+    const myFilter = { url: urlParams['model'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
 
-        const foundModel = res.models.find(mod => mod.brand.name === urlParams['brand'] && mod.active);
+        const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
 
         if (foundModel) {
           this.selectedModel = foundModel;

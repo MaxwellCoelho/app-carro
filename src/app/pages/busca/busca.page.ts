@@ -120,7 +120,7 @@ export class BuscaPage implements OnInit {
   public clickCarItem($event, brand, model) {
     const id = $event.target.id;
     const page = id && !id.includes('item-img') && !id.includes('item-label') ? 'opinar' : 'opiniao';
-    const pageUrl = `/${page}/${brand.toLowerCase()}/${model.toLowerCase()}`;
+    const pageUrl = `/${page}/${brand}/${model}`;
 
     this.saveSelectedModel(model);
     this.clearBrand();

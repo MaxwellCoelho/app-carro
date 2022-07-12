@@ -10,7 +10,7 @@
     <div class="main-body" *ngIf="selectedModel">
       <ion-item lines="none">
         <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/no-img.svg'" class="brand-image-title">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
         <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
 
         <ion-item slot="end" lines="none">
@@ -20,7 +20,7 @@
       </ion-item>
       <ion-item lines="none">
         <img src="assets/models/{{selectedModel.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/no-img.svg'" class="model-image">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
     </div>
   </div>

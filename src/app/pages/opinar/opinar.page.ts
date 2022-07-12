@@ -27,11 +27,12 @@ export class OpinarPage implements OnInit {
     { name: 'Ótimo', value:'otimo' }
   ];
   public valuationItens = [
-    { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior' },
-    { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior' },
-    { title: 'Conforto', subtitle: 'Dirigibilidade e desempenho', value:'conforto' },
-    { title: 'Segurança', subtitle: 'Itens de série e estabilidade', value:'interior' },
-    { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'interior' }
+    { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior', valuation: null },
+    { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior', valuation: null },
+    { title: 'Conforto', subtitle: 'Dirigibilidade e desempenho', value:'conforto', valuation: null },
+    { title: 'Segurança', subtitle: 'Itens de série e estabilidade', value:'seguranca', valuation: null },
+    { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
+    { title: 'Custo-benefício', subtitle: 'Recomendaria?', value:'custo-beneficio', valuation: null }
   ];
 
   constructor(
@@ -61,13 +62,13 @@ export class OpinarPage implements OnInit {
     this.showLoader = true;
 
     const urlParams = this.getUrlParams();
-    const myFilter = { name: urlParams['model'] };
+    const myFilter = { url: urlParams['model'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
 
-        const foundModel = res.models.find(mod => mod.brand.name === urlParams['brand'] && mod.active);
+        const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
 
         if (foundModel) {
           this.selectedModel = foundModel;
@@ -95,6 +96,16 @@ export class OpinarPage implements OnInit {
       brand: brandParam,
       model: modelParam
     };
+  }
+
+  public segmentChanged($event) {
+    this.valuationItens.find(item => {
+        if (item.value === $event.target.id) {
+          item.valuation = $event.target.value;
+        }
+      }
+    );
+    console.log($event.target.id, $event.target.value);
   }
 
   public showErrorToast(err) {

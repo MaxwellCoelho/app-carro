@@ -41,9 +41,11 @@ export class CarModelPage implements OnInit {
   public initForm() {
     this.formModels = this.fb.group({
       editModelId: this.fb.control(''),
-      newModelName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newModelName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
       newModelCategory: this.fb.control('', [Validators.required]),
-      newModelBrand: this.fb.control('', [Validators.required])
+      newModelBrand: this.fb.control('', [Validators.required]),
+      newModelImage: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newModelThumb: this.fb.control('', [Validators.required, Validators.minLength(3)])
     });
   }
 
@@ -96,6 +98,8 @@ export class CarModelPage implements OnInit {
       name: this.formModels.value.newModelName,
       category: this.formModels.value.newModelCategory,
       brand: this.formModels.value.newModelBrand,
+      image: this.formModels.value.newModelImage,
+      thumb: this.formModels.value.newModelThumb,
       active: this.activeChecked
     };
 
@@ -121,7 +125,9 @@ export class CarModelPage implements OnInit {
       editModelId: model['_id'],
       newModelName: model.name,
       newModelCategory: model.category['_id'],
-      newModelBrand: model.brand['_id']
+      newModelBrand: model.brand['_id'],
+      newModelImage: model.image,
+      newModelThumb: model.thumb
     });
 
     this.activeChecked = model.active;
