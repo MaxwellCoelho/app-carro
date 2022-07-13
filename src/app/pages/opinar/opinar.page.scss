@@ -18,9 +18,9 @@
 }
 
 .category-image {
-  margin-right: 0.5rem;
   margin-top: -0.2rem;
   vertical-align: middle;
+  transform: scale(0.7);
 }
 
 .selected-model-grid {
@@ -34,8 +34,7 @@
 
   .model-category {
     text-align: right;
-    padding-top: 2.6rem;
-    font-size: larger;
+    padding-top: 2.7rem;
   }
 
   @media (max-width: 576px) {
