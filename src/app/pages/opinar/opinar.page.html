@@ -24,23 +24,111 @@
         </ion-row>
       </ion-grid>
 
-      <!-- <ion-item lines="none">
-        <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
-        <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
-
-        <ion-item slot="end" lines="none">
-          <ion-icon name="car-outline" color="medium" size="medium" class="category-image"></ion-icon>
-          <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
-        </ion-item>
-      </ion-item> -->
-
       <ion-item lines="none">
         <img src="assets/models/{{selectedModel.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
           onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
 
       <ion-grid slot="content" class="valuation-itens">
+        <ion-row>
+          <ion-col>
+            <h1>Primeiro informe as características do seu carro</h1>
+          </ion-col>
+        </ion-row>
+
+        <form [formGroup]="formOpinarCarro" (submit)="showConfirmAlert()">
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Combustível</ion-label>
+                <ion-select interface="popover" formControlName="opinarCombustivel">
+                  <ion-select-option value="flex">Flex</ion-select-option>
+                  <ion-select-option value="gasolina">Gasolina</ion-select-option>
+                  <ion-select-option value="etanol">Etanol</ion-select-option>
+                  <ion-select-option value="diesel">Diesel</ion-select-option>
+                  <ion-select-option value="hibrido">Híbrido</ion-select-option>
+                  <ion-select-option value="eletrico">Elétrico</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Motor</ion-label>
+                <ion-select interface="popover" formControlName="opinarMotor">
+                  <ion-select-option value="10">1.0</ion-select-option>
+                  <ion-select-option value="14">1.4</ion-select-option>
+                  <ion-select-option value="16">1.6</ion-select-option>
+                  <ion-select-option value="20">2.0</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Ano modelo</ion-label>
+                <ion-select interface="popover" formControlName="opinarAnoModelo">
+                  <ion-select-option value="2022">2022</ion-select-option>
+                  <ion-select-option value="2021">2021</ion-select-option>
+                  <ion-select-option value="2020">2020</ion-select-option>
+                  <ion-select-option value="2019">2019</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Versão (opcional)</ion-label>
+                <ion-input type="text" formControlName="opinarVersao"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Ano em que comprou o carro</ion-label>
+                <ion-select interface="popover" formControlName="opinarAnoCompra">
+                  <ion-select-option value="2022">2022</ion-select-option>
+                  <ion-select-option value="2021">2021</ion-select-option>
+                  <ion-select-option value="2020">2020</ion-select-option>
+                  <ion-select-option value="2019">2019</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Km aproximada quando comprou</ion-label>
+                <ion-select interface="popover" formControlName="opinarKmCompra">
+                  <ion-select-option value="0">0 Km</ion-select-option>
+                  <ion-select-option value="5">5 mil Km</ion-select-option>
+                  <ion-select-option value="10">10 mil Km</ion-select-option>
+                  <ion-select-option value="15">15 mil Km</ion-select-option>
+                  <ion-select-option value="20">20 mil Km</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Período aproximado que ficou com o carro</ion-label>
+                <ion-select interface="popover" formControlName="opinarPeriodo">
+                  <ion-select-option value="0">É meu carro atual</ion-select-option>
+                  <ion-select-option value="1">1 ano</ion-select-option>
+                  <ion-select-option value="2">2 anos</ion-select-option>
+                  <ion-select-option value="3">3 anos</ion-select-option>
+                  <ion-select-option value="4">4 anos</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </form>
+
+        <ion-row>
+          <ion-col>
+            <h1>O que você tem a dizer sobre seu carro?</h1>
+          </ion-col>
+        </ion-row>
+
         <ion-row *ngFor="let item of valuationItens" class="valuation-row" [ngClass]="item.valuation ? 'item-'+item.valuation : 'item-medium'">
           <ion-col size-md="3" size-sm="4" size-xs="12" class="item-col-val">
             <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>

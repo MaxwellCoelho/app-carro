@@ -8,6 +8,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-opinar',
@@ -19,6 +20,8 @@ export class OpinarPage implements OnInit {
   public nav = NAVIGATION;
   public selectedModel: object;
   public showLoader: boolean;
+  public formOpinarCarro: FormGroup;
+
   public valuation = [
     { name: 'Péssimo', value:'pessimo' },
     { name: 'Ruim', value:'ruim' },
@@ -42,10 +45,24 @@ export class OpinarPage implements OnInit {
     public route: ActivatedRoute,
     public searchService: SearchService,
     public router: Router,
+    public fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
     this.loadModelInfo();
+    this.initForm();
+  }
+
+  public initForm() {
+    this.formOpinarCarro = this.fb.group({
+      opinarCombustivel: this.fb.control(''),
+      opinarMotor: this.fb.control(''),
+      opinarAnoModelo: this.fb.control(''),
+      opinarVersao: this.fb.control(''),
+      opinarAnoCompra: this.fb.control(''),
+      opinarKmCompra: this.fb.control(''),
+      opinarPeriodo: this.fb.control('')
+    });
   }
 
   public loadModelInfo(): void {
