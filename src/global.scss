@@ -128,3 +128,16 @@ ion-segment-button {
     padding: .5rem 0;
   }
 }
+
+ion-range {
+  --bar-border-radius: 8px;
+  --knob-background: var(--ion-color-primary);
+  --knob-size: 40px;
+  --pin-background: #fff;
+  --pin-color: #000;
+}
+
+ion-range::part(pin) {
+  top: 20px;
+  font-weight: bolder;
+}

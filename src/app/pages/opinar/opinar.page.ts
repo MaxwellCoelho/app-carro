@@ -29,6 +29,7 @@ export class OpinarPage implements OnInit {
     { name: 'Bom', value:'bom' },
     { name: 'Ótimo', value:'otimo' }
   ];
+
   public valuationItens = [
     { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior', valuation: null },
     { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior', valuation: null },
@@ -37,6 +38,11 @@ export class OpinarPage implements OnInit {
     { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
     { title: 'Custo-benefício', subtitle: 'Recomendaria?', value:'custo-beneficio', valuation: null }
   ];
+
+  public opinarKmCompra: string;
+  public opinarMotor: string;
+  public opinarPeriodo: string;
+  public newerYear;
 
   constructor(
     public dbService: DataBaseService,
@@ -49,20 +55,26 @@ export class OpinarPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.newerYear = new Date().getFullYear();
+    this.changeOpinarKmCompra({detail: { value: 0}});
+    this.changeOpinarMotor({detail: { value: 1}});
+    this.changeOpinarPeriodo({detail: { value: 2022}});
     this.loadModelInfo();
     this.initForm();
   }
 
   public initForm() {
     this.formOpinarCarro = this.fb.group({
-      opinarCombustivel: this.fb.control(''),
-      opinarMotor: this.fb.control(''),
-      opinarAnoModelo: this.fb.control(''),
+      opinarCombustivel: this.fb.control('', [Validators.required]),
+      opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
       opinarVersao: this.fb.control(''),
-      opinarAnoCompra: this.fb.control(''),
-      opinarKmCompra: this.fb.control(''),
-      opinarPeriodo: this.fb.control('')
+      opinarAnoCompra: this.fb.control('', [Validators.required, Validators.max(this.newerYear)])
     });
+  }
+
+  public onlyNumbers($event): void {
+    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
+    $event.srcElement.value = onlyNumbers;
   }
 
   public loadModelInfo(): void {
@@ -158,4 +170,33 @@ export class OpinarPage implements OnInit {
     });
   }
 
+  public changeOpinarKmCompra($event) {
+    this.opinarKmCompra = this.pinFormatterKmCompra($event.detail.value);
+  }
+
+  public changeOpinarMotor($event) {
+    this.opinarMotor = this.pinFormatterMotor($event.detail.value);
+  }
+
+  public changeOpinarPeriodo($event) {
+    this.opinarPeriodo = this.pinFormatterPeriodo($event.detail.value);
+  }
+
+  public pinFormatterKmCompra(value: number) {
+    const plus = value === 100 ? '+' : '';
+    const km = value === 0 ? 'Km' : 'mil km';
+
+    return `${plus}${value} ${km}`;
+  }
+
+  public pinFormatterMotor(value: number) {
+    return value.toFixed(1);
+  }
+
+  public pinFormatterPeriodo(value: number) {
+    const plural = value > 1 ? 's' : '';
+    const newerYear = new Date().getFullYear();
+
+    return value < newerYear ? `${value} ano${plural}` : 'Carro atual';
+  }
 }

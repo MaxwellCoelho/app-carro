@@ -54,25 +54,8 @@
 
             <ion-col>
               <ion-item>
-                <ion-label position="floating">Motor</ion-label>
-                <ion-select interface="popover" formControlName="opinarMotor">
-                  <ion-select-option value="10">1.0</ion-select-option>
-                  <ion-select-option value="14">1.4</ion-select-option>
-                  <ion-select-option value="16">1.6</ion-select-option>
-                  <ion-select-option value="20">2.0</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-
-            <ion-col>
-              <ion-item>
                 <ion-label position="floating">Ano modelo</ion-label>
-                <ion-select interface="popover" formControlName="opinarAnoModelo">
-                  <ion-select-option value="2022">2022</ion-select-option>
-                  <ion-select-option value="2021">2021</ion-select-option>
-                  <ion-select-option value="2020">2020</ion-select-option>
-                  <ion-select-option value="2019">2019</ion-select-option>
-                </ion-select>
+                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -82,43 +65,31 @@
                 <ion-input type="text" formControlName="opinarVersao"></ion-input>
               </ion-item>
             </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-label position="floating">Km aproximada quando comprou: {{opinarKmCompra}}</ion-label>
+              <ion-range [min]="0" [max]="100" [value]="0" [pin]="true" [pinFormatter]="pinFormatterKmCompra" (ionChange)="changeOpinarKmCompra($event)"></ion-range>
+            </ion-col>
 
+            <ion-col>
+              <ion-label position="floating">Motor: {{opinarMotor}}</ion-label>
+              <ion-range [min]="1" [max]="4.5" [step]="0.1" [value]="0" [pin]="true" [pinFormatter]="pinFormatterMotor" (ionChange)="changeOpinarMotor($event)"></ion-range>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">Ano em que comprou o carro</ion-label>
-                <ion-select interface="popover" formControlName="opinarAnoCompra">
-                  <ion-select-option value="2022">2022</ion-select-option>
-                  <ion-select-option value="2021">2021</ion-select-option>
-                  <ion-select-option value="2020">2020</ion-select-option>
-                  <ion-select-option value="2019">2019</ion-select-option>
-                </ion-select>
+                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col>
-              <ion-item>
-                <ion-label position="floating">Km aproximada quando comprou</ion-label>
-                <ion-select interface="popover" formControlName="opinarKmCompra">
-                  <ion-select-option value="0">0 Km</ion-select-option>
-                  <ion-select-option value="5">5 mil Km</ion-select-option>
-                  <ion-select-option value="10">10 mil Km</ion-select-option>
-                  <ion-select-option value="15">15 mil Km</ion-select-option>
-                  <ion-select-option value="20">20 mil Km</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-
-            <ion-col>
-              <ion-item>
-                <ion-label position="floating">Período aproximado que ficou com o carro</ion-label>
-                <ion-select interface="popover" formControlName="opinarPeriodo">
-                  <ion-select-option value="0">É meu carro atual</ion-select-option>
-                  <ion-select-option value="1">1 ano</ion-select-option>
-                  <ion-select-option value="2">2 anos</ion-select-option>
-                  <ion-select-option value="3">3 anos</ion-select-option>
-                  <ion-select-option value="4">4 anos</ion-select-option>
-                </ion-select>
-              </ion-item>
+              <ion-label position="floating">Período de permanência com o carro: {{opinarPeriodo}}</ion-label>
+              <ion-range [min]="1" [max]="newerYear - formOpinarCarro.value.opinarAnoCompra" [step]="1" [value]="newerYear"
+                [pin]="true" [pinFormatter]="pinFormatterPeriodo" (ionChange)="changeOpinarPeriodo($event)"></ion-range>
             </ion-col>
           </ion-row>
         </form>
