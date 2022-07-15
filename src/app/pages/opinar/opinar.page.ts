@@ -171,32 +171,24 @@ export class OpinarPage implements OnInit {
   }
 
   public changeOpinarKmCompra($event) {
-    this.opinarKmCompra = this.pinFormatterKmCompra($event.detail.value);
+    const value = $event.detail.value;
+    const plus = value === 99 ? '+' : '';
+    const km = value === 0 ? 'Km' : '000 km';
+
+    this.opinarKmCompra = `${plus}${value} ${km}`;
   }
 
   public changeOpinarMotor($event) {
-    this.opinarMotor = this.pinFormatterMotor($event.detail.value);
+    const value = $event.detail.value;
+
+    this.opinarMotor = value.toFixed(1);
   }
 
   public changeOpinarPeriodo($event) {
-    this.opinarPeriodo = this.pinFormatterPeriodo($event.detail.value);
-  }
-
-  public pinFormatterKmCompra(value: number) {
-    const plus = value === 100 ? '+' : '';
-    const km = value === 0 ? 'Km' : 'mil km';
-
-    return `${plus}${value} ${km}`;
-  }
-
-  public pinFormatterMotor(value: number) {
-    return value.toFixed(1);
-  }
-
-  public pinFormatterPeriodo(value: number) {
+    const value = $event.detail.value;
     const plural = value > 1 ? 's' : '';
-    const newerYear = new Date().getFullYear();
+    const maxPeriod = this.formOpinarCarro ? this.newerYear - this.formOpinarCarro.value.opinarAnoCompra : 1;
 
-    return value < newerYear ? `${value} ano${plural}` : 'Carro atual';
+    this.opinarPeriodo = value < maxPeriod ? `${value} ano${plural}` : 'Atual';
   }
 }

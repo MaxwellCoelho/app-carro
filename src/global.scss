@@ -132,7 +132,7 @@ ion-segment-button {
 ion-range {
   --bar-border-radius: 8px;
   --knob-background: var(--ion-color-primary);
-  --knob-size: 40px;
+  --knob-size: 26px;
   --pin-background: #fff;
   --pin-color: #000;
 }
@@ -140,4 +140,8 @@ ion-range {
 ion-range::part(pin) {
   top: 20px;
   font-weight: bolder;
+}
+
+ion-range::part(knob) {
+  transform: scale(1);
 }

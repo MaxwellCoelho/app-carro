@@ -38,7 +38,15 @@
 
         <form [formGroup]="formOpinarCarro" (submit)="showConfirmAlert()">
           <ion-row>
-            <ion-col>
+            <ion-col size-lg="2" size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Ano modelo</ion-label>
+                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
+                  placeholder="Ex: 2015"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-lg="2" size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Combustível</ion-label>
                 <ion-select interface="popover" formControlName="opinarCombustivel">
@@ -52,44 +60,56 @@
               </ion-item>
             </ion-col>
 
-            <ion-col>
-              <ion-item>
-                <ion-label position="floating">Ano modelo</ion-label>
-                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"></ion-input>
+            <ion-col size-lg="5.6" size-md="8.8" size-sm="7.6" size-xs="12">
+              <ion-item lines="none">
+                <ion-label position="floating" style="padding-bottom: 0.2rem">Motorização</ion-label>
+                <ion-range [min]="1" [max]="4.5" [step]="0.1" [value]="0" (ionChange)="changeOpinarMotor($event)"></ion-range>
               </ion-item>
             </ion-col>
 
-            <ion-col>
-              <ion-item>
-                <ion-label position="floating">Versão (opcional)</ion-label>
-                <ion-input type="text" formControlName="opinarVersao"></ion-input>
+            <ion-col size-lg="2.4" size-md="3.2" size-sm="4.4" size-xs="12">
+              <ion-item lines="none">
+                <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarMotor}}</h1></ion-note>
               </ion-item>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <ion-label position="floating">Km aproximada quando comprou: {{opinarKmCompra}}</ion-label>
-              <ion-range [min]="0" [max]="100" [value]="0" [pin]="true" [pinFormatter]="pinFormatterKmCompra" (ionChange)="changeOpinarKmCompra($event)"></ion-range>
-            </ion-col>
-
-            <ion-col>
-              <ion-label position="floating">Motor: {{opinarMotor}}</ion-label>
-              <ion-range [min]="1" [max]="4.5" [step]="0.1" [value]="0" [pin]="true" [pinFormatter]="pinFormatterMotor" (ionChange)="changeOpinarMotor($event)"></ion-range>
             </ion-col>
           </ion-row>
 
           <ion-row>
-            <ion-col>
+            <ion-col size-lg="2" size-md="2.6" size-sm="12" size-xs="12">
               <ion-item>
-                <ion-label position="floating">Ano em que comprou o carro</ion-label>
-                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"></ion-input>
+                <ion-label position="floating">Ano da compra</ion-label>
+                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"
+                  placeholder="Ex: 2017"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col>
-              <ion-label position="floating">Período de permanência com o carro: {{opinarPeriodo}}</ion-label>
-              <ion-range [min]="1" [max]="newerYear - formOpinarCarro.value.opinarAnoCompra" [step]="1" [value]="newerYear"
-                [pin]="true" [pinFormatter]="pinFormatterPeriodo" (ionChange)="changeOpinarPeriodo($event)"></ion-range>
+            <ion-col size-lg="7.6" size-md="6.2" size-sm="7.6" size-xs="12">
+              <ion-item lines="none">
+                <ion-label position="floating">Permanência com o carro</ion-label>
+                <ion-range [min]="1" [max]="formOpinarCarro.value.opinarAnoCompra ? newerYear - formOpinarCarro.value.opinarAnoCompra : 1" [step]="1" [value]="0"
+                  (ionChange)="changeOpinarPeriodo($event)"></ion-range>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-lg="2.4" size-md="3.2" size-sm="4.4" size-xs="12">
+              <ion-item lines="none">
+                <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarPeriodo}}</h1></ion-note>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size-lg="9.6" size-md="8.8" size-sm="7.6" size-xs="12">
+              <ion-item lines="none">
+                <ion-label position="floating" style="padding-bottom: 0.2rem">Km aproximada na compra</ion-label>
+                <ion-range [min]="0" [max]="99" [value]="0" (ionChange)="changeOpinarKmCompra($event)"></ion-range>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-lg="2.4" size-md="3.2" size-sm="4.4" size-xs="12">
+              <ion-item lines="none">
+                <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarKmCompra}}</h1></ion-note>
+              </ion-item>
             </ion-col>
           </ion-row>
         </form>

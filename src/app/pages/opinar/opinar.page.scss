@@ -149,4 +149,13 @@
   ion-row.item-pessimo {
     background-color: rgba(var(--ion-color-danger-secondary-rgb), 0.2);
   }
+
+  .range-note  {
+    margin-left: 0;
+
+    h1 {
+      margin: 0.7rem 0 0 0;
+     font-weight: bolder;
+    }
+  }
 }
