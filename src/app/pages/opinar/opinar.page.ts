@@ -43,6 +43,8 @@ export class OpinarPage implements OnInit {
   public opinarMotor: string;
   public opinarPeriodo: string;
   public newerYear;
+  public opinarPeriodoValue;
+  public opinarPeriodoMaxValue;
 
   constructor(
     public dbService: DataBaseService,
@@ -56,11 +58,13 @@ export class OpinarPage implements OnInit {
 
   ngOnInit(): void {
     this.newerYear = new Date().getFullYear();
+
     this.changeOpinarKmCompra({detail: { value: 0}});
     this.changeOpinarMotor({detail: { value: 1}});
-    this.changeOpinarPeriodo({detail: { value: 2022}});
+    this.changeOpinarPeriodo({detail: { value: this.newerYear - 1}});
     this.loadModelInfo();
     this.initForm();
+    this.resetOpinaPeriodo();
   }
 
   public initForm() {
@@ -75,6 +79,7 @@ export class OpinarPage implements OnInit {
   public onlyNumbers($event): void {
     const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
     $event.srcElement.value = onlyNumbers;
+    console.log(this.formOpinarCarro.controls.opinarVersao);
   }
 
   public loadModelInfo(): void {
@@ -187,8 +192,23 @@ export class OpinarPage implements OnInit {
   public changeOpinarPeriodo($event) {
     const value = $event.detail.value;
     const plural = value > 1 ? 's' : '';
-    const maxPeriod = this.formOpinarCarro ? this.newerYear - this.formOpinarCarro.value.opinarAnoCompra : 1;
+    const maxPeriod = this.formOpinarCarro ? this.newerYear - this.formOpinarCarro.controls.opinarAnoCompra.value : 1;
 
     this.opinarPeriodo = value < maxPeriod ? `${value} ano${plural}` : 'Atual';
+  }
+
+  public resetOpinaPeriodo() {
+    const isValid = this.formOpinarCarro.controls.opinarAnoCompra.valid;
+
+    if (isValid) {
+      const val = this.newerYear - this.formOpinarCarro.controls.opinarAnoCompra.value;
+      this.opinarPeriodoMaxValue = val;
+
+      if (!this.opinarPeriodoValue || val < this.opinarPeriodoValue) {
+        this.opinarPeriodoValue = val;
+      } else {
+        this.changeOpinarPeriodo({ detail: { value: this.opinarPeriodoValue }});
+      }
+    }
   }
 }

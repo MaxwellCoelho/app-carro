@@ -152,10 +152,41 @@
 
   .range-note  {
     margin-left: 0;
+    padding: 1rem 0 0 0;
 
     h1 {
-      margin: 0.7rem 0 0 0;
-     font-weight: bolder;
+      margin: 0;
+      font-weight: bolder;
+      font-size: large;
+      color: var(--ion-color-primary);
+      white-space: nowrap;
     }
+
+    @media (max-width: 576px) {
+      h1 {
+        font-size: larger;
+        padding-top: 0.1rem;
+      }
+    }
+  }
+
+  .range-label {
+    margin: 0;
+
+    p {
+      font-size: initial;
+      color: #000;
+      margin: 0;
+    }
+
+    @media (max-width: 576px) {
+      p {
+        font-size: larger;
+      }
+    }
+  }
+
+  .form-title {
+    margin-top: 2.5rem;
   }
 }

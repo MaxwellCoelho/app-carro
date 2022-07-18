@@ -135,6 +135,8 @@ ion-range {
   --knob-size: 26px;
   --pin-background: #fff;
   --pin-color: #000;
+  padding: 0 0.8rem;
+  margin-top: -0.85rem;
 }
 
 ion-range::part(pin) {
@@ -144,4 +146,14 @@ ion-range::part(pin) {
 
 ion-range::part(knob) {
   transform: scale(1);
+}
+
+.native-input.sc-ion-input-md {
+  padding-bottom: 0;
+}
+
+ion-item:not(.ion-focused, .item-has-focus, .item-has-value) .label-floating.sc-ion-label-md-h {
+  @media (max-width: 576px) {
+    font-size: smaller;
+  }
 }
