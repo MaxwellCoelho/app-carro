@@ -1,0 +1,165 @@
+
+<ion-grid slot="content" class="valuation-itens">
+  <ion-row>
+    <ion-col>
+      <h1 class="form-title">Primeiro informe as características do seu carro</h1>
+    </ion-col>
+  </ion-row>
+
+  <form [formGroup]="formOpinarCarro" (submit)="saveFormOpinarCarro()">
+    <ion-row>
+      <ion-col size-lg="2" size-md="3" size-sm="12" size-xs="12">
+        <ion-item class="input-item">
+          <ion-label position="floating">Ano modelo</ion-label>
+          <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
+            placeholder="Ex: 2015"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoModelo.touched">
+          <span *ngIf="formOpinarCarro.controls.opinarAnoModelo.errors?.required">Necessário preencher o ano do modelo do carro!</span>
+          <span *ngIf="formOpinarCarro.controls.opinarAnoModelo.errors?.minlength">Campo preenchido incorretamente! Ex: 2015</span>
+          <span *ngIf="formOpinarCarro.controls.opinarAnoModelo.errors?.max">Este ano é muito superior ao ano atual!</span>
+        </ion-note>
+      </ion-col>
+
+      <ion-col size-lg="2" size-md="3" size-sm="12" size-xs="12">
+        <ion-item class="input-item">
+          <ion-label position="floating">Combustível</ion-label>
+          <ion-select interface="popover" formControlName="opinarCombustivel">
+            <ion-select-option value="flex">Flex</ion-select-option>
+            <ion-select-option value="gasolina">Gasolina</ion-select-option>
+            <ion-select-option value="etanol">Etanol</ion-select-option>
+            <ion-select-option value="diesel">Diesel</ion-select-option>
+            <ion-select-option value="hibrido">Híbrido</ion-select-option>
+            <ion-select-option value="eletrico">Elétrico</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-lg="8" size-md="6" size-sm="12" size-xs="12">
+        <ion-item lines="none">
+          <ion-note slot="start" class="range-label"><p>Motorização</p></ion-note>
+          <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarMotor}}</h1></ion-note>
+        </ion-item>
+
+        <ion-range [min]="1" [max]="4.5" [step]="0.1" [value]="0" (ionChange)="changeOpinarMotor($event)"></ion-range>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size-lg="3" size-md="3" size-sm="4" size-xs="12">
+        <ion-item class="input-item">
+          <ion-label position="floating">Ano da compra</ion-label>
+          <ion-input type="tel" (ionInput)="onlyNumbers($event)" (ionChange)="resetOpinaPeriodo()" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"
+            placeholder="Ex: 2017"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoCompra.touched">
+          <span *ngIf="formOpinarCarro.controls.opinarAnoCompra.errors?.required">Necessário preencher o ano do modelo do carro!</span>
+          <span *ngIf="formOpinarCarro.controls.opinarAnoCompra.errors?.minlength">Campo preenchido incorretamente! Ex: 2015</span>
+          <span *ngIf="formOpinarCarro.controls.opinarAnoCompra.errors?.max">Este ano é muito superior ao ano atual!</span>
+        </ion-note>
+      </ion-col>
+
+      <ion-col size-lg="9" size-md="9" size-sm="8" size-xs="12">
+        <ion-item lines="none">
+          <ion-note slot="start" class="range-label"><p>Permanência com o carro</p></ion-note>
+          <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarPeriodo}}</h1></ion-note>
+        </ion-item>
+
+        <ion-range [min]="1" [max]="opinarPeriodoMaxValue" [value]="opinarPeriodoValue"
+            (ionChange)="changeOpinarPeriodo($event)" [disabled]="formOpinarCarro.controls.opinarAnoCompra.invalid"></ion-range>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size-lg="12" size-md="12" size-sm="12" size-xs="12">
+        <ion-item lines="none">
+          <ion-note slot="start" class="range-label"><p>Km aproximada na compra</p></ion-note>
+          <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarKmCompra}}</h1></ion-note>
+        </ion-item>
+
+        <ion-range [min]="0" [max]="99" [value]="0" (ionChange)="changeOpinarKmCompra($event)"></ion-range>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <h1 class="form-title">O que você tem a dizer sobre seu carro?</h1>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let item of valuationItens" class="valuation-row" [ngClass]="item.valuation ? 'item-'+item.valuation : 'item-medium'">
+      <ion-col size-md="3" size-sm="4" size-xs="12" class="item-col-val">
+        <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
+        <ion-label class="item-subtitle"><p>{{item.subtitle}}</p></ion-label>
+      </ion-col>
+      <ion-col size-md="9" size-sm="8" size-xs="12">
+        <ion-segment (ionChange)="segmentChanged($event)" mode="ios" color="light" [id]="item.value">
+          <ion-segment-button *ngFor="let val of valuation" value="{{val.value}}" [ngClass]="val.value">
+            <ion-label>{{val.name}}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <ion-note color="danger" *ngIf="showErrors && !item.valuation">
+          <span>Necessário preencher o título da sua avaliação!</span>
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <h1 class="form-title">Considerações finais</h1>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item class="input-item">
+          <ion-label position="floating">Título da sua avaliação</ion-label>
+          <ion-input type="tel" minlength="4" maxlength="80" formControlName="opinarTitulo"
+            placeholder="Ex: Melhor carro da categoria"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarTitulo.touched">
+          <span *ngIf="formOpinarCarro.controls.opinarTitulo.errors?.required">Necessário preencher o título da sua avaliação!</span>
+          <span *ngIf="formOpinarCarro.controls.opinarTitulo.errors?.minlength">Campo preenchido incorretamente! Ex: Melhor custo benefício</span>
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item class="input-item">
+          <ion-label position="floating">Descreva os pontos positivos</ion-label>
+          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosPositivos" rows="3"
+            placeholder="Ex: O carro é confortável, consome pouco combustível na cidade, o porta-malas é espaçoso"></ion-textarea>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarPontosPositivos.touched">
+          <span *ngIf="formOpinarCarro.controls.opinarPontosPositivos.errors?.required">Necessário preencher os pontos positivos!</span>
+          <span *ngIf="formOpinarCarro.controls.opinarPontosPositivos.errors?.minlength">Campo preenchido incorretamente! Ex: O porta-malas é espaçoso, o carro é confortável</span>
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item class="input-item">
+          <ion-label position="floating">Descreva os pontos negativos</ion-label>
+          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosNegativos" rows="3"
+            placeholder="Ex: A suspenão é dura, consome muito na cidade, pouco espaço interno"></ion-textarea>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarPontosNegativos.touched">
+          <span *ngIf="formOpinarCarro.controls.opinarPontosNegativos.errors?.required">Necessário preencher os pontos negativos!</span>
+          <span *ngIf="formOpinarCarro.controls.opinarPontosNegativos.errors?.minlength">Campo preenchido incorretamente! Ex: A suspenão é dura, pouco espaço interno</span>
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <br>
+        <ion-button size="default" title="Próximo" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinarCarro.status === 'INVALID' || !hasAllValuations">
+          <ion-icon size="default" name="arrow-forward-outline"></ion-icon>
+          <ion-label slot="start">Próximo</ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>

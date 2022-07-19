@@ -29,101 +29,50 @@
           onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
 
-      <ion-grid slot="content" class="valuation-itens">
+      <ion-grid slot="content" class="grid-steps">
         <ion-row>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.5" size-xs="3">
+            <ion-icon size="large" [name]="'car-sport'" color="primary" class="step-icon"></ion-icon>
+          </ion-col>
+
           <ion-col>
-            <h1 class="form-title">Primeiro informe as características do seu carro</h1>
+            <div class="step-line"></div>
+          </ion-col>
+
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.5" size-xs="3">
+            <ion-icon size="large" [name]="'pricetag'" color="secondary" class="step-icon"></ion-icon>
+          </ion-col>
+
+          <ion-col>
+            <div class="step-line"></div>
+          </ion-col>
+
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.5" size-xs="3">
+            <ion-icon size="large" [name]="'paper-plane'" color="secondary" class="step-icon"></ion-icon>
           </ion-col>
         </ion-row>
 
-        <form [formGroup]="formOpinarCarro" (submit)="showConfirmAlert()">
-          <ion-row>
-            <ion-col size-lg="2" size-md="3" size-sm="12" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Ano modelo</ion-label>
-                <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
-                  placeholder="Ex: 2015"></ion-input>
-              </ion-item>
-              <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoModelo.touched && formOpinarCarro.controls.opinarAnoModelo.invalid">Campo inválido</ion-note>
-            </ion-col>
-
-            <ion-col size-lg="2" size-md="3" size-sm="12" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Combustível</ion-label>
-                <ion-select interface="popover" formControlName="opinarCombustivel">
-                  <ion-select-option value="flex">Flex</ion-select-option>
-                  <ion-select-option value="gasolina">Gasolina</ion-select-option>
-                  <ion-select-option value="etanol">Etanol</ion-select-option>
-                  <ion-select-option value="diesel">Diesel</ion-select-option>
-                  <ion-select-option value="hibrido">Híbrido</ion-select-option>
-                  <ion-select-option value="eletrico">Elétrico</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size-lg="8" size-md="6" size-sm="12" size-xs="12">
-              <ion-item lines="none">
-                <ion-note slot="start" class="range-label"><p>Motorização</p></ion-note>
-                <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarMotor}}</h1></ion-note>
-              </ion-item>
-
-              <ion-range [min]="1" [max]="4.5" [step]="0.1" [value]="0" (ionChange)="changeOpinarMotor($event)"></ion-range>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size-lg="3" size-md="3" size-sm="4" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Ano da compra</ion-label>
-                <ion-input type="tel" (ionInput)="onlyNumbers($event)" (ionChange)="resetOpinaPeriodo()" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"
-                  placeholder="Ex: 2017"></ion-input>
-              </ion-item>
-              <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoCompra.touched && formOpinarCarro.controls.opinarAnoCompra.invalid">Campo inválido</ion-note>
-            </ion-col>
-
-            <ion-col size-lg="9" size-md="9" size-sm="8" size-xs="12">
-              <ion-item lines="none">
-                <ion-note slot="start" class="range-label"><p>Permanência com o carro</p></ion-note>
-                <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarPeriodo}}</h1></ion-note>
-              </ion-item>
-
-              <ion-range [min]="1" [max]="opinarPeriodoMaxValue" [value]="opinarPeriodoValue"
-                  (ionChange)="changeOpinarPeriodo($event)" [disabled]="formOpinarCarro.controls.opinarAnoCompra.invalid"></ion-range>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size-lg="12" size-md="12" size-sm="12" size-xs="12">
-              <ion-item lines="none">
-                <ion-note slot="start" class="range-label"><p>Km aproximada na compra</p></ion-note>
-                <ion-note slot="end" color="dark" class="range-note"><h1>{{opinarKmCompra}}</h1></ion-note>
-              </ion-item>
-
-              <ion-range [min]="0" [max]="99" [value]="0" (ionChange)="changeOpinarKmCompra($event)"></ion-range>
-            </ion-col>
-          </ion-row>
-        </form>
-
         <ion-row>
-          <ion-col>
-            <h1 class="form-title">O que você tem a dizer sobre seu carro?</h1>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.5" size-xs="3">
+            <ion-note class="step-title" color="primary">O carro</ion-note>
           </ion-col>
-        </ion-row>
 
-        <ion-row *ngFor="let item of valuationItens" class="valuation-row" [ngClass]="item.valuation ? 'item-'+item.valuation : 'item-medium'">
-          <ion-col size-md="3" size-sm="4" size-xs="12" class="item-col-val">
-            <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
-            <ion-label class="item-subtitle"><p>{{item.subtitle}}</p></ion-label>
+          <ion-col></ion-col>
+
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.5" size-xs="3">
+            <ion-note class="step-title">A marca</ion-note>
           </ion-col>
-          <ion-col size-md="9" size-sm="8" size-xs="12">
-            <ion-segment (ionChange)="segmentChanged($event)" mode="ios" color="light" [id]="item.value">
-              <ion-segment-button *ngFor="let val of valuation" value="{{val.value}}" [ngClass]="val.value">
-                <ion-label>{{val.name}}</ion-label>
-              </ion-segment-button>
-            </ion-segment>
+
+          <ion-col></ion-col>
+
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.5" size-xs="3">
+            <ion-note class="step-title">Enviar</ion-note>
           </ion-col>
         </ion-row>
       </ion-grid>
+
+      <app-about-car *ngIf="!finalPayload.aboutCar" [selectedModel]="selectedModel" (aboutCar)="setAboutCarPayload($event)"></app-about-car>
+
     </div>
   </div>
 </ion-content>

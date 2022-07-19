@@ -8,7 +8,6 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-opinar',
@@ -20,31 +19,7 @@ export class OpinarPage implements OnInit {
   public nav = NAVIGATION;
   public selectedModel: object;
   public showLoader: boolean;
-  public formOpinarCarro: FormGroup;
-
-  public valuation = [
-    { name: 'Péssimo', value:'pessimo' },
-    { name: 'Ruim', value:'ruim' },
-    { name: 'Regular', value:'regular' },
-    { name: 'Bom', value:'bom' },
-    { name: 'Ótimo', value:'otimo' }
-  ];
-
-  public valuationItens = [
-    { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior', valuation: null },
-    { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior', valuation: null },
-    { title: 'Conforto', subtitle: 'Dirigibilidade e desempenho', value:'conforto', valuation: null },
-    { title: 'Segurança', subtitle: 'Itens de série e estabilidade', value:'seguranca', valuation: null },
-    { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
-    { title: 'Custo-benefício', subtitle: 'Recomendaria?', value:'custo-beneficio', valuation: null }
-  ];
-
-  public opinarKmCompra: string;
-  public opinarMotor: string;
-  public opinarPeriodo: string;
-  public newerYear;
-  public opinarPeriodoValue;
-  public opinarPeriodoMaxValue;
+  public finalPayload = {};
 
   constructor(
     public dbService: DataBaseService,
@@ -53,33 +28,10 @@ export class OpinarPage implements OnInit {
     public route: ActivatedRoute,
     public searchService: SearchService,
     public router: Router,
-    public fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
-    this.newerYear = new Date().getFullYear();
-
-    this.changeOpinarKmCompra({detail: { value: 0}});
-    this.changeOpinarMotor({detail: { value: 1}});
-    this.changeOpinarPeriodo({detail: { value: this.newerYear - 1}});
     this.loadModelInfo();
-    this.initForm();
-    this.resetOpinaPeriodo();
-  }
-
-  public initForm() {
-    this.formOpinarCarro = this.fb.group({
-      opinarCombustivel: this.fb.control('', [Validators.required]),
-      opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
-      opinarVersao: this.fb.control(''),
-      opinarAnoCompra: this.fb.control('', [Validators.required, Validators.max(this.newerYear)])
-    });
-  }
-
-  public onlyNumbers($event): void {
-    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
-    $event.srcElement.value = onlyNumbers;
-    console.log(this.formOpinarCarro.controls.opinarVersao);
   }
 
   public loadModelInfo(): void {
@@ -132,16 +84,6 @@ export class OpinarPage implements OnInit {
     };
   }
 
-  public segmentChanged($event) {
-    this.valuationItens.find(item => {
-        if (item.value === $event.target.id) {
-          item.valuation = $event.target.value;
-        }
-      }
-    );
-    console.log($event.target.id, $event.target.value);
-  }
-
   public showErrorToast(err) {
     const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
     const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
@@ -175,40 +117,9 @@ export class OpinarPage implements OnInit {
     });
   }
 
-  public changeOpinarKmCompra($event) {
-    const value = $event.detail.value;
-    const plus = value === 99 ? '+' : '';
-    const km = value === 0 ? 'Km' : '000 km';
-
-    this.opinarKmCompra = `${plus}${value} ${km}`;
+  public setAboutCarPayload($event) {
+    this.finalPayload['aboutCar'] = $event;
+    console.log(this.finalPayload);
   }
 
-  public changeOpinarMotor($event) {
-    const value = $event.detail.value;
-
-    this.opinarMotor = value.toFixed(1);
-  }
-
-  public changeOpinarPeriodo($event) {
-    const value = $event.detail.value;
-    const plural = value > 1 ? 's' : '';
-    const maxPeriod = this.formOpinarCarro ? this.newerYear - this.formOpinarCarro.controls.opinarAnoCompra.value : 1;
-
-    this.opinarPeriodo = value < maxPeriod ? `${value} ano${plural}` : 'Atual';
-  }
-
-  public resetOpinaPeriodo() {
-    const isValid = this.formOpinarCarro.controls.opinarAnoCompra.valid;
-
-    if (isValid) {
-      const val = this.newerYear - this.formOpinarCarro.controls.opinarAnoCompra.value;
-      this.opinarPeriodoMaxValue = val;
-
-      if (!this.opinarPeriodoValue || val < this.opinarPeriodoValue) {
-        this.opinarPeriodoValue = val;
-      } else {
-        this.changeOpinarPeriodo({ detail: { value: this.opinarPeriodoValue }});
-      }
-    }
-  }
 }
