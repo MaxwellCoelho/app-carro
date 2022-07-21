@@ -1,0 +1,26 @@
+<ion-grid slot="content" class="valuation-itens">
+  <ion-row>
+    <ion-col>
+      <h1 class="form-title">Finalizar</h1>
+    </ion-col>
+  </ion-row>
+
+  <form [formGroup]="formOpinarSend" (submit)="saveFormOpinarSend()">
+
+    <ion-row>
+      <ion-col size-md="6" size-sm="12" size-xs="12">
+        <br>
+        <ion-button size="default" title="Próximo" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinarSend.status === 'INVALID'">
+          <ion-icon size="default" name="arrow-forward-outline"></ion-icon>
+          <ion-label slot="start">Próximo</ion-label>
+        </ion-button>
+
+        <br>
+        <ion-chip outline title="Anterior" mode="ios" color="medium" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <ion-label>Anterior</ion-label>
+        </ion-chip>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>

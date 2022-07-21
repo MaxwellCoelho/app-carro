@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
@@ -16,10 +18,13 @@ import { Router } from '@angular/router';
 })
 export class OpinarPage implements OnInit {
 
+  @ViewChild('IonContent') content;
+
   public nav = NAVIGATION;
   public selectedModel: object;
   public showLoader: boolean;
   public finalPayload = {};
+  public currentStep = 1;
 
   constructor(
     public dbService: DataBaseService,
@@ -28,6 +33,7 @@ export class OpinarPage implements OnInit {
     public route: ActivatedRoute,
     public searchService: SearchService,
     public router: Router,
+    public utils: UtilsService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +45,7 @@ export class OpinarPage implements OnInit {
 
     if (this.selectedModel) {
       this.searchService.clearModel();
+      this.loadFinalPayload();
     } else {
       this.getModel();
     }
@@ -59,6 +66,7 @@ export class OpinarPage implements OnInit {
         if (foundModel) {
           this.selectedModel = foundModel;
           this.showLoader = false;
+          this.loadFinalPayload();
         } else {
           this.showErrorToast({status: 404});
         }
@@ -85,20 +93,17 @@ export class OpinarPage implements OnInit {
   }
 
   public showErrorToast(err) {
-    const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
-    const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
-    const nonAuthorizedError = 'Você não está autorizado a fazer esse tipo de ação!';
     let response;
 
     switch (err.status) {
       case 404:
-        response = notFoundError;
+        response = NOT_FOUND;
         break;
       case 401:
-        response = nonAuthorizedError;
+        response = UNAUTHORIZED;
         break;
       default:
-        response = genericError;
+        response = GENERIC;
     }
 
     this.showLoader = false;
@@ -119,7 +124,46 @@ export class OpinarPage implements OnInit {
 
   public setAboutCarPayload($event) {
     this.finalPayload['aboutCar'] = $event;
-    console.log(this.finalPayload);
+    this.saveFinalPayload();
+    this.currentStep = 2;
+    this.content.scrollToTop(700);
+  }
+
+  public setAboutBrandPayload($event) {
+    this.finalPayload['aboutBrand'] = $event;
+    this.saveFinalPayload();
+    this.currentStep = 3;
+    this.content.scrollToTop(700);
+  }
+
+  public setStepSendPayload($event) {
+    this.finalPayload['userInfo'] = $event;
+    this.saveFinalPayload();
+    this.currentStep = 4;
+    this.content.scrollToTop(700);
+  }
+
+  public saveFinalPayload() {
+    const encoded = this.cryptoService.encondeJwt(this.finalPayload);
+    this.utils.localStorageSetItem(`opinar_${this.selectedModel['url']}`, encoded);
+  }
+
+  public loadFinalPayload() {
+    const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
+
+    if (encoded) {
+      this.finalPayload = this.cryptoService.decodeJwt(encoded);
+      console.log('recuperou');
+      console.log(this.finalPayload);
+    }
+  }
+
+  public goBack(step?: number) {
+    if (step) {
+      this.currentStep = step;
+    } else {
+      this.router.navigate([NAVIGATION.search.route]);
+    }
   }
 
 }

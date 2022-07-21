@@ -189,6 +189,11 @@
 
   .form-title {
     margin-top: 2.5rem;
+    font-weight: lighter;
+
+    span {
+      font-weight: bold;
+    }
   }
 }
 
@@ -196,27 +201,4 @@ ion-item.input-item::part(native) {
   background: var(--ion-color-light);
   background: var(--ion-color-light);
   border-radius: 0.3rem 0.3rem 0 0;
-}
-
-ion-grid.grid-steps {
-  margin-top: 2.5rem;
-
-  ion-col {
-    text-align: center;
-  }
-
-  .step-line {
-    border-bottom: 1px solid var(--ion-color-secondary);
-    margin-top: 2.2rem;
-  }
-}
-
-ion-icon.step-icon {
-  border: 3px solid;
-  border-radius: 10rem;
-  padding: 1rem;
-
-  @media (max-width: 576px) {
-    transform: scale(0.7);
-  }
 }

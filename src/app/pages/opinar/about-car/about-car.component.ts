@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -15,10 +14,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: 'about-car.component.html',
   styleUrls: ['../opinar.page.scss'],
 })
-export class AboutCarComponent implements OnInit {
+export class AboutCarComponent implements OnInit, AfterViewInit {
 
   @Input() selectedModel: object;
+  @Input() autoFill: object;
   @Output() aboutCar = new EventEmitter<any>();
+  @Output() clickForeward = new EventEmitter<any>();
 
   public nav = NAVIGATION;
   public showLoader: boolean;
@@ -35,13 +36,15 @@ export class AboutCarComponent implements OnInit {
   public valuationItens = [
     { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior', valuation: null },
     { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior', valuation: null },
-    { title: 'Conforto', subtitle: 'Dirigibilidade e desempenho', value:'conforto', valuation: null },
-    { title: 'Segurança', subtitle: 'Itens de série e estabilidade', value:'seguranca', valuation: null },
+    { title: 'Conforto', subtitle: 'Dirigibilidade e itens de série', value:'conforto', valuation: null },
+    { title: 'Segurança', subtitle: 'Estabilidade e frenagem', value:'seguranca', valuation: null },
     { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
-    { title: 'Custo-benefício', subtitle: 'Recomendaria?', value:'custo-beneficio', valuation: null }
+    { title: 'Durabilidade', subtitle: 'Reparos e manutenção', value:'durabilidade', valuation: null },
+    { title: 'Custo-benefício', subtitle: 'Vale a pena? Recomendaria?', value:'custo-beneficio', valuation: null }
   ];
 
   public opinarKmCompra: string;
+  public opinarKmCompraValue: number;
   public opinarMotor: string;
   public opinarPeriodo: string;
   public newerYear;
@@ -57,6 +60,7 @@ export class AboutCarComponent implements OnInit {
     public searchService: SearchService,
     public router: Router,
     public fb: FormBuilder,
+    private cdRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +71,11 @@ export class AboutCarComponent implements OnInit {
     this.changeOpinarPeriodo({detail: { value: this.newerYear - 1}});
     this.initForm();
     this.resetOpinaPeriodo();
+  }
+
+  ngAfterViewInit(): void {
+    this.autoFillInfo();
+    this.cdRef.detectChanges();
   }
 
   public initForm() {
@@ -101,6 +110,7 @@ export class AboutCarComponent implements OnInit {
     const plus = value === 99 ? '+' : '';
     const km = value === 0 ? 'Km' : '000 km';
 
+    this.opinarKmCompraValue = value;
     this.opinarKmCompra = `${plus}${value} ${km}`;
   }
 
@@ -114,6 +124,9 @@ export class AboutCarComponent implements OnInit {
     const value = $event.detail.value;
     const plural = value > 1 ? 's' : '';
     const maxPeriod = this.formOpinarCarro ? this.newerYear - this.formOpinarCarro.controls.opinarAnoCompra.value : 1;
+
+    this.opinarPeriodoValue = value;
+    this.opinarPeriodoMaxValue = maxPeriod;
 
     this.opinarPeriodo = value < maxPeriod ? `${value} ano${plural}` : 'Atual';
   }
@@ -151,8 +164,8 @@ export class AboutCarComponent implements OnInit {
       fuel: this.formOpinarCarro.value.opinarCombustivel,
       engine: this.opinarMotor,
       yearBought: this.formOpinarCarro.value.opinarAnoCompra,
-      kmBought: this.opinarKmCompra,
-      keptPeriod: this.opinarPeriodo,
+      kmBought: this.opinarKmCompraValue,
+      keptPeriod: this.opinarPeriodoValue,
       finalWords: {
         title: this.formOpinarCarro.value.opinarTitulo,
         positive: this.formOpinarCarro.value.opinarPontosPositivos,
@@ -164,6 +177,33 @@ export class AboutCarComponent implements OnInit {
     };
 
     this.aboutCar.emit(aboutCarData);
+  }
+
+  public autoFillInfo() {
+    if (this.autoFill) {
+      this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
+      this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);
+      this.formOpinarCarro.controls.opinarAnoCompra.patchValue(this.autoFill['yearBought']);
+
+      this.formOpinarCarro.controls.opinarTitulo.patchValue(this.autoFill['finalWords']['title']);
+      this.formOpinarCarro.controls.opinarPontosPositivos.patchValue(this.autoFill['finalWords']['positive']);
+      this.formOpinarCarro.controls.opinarPontosNegativos.patchValue(this.autoFill['finalWords']['negative']);
+
+      this.changeOpinarMotor({ detail: { value: parseFloat(this.autoFill['engine']) }});
+      this.changeOpinarPeriodo({ detail: { value: this.autoFill['keptPeriod'] }});
+      this.changeOpinarKmCompra({detail: { value: this.autoFill['kmBought']}});
+
+      for (const val of this.valuationItens) {
+        val.valuation = this.autoFill['valuation'][val.value];
+        document.getElementById(val.value+'-'+val.valuation).click();
+      }
+
+      this.hasAllValuations = true;
+    }
+  }
+
+  public goBack() {
+    this.clickForeward.emit();
   }
 
 }

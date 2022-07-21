@@ -5,6 +5,9 @@ import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { OpinarPage } from './opinar.page';
 import { SharedModule } from '../../shared/shared.module';
 import { AboutCarComponent } from './about-car/about-car.component';
+import { AboutBrandComponent } from './about-brand/about-brand.component';
+import { OpinarSendComponent } from './opinar-send/opinar-send.component';
+import { OpinarStepsComponent } from './opinar-steps/opinar-steps.component';
 
 import { OpinarPageRoutingModule } from './opinar-routing.module';
 
@@ -23,7 +26,10 @@ import { OpinarPageRoutingModule } from './opinar-routing.module';
   ],
   declarations: [
     OpinarPage,
-    AboutCarComponent
+    AboutCarComponent,
+    AboutBrandComponent,
+    OpinarSendComponent,
+    OpinarStepsComponent
   ]
 })
 export class OpinarPageModule {}

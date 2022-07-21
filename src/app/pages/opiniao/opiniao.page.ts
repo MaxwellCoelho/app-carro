@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
@@ -84,20 +85,17 @@ export class OpiniaoPage implements OnInit {
   }
 
   public showErrorToast(err) {
-    const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
-    const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
-    const nonAuthorizedError = 'Você não está autorizado a fazer esse tipo de ação!';
     let response;
 
     switch (err.status) {
       case 404:
-        response = notFoundError;
+        response = NOT_FOUND;
         break;
       case 401:
-        response = nonAuthorizedError;
+        response = UNAUTHORIZED;
         break;
       default:
-        response = genericError;
+        response = GENERIC;
     }
 
     this.showLoader = false;

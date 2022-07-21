@@ -1,0 +1,43 @@
+<ion-grid slot="content" class="grid-steps">
+  <ion-row>
+    <ion-col size-lg="1" size-md="1.3" size-sm="1.7" size-xs="2.6">
+      <ion-icon size="large" [name]="'car-sport'" [color]="'primary'" class="step-icon"></ion-icon>
+    </ion-col>
+
+    <ion-col [ngClass]="{'with-opacity': currentStep < 2 }">
+      <div class="step-line" [ngClass]="{'selected': currentStep > 1 }"></div>
+    </ion-col>
+
+    <ion-col size-lg="1" size-md="1.3" size-sm="1.7" size-xs="2.6" [ngClass]="{'with-opacity': currentStep < 2 }">
+      <ion-icon size="large" name="pricetag{{currentStep > 1 ? '' : '-outline'}}" [color]="currentStep > 1 ? 'primary' : 'secondary'"
+        class="step-icon" [style.border-style]="currentStep > 1 ? 'solid' : 'dashed'"></ion-icon>
+    </ion-col>
+
+    <ion-col [ngClass]="{'with-opacity': currentStep < 3 }">
+      <div class="step-line" [ngClass]="{'selected': currentStep > 2 }"></div>
+    </ion-col>
+
+    <ion-col size-lg="1" size-md="1.3" size-sm="1.7" size-xs="2.6" [ngClass]="{'with-opacity': currentStep < 3 }">
+      <ion-icon size="large" name="paper-plane{{currentStep > 2 ? '' : '-outline'}}" [color]="currentStep > 2 ? 'primary' : 'secondary'"
+          class="step-icon" [style.border-style]="currentStep > 2 ? 'solid' : 'dashed'"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size-lg="1" size-md="1.3" size-sm="1.7" size-xs="2.6">
+      <ion-note class="step-title" [color]="'primary'">O carro</ion-note>
+    </ion-col>
+
+    <ion-col></ion-col>
+
+    <ion-col size-lg="1" size-md="1.3" size-sm="1.7" size-xs="2.6" [ngClass]="{'with-opacity': currentStep < 2 }">
+      <ion-note class="step-title" [color]="currentStep > 1 ? 'primary' : 'secondary'">A marca</ion-note>
+    </ion-col>
+
+    <ion-col></ion-col>
+
+    <ion-col size-lg="1" size-md="1.3" size-sm="1.7" size-xs="2.6" [ngClass]="{'with-opacity': currentStep < 3 }">
+      <ion-note class="step-title" [color]="currentStep > 2 ? 'primary' : 'secondary'">Enviar</ion-note>
+    </ion-col>
+  </ion-row>
+</ion-grid>
