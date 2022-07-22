@@ -15,6 +15,10 @@ ion-grid.grid-steps {
       border-bottom: 3px solid var(--ion-color-primary);
     }
   }
+
+  @media (max-width: 576px) {
+    margin-top: 0.5rem;
+  }
 }
 
 ion-icon.step-icon {
@@ -29,5 +33,5 @@ ion-icon.step-icon {
 }
 
 .with-opacity {
-  opacity: 0.5;
+  opacity: 0.7;
 }

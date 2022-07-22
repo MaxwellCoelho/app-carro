@@ -24,9 +24,8 @@ export class OpinarSendComponent implements OnInit {
 
   public initForm() {
     this.formOpinarSend = this.fb.group({
-      // opinarTitulo: this.fb.control('', [Validators.required]),
-      // opinarPontosPositivos: this.fb.control('', [Validators.required]),
-      // opinarPontosNegativos: this.fb.control('', [Validators.required]),
+      opinarNome: this.fb.control('', [Validators.required]),
+      opinarEmail: this.fb.control('', [Validators.required]),
     });
   }
 
@@ -35,15 +34,12 @@ export class OpinarSendComponent implements OnInit {
   }
 
   public saveFormOpinarSend() {
-    const aboutBrandData = {
-      // finalWords: {
-      //   title: this.formOpinarMarca.value.opinarTitulo,
-      //   positive: this.formOpinarMarca.value.opinarPontosPositivos,
-      //   negative: this.formOpinarMarca.value.opinarPontosNegativos
-      // }
+    const userInfoData = {
+      name: this.formOpinarSend.value.opinarNome,
+      email: this.formOpinarSend.value.opinarEmail
     };
 
-    this.stepSend.emit(aboutBrandData);
+    this.stepSend.emit(userInfoData);
   }
 
 }

@@ -29,7 +29,7 @@
           onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
 
-      <app-opinar-steps [currentStep]="currentStep"></app-opinar-steps>
+      <app-opinar-steps [currentStep]="currentStep" *ngIf="currentStep < 4"></app-opinar-steps>
 
       <app-about-car *ngIf="currentStep === 1" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutCar"
         (aboutCar)="setAboutCarPayload($event)" (clickForeward)="goBack()"></app-about-car>
@@ -37,8 +37,39 @@
       <app-about-brand *ngIf="currentStep === 2" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutBrand"
         (aboutBrand)="setAboutBrandPayload($event)" (clickForeward)="goBack(1)"></app-about-brand>
 
-      <app-opinar-send *ngIf="currentStep === 3" [selectedModel]="selectedModel" [autoFill]="finalPayload?.stepSend"
+      <app-opinar-send *ngIf="currentStep === 3" [selectedModel]="selectedModel"
         (stepSend)="setStepSendPayload($event)" (clickForeward)="goBack(2)"></app-opinar-send>
+
+
+      <ion-grid slot="content" *ngIf="currentStep === 4 && !showLoader" style="margin-top: 1rem">
+        <ion-row>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.7" size-xs="12" class="sent-item-icon">
+            <ion-icon name="cloud-done-outline" color="success" size="large"></ion-icon>
+          </ion-col>
+          <ion-col size-lg="9" size-md="8" size-sm="6.7" size-xs="12" class="sent-item-text">
+            <ion-label class="ion-text-wrap">
+              <h1 class="form-title">
+                <span class="success">Parabéns!</span>
+                <br>Sua opinião sobre o <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span> foi enviada com sucesso!
+              </h1>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="suggestions">
+          <ion-col size-md="12" size-sm="12" size-xs="12">
+            <ion-chip outline title="Ver opiniões" mode="ios" color="primary" (click)="goOpinions()">
+              <ion-icon name="reader-outline"></ion-icon>
+              <ion-label>Ver opiniões deste modelo</ion-label>
+            </ion-chip>
+
+            <ion-chip outline title="Buscar outro modelo" mode="ios" color="primary" (click)="goSearch()">
+              <ion-icon name="search-outline"></ion-icon>
+              <ion-label>Buscar outro modelo</ion-label>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
   </div>
 </ion-content>

@@ -139,6 +139,7 @@ export class OpinarPage implements OnInit {
   public setStepSendPayload($event) {
     this.finalPayload['userInfo'] = $event;
     this.saveFinalPayload();
+    this.sendFinalPayload();
     this.currentStep = 4;
     this.content.scrollToTop(700);
   }
@@ -158,12 +159,30 @@ export class OpinarPage implements OnInit {
     }
   }
 
+  public sendFinalPayload() {
+    this.showLoader = true;
+    console.log('vai enviar isso aqui');
+    console.log(this.finalPayload);
+
+    setTimeout(() => {
+      this.showLoader = false;
+    }, 1000);
+  }
+
   public goBack(step?: number) {
     if (step) {
       this.currentStep = step;
     } else {
       this.router.navigate([NAVIGATION.search.route]);
     }
+  }
+
+  public goOpinions() {
+    this.router.navigate([`opiniao/${this.selectedModel['brand']['url']}/${this.selectedModel['url']}`]);
+  }
+
+  public goSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
   }
 
 }

@@ -1,7 +1,7 @@
 <ion-grid slot="content" class="valuation-itens">
   <ion-row>
     <ion-col>
-      <h1 class="form-title">Finalizar</h1>
+      <h1 class="form-title">Agora vamos finalizar e enviar sua opinião!</h1>
     </ion-col>
   </ion-row>
 
@@ -9,10 +9,36 @@
 
     <ion-row>
       <ion-col size-md="6" size-sm="12" size-xs="12">
+        <ion-item class="input-item">
+          <ion-label position="floating">Seu nome</ion-label>
+          <ion-input type="tel" minlength="3" maxlength="80" formControlName="opinarNome"
+            placeholder="Ex: João ou Paulo"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarSend.controls.opinarNome.touched">
+          <span *ngIf="formOpinarSend.controls.opinarNome.errors?.required">Necessário preencher o seu nome!</span>
+          <span *ngIf="formOpinarSend.controls.opinarNome.errors?.minlength">Campo preenchido incorretamente! Ex: João</span>
+        </ion-note>
+      </ion-col>
+
+      <ion-col size-md="6" size-sm="12" size-xs="12">
+        <ion-item class="input-item">
+          <ion-label position="floating">Seu email (não será divulgado)</ion-label>
+          <ion-input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" maxlength="50"
+            formControlName="opinarEmail" placeholder="Ex: joao@provedor.com"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarSend.controls.opinarEmail.touched">
+          <span *ngIf="formOpinarSend.controls.opinarEmail.errors?.required">Necessário preencher o seu email! Fique tranquilo, não vamos digulgá-lo!</span>
+          <span *ngIf="formOpinarSend.controls.opinarEmail.errors?.pattern">Campo preenchido incorretamente! Ex: joao@provedor.com</span>
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size-md="6" size-sm="12" size-xs="12">
         <br>
         <ion-button size="default" title="Próximo" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinarSend.status === 'INVALID'">
-          <ion-icon size="default" name="arrow-forward-outline"></ion-icon>
-          <ion-label slot="start">Próximo</ion-label>
+          <ion-icon size="default" name="paper-plane-outline"></ion-icon>
+          <ion-label slot="start">Enviar </ion-label>
         </ion-button>
 
         <br>
