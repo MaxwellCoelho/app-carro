@@ -9,7 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { Router, Event, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-opinar',
@@ -34,7 +34,13 @@ export class OpinarPage implements OnInit {
     public searchService: SearchService,
     public router: Router,
     public utils: UtilsService
-  ) {}
+  ) {
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd && this.currentStep >= 4) {
+        this.clearFinalPayload();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.loadModelInfo();
@@ -118,7 +124,7 @@ export class OpinarPage implements OnInit {
       color: 'danger'
     }).then(toast => {
       toast.present();
-      this.router.navigate([NAVIGATION.search.route]);
+      // this.router.navigate([NAVIGATION.search.route]);
     });
   }
 
@@ -140,8 +146,6 @@ export class OpinarPage implements OnInit {
     this.finalPayload['userInfo'] = $event;
     this.saveFinalPayload();
     this.sendFinalPayload();
-    this.currentStep = 4;
-    this.content.scrollToTop(700);
   }
 
   public saveFinalPayload() {
@@ -161,12 +165,26 @@ export class OpinarPage implements OnInit {
 
   public sendFinalPayload() {
     this.showLoader = true;
-    console.log('vai enviar isso aqui');
-    console.log(this.finalPayload);
 
-    setTimeout(() => {
-      this.showLoader = false;
-    }, 1000);
+    const jwtData = { data: this.cryptoService.encondeJwt(this.finalPayload)};
+
+    const subOpinion = this.dbService.createItem(environment.opinionAction, jwtData).subscribe(
+      res => {
+        if (!subOpinion.closed) { subOpinion.unsubscribe(); }
+        this.currentStep = 4;
+        this.content.scrollToTop(700);
+        this.showLoader = false;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public clearFinalPayload() {
+    this.finalPayload = {};
+    this.utils.localStorageRemoveItem(`opinar_${this.selectedModel['url']}`);
+    this.currentStep = 1;
   }
 
   public goBack(step?: number) {

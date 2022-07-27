@@ -22,7 +22,7 @@ export class DataBaseService {
     return this.http.delete(url, { withCredentials: true });
   }
 
-  public createItem(action: string, data: any, itemId: string): any {
+  public createItem(action: string, data: any, itemId?: string): any {
     const myAction = itemId ? `${action}/${itemId}` : action;
 
     const url = `${environment.middlewareEndpoint}/${myAction}`;

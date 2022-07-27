@@ -40,7 +40,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     { title: 'Segurança', subtitle: 'Estabilidade e frenagem', value:'seguranca', valuation: null },
     { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
     { title: 'Durabilidade', subtitle: 'Reparos e manutenção', value:'durabilidade', valuation: null },
-    { title: 'Custo-benefício', subtitle: 'Vale a pena? Recomendaria?', value:'custo-beneficio', valuation: null }
+    { title: 'Custo-benefício', subtitle: 'Vale a pena? Recomendaria?', value:'custobeneficio', valuation: null }
   ];
 
   public opinarKmCompra: string;
