@@ -1,0 +1,37 @@
+ion-grid.grid-steps {
+  margin-top: 2.5rem;
+
+  ion-col {
+    text-align: center;
+    padding: 0;
+    max-height: 4rem;
+  }
+
+  .step-line {
+    border-bottom: 1px dashed var(--ion-color-secondary);
+    margin-top: 2.2rem;
+
+    &.selected {
+      border-bottom: 3px solid var(--ion-color-primary);
+    }
+  }
+
+  @media (max-width: 576px) {
+    margin-top: 0.5rem;
+  }
+}
+
+ion-icon.step-icon {
+  border: 3px solid;
+  border-radius: 10rem;
+  padding: 1rem;
+  transform: scale(0.7);
+
+  @media (max-width: 576px) {
+    transform: scale(0.5);
+  }
+}
+
+.with-opacity {
+  opacity: 0.7;
+}

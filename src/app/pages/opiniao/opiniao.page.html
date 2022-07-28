@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+
+  <div class="main-container">
+    <ion-title size="large" color="primary" class="main-title">
+      <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
+      <ion-label>Opinião</ion-label>
+    </ion-title>
+
+    <div class="main-body" *ngIf="selectedModel">
+      <ion-item lines="none">
+        <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+        <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+
+        <ion-item slot="end" lines="none">
+          <ion-icon name="car-outline" color="medium" size="medium" class="category-image"></ion-icon>
+          <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
+        </ion-item>
+      </ion-item>
+      <ion-item lines="none">
+        <img src="assets/models/{{selectedModel.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+      </ion-item>
+    </div>
+  </div>
+</ion-content>

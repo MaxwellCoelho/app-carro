@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -41,9 +42,11 @@ export class CarModelPage implements OnInit {
   public initForm() {
     this.formModels = this.fb.group({
       editModelId: this.fb.control(''),
-      newModelName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newModelName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
       newModelCategory: this.fb.control('', [Validators.required]),
-      newModelBrand: this.fb.control('', [Validators.required])
+      newModelBrand: this.fb.control('', [Validators.required]),
+      newModelImage: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newModelThumb: this.fb.control('', [Validators.required, Validators.minLength(3)])
     });
   }
 
@@ -96,6 +99,8 @@ export class CarModelPage implements OnInit {
       name: this.formModels.value.newModelName,
       category: this.formModels.value.newModelCategory,
       brand: this.formModels.value.newModelBrand,
+      image: this.formModels.value.newModelImage,
+      thumb: this.formModels.value.newModelThumb,
       active: this.activeChecked
     };
 
@@ -121,7 +126,9 @@ export class CarModelPage implements OnInit {
       editModelId: model['_id'],
       newModelName: model.name,
       newModelCategory: model.category['_id'],
-      newModelBrand: model.brand['_id']
+      newModelBrand: model.brand['_id'],
+      newModelImage: model.image,
+      newModelThumb: model.thumb
     });
 
     this.activeChecked = model.active;
@@ -194,20 +201,17 @@ export class CarModelPage implements OnInit {
   }
 
   public showErrorToast(err) {
-    const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
-    const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
-    const nonAuthorizedError = 'Você não está autorizado a fazer esse tipo de ação!';
     let response;
 
     switch (err.status) {
       case 404:
-        response = notFoundError;
+        response = NOT_FOUND;
         break;
       case 401:
-        response = nonAuthorizedError;
+        response = UNAUTHORIZED;
         break;
       default:
-        response = genericError;
+        response = GENERIC;
     }
 
     this.showLoader = false;

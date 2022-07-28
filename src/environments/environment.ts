@@ -10,6 +10,8 @@ export const environment = {
   categoriesAction: 'cars/categories',
   brandsAction: 'cars/brands',
   modelsAction: 'cars/models',
+  filterModelsAction: 'cars/models/filter',
+  opinionAction: 'opinion',
   jstSecret: '-M@x-caRro$*_+'
 };
 

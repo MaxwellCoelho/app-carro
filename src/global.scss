@@ -62,6 +62,12 @@ body, .main-container, #menu-list ion-label, #menu-header ion-label {
   ion-accordion.accordion-expanded ion-grid[slot="content"] {
     border-top: 1px dashed var(--ion-tab-bar-background-focused, #e0e0e0);
   }
+
+  ion-button {
+    ion-label {
+      text-transform: capitalize;
+    }
+  }
 }
 
 .main-title {
@@ -100,4 +106,54 @@ body, .main-container, #menu-list ion-label, #menu-header ion-label {
 
 form {
   display: inherit;
+}
+
+.searchbar-input-container.sc-ion-searchbar-ios {
+  height: 40px;
+
+  input {
+    padding-left: 2.5rem !important;
+  }
+}
+
+.searchbar-search-icon.sc-ion-searchbar-ios {
+  left: 10px;
+}
+
+ion-segment-button {
+  min-width: 0px !important;
+  padding: 1rem 0;
+
+  @media (max-width: 576px) {
+    padding: .5rem 0;
+  }
+}
+
+ion-range {
+  --bar-border-radius: 8px;
+  --knob-background: var(--ion-color-primary);
+  --knob-size: 26px;
+  --pin-background: #fff;
+  --pin-color: #000;
+  padding: 0 0.8rem;
+  margin-top: -0.85rem;
+}
+
+ion-range::part(pin) {
+  top: 20px;
+  font-weight: bolder;
+}
+
+ion-range::part(knob) {
+  transform: scale(1);
+}
+
+.native-input.sc-ion-input-md {
+  padding-bottom: 0;
+}
+
+ion-item:not(.ion-focused, .item-has-focus, .item-has-value) .label-floating.sc-ion-label-md-h {
+  @media (max-width: 576px) {
+    font-size: smaller;
+  }
 }

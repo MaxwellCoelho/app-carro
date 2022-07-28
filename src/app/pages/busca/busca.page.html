@@ -1,8 +1,58 @@
 <ion-content [fullscreen]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+
   <div class="main-container">
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="nav.search.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.search.title}}</ion-label>
     </ion-title>
+
+    <div class="main-body">
+      <ion-searchbar *ngIf="!selectedBrand" mode="ios" placeholder="Digite o nome da marca" (ionInput)="searchBrandInput($event)"></ion-searchbar>
+
+      <ion-list *ngIf="!selectedBrand">
+        <ion-item *ngIf="!filteredBrands?.length && !showLoader" lines="none">
+          <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
+          <br>
+          <ion-label color="medium" class="ion-text-wrap">Não encontramos a marca que você procura!</ion-label>
+        </ion-item>
+
+        <ion-item *ngFor="let brand of filteredBrands" (click)="selectBrand(brand)" class="item-button" button>
+          <img src="assets/brands/{{brand.image}}" title="{{brand.name}}" alt="{{brand.name}}"
+            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image">
+          <ion-label>{{brand.name}}</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <ion-item lines="none" *ngIf="selectedBrand">
+        <img src="assets/brands/{{selectedBrand.image}}" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}"
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+        <ion-label class="brand-label-title">{{selectedBrand.name}}</ion-label>
+        <ion-chip outline title="Alterar marca" color="primary" (click)="clearBrand()">
+          <ion-icon [name]="'chevron-back-outline'"></ion-icon>
+          <ion-label >Alterar marca</ion-label>
+        </ion-chip>
+      </ion-item>
+
+      <ion-searchbar *ngIf="selectedBrand" mode="ios" placeholder="Digite o nome do modelo" (ionInput)="searchModelInput($event)"></ion-searchbar>
+
+      <ion-list *ngIf="selectedBrand">
+        <ion-item *ngIf="!filteredModels?.length && !showLoader" lines="none">
+          <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
+          <br>
+          <ion-label color="medium" class="ion-text-wrap">Não encontramos o modelo que você procura!</ion-label>
+        </ion-item>
+
+        <ion-item *ngFor="let model of filteredModels" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand.url, model.url)" button>
+          <img [id]="'item-img-'+model.name" src="assets/models/{{model.thumb}}" title="{{model.name}}" alt="{{model.name}}"
+            onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+          <ion-label [id]="'item-label-'+model.name">{{model.name}}</ion-label>
+          <ion-chip outline slot="end" [id]="'bt-'+model.name" title="Opniar sobre esse modelo" color="primary">
+            <ion-icon [id]="'bt-'+model.name+'-icon'" [name]="'clipboard-outline'"></ion-icon>
+            <ion-label [id]="'bt-'+model.name+'-label'">Opinar</ion-label>
+          </ion-chip>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 </ion-content>

@@ -22,10 +22,15 @@ export class DataBaseService {
     return this.http.delete(url, { withCredentials: true });
   }
 
-  public createItem(action: string, data: any, itemId: string): any {
+  public createItem(action: string, data: any, itemId?: string): any {
     const myAction = itemId ? `${action}/${itemId}` : action;
 
     const url = `${environment.middlewareEndpoint}/${myAction}`;
+    return this.http.post(url, data, { withCredentials: true });
+  }
+
+  public filterItem(action: string, data: any): any {
+    const url = `${environment.middlewareEndpoint}/${action}`;
     return this.http.post(url, data, { withCredentials: true });
   }
 }

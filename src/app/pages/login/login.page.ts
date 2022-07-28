@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
@@ -71,12 +72,10 @@ export class LoginPage implements OnInit {
 
   public showErrorAlert(err) {
     console.error(err);
-    const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
-    const notFoundError = 'Infelizmente o que você procura foi excluído ou não existe mais.';
 
     const alertObj = {
       header: 'Ops...',
-      message: err.status === 404 ? notFoundError : genericError,
+      message: err.status === 404 ? NOT_FOUND : GENERIC,
       buttons: [
         {
           text: 'Ok',
@@ -94,20 +93,17 @@ export class LoginPage implements OnInit {
   }
 
   public showErrorToast(err) {
-    const genericError = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
-    const notFoundError = 'Email ou senha incorreto!';
-    const nonAuthorizedError = 'Seu usuário foi inativado!';
     let response;
 
     switch (err.status) {
       case 404:
-        response = notFoundError;
+        response = NOT_FOUND;
         break;
       case 401:
-        response = nonAuthorizedError;
+        response = UNAUTHORIZED;
         break;
       default:
-        response = genericError;
+        response = GENERIC;
     }
 
     this.showLoader = false;
@@ -123,18 +119,6 @@ export class LoginPage implements OnInit {
     }).then(toast => {
       toast.present();
     });
-  }
-
-  public checkUser() {
-    this.authService.checkUser().subscribe(
-      res => {
-        console.log(res);
-        this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
-      },
-      err => {
-        console.log(err);
-      }
-    );
   }
 
 }
