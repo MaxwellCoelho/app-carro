@@ -19,11 +19,11 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
   public hasAllValuations = false;
 
   public valuation = [
-    { name: 'Péssimo', value:'pessimo' },
-    { name: 'Ruim', value:'ruim' },
-    { name: 'Regular', value:'regular' },
-    { name: 'Bom', value:'bom' },
-    { name: 'Ótimo', value:'otimo' }
+    { name: 'Péssimo', id: 'pessimo', value: 1 },
+    { name: 'Ruim', id: 'ruim', value: 2 },
+    { name: 'Regular', id: 'regular', value: 3 },
+    { name: 'Bom', id: 'bom', value: 4 },
+    { name: 'Ótimo', id: 'otimo', value: 5 }
   ];
 
   public valuationItens = [
@@ -59,7 +59,7 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
   public segmentChanged($event) {
     this.valuationItens.find(item => {
         if (item.value === $event.target.id) {
-          item.valuation = $event.target.value;
+          item.valuation = { id: $event.target.id, value: $event.target.value};
         }
       }
     );
@@ -80,7 +80,7 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
     const valuation = {};
 
     for (const val of this.valuationItens) {
-      valuation[val.value] = val.valuation;
+      valuation[val.value] = parseInt(val.valuation.value, 10);
     }
 
     const aboutBrandData = {
@@ -106,8 +106,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
       this.formOpinarMarca.controls.opinarPontosNegativos.patchValue(this.autoFill['finalWords']['negative']);
 
       for (const val of this.valuationItens) {
-        val.valuation = this.autoFill['valuation'][val.value];
-        document.getElementById(val.value+'-'+val.valuation).click();
+        val.valuation = this.valuation.find(valItem => valItem.value === this.autoFill['valuation'][val.value]);
+        document.getElementById(val.value+'-'+val.valuation.id).click();
       }
 
       this.hasAllValuations = true;

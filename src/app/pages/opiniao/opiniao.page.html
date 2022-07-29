@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
   <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
@@ -7,21 +7,41 @@
       <ion-label>Opinião</ion-label>
     </ion-title>
 
-    <div class="main-body" *ngIf="selectedModel">
-      <ion-item lines="none">
-        <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
-        <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+    <div class="main-body" *ngIf="selectedModel && modelOpinions">
+      <ion-grid slot="content" class="selected-model-grid">
+        <ion-row>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.7" size-xs="12" class="model-logo">
+            <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+              onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+          </ion-col>
+          <ion-col size-lg="9" size-md="8" size-sm="6.7" size-xs="12" class="model-name">
+            <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+          </ion-col>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.6" size-xs="12" class="model-category">
+            <ion-icon name="git-compare-outline" color="dark" size="large" class="category-image"></ion-icon>
+            <ion-label color="dark"> | </ion-label>
+            <ion-icon name="heart-outline" color="dark" size="large" class="category-image"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-        <ion-item slot="end" lines="none">
-          <ion-icon name="car-outline" color="medium" size="medium" class="category-image"></ion-icon>
-          <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
-        </ion-item>
-      </ion-item>
       <ion-item lines="none">
         <img src="assets/models/{{selectedModel.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
           onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
+
+      <ion-grid slot="content" class="selected-model-grid">
+        <ion-row>
+          <ion-col size-md="6" size-sm="6" size-xs="6">
+            <ion-icon name="car-outline" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
+          </ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="6" class="model-opinions">
+            <ion-icon name="clipboard-outline" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-label color="medium">{{modelOpinions.length}} avaliações</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
   </div>
 </ion-content>

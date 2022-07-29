@@ -19,6 +19,7 @@ export class OpiniaoPage implements OnInit {
 
   public nav = NAVIGATION;
   public selectedModel: object;
+  public modelOpinions: object;
   public showLoader: boolean;
 
   constructor(
@@ -39,6 +40,7 @@ export class OpiniaoPage implements OnInit {
 
     if (this.selectedModel) {
       this.searchService.clearModel();
+      this.getModelOpinions();
     } else {
       this.getModel();
     }
@@ -58,10 +60,26 @@ export class OpiniaoPage implements OnInit {
 
         if (foundModel) {
           this.selectedModel = foundModel;
-          this.showLoader = false;
+          this.getModelOpinions();
         } else {
           this.showErrorToast({status: 404});
         }
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public getModelOpinions(): void {
+    const action = `${environment.opinionAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
+    const subModelOpinions = this.dbService.getItens(action,).subscribe(
+      res => {
+        if (!subModelOpinions.closed) { subModelOpinions.unsubscribe(); }
+
+        this.modelOpinions = res;
+        this.showLoader = false;
+        console.log(res);
       },
       err => {
         this.showErrorToast(err);
