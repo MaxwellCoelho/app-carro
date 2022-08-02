@@ -33,12 +33,48 @@
       <ion-grid slot="content" class="selected-model-grid">
         <ion-row>
           <ion-col size-md="6" size-sm="6" size-xs="6">
-            <ion-icon name="car-outline" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-icon name="car" color="medium" size="large" class="category-image"></ion-icon>
             <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
           </ion-col>
           <ion-col size-md="6" size-sm="6" size-xs="6" class="model-opinions">
-            <ion-icon name="clipboard-outline" color="medium" size="large" class="category-image"></ion-icon>
-            <ion-label color="medium">{{modelOpinions.length}} avaliações</ion-label>
+            <ion-icon name="clipboard" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-label color="medium" *ngIf="modelOpinions.qtd > 0">{{modelOpinions.qtd}} opini{{modelOpinions.qtd < 2 ? 'ão' : 'ões'}}</ion-label>
+            <ion-label color="medium" *ngIf="modelOpinions.qtd === 0">Nenhuma opinião</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid slot="content" class="selected-model-grid">
+        <ion-row class="average-row" [ngClass]="modelAverage.id">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <ion-icon name="ribbon" color="dark" size="large"></ion-icon>
+            <ion-label color="dark" *ngIf="modelOpinions.averages.average">{{modelOpinions.averages.average}} | {{modelAverage.name}}</ion-label>
+            <ion-label color="dark" *ngIf="!modelOpinions.averages.average">{{modelAverage.name}}</ion-label>
+          </ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <div class="val-bar">
+              <div class="box1"><span><i class="arrow"></i></span></div>
+              <div class="box2"><span><i class="arrow"></i></span></div>
+              <div class="box3"><span><i class="arrow"></i></span></div>
+              <div class="box4"><span><i class="arrow"></i></span></div>
+              <div class="box5"><span><i class="arrow"></i></span></div>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let item of valuationItens" class="average-row average-small" [ngClass]="item.valuation ? item.valuation.id : ''">
+          <ion-col size-md="8" size-sm="7" size-xs="12">
+            <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
+            <ion-label class="item-subtitle"><p>{{item.subtitle}}</p></ion-label>
+          </ion-col>
+          <ion-col size-md="4" size-sm="5" size-xs="12">
+            <div class="val-bar">
+              <div class="box1"><span><i class="arrow"></i></span></div>
+              <div class="box2"><span><i class="arrow"></i></span></div>
+              <div class="box3"><span><i class="arrow"></i></span></div>
+              <div class="box4"><span><i class="arrow"></i></span></div>
+              <div class="box5"><span><i class="arrow"></i></span></div>
+            </div>
           </ion-col>
         </ion-row>
       </ion-grid>

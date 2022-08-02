@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { VALUATION, VALUATION_ITENS_BRAND } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-about-brand',
@@ -18,21 +19,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
 
   public hasAllValuations = false;
 
-  public valuation = [
-    { name: 'Péssimo', id: 'pessimo', value: 1 },
-    { name: 'Ruim', id: 'ruim', value: 2 },
-    { name: 'Regular', id: 'regular', value: 3 },
-    { name: 'Bom', id: 'bom', value: 4 },
-    { name: 'Ótimo', id: 'otimo', value: 5 }
-  ];
-
-  public valuationItens = [
-    { title: 'Serviços', subtitle: 'Revisão e manutenção', value:'servicos', valuation: null },
-    { title: 'Atendimento', subtitle: 'Cordialidade e cumprimeto de prazos', value:'atendimento', valuation: null },
-    { title: 'Preços', subtitle: 'Carros, peças e serviços', value:'precos', valuation: null },
-    { title: 'Credibilidade', subtitle: 'Transmite confiança em seus produtos e serviços?', value:'credibilidade', valuation: null },
-    { title: 'Satisfação', subtitle: 'Recomendaria ou compraria novamente?', value:'satisfacao', valuation: null }
-  ];
+  public valuation = [...VALUATION];
+  public valuationItens = [...VALUATION_ITENS_BRAND];
 
   constructor(
     public fb: FormBuilder,

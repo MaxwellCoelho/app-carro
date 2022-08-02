@@ -8,6 +8,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { VALUATION, VALUATION_ITENS_CAR } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-about-car',
@@ -25,23 +26,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
 
-  public valuation = [
-    { name: 'Péssimo', id: 'pessimo', value: 1 },
-    { name: 'Ruim', id: 'ruim', value: 2 },
-    { name: 'Regular', id: 'regular', value: 3 },
-    { name: 'Bom', id: 'bom', value: 4 },
-    { name: 'Ótimo', id: 'otimo', value: 5 }
-  ];
-
-  public valuationItens = [
-    { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior', valuation: null },
-    { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior', valuation: null },
-    { title: 'Conforto', subtitle: 'Dirigibilidade e itens de série', value:'conforto', valuation: null },
-    { title: 'Segurança', subtitle: 'Estabilidade e frenagem', value:'seguranca', valuation: null },
-    { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
-    { title: 'Durabilidade', subtitle: 'Reparos e manutenção', value:'durabilidade', valuation: null },
-    { title: 'Custo-benefício', subtitle: 'Vale a pena? Recomendaria?', value:'custobeneficio', valuation: null }
-  ];
+  public valuation = [...VALUATION];
+  public valuationItens = [...VALUATION_ITENS_CAR];
 
   public opinarKmCompra: string;
   public opinarKmCompraValue: number;

@@ -61,4 +61,157 @@
       padding: 0.5rem 0 1rem 0;
     }
   }
+
+  .average-row {
+    padding: 1rem;
+    border: 3px solid #000;
+    border-radius:  0.5rem;
+
+    ion-label {
+      font-weight: bold;
+      font-size: x-large;
+    }
+
+    ion-icon {
+      transform: scale(1);
+      margin-right: 0.8rem;
+      margin-top: -0.5rem;
+      vertical-align: middle;
+    }
+
+    .val-bar {
+      display: flex;
+
+      div {
+        width: 19%;
+        margin-left: 1%;
+        height: 30px;
+        display: inline-flex;
+        background-color: rgba(var(--ion-color-medium-rgb), 0.4);
+        border-radius: 0.4rem;
+
+        span {
+          margin: 0 auto;
+        }
+
+        i.arrow {
+          width: 0px;
+          height: 0px;
+          border-left: 1rem solid transparent;
+          border-right: 1rem solid transparent;
+          border-bottom: 1.1rem solid #000;
+          position: absolute;
+          bottom: -0.2rem;
+          border-radius: 5px;
+          margin-left: -1rem;
+          display: none;
+        }
+      }
+    }
+
+    &.otimo {
+      border-color: var(--ion-color-primary);
+
+      .val-bar div {
+        background-color: var(--ion-color-primary);
+
+        &.box5 i.arrow {
+          display: block;
+        }
+      }
+    }
+
+    &.bom {
+      border-color: var(--ion-color-success);
+
+      .val-bar div:not(.box5) {
+        background-color: var(--ion-color-success);
+
+        &.box4 i.arrow {
+          display: block;
+        }
+      }
+    }
+
+    &.regular {
+      border-color: var(--ion-color-secondary);
+
+      .val-bar div:not(.box5, .box4) {
+        background-color: var(--ion-color-secondary);
+
+        &.box3 i.arrow {
+          display: block;
+        }
+      }
+    }
+
+    &.ruim {
+      border-color: var(--ion-color-danger);
+
+      .val-bar div:not(.box5, .box4, .box3) {
+        background-color: var(--ion-color-danger);
+
+        &.box2 i.arrow {
+          display: block;
+        }
+      }
+    }
+
+    &.pessimo {
+      border-color: var(--ion-color-danger-secondary);
+
+      .val-bar div:not(.box5, .box4, .box3, .box2) {
+        background-color: var(--ion-color-danger-secondary);
+
+        &.box1 i.arrow {
+          display: block;
+        }
+      }
+    }
+
+    &.indisponivel {
+      border-color: var(--ion-color-medium);
+    }
+
+    @media (max-width: 576px) {
+
+      padding: 1rem 0.5rem;
+
+      ion-col:nth-child(1) {
+        text-align: center;
+        padding-bottom: 1rem;
+      }
+
+      .val-bar div {
+        height: 20px;
+        border-radius: 0.3rem;
+
+        i.arrow {
+          border-left-width: 0.6rem;
+          border-right-width: 0.6rem;
+          border-bottom-width: 0.7rem;
+          margin-left: -0.6rem;
+          bottom: 0rem;
+        }
+      }
+    }
+  }
+
+  .average-small {
+    border: 0px;
+
+    .val-bar div {
+      height: 20px;
+      border-radius: 0.3rem;
+
+      i.arrow {
+        border-left-width: 0.6rem;
+        border-right-width: 0.6rem;
+        border-bottom-width: 0.7rem;
+        margin-left: -0.6rem;
+        bottom: 0rem;
+      }
+    }
+  }
+
 }

@@ -9,6 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { VALUATION, VALUATION_ITENS_CAR } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-opiniao',
@@ -21,6 +22,10 @@ export class OpiniaoPage implements OnInit {
   public selectedModel: object;
   public modelOpinions: object;
   public showLoader: boolean;
+  public modelAverage: object;
+
+  public valuation = [...VALUATION];
+  public valuationItens = [...VALUATION_ITENS_CAR];
 
   constructor(
     public dbService: DataBaseService,
@@ -78,6 +83,7 @@ export class OpiniaoPage implements OnInit {
         if (!subModelOpinions.closed) { subModelOpinions.unsubscribe(); }
 
         this.modelOpinions = res;
+        this.setModelAverages(res.averages);
         this.showLoader = false;
         console.log(res);
       },
@@ -85,6 +91,27 @@ export class OpiniaoPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public setModelAverages(averages: any) {
+    const average = averages.average;
+    const int = average ? parseInt(average, 10) : 0;
+    const foundVal = this.valuation.reverse().find(val => int === val.value);
+    const notFound = { name: 'Indisponível', id: 'indisponivel', value: 0 };
+    this.modelAverage = foundVal || notFound;
+
+    for (const valItem of this.valuationItens) {
+      valItem.valuation = null;
+
+      if (averages[valItem.value]) {
+        const valInt = parseInt(averages[valItem.value], 10);
+        const valFound = this.valuation.reverse().find(val => valInt === val.value);
+        const valNotFound = { name: 'Indisponível', id: 'indisponivel', value: 0 };
+        valItem.valuation =  valFound || valNotFound;
+      }
+
+      console.log(this.valuationItens);
+    }
   }
 
   public getUrlParams(): object {
