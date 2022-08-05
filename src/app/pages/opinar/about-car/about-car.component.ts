@@ -26,8 +26,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
 
-  public valuation = [...VALUATION];
-  public valuationItens = [...VALUATION_ITENS_CAR];
+  public valuation = VALUATION.slice();
+  public valuationItens = VALUATION_ITENS_CAR.slice();
 
   public opinarKmCompra: string;
   public opinarKmCompraValue: number;

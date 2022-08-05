@@ -9,7 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { VALUATION, VALUATION_ITENS_CAR } from 'src/app/helpers/valuation.helper';
+import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-opiniao',
@@ -24,8 +24,8 @@ export class OpiniaoPage implements OnInit {
   public showLoader: boolean;
   public modelAverage: object;
 
-  public valuation = [...VALUATION];
-  public valuationItens = [...VALUATION_ITENS_CAR];
+  public valuation = VALUATION.slice();
+  public valuationItens = [];
 
   constructor(
     public dbService: DataBaseService,
@@ -84,6 +84,7 @@ export class OpiniaoPage implements OnInit {
 
         this.modelOpinions = res;
         this.setModelAverages(res.averages);
+        this.setOpinionValuation();
         this.showLoader = false;
         console.log(res);
       },
@@ -95,23 +96,46 @@ export class OpiniaoPage implements OnInit {
 
   public setModelAverages(averages: any) {
     const average = averages.average;
-    const int = average ? parseInt(average, 10) : 0;
-    const foundVal = this.valuation.reverse().find(val => int === val.value);
-    const notFound = { name: 'Indisponível', id: 'indisponivel', value: 0 };
-    this.modelAverage = foundVal || notFound;
+    this.modelAverage = this.getValuationItemByValue(average);
 
-    for (const valItem of this.valuationItens) {
-      valItem.valuation = null;
+    const valItens = VALUATION_ITENS_CAR.slice();
 
+    for (const valItem of valItens) {
       if (averages[valItem.value]) {
-        const valInt = parseInt(averages[valItem.value], 10);
-        const valFound = this.valuation.reverse().find(val => valInt === val.value);
-        const valNotFound = { name: 'Indisponível', id: 'indisponivel', value: 0 };
-        valItem.valuation =  valFound || valNotFound;
+        const newItem = {
+          ...valItem,
+          valuation: this.getValuationItemByValue(averages[valItem.value])
+        };
+
+        this.valuationItens.push(newItem);
+      }
+    }
+  }
+
+  public setOpinionValuation() {
+    for (const opinion of this.modelOpinions['opinions']) {
+      // opinion['valuation'] = { average: this.getValuationItemByValue(opinion.car_val_average) };
+
+      const valItens = VALUATION_ITENS_CAR.slice();
+      const newItens = [];
+
+      for (const valItem of valItens) {
+        const newItem = {
+          ...valItem,
+          valuation: this.getValuationItemByValue(opinion[`car_val_${valItem.value}`])
+        };
+
+        newItens.push(newItem);
       }
 
-      console.log(this.valuationItens);
+      opinion['valuationItens'] = newItens;
     }
+  }
+
+  public getValuationItemByValue(value: any): any {
+    const int = value ? parseInt(value, 10) : 0;
+    const foundVal = this.valuation.find(val => int === val.value);
+    return foundVal || VALUATION_NOT_FOUND;
   }
 
   public getUrlParams(): object {
@@ -157,6 +181,10 @@ export class OpiniaoPage implements OnInit {
       toast.present();
       this.router.navigate([NAVIGATION.search.route]);
     });
+  }
+
+  public goToOpinar() {
+    this.router.navigate(['/opinar/'+ this.selectedModel['brand']['url'] + '/' + this.selectedModel['url']]);
   }
 
 }
