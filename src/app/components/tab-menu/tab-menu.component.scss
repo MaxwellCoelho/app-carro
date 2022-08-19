@@ -2,3 +2,11 @@
   border-top: 0.3rem solid;
   margin-top: -0.3rem;
 }
+
+.mobile-menu {
+  height: 0px;
+
+  @media (max-width: 700px) {
+    height: 57px;
+  }
+}

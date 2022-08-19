@@ -1,12 +1,75 @@
 #main-header {
-  .logo-img {
-    width: 40px;
-    margin: 0.4rem 0.7rem 0.5rem 1rem;
-    vertical-align: middle;
+
+  .mobile-menu {
+    display: none;
+
+    @media (max-width: 700px) {
+      display: block;
+    }
   }
 
-  .logo-name {
-    vertical-align: middle;
-    width: 130px;
+  .desktop-menu {
+    @media (max-width: 700px) {
+      display: none;
+    }
+  }
+
+  ion-button {
+    text-transform: capitalize;
+    margin-top: -0.8rem;
+    font-family: calibri, arial, verdana;
+    border-right: 1px dashed var(--ion-color-primary-tint);
+    padding-right: 0.25rem;
+
+    &:nth-child(4) {
+      border-right: 0px;
+    }
+  }
+
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: #fff;
+    --border-width: 0px 0 14px 0;
+    --border-color: #fff;
+  }
+
+  ion-menu-button {
+    margin-top: -15px;
+    transform: scale(1.2);
+  }
+
+  ion-buttons {
+    margin-right: -585px;
+    position: absolute;
+    right: 50%;
+
+    @media (max-width: 1170px) {
+      margin-right: 0;
+      position: relative;
+      right: auto;
+    }
+  }
+
+  &.header-md::after {
+    height: 10px;
+    background: #fff;
+    box-shadow: 0px 5px 10px 8px #fff;
+  }
+
+  .logo-container {
+    background-color: #fff;
+    max-width: 180px;
+    padding: 5px 15px 0 15px;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: -585px;
+    border-radius: 5px;
+
+    @media (max-width: 1170px) {
+      top: 0px;
+      left: 0px;
+      margin-left: 0px;
+    }
   }
 }
