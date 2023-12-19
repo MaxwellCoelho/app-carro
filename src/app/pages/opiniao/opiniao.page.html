@@ -2,10 +2,10 @@
   <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
-    <ion-title size="large" color="primary" class="main-title">
+    <!-- <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
       <ion-label>Opinião</ion-label>
-    </ion-title>
+    </ion-title> -->
 
     <div class="main-body" *ngIf="selectedModel && modelOpinions">
       <ion-grid slot="content" class="selected-model-grid">
@@ -53,11 +53,11 @@
           </ion-col>
           <ion-col size-md="6" size-sm="6" size-xs="12">
             <div class="val-bar">
-              <div class="box1"><span><i class="arrow"></i></span></div>
-              <div class="box2"><span><i class="arrow"></i></span></div>
-              <div class="box3"><span><i class="arrow"></i></span></div>
-              <div class="box4"><span><i class="arrow"></i></span></div>
-              <div class="box5"><span><i class="arrow"></i></span></div>
+              <div class="box1"></div>
+              <div class="box2"></div>
+              <div class="box3"></div>
+              <div class="box4"></div>
+              <div class="box5"></div>
             </div>
           </ion-col>
         </ion-row>
@@ -69,11 +69,11 @@
           </ion-col>
           <ion-col size-md="5" size-sm="5" size-xs="12">
             <div class="val-bar">
-              <div class="box1"><span><i class="arrow"></i></span></div>
-              <div class="box2"><span><i class="arrow"></i></span></div>
-              <div class="box3"><span><i class="arrow"></i></span></div>
-              <div class="box4"><span><i class="arrow"></i></span></div>
-              <div class="box5"><span><i class="arrow"></i></span></div>
+              <div class="box1"></div>
+              <div class="box2"></div>
+              <div class="box3"></div>
+              <div class="box4"></div>
+              <div class="box5"></div>
             </div>
           </ion-col>
         </ion-row>
@@ -99,27 +99,32 @@
         </ion-row>
       </ion-grid>
 
-      <ion-grid slot="content">
-        <ion-row *ngIf="modelOpinions.qtd > 0">
-          <ion-col>
-            <h1><strong>Opinião dos donos</strong> ({{modelOpinions.qtd}})</h1>
+      <ion-title size="large" color="primary" class="main-title" *ngIf="modelOpinions.qtd > 0">
+        <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
+        <ion-label><strong>Opinião dos donos</strong> ({{modelOpinions.qtd}})</ion-label>
+      </ion-title>
+
+      <ion-grid slot="content" class="selected-model-grid opinion" *ngFor="let opinion of modelOpinions.opinions">
+        <ion-row class="">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <ion-label color="dark" class="item-title"><h1>{{opinion.customer.name}}</h1></ion-label>
+            <ion-label class="ion-text-wrap">{{opinion.created}}</ion-label>
           </ion-col>
         </ion-row>
-      </ion-grid>
 
-      <ion-grid slot="content" class="selected-model-grid" *ngFor="let opinion of modelOpinions.opinions">
-        <ion-row class="average-row">
+        <ion-row class="car-info">
           <ion-col size-md="6" size-sm="6" size-xs="12">
-          {{opinion.customer.name}}<br>
-          {{opinion.created}}<br><br>
-          {{modelOpinions.model.brand.name}} {{modelOpinions.model.name}} {{opinion.engine}} {{opinion.fuel}} {{opinion.year_model}}<br>
-          Comprou em {{opinion.year_bought}} | Dono há {{opinion.kept_period}} anos<br>
-          Comprou com {{opinion.km_bought}} 000 Km rodados<br><br>
-          "{{opinion.car_title}}"<br><br>
-          Pontos positivos:<br>
-          {{opinion.car_positive}}<br><br>
-          Pontos negativos:<br>
-          {{opinion.car_negative}}
+            <ion-label class="ion-text-wrap">
+              {{modelOpinions.model.brand.name}} {{modelOpinions.model.name}} {{opinion.engine}} {{opinion.fuel}} {{opinion.year_model}}<br>
+              Comprou em {{opinion.year_bought}} | Dono há {{opinion.kept_period}} anos<br>
+              Comprou com {{opinion.km_bought}} 000 Km rodados
+            </ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <ion-label color="dark" class="item-title"><h1>"{{opinion.car_title}}"</h1></ion-label>
           </ion-col>
         </ion-row>
 
@@ -130,12 +135,30 @@
           </ion-col>
           <ion-col size-md="5" size-sm="5" size-xs="12">
             <div class="val-bar">
-              <div class="box1"><span><i class="arrow"></i></span></div>
-              <div class="box2"><span><i class="arrow"></i></span></div>
-              <div class="box3"><span><i class="arrow"></i></span></div>
-              <div class="box4"><span><i class="arrow"></i></span></div>
-              <div class="box5"><span><i class="arrow"></i></span></div>
+              <div class="box1"></div>
+              <div class="box2"></div>
+              <div class="box3"></div>
+              <div class="box4"></div>
+              <div class="box5"></div>
             </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="positive-points">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <ion-label class="ion-text-wrap">
+              Pontos positivos:<br>
+              <strong>{{opinion.car_positive}}</strong><br>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="negative-points">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <ion-label class="ion-text-wrap">
+              Pontos negativos:<br>
+              <strong>{{opinion.car_negative}}</strong>
+            </ion-label>
           </ion-col>
         </ion-row>
       </ion-grid>

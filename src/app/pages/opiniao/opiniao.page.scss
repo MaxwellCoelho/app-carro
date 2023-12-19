@@ -24,6 +24,20 @@
 }
 
 .selected-model-grid {
+  &.opinion {
+    padding: 0;
+    border: 3px solid #000;
+    border-radius: 0.5rem;
+    margin: 2rem 0.3rem;
+
+    .car-info, .positive-points {
+      background-color: rgba(var(--ion-color-medium-rgb), 0.4);
+      border-radius: 0.4rem;
+      padding: .5rem;
+      margin: 0;
+    }
+  }
+
   .model-logo {
     text-align: right;
   }
@@ -87,24 +101,9 @@
         margin-left: 1%;
         height: 30px;
         display: inline-flex;
-        background-color: rgba(var(--ion-color-medium-rgb), 0.4);
         border-radius: 0.4rem;
-
-        span {
-          margin: 0 auto;
-        }
-
-        i.arrow {
-          width: 0.3rem;
-          background-color: #000;
-          height: 1.4rem;
-          position: absolute;
-          top: 1.4rem;
-          border-radius: 10px 10px 0 0;
-          margin-left: -0.15rem;
-          display: none;
-          box-shadow: 0px 0px 0px 0.2rem #fff;
-        }
+        border: 2px dashed rgba(var(--ion-color-medium-rgb), 0.4);
+        border-radius: 0.4rem;
       }
     }
 
@@ -113,10 +112,7 @@
 
       .val-bar div {
         background-color: var(--ion-color-primary);
-
-        &.box5 i.arrow {
-          display: block;
-        }
+        border: 0;
       }
     }
 
@@ -125,10 +121,7 @@
 
       .val-bar div:not(.box5) {
         background-color: var(--ion-color-success);
-
-        &.box4 i.arrow {
-          display: block;
-        }
+        border: 0;
       }
     }
 
@@ -137,10 +130,7 @@
 
       .val-bar div:not(.box5, .box4) {
         background-color: var(--ion-color-secondary);
-
-        &.box3 i.arrow {
-          display: block;
-        }
+        border: 0;
       }
     }
 
@@ -149,10 +139,7 @@
 
       .val-bar div:not(.box5, .box4, .box3) {
         background-color: var(--ion-color-danger);
-
-        &.box2 i.arrow {
-          display: block;
-        }
+        border: 0;
       }
     }
 
@@ -161,10 +148,7 @@
 
       .val-bar div:not(.box5, .box4, .box3, .box2) {
         background-color: var(--ion-color-danger-secondary);
-
-        &.box1 i.arrow {
-          display: block;
-        }
+        border: 0;
       }
     }
 
@@ -184,14 +168,6 @@
       .val-bar div {
         height: 20px;
         border-radius: 0.3rem;
-
-        i.arrow {
-          width: 0.2rem;
-          height: 1rem;
-          margin-left: -0.1rem;
-          top: 1rem;
-          box-shadow: 0px 0px 0px 0.14rem #fff;
-        }
       }
     }
   }
@@ -233,18 +209,6 @@
         height: 15px;
         margin-left: 1.5%;
         border-radius: 0.2rem;
-
-        i.arrow {
-          background-color: #000;
-          position: absolute;
-          border-radius: 10px 10px 0 0;
-          display: none;
-          width: 0.2rem;
-          height: 0.6rem;
-          margin-left: -0.1rem;
-          top: 2rem;
-          box-shadow: 0px 0px 0px 0.14rem #fff;
-        }
       }
     }
 
@@ -257,11 +221,6 @@
 
         div {
           height: 10px;
-
-          i.arrow {
-            top: 0.8rem;
-            height: 0.4rem;
-          }
         }
       }
 
