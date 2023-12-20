@@ -1,27 +1,196 @@
-<ion-content [fullscreen]="true">
+<ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
   <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
-    <ion-title size="large" color="primary" class="main-title">
+    <!-- <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
       <ion-label>Opinião</ion-label>
-    </ion-title>
+    </ion-title> -->
 
-    <div class="main-body" *ngIf="selectedModel">
-      <ion-item lines="none">
-        <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
-        <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+    <div class="main-body" *ngIf="selectedModel && modelOpinions">
+      <ion-grid slot="content" class="selected-model-grid">
+        <ion-row>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.7" size-xs="12" class="model-logo">
+            <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+              onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+          </ion-col>
+          <ion-col size-lg="9" size-md="8" size-sm="6.7" size-xs="12" class="model-name">
+            <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+          </ion-col>
+          <ion-col size-lg="1.5" size-md="2" size-sm="2.6" size-xs="12" class="model-category">
+            <ion-icon name="git-compare-outline" color="dark" size="large" class="category-image"></ion-icon>
+            <ion-label color="dark"> | </ion-label>
+            <ion-icon name="heart-outline" color="dark" size="large" class="category-image"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-        <ion-item slot="end" lines="none">
-          <ion-icon name="car-outline" color="medium" size="medium" class="category-image"></ion-icon>
-          <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
-        </ion-item>
-      </ion-item>
       <ion-item lines="none">
         <img src="assets/models/{{selectedModel.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
           onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
+
+      <ion-grid slot="content" class="selected-model-grid">
+        <ion-row>
+          <ion-col size-md="6" size-sm="6" size-xs="5">
+            <ion-icon name="car" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-label color="medium">{{selectedModel.category.name}}</ion-label>
+          </ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="7" class="model-opinions">
+            <ion-icon name="clipboard" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-label color="medium" *ngIf="modelOpinions.qtd > 0">{{modelOpinions.qtd}} opini{{modelOpinions.qtd < 2 ? 'ão' : 'ões'}}</ion-label>
+            <ion-label color="medium" *ngIf="modelOpinions.qtd === 0">Nenhuma opinião</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid slot="content" class="selected-model-grid" *ngIf="modelOpinions.qtd > 0">
+        <ion-row class="average-row" [ngClass]="modelAverage.id">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <ion-icon name="ribbon" color="dark" size="large"></ion-icon>
+            <ion-label color="dark" *ngIf="modelOpinions.averages.average">{{modelOpinions.averages.average}} | {{modelAverage.name}}</ion-label>
+            <ion-label color="dark" *ngIf="!modelOpinions.averages.average">{{modelAverage.name}}</ion-label>
+          </ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <div class="val-bar">
+              <div class="box1"></div>
+              <div class="box2"></div>
+              <div class="box3"></div>
+              <div class="box4"></div>
+              <div class="box5"></div>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let item of valuationItens" class="average-row average-small" [ngClass]="item.valuation ? item.valuation.id : ''">
+          <ion-col size-md="6" size-sm="7" size-xs="12">
+            <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
+            <ion-label class="item-subtitle"><p>{{item.subtitle}}</p></ion-label>
+          </ion-col>
+          <ion-col size-md="4" size-sm="5" size-xs="12">
+            <div class="val-bar">
+              <div class="box1"></div>
+              <div class="box2"></div>
+              <div class="box3"></div>
+              <div class="box4"></div>
+              <div class="box5"></div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid slot="content">
+        <ion-row class="box-send-too">
+          <ion-col size-md="8" size-sm="6" size-xs="12">
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap" *ngIf="modelOpinions.qtd > 0">Você também tem um <strong>{{selectedModel.brand.name}} {{selectedModel.name}}</strong>?</ion-label>
+              <ion-label class="ion-text-wrap" *ngIf="modelOpinions.qtd === 0">
+                Não há opiniões ainda. <br>
+                Seja o primeiro a opinar sobre o <strong>{{selectedModel.brand.name}} {{selectedModel.name}}</strong>!</ion-label>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-chip outline title="Envie a sua opinião" color="primary" (click)="goToOpinar()">
+              <ion-icon [name]="'paper-plane-outline'"></ion-icon>
+              <ion-label>Envie a sua opinião</ion-label>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-title size="large" color="primary" class="main-title" *ngIf="modelOpinions.qtd > 0">
+        <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
+        <ion-label><strong>Opinião dos donos</strong> ({{modelOpinions.qtd}})</ion-label>
+      </ion-title>
+
+      <ion-grid slot="content" class="selected-model-grid opinion" *ngFor="let opinion of modelOpinions.opinions" id="{{opinion._id}}" [ngClass]="opinion.average.id">
+        <ion-row class="customer-info">
+          <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5">
+            <ion-icon name="person-circle-outline" color="dark" style="font-size: 55px"></ion-icon>
+          </ion-col>
+
+          <ion-col size-lg="7.2" size-md="7" size-sm="5.5" size-xs="9.5">
+            <ion-label color="dark" class="item-title"><h1>{{opinion.customer?.name}}</h1></ion-label>
+            <ion-label class="ion-text-wrap">{{opinion.created}}</ion-label>
+          </ion-col>
+
+          <ion-col size-lg="4" size-md="4" size-sm="5" size-xs="12" style="padding: 0">
+            <ion-row class="average-row average-small" [ngClass]="opinion.average.id" style="padding: 0">
+              <ion-col size-md="12" size-sm="12" size-xs="12">
+                <ion-icon name="ribbon" color="dark" style="font-size: 25px; margin-left: 0.5rem"></ion-icon>
+                <ion-label color="dark" *ngIf="opinion.car_val_average">{{opinion.car_val_average}} | {{opinion.average.name}}</ion-label>
+                <ion-label color="dark" *ngIf="!opinion.car_val_average">{{opinion.average.name}}</ion-label>
+
+                <div class="val-bar" style="margin-top: 0.5rem">
+                  <div class="box1"></div>
+                  <div class="box2"></div>
+                  <div class="box3"></div>
+                  <div class="box4"></div>
+                  <div class="box5"></div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+
+        <ion-title size="large" color="dark" class="car-info">
+          <ion-icon [name]="'car'" color="dark"></ion-icon>
+          <ion-label class="ion-text-wrap">{{modelOpinions.model.brand.name}} {{modelOpinions.model.name}} {{opinion.engine}} {{opinion.fuel}} {{opinion.year_model}}<br></ion-label>
+
+          <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
+          <ion-label class="ion-text-wrap">Comprou em {{opinion.year_bought}} | Dono há {{opinion.kept_period}} anos<br></ion-label>
+
+          <ion-icon [name]="'speedometer'" color="dark"></ion-icon>
+          <ion-label class="ion-text-wrap">Comprou com {{opinion.km_bought}} 000 Km rodados</ion-label>
+        </ion-title>
+
+        <ion-row class="opinion-title" [ngClass]="opinion.average.id">
+          <ion-col size-md="12" size-sm="12" size-xs="12">
+            <ion-label class="ion-text-wrap" color="light"><h1>"{{opinion.car_title}}"</h1></ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div class="details">
+          <ion-row *ngFor="let item of opinion.valuationItens" class="average-row average-small" [ngClass]="item.valuation ? item.valuation.id : ''">
+            <ion-col size-md="6" size-sm="7" size-xs="12">
+              <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
+              <ion-label class="item-subtitle"><p>{{item.subtitle}}</p></ion-label>
+            </ion-col>
+            <ion-col size-md="4" size-sm="5" size-xs="12">
+              <div class="val-bar">
+                <div class="box1"></div>
+                <div class="box2"></div>
+                <div class="box3"></div>
+                <div class="box4"></div>
+                <div class="box5"></div>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <br>
+          <ion-title size="large" color="dark" class="positive-points">
+            <ion-icon [name]="'thumbs-up'" color="dark"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              Pontos positivos:<br>
+              <span>{{opinion.car_positive}}</span>
+            </ion-label>
+          </ion-title>
+
+          <ion-title size="large" color="dark" class="negative-points">
+            <ion-icon [name]="'thumbs-down'" color="dark"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              Pontos negativos:<br>
+              <span>{{opinion.car_negative}}</span>
+            </ion-label>
+          </ion-title>
+        </div>
+
+        <ion-title size="large" color="dark" class="details-button" (click)="expandDetials(opinion._id)">
+          <ion-label>Expandir detalhes</ion-label>
+          <ion-icon [name]="'chevron-down'" color="dark"></ion-icon>
+        </ion-title>
+      </ion-grid>
     </div>
   </div>
 </ion-content>

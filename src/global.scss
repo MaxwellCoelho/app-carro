@@ -157,3 +157,7 @@ ion-item:not(.ion-focused, .item-has-focus, .item-has-value) .label-floating.sc-
     font-size: smaller;
   }
 }
+
+ion-popover [popover]:not(:popover-open):not(dialog[open]) {
+  display: contents;
+}

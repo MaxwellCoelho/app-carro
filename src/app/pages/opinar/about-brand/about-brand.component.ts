@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { VALUATION, VALUATION_ITENS_BRAND } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-about-brand',
@@ -18,21 +19,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
 
   public hasAllValuations = false;
 
-  public valuation = [
-    { name: 'Péssimo', value:'pessimo' },
-    { name: 'Ruim', value:'ruim' },
-    { name: 'Regular', value:'regular' },
-    { name: 'Bom', value:'bom' },
-    { name: 'Ótimo', value:'otimo' }
-  ];
-
-  public valuationItens = [
-    { title: 'Serviços', subtitle: 'Revisão e manutenção', value:'servicos', valuation: null },
-    { title: 'Atendimento', subtitle: 'Cordialidade e cumprimeto de prazos', value:'atendimento', valuation: null },
-    { title: 'Preços', subtitle: 'Carros, peças e serviços', value:'precos', valuation: null },
-    { title: 'Credibilidade', subtitle: 'Transmite confiança em seus produtos e serviços?', value:'credibilidade', valuation: null },
-    { title: 'Satisfação', subtitle: 'Recomendaria ou compraria novamente?', value:'satisfacao', valuation: null }
-  ];
+  public valuation = [...VALUATION];
+  public valuationItens = [...VALUATION_ITENS_BRAND];
 
   constructor(
     public fb: FormBuilder,
@@ -59,7 +47,7 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
   public segmentChanged($event) {
     this.valuationItens.find(item => {
         if (item.value === $event.target.id) {
-          item.valuation = $event.target.value;
+          item.valuation = { id: $event.target.id, value: $event.target.value};
         }
       }
     );
@@ -80,7 +68,7 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
     const valuation = {};
 
     for (const val of this.valuationItens) {
-      valuation[val.value] = val.valuation;
+      valuation[val.value] = parseInt(val.valuation.value, 10);
     }
 
     const aboutBrandData = {
@@ -106,8 +94,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
       this.formOpinarMarca.controls.opinarPontosNegativos.patchValue(this.autoFill['finalWords']['negative']);
 
       for (const val of this.valuationItens) {
-        val.valuation = this.autoFill['valuation'][val.value];
-        document.getElementById(val.value+'-'+val.valuation).click();
+        val.valuation = this.valuation.find(valItem => valItem.value === this.autoFill['valuation'][val.value]);
+        document.getElementById(val.value+'-'+val.valuation.id).click();
       }
 
       this.hasAllValuations = true;

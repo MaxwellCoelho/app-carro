@@ -8,6 +8,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { VALUATION, VALUATION_ITENS_CAR } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-about-car',
@@ -25,23 +26,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
 
-  public valuation = [
-    { name: 'Péssimo', value:'pessimo' },
-    { name: 'Ruim', value:'ruim' },
-    { name: 'Regular', value:'regular' },
-    { name: 'Bom', value:'bom' },
-    { name: 'Ótimo', value:'otimo' }
-  ];
-
-  public valuationItens = [
-    { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'interior', valuation: null },
-    { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'exterior', valuation: null },
-    { title: 'Conforto', subtitle: 'Dirigibilidade e itens de série', value:'conforto', valuation: null },
-    { title: 'Segurança', subtitle: 'Estabilidade e frenagem', value:'seguranca', valuation: null },
-    { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumo', valuation: null },
-    { title: 'Durabilidade', subtitle: 'Reparos e manutenção', value:'durabilidade', valuation: null },
-    { title: 'Custo-benefício', subtitle: 'Vale a pena? Recomendaria?', value:'custobeneficio', valuation: null }
-  ];
+  public valuation = VALUATION.slice();
+  public valuationItens = VALUATION_ITENS_CAR.slice();
 
   public opinarKmCompra: string;
   public opinarKmCompraValue: number;
@@ -97,7 +83,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public segmentChanged($event) {
     this.valuationItens.find(item => {
         if (item.value === $event.target.id) {
-          item.valuation = $event.target.value;
+          item.valuation = { id: $event.target.id, value: $event.target.value};
         }
       }
     );
@@ -155,7 +141,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     const valuation = {};
 
     for (const val of this.valuationItens) {
-      valuation[val.value] = val.valuation;
+      valuation[val.value] = parseInt(val.valuation.value, 10);
     }
 
     const aboutCarData = {
@@ -194,8 +180,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       this.changeOpinarKmCompra({detail: { value: this.autoFill['kmBought']}});
 
       for (const val of this.valuationItens) {
-        val.valuation = this.autoFill['valuation'][val.value];
-        document.getElementById(val.value+'-'+val.valuation).click();
+        val.valuation = this.valuation.find(valItem => valItem.value === this.autoFill['valuation'][val.value]);
+        document.getElementById(val.value+'-'+val.valuation.id).click();
       }
 
       this.hasAllValuations = true;

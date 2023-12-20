@@ -9,6 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-opiniao',
@@ -19,7 +20,12 @@ export class OpiniaoPage implements OnInit {
 
   public nav = NAVIGATION;
   public selectedModel: object;
+  public modelOpinions: object;
   public showLoader: boolean;
+  public modelAverage: object;
+
+  public valuation = VALUATION.slice();
+  public valuationItens = [];
 
   constructor(
     public dbService: DataBaseService,
@@ -39,6 +45,7 @@ export class OpiniaoPage implements OnInit {
 
     if (this.selectedModel) {
       this.searchService.clearModel();
+      this.getModelOpinions();
     } else {
       this.getModel();
     }
@@ -58,7 +65,7 @@ export class OpiniaoPage implements OnInit {
 
         if (foundModel) {
           this.selectedModel = foundModel;
-          this.showLoader = false;
+          this.getModelOpinions();
         } else {
           this.showErrorToast({status: 404});
         }
@@ -67,6 +74,67 @@ export class OpiniaoPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public getModelOpinions(): void {
+    const action = `${environment.opinionAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
+    const subModelOpinions = this.dbService.getItens(action,).subscribe(
+      res => {
+        if (!subModelOpinions.closed) { subModelOpinions.unsubscribe(); }
+
+        this.modelOpinions = res;
+        this.setModelAverages(res.averages);
+        this.setOpinionValuation();
+        this.showLoader = false;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public setModelAverages(averages: any) {
+    const average = averages.average;
+    this.modelAverage = this.getValuationItemByValue(average);
+
+    const valItens = VALUATION_ITENS_CAR.slice();
+
+    for (const valItem of valItens) {
+      if (averages[valItem.value]) {
+        const newItem = {
+          ...valItem,
+          valuation: this.getValuationItemByValue(averages[valItem.value])
+        };
+
+        this.valuationItens.push(newItem);
+      }
+    }
+  }
+
+  public setOpinionValuation() {
+    for (const opinion of this.modelOpinions['opinions']) {
+      opinion['average'] = this.getValuationItemByValue(opinion.car_val_average);
+
+      const valItens = VALUATION_ITENS_CAR.slice();
+      const newItens = [];
+
+      for (const valItem of valItens) {
+        const newItem = {
+          ...valItem,
+          valuation: this.getValuationItemByValue(opinion[`car_val_${valItem.value}`])
+        };
+
+        newItens.push(newItem);
+      }
+
+      opinion['valuationItens'] = newItens;
+    }
+  }
+
+  public getValuationItemByValue(value: any): any {
+    const int = value ? parseInt(value, 10) : 0;
+    const foundVal = this.valuation.find(val => int === val.value);
+    return foundVal || VALUATION_NOT_FOUND;
   }
 
   public getUrlParams(): object {
@@ -112,6 +180,15 @@ export class OpiniaoPage implements OnInit {
       toast.present();
       this.router.navigate([NAVIGATION.search.route]);
     });
+  }
+
+  public goToOpinar() {
+    this.router.navigate(['/opinar/'+ this.selectedModel['brand']['url'] + '/' + this.selectedModel['url']]);
+  }
+
+  public expandDetials(opinionId: string): void {
+    document.getElementById(opinionId).querySelector('.details').classList.add('expand-details');
+    document.getElementById(opinionId).querySelector('.details-button').classList.add('hide-button');
   }
 
 }

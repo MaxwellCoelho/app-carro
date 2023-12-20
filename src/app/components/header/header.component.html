@@ -1,9 +1,26 @@
 <ion-header [collapse]="condense" id="main-header">
-  <ion-toolbar color="primary">
-    <ion-buttons slot="primary">
-      <ion-menu-button auto-hide="false"></ion-menu-button>
-    </ion-buttons>
-    <img src="assets/logo-img.svg" alt="Car Reputation" title="Car Reputation" class="logo-img">
-    <img src="assets/logo-name.svg" alt="Car Reputation" title="Car Reputation" class="logo-name">
-  </ion-toolbar>
+    <ion-toolbar>
+      <ion-buttons slot="primary">
+        <ion-button routerDirection="root" [routerLink]="'/'+ nav.best.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.best.icon"></ion-icon>
+          {{nav.best.title}}
+        </ion-button>
+        <ion-button routerDirection="root" [routerLink]="'/'+ nav.search.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.search.icon"></ion-icon>
+          {{nav.search.title}}
+        </ion-button>
+        <ion-button routerDirection="root" [routerLink]="'/'+ nav.compare.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.compare.icon"></ion-icon>
+          {{nav.compare.title}}
+        </ion-button>
+        <ion-button routerDirection="root" [routerLink]="'/'+ nav.favorite.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.favorite.icon"></ion-icon>
+          {{nav.favorite.title}}
+        </ion-button>
+        <ion-menu-button auto-hide="false" class="mobile-menu"></ion-menu-button>
+      </ion-buttons>
+      <div class="logo-container">
+        <img src="assets/krro.svg" alt="Krro - Opinião dos donos" title="Krro - Opinião dos donos">
+      </div>
+    </ion-toolbar>
 </ion-header>
