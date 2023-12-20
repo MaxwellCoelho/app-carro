@@ -165,7 +165,7 @@ export class OpinarPage implements OnInit {
 
   public sendFinalPayload() {
     this.showLoader = true;
-
+    console.log(this.finalPayload);
     const jwtData = { data: this.cryptoService.encondeJwt(this.finalPayload)};
 
     const subOpinion = this.dbService.createItem(environment.opinionAction, jwtData).subscribe(

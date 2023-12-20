@@ -17,6 +17,14 @@
           <ion-icon slot="start" [name]="nav.favorite.icon"></ion-icon>
           {{nav.favorite.title}}
         </ion-button>
+        <ion-button *ngIf="loggedUser" routerDirection="root" [routerLink]="'/'+ nav.garage.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.garage.icon"></ion-icon>
+          {{nav.garage.title}}
+        </ion-button>
+        <ion-button *ngIf="loggedUser && loggedUser.role?.level <= 1" routerDirection="root" [routerLink]="'/'+ nav.admin.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.admin.icon"></ion-icon>
+          {{nav.admin.title}}
+        </ion-button>
         <ion-menu-button auto-hide="false" class="mobile-menu"></ion-menu-button>
       </ion-buttons>
       <div class="logo-container">
