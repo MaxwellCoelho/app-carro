@@ -1,9 +1,9 @@
 export const VALUATION = [
-  { name: 'Ótimo', id: 'otimo', value: 5 },
-  { name: 'Bom', id: 'bom', value: 4 },
-  { name: 'Regular', id: 'regular', value: 3 },
+  { name: 'Péssimo', id: 'pessimo', value: 1 },
   { name: 'Ruim', id: 'ruim', value: 2 },
-  { name: 'Péssimo', id: 'pessimo', value: 1 }
+  { name: 'Regular', id: 'regular', value: 3 },
+  { name: 'Bom', id: 'bom', value: 4 },
+  { name: 'Ótimo', id: 'otimo', value: 5 }
 ];
 
 export const VALUATION_NOT_FOUND = { name: 'Indisponível', id: 'indisponivel', value: 0 };

@@ -25,16 +25,131 @@
 
 .selected-model-grid {
   &.opinion {
-    padding: 0;
+    padding: 0rem;
     border: 3px solid #000;
-    border-radius: 0.5rem;
+    border-radius:  0.5rem;
     margin: 2rem 0.3rem;
+
+    &.otimo {
+      border-color: var(--ion-color-primary);
+    }
+
+    &.bom {
+      border-color: var(--ion-color-success);
+    }
+
+    &.regular {
+      border-color: var(--ion-color-secondary);
+    }
+
+    &.ruim {
+      border-color: var(--ion-color-danger);
+    }
+
+    &.pessimo {
+      border-color: var(--ion-color-danger-secondary);
+    }
+
+    .customer-info {
+      padding: 1rem;
+
+      .item-title {
+        h1 {
+          margin-bottom: -5px;
+          margin-top: 5px;
+          color: var(--ion-color-dark);
+          font-weight: bold;
+        }
+      }
+    }
+
+    .car-info, .positive-points, .negative-points, .details-button {
+      ion-icon {
+        vertical-align: middle;
+        margin-right: 0.5rem;
+      }
+    }
 
     .car-info, .positive-points {
       background-color: rgba(var(--ion-color-medium-rgb), 0.4);
       border-radius: 0.4rem;
-      padding: .5rem;
+      padding: 1rem;
       margin: 0;
+    }
+
+    .positive-points, .negative-points {
+      padding: 1rem;
+
+      span {
+        font-style: italic;
+        font-weight: bolder;
+        margin-left: 2rem;
+      }
+    }
+
+    .car-info {
+      border-radius: 0.4rem 0.4rem 0 0;
+    }
+
+    .opinion-title {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--ion-color-dark);
+
+      h1 {
+        color: var(--ion-color-light);
+        font-style: italic;
+        font-weight: lighter;
+        font-size: xx-large;
+      }
+
+      &.otimo {
+        background-color: var(--ion-color-primary);
+      }
+
+      &.bom {
+        background-color: var(--ion-color-success);
+      }
+
+      &.regular {
+        background-color: var(--ion-color-secondary);
+        h1 {
+          color: var(--ion-color-dark);
+        }
+      }
+
+      &.ruim {
+        background-color: var(--ion-color-danger);
+      }
+
+      &.pessimo {
+        background-color: var(--ion-color-danger-secondary);
+      }
+    }
+
+    .details-button {
+      padding: 1rem;
+      margin: 0;
+      text-align: center;
+      cursor: pointer;
+
+      ion-icon {
+        margin-left: 0.5rem;
+        margin-right: 0;
+      }
+
+      &.hide-button {
+        display: none;
+      }
+    }
+
+    .details {
+      overflow-y: hidden;
+      height: 0;
+
+      &.expand-details {
+        height: initial;
+      }
     }
   }
 

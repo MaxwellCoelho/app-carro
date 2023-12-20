@@ -86,7 +86,6 @@ export class OpiniaoPage implements OnInit {
         this.setModelAverages(res.averages);
         this.setOpinionValuation();
         this.showLoader = false;
-        console.log(res);
       },
       err => {
         this.showErrorToast(err);
@@ -114,7 +113,7 @@ export class OpiniaoPage implements OnInit {
 
   public setOpinionValuation() {
     for (const opinion of this.modelOpinions['opinions']) {
-      // opinion['valuation'] = { average: this.getValuationItemByValue(opinion.car_val_average) };
+      opinion['average'] = this.getValuationItemByValue(opinion.car_val_average);
 
       const valItens = VALUATION_ITENS_CAR.slice();
       const newItens = [];
@@ -185,6 +184,11 @@ export class OpiniaoPage implements OnInit {
 
   public goToOpinar() {
     this.router.navigate(['/opinar/'+ this.selectedModel['brand']['url'] + '/' + this.selectedModel['url']]);
+  }
+
+  public expandDetials(opinionId: string): void {
+    document.getElementById(opinionId).querySelector('.details').classList.add('expand-details');
+    document.getElementById(opinionId).querySelector('.details-button').classList.add('hide-button');
   }
 
 }
