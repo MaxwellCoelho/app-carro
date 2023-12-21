@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
+import { GENERIC, INVALID_USER, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
@@ -97,7 +97,7 @@ export class LoginPage implements OnInit {
 
     switch (err.status) {
       case 404:
-        response = NOT_FOUND;
+        response = INVALID_USER;
         break;
       case 401:
         response = UNAUTHORIZED;

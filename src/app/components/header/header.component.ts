@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
@@ -7,6 +7,8 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+
+  @Input() loggedUser;
 
   public nav = NAVIGATION;
 

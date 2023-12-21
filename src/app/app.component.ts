@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   public userLogged;
   public nav = NAVIGATION;
@@ -22,6 +22,10 @@ export class AppComponent {
     public router: Router,
     public toastController: ToastController
   ) {}
+
+  ngOnInit(): void {
+    this.checkUser();
+  }
 
   public checkUser() {
     this.userLogged = this.utils.returnLoggedUser();
