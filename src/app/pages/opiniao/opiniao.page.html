@@ -38,7 +38,7 @@
           </ion-col>
           <ion-col size-md="6" size-sm="6" size-xs="7" class="model-opinions">
             <ion-icon name="clipboard" color="medium" size="large" class="category-image"></ion-icon>
-            <ion-label color="medium" *ngIf="modelOpinions.qtd > 0">{{modelOpinions.qtd}} opini{{modelOpinions.qtd < 2 ? 'ão' : 'ões'}}</ion-label>
+            <ion-label color="medium" *ngIf="modelOpinions.qtd > 0">{{modelOpinions.qtd}} | {{selectedModel.val_length}} opini{{modelOpinions.qtd < 2 ? 'ão' : 'ões'}}</ion-label>
             <ion-label color="medium" *ngIf="modelOpinions.qtd === 0">Nenhuma opinião</ion-label>
           </ion-col>
         </ion-row>
@@ -48,7 +48,7 @@
         <ion-row class="average-row" [ngClass]="modelAverage.id">
           <ion-col size-md="6" size-sm="6" size-xs="12">
             <ion-icon name="ribbon" color="dark" size="large"></ion-icon>
-            <ion-label color="dark" *ngIf="modelOpinions.averages.average">{{modelOpinions.averages.average}} | {{modelAverage.name}}</ion-label>
+            <ion-label color="dark" *ngIf="modelOpinions.averages.average">{{modelOpinions.averages.average.toFixed(1)}} | {{selectedModel.average.toFixed(1)}} | {{modelAverage.name}}</ion-label>
             <ion-label color="dark" *ngIf="!modelOpinions.averages.average">{{modelAverage.name}}</ion-label>
           </ion-col>
           <ion-col size-md="6" size-sm="6" size-xs="12">
