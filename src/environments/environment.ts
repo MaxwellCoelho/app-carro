@@ -12,6 +12,8 @@ export const environment = {
   modelsAction: 'cars/models',
   filterModelsAction: 'cars/models/filter',
   opinionAction: 'opinion',
+  bestBrandsAction: 'best/brands',
+  bestModelsAction: 'best/models',
   jstSecret: '-M@x-caRro$*_+'
 };
 

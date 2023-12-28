@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { MelhoresPage } from './melhores.page';
+import { SharedModule } from '../../shared/shared.module';
 
 import { MelhoresPageRoutingModule } from './melhores-routing.module';
 
@@ -12,6 +13,7 @@ import { MelhoresPageRoutingModule } from './melhores-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
+    SharedModule,
     MelhoresPageRoutingModule
   ],
   declarations: [MelhoresPage]
