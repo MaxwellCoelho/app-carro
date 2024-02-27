@@ -11,9 +11,13 @@ export class DataBaseService {
     private http: HttpClient,
   ) { }
 
-  public getItens(action: string): any {
+  public getItens(action: string, page?: string, perPage?: string): any {
     const url = `${environment.middlewareEndpoint}/${action}`;
-    return this.http.get(url, { withCredentials: true });
+    const params = {
+      page: page || '1',
+      perpage: perPage || '5'
+    };
+    return this.http.get(url, { params });
   }
 
   public deleteItem(action: string, itemId: string): any {

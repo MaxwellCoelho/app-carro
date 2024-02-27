@@ -1,2 +1,220 @@
+.model-image {
+  max-width: 120px;
+  width: 100%;
+}
 
+.brand-image-title {
+  text-align: right;
+}
 
+.item-button {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+
+  ion-grid {
+    margin: 1rem 0;
+  }
+
+  .position {
+    border: 1px solid var(--ion-color-medium);
+    text-align: right;
+    padding: 3px 5px 2px 0;
+    font-weight: bolder;
+    font-size: smaller;
+  }
+
+  .car-data ion-icon {
+    font-size: 20px;
+    vertical-align: bottom;
+  }
+}
+
+.item-button:nth-child(1) .position {
+  border: 0;
+  background-color: var(--ion-color-secondary);
+}
+
+.item-button:nth-child(2) .position {
+  border: 0;
+  background-color: #BDBDBC;
+}
+
+.item-button:nth-child(3) .position {
+  border: 0;
+  background-color: #DB9656;
+}
+
+.average-row {
+  padding: 1rem;
+  border: 3px solid #000;
+  border-radius:  0.5rem;
+
+  ion-label {
+    font-weight: bold;
+    font-size: x-large;
+  }
+
+  ion-icon {
+    transform: scale(1);
+    margin-right: 0.8rem;
+    margin-top: -0.5rem;
+    vertical-align: middle;
+  }
+
+  .val-bar {
+    display: flex;
+
+    div {
+      width: 19%;
+      margin-left: 1%;
+      height: 30px;
+      display: inline-flex;
+      border-radius: 0.4rem;
+      border: 2px dashed rgba(var(--ion-color-medium-rgb), 0.4);
+      border-radius: 0.4rem;
+    }
+  }
+
+  &.otimo {
+    border-color: var(--ion-color-primary);
+
+    .val-bar div {
+      background-color: var(--ion-color-primary);
+      border: 0;
+    }
+  }
+
+  &.bom {
+    border-color: var(--ion-color-success);
+
+    .val-bar div:not(.box5) {
+      background-color: var(--ion-color-success);
+      border: 0;
+    }
+  }
+
+  &.regular {
+    border-color: var(--ion-color-secondary);
+
+    .val-bar div:not(.box5, .box4) {
+      background-color: var(--ion-color-secondary);
+      border: 0;
+    }
+  }
+
+  &.ruim {
+    border-color: var(--ion-color-danger);
+
+    .val-bar div:not(.box5, .box4, .box3) {
+      background-color: var(--ion-color-danger);
+      border: 0;
+    }
+  }
+
+  &.pessimo {
+    border-color: var(--ion-color-danger-secondary);
+
+    .val-bar div:not(.box5, .box4, .box3, .box2) {
+      background-color: var(--ion-color-danger-secondary);
+      border: 0;
+    }
+  }
+
+  &.indisponivel {
+    border-color: var(--ion-color-medium);
+  }
+
+  @media (max-width: 576px) {
+
+    padding: 1rem 0.5rem;
+
+    ion-col:nth-child(1) {
+      text-align: center;
+      padding-bottom: 1rem;
+    }
+
+    .val-bar div {
+      height: 20px;
+      border-radius: 0.3rem;
+    }
+  }
+}
+
+.average-small {
+  border: 0px;
+  padding: 0;
+  padding-bottom: 1rem;
+  margin-top: -0.5rem;
+
+  ion-col {
+    padding-bottom: 0px;
+  }
+
+  .item-title {
+    text-align: right;
+
+    h1 {
+      font-weight: bolder;
+      padding-right: 2rem;
+    }
+  }
+
+  .item-subtitle {
+    text-align: right;
+
+    p {
+      margin-top: -6px;
+      color: var(--ion-color-medium);
+      font-size: large;
+      font-weight: lighter;
+      padding-right: 2rem;
+    }
+  }
+
+  .val-bar {
+    margin-top: 0;
+
+    div {
+
+      height: 15px;
+      margin-left: 1.5%;
+      border-radius: 0.2rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 0;
+    padding-bottom: 0.5rem;
+    margin-top: -0.5rem;
+
+    .val-bar {
+      margin-top: 0;
+
+      div {
+        height: 10px;
+      }
+    }
+
+    .item-title {
+      text-align: center;
+
+      h1 {
+        padding-right: 0;
+      }
+    }
+
+    .item-subtitle {
+      text-align: center;
+
+      p {
+        padding-right: 0;
+      }
+    }
+
+    ion-col:nth-child(1) {
+      text-align: center;
+      padding-bottom: 0rem;
+    }
+  }
+
+}
