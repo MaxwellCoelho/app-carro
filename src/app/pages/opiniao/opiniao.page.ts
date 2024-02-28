@@ -6,7 +6,7 @@ import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { ToastController } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
@@ -26,6 +26,8 @@ export class OpiniaoPage implements OnInit {
 
   public valuation = VALUATION.slice();
   public valuationItens = [];
+  public page = 1;
+  public pagination = 20;
 
   constructor(
     public dbService: DataBaseService,
@@ -78,14 +80,18 @@ export class OpiniaoPage implements OnInit {
 
   public getModelOpinions(): void {
     const action = `${environment.opinionAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
-    const subModelOpinions = this.dbService.getItens(action,).subscribe(
+    const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
       res => {
         if (!subModelOpinions.closed) { subModelOpinions.unsubscribe(); }
-
-        this.modelOpinions = res;
+        if (this.page === 1) {
+          this.modelOpinions = res;
+        } else {
+          this.modelOpinions['opinions'] = [...this.modelOpinions['opinions'], ...res.opinions];
+        }
         this.setModelAverages(res.averages);
         this.setOpinionValuation();
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
@@ -191,4 +197,13 @@ export class OpiniaoPage implements OnInit {
     document.getElementById(opinionId).querySelector('.details-button').classList.add('hide-button');
   }
 
+  onIonInfinite(ev) {
+    if (this.modelOpinions['opinions'].length === ((this.page - 1)*this.pagination)) {
+      this.getModelOpinions();
+    }
+
+    setTimeout(() => {
+      (ev as InfiniteScrollCustomEvent).target.complete();
+    }, 500);
+  }
 }

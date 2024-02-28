@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -13,10 +14,11 @@ export class DataBaseService {
 
   public getItens(action: string, page?: string, perPage?: string): any {
     const url = `${environment.middlewareEndpoint}/${action}`;
-    const params = {
-      page: page || '1',
-      perpage: perPage || '5'
-    };
+    const params = {};
+    if (page && perPage) {
+      params['page'] = page;
+      params['perpage'] = perPage;
+    }
     return this.http.get(url, { params });
   }
 
