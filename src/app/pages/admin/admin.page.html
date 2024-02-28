@@ -29,6 +29,8 @@
             </ion-card-header>
           </ion-card>
         </ion-col>
+
+        <ion-col></ion-col>
       </ion-row>
 
       <ion-row>
@@ -36,7 +38,6 @@
           <h1>Configurações de carros</h1>
         </ion-col>
       </ion-row>
-
       <ion-row>
         <ion-col>
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carmodels.route">
@@ -64,6 +65,26 @@
             </ion-card-header>
           </ion-card>
         </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <h1>Configurações de opiniões</h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + 'opinioes'">
+            <ion-card-header>
+              <ion-icon size="large" [name]="'reader'"></ion-icon>
+              <ion-card-title>Opiniões</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col></ion-col>
+
+        <ion-col></ion-col>
       </ion-row>
     </ion-grid>
 
