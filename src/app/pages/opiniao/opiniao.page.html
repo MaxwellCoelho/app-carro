@@ -191,6 +191,9 @@
           <ion-icon [name]="'chevron-down'" color="dark"></ion-icon>
         </ion-title>
       </ion-grid>
+      <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </div>
   </div>
 </ion-content>

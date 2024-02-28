@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPage } from './admin.page';
+import { OpinionPage } from './opinion/opinion.page';
 import { PermissionPage } from './permission/permission.page';
 import { CustomerPage } from './customer/customer.page';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -10,6 +11,11 @@ import { CarModelPage } from './car-model/car-model.page';
 import { LoggedAdminGuard } from 'src/app/guard/logged-admin.guard';
 
 const routes: Routes = [
+  {
+    path: 'opinioes',
+    component: OpinionPage,
+    canActivate: [LoggedAdminGuard]
+  },
   {
     path: NAVIGATION.permission.route,
     component: PermissionPage,
