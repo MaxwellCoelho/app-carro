@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
-import { InfiniteScrollCustomEvent, ToastController } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { VALUATION, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 import { Router } from '@angular/router';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-melhores',
   templateUrl: 'melhores.page.html',
   styleUrls: ['melhores.page.scss'],
 })
-export class MelhoresPage implements OnInit {
+export class MelhoresPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
   public bestModels: Array<any> = [];
@@ -24,10 +25,21 @@ export class MelhoresPage implements OnInit {
     public dbService: DataBaseService,
     public toastController: ToastController,
     public router: Router,
+    public utils: UtilsService
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getBestModels();
+  }
+
+  public ionViewWillEnter(): void {
+    if (this.utils.getShouldUpdate('bests')) {
+      this.utils.setShouldUpdate(['bests'], false);
+      this.bestModels = [];
+      this.page = 1;
+      this.pagination = 20;
+      this.getBestModels();
+    }
   }
 
   public getBestModels(): void {

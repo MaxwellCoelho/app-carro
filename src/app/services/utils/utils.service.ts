@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
+export type UpdateTypes = 'opinions' | 'bests';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
+
+  public sessionUser;
+
+  public update = {
+    opinions: false,
+    bests: false,
+    app: false
+  };
 
   constructor(
     public cryptoService: CryptoService,
@@ -20,14 +30,14 @@ export class UtilsService {
       : '';
   }
 
-  public returnLoggedUser(): any {
+  public returnLoggedUser(): void {
     const sessionUser = this.localStorageGetItem('userSession');
 
     if (sessionUser) {
-      return this.cryptoService.decodeJwt(sessionUser);
+      this.sessionUser = this.cryptoService.decodeJwt(sessionUser);
+    } else {
+      this.sessionUser = null;
     }
-
-    return null;
   }
 
   public storageAvailable(type: string): boolean {
@@ -99,5 +109,13 @@ export class UtilsService {
     if (this.storageAvailable('localStorage')) {
       window.localStorage.clear();
     }
+  }
+
+  public setShouldUpdate(itens: Array<UpdateTypes>, status: boolean): void {
+    itens.forEach(item => this.update[item] = status);
+  }
+
+  public getShouldUpdate(item: UpdateTypes): boolean {
+    return this.update[item];
   }
 }

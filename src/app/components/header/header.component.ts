@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-header',
@@ -8,11 +9,11 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() loggedUser;
-
   public nav = NAVIGATION;
 
-  constructor() { }
+  constructor(
+    public utils: UtilsService,
+  ) { }
 
   ngOnInit() {}
 

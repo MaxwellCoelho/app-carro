@@ -47,7 +47,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
   public segmentChanged($event) {
     this.valuationItens.find(item => {
         if (item.value === $event.target.id) {
-          item.valuation = { id: $event.target.id, value: $event.target.value};
+          const val = this.valuation.find(valItem => valItem.value.toString() === $event.target.value.toString());
+          item.valuation = { id: val ? val.id : $event.target.id, value: $event.target.value};
         }
       }
     );

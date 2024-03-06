@@ -144,6 +144,7 @@ export class OpinarPage implements OnInit {
 
   public setStepSendPayload($event) {
     this.finalPayload['userInfo'] = $event;
+    this.finalPayload['active'] = true;
     this.saveFinalPayload();
     this.sendFinalPayload();
   }
@@ -158,14 +159,11 @@ export class OpinarPage implements OnInit {
 
     if (encoded) {
       this.finalPayload = this.cryptoService.decodeJwt(encoded);
-      console.log('recuperou');
-      console.log(this.finalPayload);
     }
   }
 
   public sendFinalPayload() {
     this.showLoader = true;
-    console.log(this.finalPayload);
     const jwtData = { data: this.cryptoService.encondeJwt(this.finalPayload)};
 
     const subOpinion = this.dbService.createItem(environment.opinionAction, jwtData).subscribe(
@@ -173,6 +171,7 @@ export class OpinarPage implements OnInit {
         if (!subOpinion.closed) { subOpinion.unsubscribe(); }
         this.currentStep = 4;
         this.content.scrollToTop(700);
+        this.utils.setShouldUpdate(['opinions', 'bests'], true);
         this.showLoader = false;
       },
       err => {

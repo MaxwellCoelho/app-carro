@@ -2,19 +2,19 @@
 <ion-header id="menu-header">
   <ion-toolbar color="primary">
     <ion-menu-toggle auto-hide="false">
-      <ion-item *ngIf="loggedUser" (click)="clickItem(nav.perfil.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" lines="none" detail="false">
+      <ion-item *ngIf="utils.sessionUser" (click)="clickItem(nav.perfil.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" lines="none" detail="false">
         <ion-icon slot="start" [name]="nav.perfil.icon + '-outline'"></ion-icon>
-        <ion-label>{{loggedUser.name}}</ion-label>
+        <ion-label>{{utils.sessionUser.name}}</ion-label>
       </ion-item>
 
-      <!-- <ion-item *ngIf="!loggedUser" (click)="clickItem(nav.login.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="none" detail="false">
+      <!-- <ion-item *ngIf="!utils.sessionUser" (click)="clickItem(nav.login.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="none" detail="false">
         <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.login.title}}</ion-label>
       </ion-item> -->
     </ion-menu-toggle>
     <ion-buttons slot="primary">
       <ion-menu-toggle auto-hide="false">
-        <ion-button *ngIf="loggedUser" (click)="clickItem(nav.settings.route)" routerDirection="root" [routerLink]="'/'+ nav.settings.route">
+        <ion-button *ngIf="utils.sessionUser" (click)="clickItem(nav.settings.route)" routerDirection="root" [routerLink]="'/'+ nav.settings.route">
           <ion-icon slot="start" [name]="nav.settings.icon + '-outline'"></ion-icon>
         </ion-button>
       </ion-menu-toggle>
@@ -44,7 +44,7 @@
         <ion-label>{{nav.favorite.title}}</ion-label>
       </ion-item>
 
-      <ion-item *ngIf="loggedUser" (click)="clickItem(nav.garage.route)" routerDirection="root" [routerLink]="'/'+ nav.garage.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item *ngIf="utils.sessionUser" (click)="clickItem(nav.garage.route)" routerDirection="root" [routerLink]="'/'+ nav.garage.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.garage.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.garage.title}}</ion-label>
       </ion-item>
@@ -59,12 +59,12 @@
         <ion-label>{{nav.term.title}}</ion-label>
       </ion-item>
 
-      <ion-item *ngIf="loggedUser && loggedUser.role?.level <= 1" (click)="clickItem(nav.admin.route)" routerDirection="root" [routerLink]="'/'+ nav.admin.route" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item *ngIf="utils.sessionUser && utils.sessionUser.role?.level <= 1" (click)="clickItem(nav.admin.route)" routerDirection="root" [routerLink]="'/'+ nav.admin.route" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.admin.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.admin.title}}</ion-label>
       </ion-item>
 
-      <ion-item button *ngIf="loggedUser" (click)="clickItem(nav.logout.route)" routerDirection="root" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item button *ngIf="utils.sessionUser" (click)="clickItem(nav.logout.route)" routerDirection="root" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.logout.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.logout.title}}</ion-label>
       </ion-item>

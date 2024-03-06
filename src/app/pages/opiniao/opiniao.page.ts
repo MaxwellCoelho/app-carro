@@ -6,17 +6,18 @@ import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { InfiniteScrollCustomEvent, ToastController } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-opiniao',
   templateUrl: 'opiniao.page.html',
   styleUrls: ['opiniao.page.scss'],
 })
-export class OpiniaoPage implements OnInit {
+export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
   public selectedModel: object;
@@ -36,10 +37,24 @@ export class OpiniaoPage implements OnInit {
     public route: ActivatedRoute,
     public searchService: SearchService,
     public router: Router,
+    public utils: UtilsService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadModelInfo();
+  }
+
+  public ionViewWillEnter(): void {
+    if (this.utils.getShouldUpdate('opinions')) {
+      this.utils.setShouldUpdate(['opinions'], false);
+      this.selectedModel = null;
+      this.modelOpinions = null;
+      this.modelAverage = null;
+      this.valuationItens = [];
+      this.page = 1;
+      this.pagination = 20;
+      this.loadModelInfo();
+    }
   }
 
   public loadModelInfo(): void {
