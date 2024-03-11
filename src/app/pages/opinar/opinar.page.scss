@@ -144,7 +144,7 @@
 
   ion-row.item-medium, ion-row.item-otimo, ion-row.item-bom, ion-row.item-regular, ion-row.item-ruim, ion-row.item-pessimo {
     border-radius: 0;
-    border-bottom: 1px dashed rgba(var(--ion-color-medium-rgb), 0.5);
+    border-bottom: 1px dashed rgba(var(--ion-color-medium-rgb), 0.4);
   }
 
   ion-row.item-otimo ion-segment-button {

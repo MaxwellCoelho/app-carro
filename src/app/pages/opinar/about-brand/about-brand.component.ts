@@ -19,8 +19,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
 
   public hasAllValuations = false;
 
-  public valuation = [...VALUATION];
-  public valuationItens = [...VALUATION_ITENS_BRAND];
+  public valuation = VALUATION.slice();
+  public valuationItens = VALUATION_ITENS_BRAND.slice();
 
   constructor(
     public fb: FormBuilder,
@@ -100,6 +100,8 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
       }
 
       this.hasAllValuations = true;
+    } else {
+      this.valuationItens.forEach(item => item.valuation = null);
     }
   }
 

@@ -186,6 +186,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       }
 
       this.hasAllValuations = true;
+    } else {
+      this.valuationItens.forEach(item => item.valuation = null);
     }
   }
 

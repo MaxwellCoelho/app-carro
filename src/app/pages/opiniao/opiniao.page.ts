@@ -118,7 +118,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     const average = averages.average;
     this.modelAverage = this.getValuationItemByValue(average);
 
-    const valItens = VALUATION_ITENS_CAR.slice();
+    const valItens = [...VALUATION_ITENS_CAR];
 
     for (const valItem of valItens) {
       if (averages[valItem.value]) {
@@ -136,7 +136,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     for (const opinion of this.modelOpinions['opinions']) {
       opinion['average'] = this.getValuationItemByValue(opinion.car_val_average);
 
-      const valItens = VALUATION_ITENS_CAR.slice();
+      const valItens = [...VALUATION_ITENS_CAR];
       const newItens = [];
 
       for (const valItem of valItens) {

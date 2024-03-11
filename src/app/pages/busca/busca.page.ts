@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: 'busca.page.html',
   styleUrls: ['busca.page.scss'],
 })
-export class BuscaPage implements OnInit {
+export class BuscaPage implements ViewWillEnter {
 
   public nav = NAVIGATION;
   public brands = [];
@@ -33,7 +33,13 @@ export class BuscaPage implements OnInit {
     public router: Router,
   ) {}
 
-  ngOnInit() {
+  public ionViewWillEnter(): void {
+    this.brands = [];
+    this.filteredBrands = [];
+    this.selectedBrand = null;
+    this.models = [];
+    this.filteredModels = [];
+    this.selectedModel = null;
     this.getBrands();
   }
 
