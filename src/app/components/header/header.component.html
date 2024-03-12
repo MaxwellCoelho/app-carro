@@ -25,6 +25,10 @@
           <ion-icon slot="start" [name]="nav.admin.icon"></ion-icon>
           {{nav.admin.title}}
         </ion-button>
+        <ion-button *ngIf="utils.sessionUser" routerDirection="root" (click)="clickItem(nav.logout.route)" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.logout.icon"></ion-icon>
+          {{nav.logout.title}}
+        </ion-button>
         <ion-menu-button auto-hide="false" class="mobile-menu"></ion-menu-button>
       </ion-buttons>
       <div class="logo-container">

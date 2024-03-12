@@ -6,7 +6,7 @@
 
     <ion-content id="main-content">
       <app-loader [showLoader]="showLoader"></app-loader>
-      <app-header></app-header>
+      <app-header (clickedItem)="checkClickedItem($event)"></app-header>
 
       <ion-router-outlet></ion-router-outlet>
 

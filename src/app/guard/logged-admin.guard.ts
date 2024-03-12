@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -5,7 +6,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { Router } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { Subscription, Observable, Subject  } from 'rxjs';
+import { Subscription, Observable, Subject, of  } from 'rxjs';
 import { finalize, map, catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -37,7 +38,10 @@ export class LoggedAdminGuard implements CanActivate {
             this.accept(res);
           }
         }),
-        catchError((err) => this.reject(err, this.nav.login.route)),
+        catchError((err) => {
+          this.reject(err, this.nav.login.route);
+          return this.loggedUser.asObservable();
+        }),
         finalize(() => {
           if (!authSubscription.closed) {authSubscription.unsubscribe(); }
         })

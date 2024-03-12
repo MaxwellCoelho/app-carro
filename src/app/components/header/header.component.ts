@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -9,6 +9,8 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class HeaderComponent implements OnInit {
 
+  @Output() clickedItem = new EventEmitter<any>();
+
   public nav = NAVIGATION;
 
   constructor(
@@ -16,5 +18,9 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {}
+
+  public clickItem(itemRoute): void {
+    this.clickedItem.emit(itemRoute);
+  }
 
 }

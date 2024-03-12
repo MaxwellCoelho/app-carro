@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -29,7 +30,10 @@ export class LoggedGuard implements CanActivate {
     authSubscription = this.authService.checkUser()
       .pipe(
         map((res) => !res['authorized'].active ? this.reject(res) : this.accept(res)),
-        catchError((err) => this.reject(err)),
+        catchError((err) => {
+          this.reject(err);
+          return this.loggedUser.asObservable();
+        }),
         finalize(() => {
           if (!authSubscription.closed) {authSubscription.unsubscribe(); }
         })

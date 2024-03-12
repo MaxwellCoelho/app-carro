@@ -66,10 +66,15 @@ export class OpinarPage implements OnInit {
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-
         const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
+        const recoveredReviewBrands = this.utils.recoveryCreatedBrandOrModel('createdBrand');
+        const checkReviewBrand = foundModel && !foundModel.brand.review
+          || (foundModel.brand.review && recoveredReviewBrands.find(item => item['_id'] === foundModel.brand['_id']));
+        const recoveredReviewModel = this.utils.recoveryCreatedBrandOrModel('createdModel');
+        const checkReviewModel = foundModel && !foundModel.review
+          || (foundModel.review && recoveredReviewModel.find(item => item['_id'] === foundModel['_id']));
 
-        if (foundModel) {
+        if (foundModel && checkReviewBrand && checkReviewModel) {
           this.selectedModel = foundModel;
           this.showLoader = false;
           this.loadFinalPayload();

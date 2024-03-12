@@ -20,14 +20,21 @@
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Email</ion-label>
-                <ion-input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" maxlength="50" formControlName="userEmail"></ion-input>
+                <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
               </ion-item>
+              <ion-note color="danger" *ngIf="formLogin.controls.userEmail.touched">
+                <span *ngIf="formLogin.controls.userEmail.errors?.required">Necessário preencher seu email!</span>
+                <span *ngIf="formLogin.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
+              </ion-note>
             </ion-col>
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Senha</ion-label>
                 <ion-input type="password" maxlength="80" formControlName="userPassword"></ion-input>
               </ion-item>
+              <ion-note color="danger" *ngIf="formLogin.controls.userPassword.touched">
+                <span *ngIf="formLogin.controls.userPassword.errors?.required">Necessário preencher sua senha!</span>
+              </ion-note>
             </ion-col>
           </ion-row>
 

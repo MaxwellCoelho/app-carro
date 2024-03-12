@@ -31,7 +31,6 @@ export class ModelNotFoundComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.selectedBrand);
     this.initForm();
   }
 
@@ -48,31 +47,32 @@ export class ModelNotFoundComponent implements OnInit {
 
   public sendFormModelNotFound(): void {
     this.showLoader = true;
-    let brandId;
-    const brandName = this.utils.sanitizeText(this.formModelNotFound.value.opinarBrand);
-    const data = {
-      name: this.formModelNotFound.value.opinarBrand,
-      image: `${brandName}.svg`,
-      url: brandName,
-      active: true,
-      review: true
-    };
 
-    if (this.selectedBrand && this.selectedBrand['name'] === data.name) {
-      brandId = this.selectedBrand['_id'];
+    if (!this.selectedBrand) {
+      const brandName = this.utils.sanitizeText(this.formModelNotFound.value.opinarBrand);
+      const data = {
+        name: this.formModelNotFound.value.opinarBrand,
+        image: `${brandName}.svg`,
+        url: brandName,
+        active: true,
+        review: true
+      };
+
+      const jwtData = { data: this.cryptoService.encondeJwt(data)};
+
+      const subBrands = this.dbService.createItem(environment.brandsAction, jwtData).subscribe(
+        res => {
+          if (!subBrands.closed) { subBrands.unsubscribe(); }
+          this.utils.saveCreatedBrandOrModel(res.saved, 'createdBrand');
+          this.createModel(res.saved);
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    } else {
+      this.createModel(this.selectedBrand);
     }
-
-    const jwtData = { data: this.cryptoService.encondeJwt(data)};
-
-    const subBrands = this.dbService.createItem(environment.brandsAction, jwtData, brandId).subscribe(
-      res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.createModel(res.saved);
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
   }
 
   public createModel(brand: any): void {
@@ -93,6 +93,7 @@ export class ModelNotFoundComponent implements OnInit {
     const subModels = this.dbService.createItem(environment.modelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
+        this.utils.saveCreatedBrandOrModel(res.saved, 'createdModel');
         this.router.navigate([`/opinar/${brand['url']}/${res.saved['url']}`]);
         this.showLoader = false;
       },
@@ -130,5 +131,6 @@ export class ModelNotFoundComponent implements OnInit {
       toast.present();
     });
   }
+
 
 }

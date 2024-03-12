@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
@@ -117,5 +118,22 @@ export class UtilsService {
 
   public getShouldUpdate(item: UpdateTypes): boolean {
     return this.update[item];
+  }
+
+  public saveCreatedBrandOrModel(myItem: any, itemName: string): void {
+    const recovered = this.recoveryCreatedBrandOrModel(itemName);
+    const alreadyExists = recovered.find(item => item['_id'] === myItem['_id']);
+
+    if (!alreadyExists) {
+      recovered.push(myItem);
+      const encoded = this.cryptoService.encondeJwt(recovered);
+      this.localStorageSetItem(itemName, encoded);
+    }
+  }
+
+  public recoveryCreatedBrandOrModel(itemName: string): any {
+    const encoded = this.localStorageGetItem(itemName);
+    const recovered = encoded ? this.cryptoService.decodeJwt(encoded) : [];
+    return recovered;
   }
 }

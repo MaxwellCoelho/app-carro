@@ -49,7 +49,7 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
+        this.brands = res.brands.sort((a, b) => (!a['review']) || -1);
         this.showLoader = false;
       },
       err => {

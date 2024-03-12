@@ -7,6 +7,7 @@ import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -31,6 +32,7 @@ export class BuscaPage implements ViewWillEnter {
     public cryptoService: CryptoService,
     public searchService: SearchService,
     public router: Router,
+    public utils: UtilsService,
   ) {}
 
   public ionViewWillEnter(): void {
@@ -44,6 +46,7 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public getBrands(): void {
+    const recoveredReviewBrands = this.utils.recoveryCreatedBrandOrModel('createdBrand');
     this.showLoader = true;
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
@@ -51,7 +54,9 @@ export class BuscaPage implements ViewWillEnter {
         this.brands = [];
         for (const brand of res.brands) {
           if (brand.active) {
-            this.brands.push(brand);
+            if (!brand.review || (brand.review && recoveredReviewBrands.find(item => item['_id'] === brand['_id']))) {
+              this.brands.push(brand);
+            }
           }
         }
 
@@ -88,8 +93,8 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public getModel(): void {
+    const recoveredReviewModel = this.utils.recoveryCreatedBrandOrModel('createdModel');
     this.showLoader = true;
-
     const myFilter = { brand: this.selectedBrand['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
@@ -98,7 +103,9 @@ export class BuscaPage implements ViewWillEnter {
         this.models = [];
         for (const model of res.models) {
           if (model.active) {
-            this.models.push(model);
+            if (!model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
+              this.models.push(model);
+            }
           }
         }
 

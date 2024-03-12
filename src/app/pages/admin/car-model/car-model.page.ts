@@ -84,7 +84,7 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models;
+        this.models = res.models.sort((a, b) => (!a['review']) || -1);
         this.showLoader = false;
       },
       err => {
@@ -128,14 +128,14 @@ export class CarModelPage implements OnInit {
     this.formModels.reset({
       editModelId: model['_id'],
       newModelName: model.name,
-      newModelCategory: model.category['_id'],
+      newModelCategory: model.category ? model.category['_id'] : '',
       newModelBrand: model.brand['_id'],
       newModelImage: model.image,
       newModelThumb: model.thumb
     });
 
     this.activeChecked = model.active;
-    this.activeChecked = model.active;
+    this.pendingReview = model.review;
 
     this.content.scrollToTop(700);
   }
