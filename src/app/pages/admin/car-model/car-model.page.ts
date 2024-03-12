@@ -23,6 +23,7 @@ export class CarModelPage implements OnInit {
   public showLoader: boolean;
   public formModels: FormGroup;
   public activeChecked = true;
+  public pendingReview = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -83,7 +84,7 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models;
+        this.models = res.models.sort((a, b) => (!a['review']) || -1);
         this.showLoader = false;
       },
       err => {
@@ -101,7 +102,8 @@ export class CarModelPage implements OnInit {
       brand: this.formModels.value.newModelBrand,
       image: this.formModels.value.newModelImage,
       thumb: this.formModels.value.newModelThumb,
-      active: this.activeChecked
+      active: this.activeChecked,
+      review: this.pendingReview
     };
 
     const jwtData = { data: this.cryptoService.encondeJwt(data)};
@@ -113,6 +115,7 @@ export class CarModelPage implements OnInit {
         this.models = res.models;
         this.showLoader = false;
         this.activeChecked = true;
+        this.pendingReview = false;
         this.showToast(action, res.saved);
       },
       err => {
@@ -125,13 +128,14 @@ export class CarModelPage implements OnInit {
     this.formModels.reset({
       editModelId: model['_id'],
       newModelName: model.name,
-      newModelCategory: model.category['_id'],
+      newModelCategory: model.category ? model.category['_id'] : '',
       newModelBrand: model.brand['_id'],
       newModelImage: model.image,
       newModelThumb: model.thumb
     });
 
     this.activeChecked = model.active;
+    this.pendingReview = model.review;
 
     this.content.scrollToTop(700);
   }
@@ -169,11 +173,13 @@ export class CarModelPage implements OnInit {
         case 'limpar':
           this.formModels.reset();
           this.activeChecked = true;
+          this.pendingReview = false;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
           this.formModels.reset();
           this.activeChecked = true;
+          this.pendingReview = false;
           this.showToast('Edição descartada');
           break;
       }

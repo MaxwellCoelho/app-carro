@@ -1,16 +1,16 @@
 <ion-app>
   <ion-split-pane when="(min-width: 40000rem)" contentId="main-content">
     <ion-menu class="main-menu" contentId="main-content" type="overlay" side="end">
-      <app-side-menu [loggedUser]="userLogged" (clickedItem)="checkClickedItem($event)"></app-side-menu>
+      <app-side-menu (clickedItem)="checkClickedItem($event)"></app-side-menu>
     </ion-menu>
 
     <ion-content id="main-content">
       <app-loader [showLoader]="showLoader"></app-loader>
-      <app-header [loggedUser]="userLogged"></app-header>
+      <app-header (clickedItem)="checkClickedItem($event)"></app-header>
 
       <ion-router-outlet></ion-router-outlet>
 
-      <app-tab-menu [loggedUser]="userLogged"></app-tab-menu>
+      <app-tab-menu></app-tab-menu>
     </ion-content>
   </ion-split-pane>
 </ion-app>

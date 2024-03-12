@@ -25,7 +25,7 @@
       border-right: 0px;
     }
 
-    @media (max-width: 810px) {
+    @media (max-width: 880px) {
       ion-icon {
         display: none;
       }
@@ -71,6 +71,7 @@
     left: 50%;
     margin-left: -585px;
     border-radius: 5px;
+    cursor: pointer;
 
     @media (max-width: 1170px) {
       top: 0px;

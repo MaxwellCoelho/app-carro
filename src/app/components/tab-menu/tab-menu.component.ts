@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -9,8 +9,6 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class TabMenuComponent implements OnInit {
 
-  @Input() loggedUser;
-
   public nav = NAVIGATION;
   public tabSelected: string;
 
@@ -19,8 +17,4 @@ export class TabMenuComponent implements OnInit {
   ) { }
 
   ngOnInit() {}
-
-  public checkUser() {
-    this.loggedUser = this.utils.returnLoggedUser();
-  }
 }

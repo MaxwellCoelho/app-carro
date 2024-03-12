@@ -22,7 +22,7 @@ export class NotLoggedGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-    const loggedUser = this.utils.returnLoggedUser();
+    const loggedUser = this.utils.sessionUser;
 
     if (loggedUser) {
       this.router.navigate([`/${this.nav.garage.route}`]);

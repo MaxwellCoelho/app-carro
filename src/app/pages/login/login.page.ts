@@ -58,6 +58,7 @@ export class LoginPage implements OnInit {
 
         this.formLogin.reset();
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+        this.utils.returnLoggedUser();
         this.router.navigate([`/${this.nav.garage.route}`]);
       },
       err => {

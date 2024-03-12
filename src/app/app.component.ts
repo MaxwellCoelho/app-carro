@@ -12,7 +12,6 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 })
 export class AppComponent implements OnInit {
 
-  public userLogged;
   public nav = NAVIGATION;
   public showLoader: boolean;
 
@@ -24,11 +23,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.checkUser();
-  }
-
-  public checkUser() {
-    this.userLogged = this.utils.returnLoggedUser();
+    this.utils.returnLoggedUser();
   }
 
   public checkClickedItem($event) {
@@ -45,6 +40,7 @@ export class AppComponent implements OnInit {
     this.authService.logoutUser().subscribe(
       res => {
         this.utils.localStorageRemoveItem('userSession');
+        this.utils.returnLoggedUser();
         this.router.navigate([`/`]);
         this.showLoader = false;
         this.showToast('success');

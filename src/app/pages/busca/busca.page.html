@@ -14,7 +14,7 @@
         <ion-item *ngIf="!filteredBrands?.length && !showLoader" lines="none">
           <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
           <br>
-          <ion-label color="medium" class="ion-text-wrap">Não encontramos a marca que você procura!</ion-label>
+          <ion-label color="medium" class="ion-text-wrap">A marca que você procura ainda não existe em nossa base.</ion-label>
         </ion-item>
 
         <ion-item *ngFor="let brand of filteredBrands" (click)="selectBrand(brand)" class="item-button" button>
@@ -23,6 +23,8 @@
           <ion-label>{{brand.name}}</ion-label>
         </ion-item>
       </ion-list>
+
+      <app-model-not-found *ngIf="brands.length && !selectedBrand"></app-model-not-found>
 
       <ion-item lines="none" *ngIf="selectedBrand">
         <img src="assets/brands/{{selectedBrand.image}}" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}"
@@ -34,13 +36,14 @@
         </ion-chip>
       </ion-item>
 
+
       <ion-searchbar *ngIf="selectedBrand" mode="ios" placeholder="Digite o nome do modelo" (ionInput)="searchModelInput($event)"></ion-searchbar>
 
       <ion-list *ngIf="selectedBrand">
         <ion-item *ngIf="!filteredModels?.length && !showLoader" lines="none">
           <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
           <br>
-          <ion-label color="medium" class="ion-text-wrap">Não encontramos o modelo que você procura!</ion-label>
+          <ion-label color="medium" class="ion-text-wrap">O modelo que você procura ainda não existe em nossa base.</ion-label>
         </ion-item>
 
         <ion-item *ngFor="let model of filteredModels" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand.url, model.url)" button>
@@ -53,6 +56,8 @@
           </ion-chip>
         </ion-item>
       </ion-list>
+
+      <app-model-not-found *ngIf="selectedBrand" [selectedBrand]="selectedBrand"></app-model-not-found>
     </div>
   </div>
 </ion-content>

@@ -21,6 +21,7 @@ export class CarBrandPage implements OnInit {
   public showLoader: boolean;
   public formBrands: FormGroup;
   public activeChecked = true;
+  public pendingReview = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -48,7 +49,7 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
+        this.brands = res.brands.sort((a, b) => (!a['review']) || -1);
         this.showLoader = false;
       },
       err => {
@@ -63,7 +64,8 @@ export class CarBrandPage implements OnInit {
     const data = {
       name: this.formBrands.value.newBrandName,
       image: this.formBrands.value.newBrandImage,
-      active: this.activeChecked
+      active: this.activeChecked,
+      review: this.pendingReview
     };
 
     const jwtData = { data: this.cryptoService.encondeJwt(data)};
@@ -75,6 +77,7 @@ export class CarBrandPage implements OnInit {
         this.brands = res.brands;
         this.showLoader = false;
         this.activeChecked = true;
+        this.pendingReview = false;
         this.showToast(action, res.saved);
       },
       err => {
@@ -91,6 +94,7 @@ export class CarBrandPage implements OnInit {
     });
 
     this.activeChecked = brand.active;
+    this.pendingReview = brand.review;
 
     this.content.scrollToTop(700);
   }
@@ -128,11 +132,13 @@ export class CarBrandPage implements OnInit {
         case 'limpar':
           this.formBrands.reset();
           this.activeChecked = true;
+          this.pendingReview = false;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
           this.formBrands.reset();
           this.activeChecked = true;
+          this.pendingReview = false;
           this.showToast('Edição descartada');
           break;
       }
