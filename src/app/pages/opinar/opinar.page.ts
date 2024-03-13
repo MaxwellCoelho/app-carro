@@ -129,7 +129,7 @@ export class OpinarPage implements OnInit {
       color: 'danger'
     }).then(toast => {
       toast.present();
-      // this.router.navigate([NAVIGATION.search.route]);
+      this.router.navigate([NAVIGATION.search.route]);
     });
   }
 

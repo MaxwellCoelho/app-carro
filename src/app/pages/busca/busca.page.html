@@ -24,7 +24,7 @@
         </ion-item>
       </ion-list>
 
-      <app-model-not-found *ngIf="brands.length && !selectedBrand"></app-model-not-found>
+      <app-model-not-found *ngIf="brands.length && !selectedBrand" [brandList]="brands"></app-model-not-found>
 
       <ion-item lines="none" *ngIf="selectedBrand">
         <img src="assets/brands/{{selectedBrand.image}}" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}"
@@ -57,7 +57,7 @@
         </ion-item>
       </ion-list>
 
-      <app-model-not-found *ngIf="selectedBrand" [selectedBrand]="selectedBrand"></app-model-not-found>
+      <app-model-not-found *ngIf="brands.length && selectedBrand" [selectedBrand]="selectedBrand" [brandList]="brands"></app-model-not-found>
     </div>
   </div>
 </ion-content>

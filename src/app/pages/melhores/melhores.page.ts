@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -61,14 +62,23 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   }
 
   public setModelAverages(models: any): any {
-    const modelWithAverage = models;
+    const modelWithAverage = [];
+    const recoveredReviewBrands = this.utils.recoveryCreatedBrandOrModel('createdBrand');
+    const recoveredReviewModel = this.utils.recoveryCreatedBrandOrModel('createdModel');
 
-    modelWithAverage.forEach(model => {
-      const average = model.average;
-      const int = average ? parseInt(average, 10) : 0;
-      const valuation = VALUATION.slice();
-      const foundVal = valuation.find(val => int === val.value) || VALUATION_NOT_FOUND;
-      model.average = foundVal;
+    models.forEach(model => {
+      const checkBrandReview = !model.brand.review
+        || (model.brand.review && recoveredReviewBrands.find(item => item['_id'] === model.brand['_id']));
+      const checkModelReview = !model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']));
+
+      if (model.brand.active && model.active && checkBrandReview && checkModelReview) {
+        const average = model.average;
+        const int = average ? parseInt(average, 10) : 0;
+        const valuation = VALUATION.slice();
+        const foundVal = valuation.find(val => int === val.value) || VALUATION_NOT_FOUND;
+        model.average = foundVal;
+        modelWithAverage.push(model);
+      }
     });
 
     return modelWithAverage;

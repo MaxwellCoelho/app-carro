@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 export class ModelNotFoundComponent implements OnInit {
 
   @Input() selectedBrand: object;
+  @Input() brandList: object[];
 
   public formModelNotFound: FormGroup;
   public showLoader = false;
@@ -47,9 +48,11 @@ export class ModelNotFoundComponent implements OnInit {
 
   public sendFormModelNotFound(): void {
     this.showLoader = true;
+    const brandName = this.utils.sanitizeText(this.formModelNotFound.value.opinarBrand);
+    const typedAnother = this.selectedBrand && (this.utils.sanitizeText(this.selectedBrand['name']) !== brandName);
+    const alreadyExists = this.brandList.find(brand => this.utils.sanitizeText(brand['name']) === brandName);
 
-    if (!this.selectedBrand) {
-      const brandName = this.utils.sanitizeText(this.formModelNotFound.value.opinarBrand);
+    if ((!this.selectedBrand || typedAnother) && !alreadyExists) {
       const data = {
         name: this.formModelNotFound.value.opinarBrand,
         image: `${brandName}.svg`,
@@ -71,6 +74,9 @@ export class ModelNotFoundComponent implements OnInit {
         }
       );
     } else {
+      if (alreadyExists) {
+        this.selectedBrand = alreadyExists;
+      }
       this.createModel(this.selectedBrand);
     }
   }
