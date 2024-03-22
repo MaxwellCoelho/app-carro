@@ -46,7 +46,7 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public getBrands(): void {
-    const recoveredReviewBrands = this.utils.recoveryCreatedBrandOrModel('createdBrand');
+    const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
     this.showLoader = true;
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
@@ -93,7 +93,7 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public getModel(): void {
-    const recoveredReviewModel = this.utils.recoveryCreatedBrandOrModel('createdModel');
+    const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
     this.showLoader = true;
     const myFilter = { brand: this.selectedBrand['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};

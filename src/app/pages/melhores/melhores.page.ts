@@ -63,8 +63,8 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   public setModelAverages(models: any): any {
     const modelWithAverage = [];
-    const recoveredReviewBrands = this.utils.recoveryCreatedBrandOrModel('createdBrand');
-    const recoveredReviewModel = this.utils.recoveryCreatedBrandOrModel('createdModel');
+    const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
+    const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
 
     models.forEach(model => {
       const checkBrandReview = !model.brand.review

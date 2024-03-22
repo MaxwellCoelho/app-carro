@@ -67,10 +67,10 @@ export class OpinarPage implements OnInit {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
         const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
-        const recoveredReviewBrands = this.utils.recoveryCreatedBrandOrModel('createdBrand');
+        const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
         const checkReviewBrand = foundModel && !foundModel.brand.review
           || (foundModel.brand.review && recoveredReviewBrands.find(item => item['_id'] === foundModel.brand['_id']));
-        const recoveredReviewModel = this.utils.recoveryCreatedBrandOrModel('createdModel');
+        const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
         const checkReviewModel = foundModel && !foundModel.review
           || (foundModel.review && recoveredReviewModel.find(item => item['_id'] === foundModel['_id']));
 
