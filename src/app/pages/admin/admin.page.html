@@ -12,7 +12,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col size-md="3" size-sm="6" size-xs="6">
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.customer.route">
             <ion-card-header>
               <ion-icon size="large" [name]="nav.customer.icon"></ion-icon>
@@ -21,7 +21,7 @@
           </ion-card>
         </ion-col>
 
-        <ion-col>
+        <ion-col size-md="3" size-sm="6" size-xs="6">
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.permission.route">
             <ion-card-header>
               <ion-icon size="large" [name]="nav.permission.icon"></ion-icon>
@@ -29,8 +29,6 @@
             </ion-card-header>
           </ion-card>
         </ion-col>
-
-        <ion-col></ion-col>
       </ion-row>
 
       <ion-row>
@@ -39,7 +37,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col size-md="3" size-sm="6" size-xs="6">
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carbrands.route">
             <ion-card-header>
               <ion-icon size="large" [name]="nav.carbrands.icon"></ion-icon>
@@ -48,7 +46,7 @@
           </ion-card>
         </ion-col>
 
-        <ion-col>
+        <ion-col size-md="3" size-sm="6" size-xs="6">
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carmodels.route">
             <ion-card-header>
               <ion-icon size="large" [name]="nav.carmodels.icon"></ion-icon>
@@ -57,7 +55,16 @@
           </ion-card>
         </ion-col>
 
-        <ion-col>
+        <ion-col size-md="3" size-sm="6" size-xs="6">
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carversions.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.carversions.icon"></ion-icon>
+              <ion-card-title>{{nav.carversions.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size-md="3" size-sm="6" size-xs="6">
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.carcategories.route">
             <ion-card-header>
               <ion-icon size="large" [name]="nav.carcategories.icon"></ion-icon>
@@ -73,7 +80,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col size-md="3" size-sm="6" size-xs="6">
           <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + 'opinioes'">
             <ion-card-header>
               <ion-icon size="large" [name]="'reader'"></ion-icon>
@@ -81,10 +88,6 @@
             </ion-card-header>
           </ion-card>
         </ion-col>
-
-        <ion-col></ion-col>
-
-        <ion-col></ion-col>
       </ion-row>
     </ion-grid>
 

@@ -9,6 +9,8 @@ import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VALUATION, VALUATION_ITENS_CAR } from 'src/app/helpers/valuation.helper';
+import { environment } from 'src/environments/environment';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-about-car',
@@ -33,10 +35,25 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public opinarKmCompraValue: number;
   public opinarMotor: string;
   public opinarPeriodo: string;
-  public newerYear;
+  public newerYear = new Date().getFullYear();
   public opinarPeriodoValue;
   public opinarPeriodoMaxValue;
   public hasAllValuations = false;
+  public carVersions: any[];
+  public newVersion = false;
+  public mainFormGroup = {
+    opinarVersao: this.fb.control('', [Validators.required]),
+    opinarAnoCompra: this.fb.control('', [Validators.required, Validators.max(this.newerYear)]),
+    opinarTitulo: this.fb.control('', [Validators.required]),
+    opinarPontosPositivos: this.fb.control('', [Validators.required]),
+    opinarPontosNegativos: this.fb.control('', [Validators.required]),
+  };
+  public newVersionFormGroup = {
+    opinarCombustivel: this.fb.control('', [Validators.required]),
+    opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
+    opinarCambio: this.fb.control('', [Validators.required]),
+    opinarComplemento: this.fb.control('', []),
+  };
 
   constructor(
     public dbService: DataBaseService,
@@ -47,10 +64,11 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     public router: Router,
     public fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
+    public utils: UtilsService,
   ) {}
 
   ngOnInit(): void {
-    this.newerYear = new Date().getFullYear();
+    this.getVersions();
 
     this.changeOpinarKmCompra({detail: { value: 0}});
     this.changeOpinarMotor({detail: { value: 1}});
@@ -65,14 +83,47 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   }
 
   public initForm() {
-    this.formOpinarCarro = this.fb.group({
-      opinarCombustivel: this.fb.control('', [Validators.required]),
-      opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
-      opinarAnoCompra: this.fb.control('', [Validators.required, Validators.max(this.newerYear)]),
-      opinarTitulo: this.fb.control('', [Validators.required]),
-      opinarPontosPositivos: this.fb.control('', [Validators.required]),
-      opinarPontosNegativos: this.fb.control('', [Validators.required]),
-    });
+    this.formOpinarCarro = this.fb.group(this.mainFormGroup);
+  }
+
+  public getVersions(): void {
+    const recoveredReviewVersion = this.utils.recoveryCreatedItem('createdVersion');
+    this.showLoader = true;
+    const myFilter = { model: this.selectedModel['_id'] };
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData).subscribe(
+      res => {
+        if (!subVersions.closed) { subVersions.unsubscribe(); }
+        const versions = [];
+        for (const version of res.versions) {
+          if (version.active) {
+            if (!version.review || (version.review && recoveredReviewVersion.find(item => item['_id'] === version['_id']))) {
+              versions.push(version);
+            }
+          }
+        }
+
+        this.carVersions = versions;
+        this.chooseVersion();
+        this.showLoader = false;
+      },
+      err => {
+        this.carVersions = [];
+        this.chooseVersion();
+        this.showLoader = false;
+      }
+    );
+  }
+
+  public chooseVersion(): void {
+    this.newVersion = (this.carVersions && !this.carVersions.length) || this.formOpinarCarro.controls.opinarVersao.value === 'another';
+
+    if (this.newVersion) {
+      this.formOpinarCarro.controls.opinarVersao.patchValue('another');
+      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.newVersionFormGroup});
+    } else {
+      this.formOpinarCarro = this.fb.group(this.mainFormGroup);
+    }
   }
 
   public onlyNumbers($event): void {
@@ -145,11 +196,20 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       valuation[val.value] = parseInt(val.valuation.value, 10);
     }
 
+    const selectedCarVersion = this.formOpinarCarro.value.opinarVersao;
+    const carFuel = this.formOpinarCarro.value.opinarCombustivel;
+    const versionComplement = this.formOpinarCarro.value.opinarComplemento;
+    const selectedGearBox = this.formOpinarCarro.value.opinarCambio;
+    const selectedYearModel = this.formOpinarCarro.value.opinarAnoModelo;
+
     const aboutCarData = {
+      carVersion: selectedCarVersion,
       carModel: this.selectedModel['_id'],
-      yearModel: this.formOpinarCarro.value.opinarAnoModelo,
-      fuel: this.formOpinarCarro.value.opinarCombustivel,
+      yearModel: selectedYearModel,
       engine: this.opinarMotor,
+      fuel: carFuel,
+      gearBox: selectedGearBox,
+      complement: versionComplement,
       yearBought: this.formOpinarCarro.value.opinarAnoCompra,
       kmBought: this.opinarKmCompraValue,
       keptPeriod: this.opinarPeriodoValue,
@@ -162,6 +222,10 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
         ...valuation
       }
     };
+
+    if (selectedCarVersion === 'another') {
+      aboutCarData['carNewVersion'] = `${this.opinarMotor} ${carFuel} ${versionComplement} ${selectedGearBox} ${selectedYearModel}`;
+    }
 
     this.aboutCar.emit(aboutCarData);
   }

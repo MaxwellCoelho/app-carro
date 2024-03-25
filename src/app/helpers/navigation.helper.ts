@@ -11,9 +11,10 @@ export const NAVIGATION = {
   login: { title: 'Entrar', icon: 'enter', route: 'login' },
   logout: { title: 'Sair', icon: 'exit', route: 'logout' },
   admin: { title: 'Admin', icon: 'hammer', route: 'admin' },
-  permission: { title: 'Permissões de usuários', icon: 'lock-open', route: 'permissao' },
+  permission: { title: 'Permissões', icon: 'lock-open', route: 'permissao' },
   customer: { title: 'Usuários', icon: 'person', route: 'usuario' },
-  carcategories: { title: 'Categorias de carro', icon: 'shapes', route: 'carro-categoria' },
-  carbrands: { title: 'Marcas de carro', icon: 'pricetag', route: 'carro-marca' },
-  carmodels: { title: 'Modelos de carro', icon: 'car', route: 'carro-modelo' }
+  carcategories: { title: 'Categorias', icon: 'shapes', route: 'carro-categoria' },
+  carbrands: { title: 'Marcas', icon: 'pricetag', route: 'carro-marca' },
+  carmodels: { title: 'Modelos', icon: 'car', route: 'carro-modelo' },
+  carversions: { title: 'Versões', icon: 'git-network', route: 'carro-versao' }
 };

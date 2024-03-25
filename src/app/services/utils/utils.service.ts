@@ -120,8 +120,8 @@ export class UtilsService {
     return this.update[item];
   }
 
-  public saveCreatedBrandOrModel(myItem: any, itemName: string): void {
-    const recovered = this.recoveryCreatedBrandOrModel(itemName);
+  public saveCreatedItem(myItem: any, itemName: string): void {
+    const recovered = this.recoveryCreatedItem(itemName);
     const alreadyExists = recovered.find(item => item['_id'] === myItem['_id']);
 
     if (!alreadyExists) {
@@ -131,7 +131,7 @@ export class UtilsService {
     }
   }
 
-  public recoveryCreatedBrandOrModel(itemName: string): any {
+  public recoveryCreatedItem(itemName: string): any {
     const encoded = this.localStorageGetItem(itemName);
     const recovered = encoded ? this.cryptoService.decodeJwt(encoded) : [];
     return recovered;

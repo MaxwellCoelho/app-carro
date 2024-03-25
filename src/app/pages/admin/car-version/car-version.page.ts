@@ -1,4 +1,3 @@
-import { FormControl } from '@angular/forms';
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -10,17 +9,20 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-permission',
-  templateUrl: './permission.page.html',
-  styleUrls: ['./permission.page.scss'],
+  selector: 'app-car-version',
+  templateUrl: './car-version.page.html',
+  styleUrls: ['./car-version.page.scss'],
 })
-export class PermissionPage implements OnInit {
+export class CarVersionPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public roles: Array<any>;
+  public versions: Array<any>;
+  public models: Array<any>;
   public showLoader: boolean;
-  public formRoles: FormGroup;
+  public formVersions: FormGroup;
+  public activeChecked = true;
+  public pendingReview = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -32,28 +34,24 @@ export class PermissionPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getRoles();
+    this.getVersions();
+    this.getModels();
   }
 
   public initForm() {
-    this.formRoles = this.fb.group({
-      editRoleId: this.fb.control(''),
-      newRoleName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
-      newRoleLevel: this.fb.control('', [Validators.required])
+    this.formVersions = this.fb.group({
+      editVersionId: this.fb.control(''),
+      newVersionName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newVersionModel: this.fb.control('', [Validators.required])
     });
   }
 
-  public onlyNumbers($event): void {
-    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
-    $event.srcElement.value = onlyNumbers;
-  }
-
-  public getRoles(): void {
+  public getVersions(): void {
     this.showLoader = true;
-    const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
+    const subVersions = this.dbService.getItens(environment.versionsAction).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subVersions.closed) { subVersions.unsubscribe(); }
+        this.versions = res.versions.sort((a, b) => (!a['review']) || -1);
         this.showLoader = false;
       },
       err => {
@@ -62,22 +60,40 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public createRole(action: string) {
+  public getModels(): void {
     this.showLoader = true;
-    const roleId = this.formRoles.value.editRoleId;
+    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+      res => {
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.models = res.models.sort((a, b) => (a['brand']['name'] > b['brand']['name']) || -1);
+        this.showLoader = false;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public createVersion(action: string) {
+    this.showLoader = true;
+    const versionId = this.formVersions.value.editVersionId;
     const data = {
-      name: this.formRoles.value.newRoleName,
-      level: this.formRoles.value.newRoleLevel
+      name: this.formVersions.value.newVersionName,
+      model: this.formVersions.value.newVersionModel,
+      active: this.activeChecked,
+      review: this.pendingReview
     };
 
     const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
-    const subRoles = this.dbService.createItem(environment.rolesAction, jwtData, roleId).subscribe(
+    const subVersions = this.dbService.createItem(environment.versionsAction, jwtData, versionId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.formRoles.reset();
-        this.roles = res.roles;
+        if (!subVersions.closed) { subVersions.unsubscribe(); }
+        this.formVersions.reset();
+        this.versions = res.versions;
         this.showLoader = false;
+        this.activeChecked = true;
+        this.pendingReview = false;
         this.showToast(action, res.saved);
         this.ngOnInit();
       },
@@ -87,22 +103,25 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public editRole(role) {
-    this.formRoles.reset({
-      editRoleId: role['_id'],
-      newRoleName: role.name,
-      newRoleLevel: role.level
+  public editVersion(version) {
+    this.formVersions.reset({
+      editVersionId: version['_id'],
+      newVersionModel: version.model['_id'],
+      newVersionName: version.name
     });
+
+    this.activeChecked = version.active;
+    this.pendingReview = version.review;
 
     this.content.scrollToTop(700);
   }
 
-  public deleteRole(roleId: string, action: string) {
+  public deleteVersion(versionId: string, action: string) {
     this.showLoader = true;
-    const subRoles = this.dbService.deleteItem(environment.rolesAction, roleId).subscribe(
+    const subVersions = this.dbService.deleteItem(environment.versionsAction, versionId).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subVersions.closed) { subVersions.unsubscribe(); }
+        this.versions = res.versions;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -112,27 +131,31 @@ export class PermissionPage implements OnInit {
     );
   }
 
-  public showConfirmAlert(action: string, role: any) {
+  public showConfirmAlert(action: string, version: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${role.newRoleName || role.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${version.newVersionName || version.name || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
         case 'excluir':
-          this.deleteRole(role['_id'], 'Item excluído');
+          this.deleteVersion(version['_id'], 'Item excluído');
           break;
         case 'criar':
-          this.createRole('Item criado');
+          this.createVersion('Item criado');
           break;
         case 'editar':
-          this.createRole('Item editado');
+          this.createVersion('Item editado');
           break;
         case 'limpar':
-          this.formRoles.reset();
+          this.formVersions.reset();
+          this.activeChecked = true;
+          this.pendingReview = false;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
-          this.formRoles.reset();
+          this.formVersions.reset();
+          this.activeChecked = true;
+          this.pendingReview = false;
           this.showToast('Edição descartada');
           break;
       }
@@ -191,7 +214,7 @@ export class PermissionPage implements OnInit {
   public showToast(action: string, item?: any) {
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}, nível: ${item.level}` : '',
+      message: item ? `Nome: ${item.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

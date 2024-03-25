@@ -9,6 +9,7 @@ import { CustomerPage } from './customer/customer.page';
 import { CarCategoryPage } from './car-category/car-category.page';
 import { CarBrandPage } from './car-brand/car-brand.page';
 import { CarModelPage } from './car-model/car-model.page';
+import { CarVersionPage } from './car-version/car-version.page';
 import { SharedModule } from '../../shared/shared.module';
 import { AdminPageRoutingModule } from './admin-routing.module';
 
@@ -32,7 +33,8 @@ import { AdminPageRoutingModule } from './admin-routing.module';
     CustomerPage,
     CarCategoryPage,
     CarBrandPage,
-    CarModelPage
+    CarModelPage,
+    CarVersionPage
   ]
 })
 export class AdminPageModule {}

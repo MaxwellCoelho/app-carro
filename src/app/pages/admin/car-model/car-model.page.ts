@@ -117,6 +117,7 @@ export class CarModelPage implements OnInit {
         this.activeChecked = true;
         this.pendingReview = false;
         this.showToast(action, res.saved);
+        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);

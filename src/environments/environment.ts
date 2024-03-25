@@ -11,6 +11,8 @@ export const environment = {
   brandsAction: 'cars/brands',
   modelsAction: 'cars/models',
   filterModelsAction: 'cars/models/filter',
+  versionsAction: 'cars/versions',
+  filterVersionsAction: 'cars/versions/filter',
   opinionAction: 'opinion',
   bestBrandsAction: 'best/brands',
   bestModelsAction: 'best/models',

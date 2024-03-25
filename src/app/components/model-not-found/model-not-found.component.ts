@@ -66,7 +66,7 @@ export class ModelNotFoundComponent implements OnInit {
       const subBrands = this.dbService.createItem(environment.brandsAction, jwtData).subscribe(
         res => {
           if (!subBrands.closed) { subBrands.unsubscribe(); }
-          this.utils.saveCreatedBrandOrModel(res.saved, 'createdBrand');
+          this.utils.saveCreatedItem(res.saved, 'createdBrand');
           this.createModel(res.saved);
         },
         err => {
@@ -99,7 +99,7 @@ export class ModelNotFoundComponent implements OnInit {
     const subModels = this.dbService.createItem(environment.modelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.utils.saveCreatedBrandOrModel(res.saved, 'createdModel');
+        this.utils.saveCreatedItem(res.saved, 'createdModel');
         this.router.navigate([`/opinar/${brand['url']}/${res.saved['url']}`]);
         this.showLoader = false;
       },
