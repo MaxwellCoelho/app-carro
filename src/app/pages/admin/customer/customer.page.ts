@@ -97,6 +97,7 @@ export class CustomerPage implements OnInit {
         this.showLoader = false;
         this.activeChecked = true;
         this.showToast(action, res.saved);
+        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);

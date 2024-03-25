@@ -196,11 +196,20 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       valuation[val.value] = parseInt(val.valuation.value, 10);
     }
 
+    const selectedCarVersion = this.formOpinarCarro.value.opinarVersao;
+    const carFuel = this.formOpinarCarro.value.opinarCombustivel;
+    const versionComplement = this.formOpinarCarro.value.opinarComplemento;
+    const selectedGearBox = this.formOpinarCarro.value.opinarCambio;
+    const selectedYearModel = this.formOpinarCarro.value.opinarAnoModelo;
+
     const aboutCarData = {
+      carVersion: selectedCarVersion,
       carModel: this.selectedModel['_id'],
-      yearModel: this.formOpinarCarro.value.opinarAnoModelo,
-      fuel: this.formOpinarCarro.value.opinarCombustivel,
+      yearModel: selectedYearModel,
       engine: this.opinarMotor,
+      fuel: carFuel,
+      gearBox: selectedGearBox,
+      complement: versionComplement,
       yearBought: this.formOpinarCarro.value.opinarAnoCompra,
       kmBought: this.opinarKmCompraValue,
       keptPeriod: this.opinarPeriodoValue,
@@ -213,6 +222,10 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
         ...valuation
       }
     };
+
+    if (selectedCarVersion === 'another') {
+      aboutCarData['carNewVersion'] = `${this.opinarMotor} ${carFuel} ${versionComplement} ${selectedGearBox} ${selectedYearModel}`;
+    }
 
     this.aboutCar.emit(aboutCarData);
   }

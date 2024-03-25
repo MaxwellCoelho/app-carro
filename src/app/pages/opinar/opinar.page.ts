@@ -151,7 +151,7 @@ export class OpinarPage implements OnInit {
     this.finalPayload['userInfo'] = $event;
     this.finalPayload['active'] = true;
     this.saveFinalPayload();
-    this.sendFinalPayload();
+    this.checkAboutCarPayload();
   }
 
   public saveFinalPayload() {
@@ -169,6 +169,19 @@ export class OpinarPage implements OnInit {
 
   public sendFinalPayload() {
     this.showLoader = true;
+
+    const aboutCar = this.finalPayload['aboutCar'];
+
+    this.finalPayload['aboutCar'] = {
+      carVersion : aboutCar['carVersion'],
+      carModel : aboutCar['carModel'],
+      yearBought : aboutCar['yearBought'],
+      kmBought : aboutCar['kmBought'],
+      keptPeriod : aboutCar['keptPeriod'],
+      finalWords : aboutCar['finalWords'],
+      valuation : aboutCar['valuation'],
+    };
+
     const jwtData = { data: this.cryptoService.encondeJwt(this.finalPayload)};
 
     const subOpinion = this.dbService.createItem(environment.opinionAction, jwtData).subscribe(
@@ -183,6 +196,33 @@ export class OpinarPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public checkAboutCarPayload(): void {
+    if (this.finalPayload['aboutCar']['carVersion'] === 'another') {
+      this.showLoader = true;
+      const newVersion = {
+        name: this.finalPayload['aboutCar']['carNewVersion'],
+        model: this.finalPayload['aboutCar']['carModel'],
+        active: true,
+        review: true
+      };
+      const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
+      const subVersion = this.dbService.createItem(environment.versionsAction, jwtData).subscribe(
+        res => {
+          if (!subVersion.closed) { subVersion.unsubscribe(); }
+          this.utils.saveCreatedItem(res.saved, 'createdVersion');
+          this.finalPayload['aboutCar']['carVersion'] = res['saved']['_id'];
+          this.showLoader = false;
+          this.sendFinalPayload();
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    } else {
+      this.sendFinalPayload();
+    }
   }
 
   public clearFinalPayload() {

@@ -2,15 +2,15 @@
 <ion-grid slot="content" class="valuation-itens">
   <ion-row>
     <ion-col>
-      <h1 class="form-title">Primeiro informe as características do seu <span>{{selectedModel.name}}</span></h1>
+      <h1 class="form-title">Primeiro informe as características de seu carro</h1>
     </ion-col>
   </ion-row>
 
   <form *ngIf="formOpinarCarro" [formGroup]="formOpinarCarro" (submit)="saveFormOpinarCarro()">
-    <ion-row *ngIf="carVersions?.lenght">
+    <ion-row *ngIf="carVersions?.length">
       <ion-col size-lg="12" size-md="12" size-sm="12" size-xs="12">
         <ion-item class="input-item">
-          <ion-label position="floating">Ano e versão</ion-label>
+          <ion-label position="floating">Versão e ano do modelo</ion-label>
           <ion-select interface="popover" formControlName="opinarVersao" (ionChange)="chooseVersion()">
             <ion-select-option *ngFor="let version of carVersions" value="{{version._id}}">{{version.name}}</ion-select-option>
             <ion-select-option value="another">Outro que não está na lista</ion-select-option>
@@ -19,7 +19,13 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="newVersion">
+    <ion-row *ngIf="newVersion && carVersions?.length" style="margin-top: .5rem; background-color: cornsilk;">
+      <ion-col size-lg="12" size-md="12" size-sm="12" size-xs="12">
+        <h2>Conte-nos mais detalhes</h2>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="newVersion" [ngStyle]="{'background-color': carVersions?.length ? 'cornsilk' : 'unset'}">
       <ion-col size-lg="2" size-md="3" size-sm="12" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Ano modelo</ion-label>
@@ -57,7 +63,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="newVersion">
+    <ion-row *ngIf="newVersion" style="padding-bottom: .5rem; margin-bottom: .5rem" [ngStyle]="{'background-color': carVersions?.length ? 'cornsilk' : 'unset'}">
       <ion-col size-lg="3" size-md="3" size-sm="6" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Câmbio</ion-label>
@@ -72,7 +78,7 @@
 
       <ion-col size-lg="9" size-md="9" size-sm="6" size-xs="12">
         <ion-item class="input-item">
-          <ion-label position="floating">Descrição / complemento</ion-label>
+          <ion-label position="floating">Detalhes da versão</ion-label>
           <ion-input type="text" formControlName="opinarComplemento" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
         </ion-item>
       </ion-col>
@@ -116,7 +122,7 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">O que você tem a dizer sobre seu <span>{{selectedModel.name}}</span>?</h1>
+        <h1 class="form-title">O que você tem a dizer sobre seu <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span>?</h1>
       </ion-col>
     </ion-row>
 
@@ -139,7 +145,7 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">Considerações finais sobre seu <span>{{selectedModel.name}}</span></h1>
+        <h1 class="form-title">Agora as Considerações finais.</h1>
       </ion-col>
     </ion-row>
 
