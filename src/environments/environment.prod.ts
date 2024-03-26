@@ -1,3 +1,7 @@
+import { environment as defaults } from './environment.defaults';
+
 export const environment = {
-  production: true
+  ...defaults,
+  production: true,
+  middlewareEndpoint: `${window.location.origin}/api`
 };
