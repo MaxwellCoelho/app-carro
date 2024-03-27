@@ -135,7 +135,7 @@
               <td>{{brand.modified || '-'}}</td>
               <td>{{(brand.modified_by?.name ? brand.modified_by?.name : brand.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(brand)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editBrand(brand)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', brand)">

@@ -131,7 +131,7 @@
               <td>{{version.modified || '-'}}</td>
               <td>{{(version.modified_by?.name ? version.modified_by?.name : version.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(version)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editVersion(version)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', version)">

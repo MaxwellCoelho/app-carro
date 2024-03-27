@@ -110,7 +110,7 @@
               <td>{{category.modified || '-'}}</td>
               <td>{{(category.modified_by?.name ? category.modified_by?.name : category.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(category)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCategory(category)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', category)">

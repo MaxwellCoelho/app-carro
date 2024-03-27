@@ -107,7 +107,7 @@
               <td>{{role.modified || '-'}}</td>
               <td>{{(role.modified_by?.name ? role.modified_by?.name : role.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(role)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editRole(role)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', role)">
