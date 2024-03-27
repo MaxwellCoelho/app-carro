@@ -164,7 +164,7 @@
               <td>{{opinion.modified || '-'}}</td>
               <td>{{(opinion.modified_by?.name ? opinion.modified_by?.name : opinion.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(opinion)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editOpinion(opinion)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', opinion)">

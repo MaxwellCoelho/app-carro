@@ -173,7 +173,7 @@
               <td>{{model.modified || '-'}}</td>
               <td>{{(model.modified_by?.name ? model.modified_by?.name : model.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(model)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editModel(model)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
                 <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', model)">
