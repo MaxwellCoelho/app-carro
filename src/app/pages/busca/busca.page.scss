@@ -5,7 +5,7 @@
 
 .model-image {
   max-width: 100px;
-  margin: 0.5rem 1.5rem 0.5rem 0.5rem;
+  margin: 0.5rem 1.5rem 0.5rem 0;
 }
 
 .brand-image-title {
@@ -20,6 +20,8 @@
 
 .item-button {
   text-transform: capitalize;
+  --padding-start: 0;
+  --inner-padding-end: 0;
 }
 
 ion-searchbar {
@@ -28,4 +30,40 @@ ion-searchbar {
 
 ion-item.item-button::part(native) {
   padding-left: 0 !important;
+}
+
+.selected-brand {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+@media (max-width: 576px) {
+  .brand-image-title {
+    max-width: 50px;
+    margin-right: 1rem;
+  }
+
+  .brand-label-title {
+    font-size: x-large;
+  }
+}
+
+@media (max-width: 410px) {
+  .model-image {
+    max-width: 80px;
+    margin-right: 1rem;
+  }
+
+  .selected-brand {
+    margin: .5rem 0;
+  }
+
+  .brand-image-title {
+    max-width: 30px;
+    margin-right: .5rem;
+  }
+
+  .brand-label-title {
+    font-size: large;
+  }
 }

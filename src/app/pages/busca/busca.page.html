@@ -26,7 +26,7 @@
 
       <app-model-not-found *ngIf="brands.length && !selectedBrand" [brandList]="brands"></app-model-not-found>
 
-      <ion-item lines="none" *ngIf="selectedBrand">
+      <ion-item lines="none" *ngIf="selectedBrand" class="selected-brand">
         <img src="assets/brands/{{selectedBrand.image}}" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}"
           onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
         <ion-label class="brand-label-title">{{selectedBrand.name}}</ion-label>
