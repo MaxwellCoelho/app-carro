@@ -74,7 +74,7 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Categorias de carro:</h1></ion-col>
+          <ion-col><h1>Categorias de carro {{categories ? '('+categories.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
         <ion-row *ngIf="!categories" class="grid-content">
@@ -85,30 +85,41 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="categories" class="grid-header">
-          <ion-col size-md="4" size-sm="3" size-xs="3"><ion-label>Id</ion-label></ion-col>
-          <ion-col size-md="4" size-sm="3" size-xs="3"><ion-label>Nome</ion-label></ion-col>
-          <ion-col size-md="2" size-sm="2" size-xs="2"><ion-label>Ativo</ion-label></ion-col>
-          <ion-col size-md="2" size-sm="4" size-xs="4"><ion-label>Ação</ion-label></ion-col>
-        </ion-row>
-        <ion-row *ngFor="let category of categories" class="grid-content">
-          <ion-col size-md="4" size-sm="3" size-xs="3"><ion-label>{{category._id}}</ion-label></ion-col>
-          <ion-col size-md="4" size-sm="3" size-xs="3"><ion-label>{{category.name}}</ion-label></ion-col>
-          <ion-col size-md="2" size-sm="2" size-xs="2">
-            <ion-icon *ngIf="category.active" size="large" color="success" name="checkmark-circle"></ion-icon>
-            <ion-icon *ngIf="!category.active" size="large" color="danger" name="close-circle"></ion-icon>
-          </ion-col>
-          <ion-col size-md="1" size-sm="2" size-xs="2">
-            <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCategory(category)">
-              <ion-icon name="create-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col size-md="1" size-sm="2" size-xs="2">
-            <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', category)">
-              <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
+        <div class="table-container" *ngIf="categories">
+          <table>
+            <tr>
+              <th>Ativo</th>
+              <th>Id</th>
+              <th>Nome</th>
+              <th>Criado em</th>
+              <th>Criado por</th>
+              <th>Modificado em</th>
+              <th>Modificado por</th>
+              <th>Ação</th>
+            </tr>
+
+            <tr *ngFor="let category of categories">
+              <td>
+                <ion-icon *ngIf="category.active" size="large" color="success" name="checkmark-circle"></ion-icon>
+                <ion-icon *ngIf="!category.active" size="large" color="danger" name="close-circle"></ion-icon>
+              </td>
+              <td>{{category._id}}</td>
+              <td>{{category.name}}</td>
+              <td>{{category.created || '-'}}</td>
+              <td>{{(category.created_by?.name ? category.created_by.name  : category.created_by) || '-'}}</td>
+              <td>{{category.modified || '-'}}</td>
+              <td>{{(category.modified_by?.name ? category.modified_by?.name : category.modified_by) || '-'}}</td>
+              <td style="display: flex">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(category)">
+                  <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', category)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </ion-grid>
     </div>
 

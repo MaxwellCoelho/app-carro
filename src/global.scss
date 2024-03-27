@@ -161,3 +161,30 @@ ion-item:not(.ion-focused, .item-has-focus, .item-has-value) .label-floating.sc-
 ion-popover [popover]:not(:popover-open):not(dialog[open]) {
   display: contents;
 }
+
+.table-container {
+  width: 100%;
+  overflow: auto;
+  max-height: 500px;
+
+  table {
+    border-collapse: initial;
+    border-spacing: 5px;
+    width: 100%;
+
+    tr {
+      margin: 5px;
+      background-color: #efeded;
+    }
+
+    tr:first-child {
+      background-color: #d7d8da;
+    }
+
+    td, th {
+      padding: 0.1rem 0.5rem;
+      text-wrap: nowrap;
+      text-align: left;
+    }
+  }
+}

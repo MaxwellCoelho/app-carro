@@ -96,7 +96,7 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Usuários:</h1></ion-col>
+          <ion-col><h1>Usuários {{users ? '('+users.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
         <ion-row *ngIf="!users" class="grid-content">
@@ -107,33 +107,45 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="users" class="grid-header">
-          <ion-col size-md="3" size-sm="2" size-xs="2"><ion-label>Nome</ion-label></ion-col>
-          <ion-col size-md="4" size-sm="3" size-xs="3"><ion-label>Email</ion-label></ion-col>
-          <ion-col size-md="2" size-sm="2" size-xs="2"><ion-label>Nível</ion-label></ion-col>
-          <ion-col size-md="1" size-sm="1" size-xs="1"><ion-label>Ativo</ion-label></ion-col>
-          <ion-col size-md="2" size-sm="4" size-xs="4"><ion-label>Ação</ion-label></ion-col>
-        </ion-row>
+        <div class="table-container" *ngIf="users">
+          <table>
+            <tr>
+              <th>Ativo</th>
+              <th>Id</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Nível</th>
+              <th>Criado em</th>
+              <th>Criado por</th>
+              <th>Modificado em</th>
+              <th>Modificado por</th>
+              <th>Ação</th>
+            </tr>
 
-        <ion-row *ngFor="let user of users" class="grid-content">
-          <ion-col size-md="3" size-sm="2" size-xs="2"><ion-label>{{user.name}}</ion-label></ion-col>
-          <ion-col size-md="4" size-sm="3" size-xs="3"><ion-label>{{user.email}}</ion-label></ion-col>
-          <ion-col size-md="2" size-sm="2" size-xs="2"><ion-label>{{user.role.level}} - {{user.role.name}}</ion-label></ion-col>
-          <ion-col size-md="1" size-sm="1" size-xs="1">
-            <ion-icon *ngIf="user.active" size="large" color="success" name="checkmark-circle"></ion-icon>
-            <ion-icon *ngIf="!user.active" size="large" color="danger" name="close-circle"></ion-icon>
-          </ion-col>
-          <ion-col size-md="1" size-sm="2" size-xs="2">
-            <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(user)">
-              <ion-icon name="create-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col size-md="1" size-sm="2" size-xs="2">
-            <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', user)">
-              <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
+            <tr *ngFor="let user of users">
+              <td>
+                <ion-icon *ngIf="user.active" size="large" color="success" name="checkmark-circle"></ion-icon>
+                <ion-icon *ngIf="!user.active" size="large" color="danger" name="close-circle"></ion-icon>
+              </td>
+              <td>{{user._id}}</td>
+              <td>{{user.name}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.role.level}} - {{user.role.name}}</td>
+              <td>{{user.created || '-'}}</td>
+              <td>{{(user.created_by?.name ? user.created_by.name  : user.created_by) || '-'}}</td>
+              <td>{{user.modified || '-'}}</td>
+              <td>{{(user.modified_by?.name ? user.modified_by?.name : user.modified_by) || '-'}}</td>
+              <td style="display: flex">
+                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editCustomer(user)">
+                  <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', user)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </ion-grid>
     </div>
 

@@ -18,7 +18,7 @@
           </ion-segment-button>
         </ion-segment>
         <ion-note color="danger" *ngIf="showErrors && !item.valuation">
-          <span>Necessário preencher o título da sua avaliação!</span>
+          <span>Necessário preencher todas as avaliações!</span>
         </ion-note>
       </ion-col>
     </ion-row>
@@ -33,7 +33,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Título da sua avaliação</ion-label>
-          <ion-input type="tel" minlength="4" maxlength="80" formControlName="opinarTitulo"
+          <ion-input type="text" minlength="4" maxlength="80" formControlName="opinarTitulo"
             placeholder="Ex: Melhor carro da categoria"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarMarca.controls.opinarTitulo.touched">

@@ -71,7 +71,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
         || (model.brand.review && recoveredReviewBrands.find(item => item['_id'] === model.brand['_id']));
       const checkModelReview = !model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']));
 
-      if (model.brand.active && model.active && checkBrandReview && checkModelReview) {
+      if (model.brand.active && model.active && model.val_length > 0 && checkBrandReview && checkModelReview) {
         const average = model.average;
         const int = average ? parseInt(average, 10) : 0;
         const valuation = VALUATION.slice();
