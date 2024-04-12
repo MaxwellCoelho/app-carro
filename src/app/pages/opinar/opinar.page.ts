@@ -25,6 +25,7 @@ export class OpinarPage implements OnInit {
   public showLoader: boolean;
   public finalPayload = {};
   public currentStep = 1;
+  public years = [];
 
   constructor(
     public dbService: DataBaseService,
@@ -134,7 +135,8 @@ export class OpinarPage implements OnInit {
   }
 
   public setAboutCarPayload($event) {
-    this.finalPayload['aboutCar'] = $event;
+    this.finalPayload['aboutCar'] = $event.aboutCar;
+    this.years = $event.years;
     this.saveFinalPayload();
     this.currentStep = 2;
     this.content.scrollToTop(700);
@@ -175,6 +177,7 @@ export class OpinarPage implements OnInit {
     this.finalPayload['aboutCar'] = {
       carVersion : aboutCar['carVersion'],
       carModel : aboutCar['carModel'],
+      yearModel : aboutCar['yearModel'],
       yearBought : aboutCar['yearBought'],
       kmBought : aboutCar['kmBought'],
       keptPeriod : aboutCar['keptPeriod'],
@@ -199,19 +202,14 @@ export class OpinarPage implements OnInit {
   }
 
   public checkAboutCarPayload(): void {
-    if (this.finalPayload['aboutCar']['carVersion'] === 'another') {
+    const yearModel = parseInt(this.finalPayload['aboutCar']['yearModel'], 10);
+    const foundYear = this.years.indexOf(yearModel) >= 0;
+
+    const setVersion = (jwtData: any, id?: string) => {
       this.showLoader = true;
-      const newVersion = {
-        name: this.finalPayload['aboutCar']['carNewVersion'],
-        model: this.finalPayload['aboutCar']['carModel'],
-        active: true,
-        review: true
-      };
-      const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
-      const subVersion = this.dbService.createItem(environment.versionsAction, jwtData).subscribe(
+      const subVersion = this.dbService.createItem(environment.versionsAction, jwtData, id).subscribe(
         res => {
           if (!subVersion.closed) { subVersion.unsubscribe(); }
-          this.utils.saveCreatedItem(res.saved, 'createdVersion');
           this.finalPayload['aboutCar']['carVersion'] = res['saved']['_id'];
           this.showLoader = false;
           this.sendFinalPayload();
@@ -220,6 +218,29 @@ export class OpinarPage implements OnInit {
           this.showErrorToast(err);
         }
       );
+    };
+
+    if (this.finalPayload['aboutCar']['carVersion'] !== 'anotherVersion' && !foundYear) {
+      const id = this.finalPayload['aboutCar']['carVersion'];
+      const newVersion = {
+        year: yearModel,
+        review: true
+      };
+      const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
+      setVersion(jwtData, id);
+    } else if (this.finalPayload['aboutCar']['carVersion'] === 'anotherVersion') {
+      const newVersion = {
+        engine: this.finalPayload['aboutCar']['engine'],
+        fuel: this.finalPayload['aboutCar']['fuel'],
+        gearbox: this.finalPayload['aboutCar']['gearBox'],
+        year: yearModel,
+        complement: this.finalPayload['aboutCar']['complement'],
+        model: this.finalPayload['aboutCar']['carModel'],
+        active: true,
+        review: true
+      };
+      const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
+      setVersion(jwtData);
     } else {
       this.sendFinalPayload();
     }

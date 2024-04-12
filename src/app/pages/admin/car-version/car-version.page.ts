@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
+import { FUEL, GEARBOX } from 'src/app/helpers/forms.helper';
 
 @Component({
   selector: 'app-car-version',
@@ -17,6 +18,8 @@ export class CarVersionPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
+  public fuels = FUEL;
+  public gearboxes = GEARBOX;
   public versions: Array<any>;
   public models: Array<any>;
   public showLoader: boolean;
@@ -42,7 +45,14 @@ export class CarVersionPage implements OnInit {
     this.formVersions = this.fb.group({
       editVersionId: this.fb.control(''),
       newVersionName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
-      newVersionModel: this.fb.control('', [Validators.required])
+      newVersionModel: this.fb.control('', [Validators.required]),
+      newVersionImage: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newVersionThumb: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newVersionFuel: this.fb.control('', [Validators.required]),
+      newVersionYearModel: this.fb.control('', [Validators.required]),
+      newVersionEngine: this.fb.control('', [Validators.required]),
+      newVersionGearbox: this.fb.control('', [Validators.required]),
+      newVersionComplement: this.fb.control('', []),
     });
   }
 
@@ -77,9 +87,21 @@ export class CarVersionPage implements OnInit {
   public createVersion(action: string) {
     this.showLoader = true;
     const versionId = this.formVersions.value.editVersionId;
+    const years = this.formVersions.value.newVersionYearModel;
+    const formattedYears = Array.isArray(years) ? years : years.split(',');
+    const finalYears = [];
+    formattedYears.forEach(y =>  finalYears.push(parseInt(y, 10)));
+
     const data = {
       name: this.formVersions.value.newVersionName,
       model: this.formVersions.value.newVersionModel,
+      image: this.formVersions.value.newVersionImage,
+      thumb: this.formVersions.value.newVersionThumb,
+      fuel: this.formVersions.value.newVersionFuel,
+      years: finalYears,
+      engine: this.formVersions.value.newVersionEngine,
+      gearbox: this.formVersions.value.newVersionGearbox,
+      complement: this.formVersions.value.newVersionComplement,
       active: this.activeChecked,
       review: this.pendingReview
     };
@@ -107,7 +129,14 @@ export class CarVersionPage implements OnInit {
     this.formVersions.reset({
       editVersionId: version['_id'],
       newVersionModel: version.model['_id'],
-      newVersionName: version.name
+      newVersionName: version.name,
+      newVersionImage: version.image,
+      newVersionThumb: version.thumb,
+      newVersionFuel: version.fuel,
+      newVersionYearModel: version.years,
+      newVersionEngine: version.engine,
+      newVersionGearbox: version.gearbox,
+      newVersionComplement: version.complement,
     });
 
     this.activeChecked = version.active;
@@ -222,5 +251,10 @@ export class CarVersionPage implements OnInit {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public onlyNumbers($event): void {
+    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
+    $event.srcElement.value = onlyNumbers;
   }
 }

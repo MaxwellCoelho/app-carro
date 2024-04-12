@@ -9,6 +9,7 @@ import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VALUATION, VALUATION_ITENS_CAR } from 'src/app/helpers/valuation.helper';
+import { FUEL, GEARBOX } from 'src/app/helpers/forms.helper';
 import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -25,6 +26,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   @Output() clickForeward = new EventEmitter<any>();
 
   public nav = NAVIGATION;
+  public fuels = FUEL;
+  public gearboxes = GEARBOX;
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
 
@@ -41,6 +44,10 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public hasAllValuations = false;
   public carVersions: any[];
   public newVersion = false;
+  public newYear = false;
+  public yearsVersionFormGroup = {
+    opinarAnosVersao: this.fb.control('', [Validators.required]),
+  };
   public mainFormGroup = {
     opinarVersao: this.fb.control('', [Validators.required]),
     opinarAnoCompra: this.fb.control('', [Validators.required, Validators.max(this.newerYear)]),
@@ -48,12 +55,16 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     opinarPontosPositivos: this.fb.control('', [Validators.required]),
     opinarPontosNegativos: this.fb.control('', [Validators.required]),
   };
-  public newVersionFormGroup = {
-    opinarCombustivel: this.fb.control('', [Validators.required]),
+  public newYearFormGroup = {
     opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
+  };
+  public newVersionFormGroup = {
+    ...this.newYearFormGroup,
+    opinarCombustivel: this.fb.control('', [Validators.required]),
     opinarCambio: this.fb.control('', [Validators.required]),
     opinarComplemento: this.fb.control('', []),
   };
+  public years = [];
 
   constructor(
     public dbService: DataBaseService,
@@ -68,8 +79,6 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.getVersions();
-
     this.changeOpinarKmCompra({detail: { value: 0}});
     this.changeOpinarMotor({detail: { value: 1}});
     this.changeOpinarPeriodo({detail: { value: this.newerYear - 1}});
@@ -78,7 +87,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.autoFillInfo();
+    this.getVersions();
     this.cdRef.detectChanges();
   }
 
@@ -87,7 +96,6 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   }
 
   public getVersions(): void {
-    const recoveredReviewVersion = this.utils.recoveryCreatedItem('createdVersion');
     this.showLoader = true;
     const myFilter = { model: this.selectedModel['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
@@ -97,32 +105,47 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
         const versions = [];
         for (const version of res.versions) {
           if (version.active) {
-            if (!version.review || (version.review && recoveredReviewVersion.find(item => item['_id'] === version['_id']))) {
-              versions.push(version);
-            }
+            versions.push(version);
           }
         }
 
         this.carVersions = versions;
         this.chooseVersion();
+        this.autoFillInfo();
         this.showLoader = false;
       },
       err => {
         this.carVersions = [];
         this.chooseVersion();
+        this.autoFillInfo();
         this.showLoader = false;
       }
     );
   }
 
   public chooseVersion(): void {
-    this.newVersion = (this.carVersions && !this.carVersions.length) || this.formOpinarCarro.controls.opinarVersao.value === 'another';
+    this.newVersion = (this.carVersions && !this.carVersions.length)
+      || this.formOpinarCarro.controls.opinarVersao.value === 'anotherVersion';
 
     if (this.newVersion) {
-      this.formOpinarCarro.controls.opinarVersao.patchValue('another');
+      this.formOpinarCarro.controls.opinarVersao.patchValue('anotherVersion');
       this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.newVersionFormGroup});
+      this.years = [];
     } else {
-      this.formOpinarCarro = this.fb.group(this.mainFormGroup);
+      const choosenVersion = this.carVersions.find(v => v['_id'] === this.formOpinarCarro.controls.opinarVersao.value);
+      this.years = choosenVersion ? choosenVersion.years : [];
+      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.yearsVersionFormGroup});
+    }
+  }
+
+  public chooseYear(): void {
+    this.newYear = this.formOpinarCarro.controls.opinarAnosVersao.value === 'anotherYear';
+
+    if (this.newYear) {
+      this.formOpinarCarro.controls.opinarAnosVersao.patchValue('anotherYear');
+      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.newYearFormGroup, ...this.yearsVersionFormGroup});
+    } else {
+      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.yearsVersionFormGroup});
     }
   }
 
@@ -200,7 +223,9 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     const carFuel = this.formOpinarCarro.value.opinarCombustivel;
     const versionComplement = this.formOpinarCarro.value.opinarComplemento;
     const selectedGearBox = this.formOpinarCarro.value.opinarCambio;
-    const selectedYearModel = this.formOpinarCarro.value.opinarAnoModelo;
+    const selectedYearModel = this.newVersion || this.newYear
+      ? this.formOpinarCarro.value.opinarAnoModelo
+      : this.formOpinarCarro.value.opinarAnosVersao;
 
     const aboutCarData = {
       carVersion: selectedCarVersion,
@@ -223,24 +248,38 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       }
     };
 
-    if (selectedCarVersion === 'another') {
-      aboutCarData['carNewVersion'] = `${this.opinarMotor} ${carFuel} ${versionComplement} ${selectedGearBox} ${selectedYearModel}`;
-    }
-
-    this.aboutCar.emit(aboutCarData);
+    this.aboutCar.emit({aboutCar: aboutCarData, years: this.years});
   }
 
   public autoFillInfo() {
     if (this.autoFill) {
-      this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
-      this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);
+      this.formOpinarCarro.controls.opinarVersao.patchValue(this.autoFill['carVersion']);
+      this.chooseVersion();
+
+      const foundYear = this.years.indexOf(parseInt(this.autoFill['yearModel'], 10)) >= 0;
+      if (this.newVersion || !foundYear) {
+        if (this.formOpinarCarro.controls.opinarAnosVersao) {
+          this.formOpinarCarro.controls.opinarAnosVersao.patchValue('anotherYear');
+          this.chooseYear();
+        }
+        this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
+      } else {
+        this.formOpinarCarro.controls.opinarAnosVersao.patchValue(this.autoFill['yearModel']);
+        this.chooseYear();
+      }
+
+      if (this.newVersion) {
+        this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);
+        this.formOpinarCarro.controls.opinarCambio.patchValue(this.autoFill['gearBox']);
+        this.formOpinarCarro.controls.opinarComplemento.patchValue(this.autoFill['complement']);
+        this.changeOpinarMotor({ detail: { value: parseFloat(this.autoFill['engine']) }});
+      }
       this.formOpinarCarro.controls.opinarAnoCompra.patchValue(this.autoFill['yearBought']);
 
       this.formOpinarCarro.controls.opinarTitulo.patchValue(this.autoFill['finalWords']['title']);
       this.formOpinarCarro.controls.opinarPontosPositivos.patchValue(this.autoFill['finalWords']['positive']);
       this.formOpinarCarro.controls.opinarPontosNegativos.patchValue(this.autoFill['finalWords']['negative']);
 
-      this.changeOpinarMotor({ detail: { value: parseFloat(this.autoFill['engine']) }});
       this.changeOpinarPeriodo({ detail: { value: this.autoFill['keptPeriod'] }});
       this.changeOpinarKmCompra({detail: { value: this.autoFill['kmBought']}});
 
