@@ -41,7 +41,9 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   ) {}
 
   public ngOnInit(): void {
-    this.loadModelInfo();
+    if (!this.utils.getShouldUpdate('opinions')) {
+      this.loadModelInfo();
+    }
   }
 
   public ionViewWillEnter(): void {

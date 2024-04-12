@@ -26,20 +26,74 @@
         <form name="versions" [formGroup]="formVersions" (submit)="showConfirmAlert(formVersions.value.editVersionId ? 'editar' : 'criar', formVersions.value)">
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
             <ion-input type="hidden" formControlName="editVersionId"></ion-input>
-            <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-col size-md="4" size-sm="4" size-xs="12">
               <ion-item>
-                <ion-label position="floating">Nome</ion-label>
-                <ion-input type="text" maxlength="50" formControlName="newVersionName"></ion-input>
+                <ion-label position="floating">Modelo</ion-label>
+                <ion-select interface="popover" formControlName="newVersionModel">
+                  <ion-select-option *ngFor="let model of models" [value]="model._id">{{ model.brand?.name }} {{ model.name }}</ion-select-option>
+                </ion-select>
               </ion-item>
             </ion-col>
+
+            <ion-col size-md="4" size-sm="4" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Combustível</ion-label>
+                <ion-select interface="popover" formControlName="newVersionFuel">
+                  <ion-select-option *ngFor="let fuel of fuels" value="{{fuel.value}}">{{fuel.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="4" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Anos modelo</ion-label>
+                <ion-input type="text" formControlName="newVersionYearModel"
+                  placeholder="Ex: 2015"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
+            <ion-col size-md="2" size-sm="2" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Motor</ion-label>
+                <ion-input type="text" pattern="[0-9]{1}[\.]?[0-9]{1}" minlength="3" maxlength="3" formControlName="newVersionEngine"
+                  placeholder="Ex: 1.6"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="4" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Câmbio</ion-label>
+                <ion-select interface="popover" formControlName="newVersionGearbox">
+                  <ion-select-option *ngFor="let gearbox of gearboxes" value="{{gearbox.value}}">{{gearbox.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="6" size-sm="6" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Detalhes da versão</ion-label>
+                <ion-input type="text" formControlName="newVersionComplement" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
             <ion-col size-md="4" size-sm="6" size-xs="12">
-            <ion-item>
-              <ion-label position="floating">Marca</ion-label>
-              <ion-select interface="popover" formControlName="newVersionModel">
-                <ion-select-option *ngFor="let model of models" [value]="model._id">{{ model.brand?.name }} {{ model.name }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
+              <ion-item>
+                <ion-label position="floating">Imagem</ion-label>
+                <ion-input type="text" formControlName="newVersionImage"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="6" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Thumbnail</ion-label>
+                <ion-input type="text" formControlName="newVersionThumb"></ion-input>
+              </ion-item>
+            </ion-col>
+
             <ion-col size-md="2" size-sm="6" size-xs="6">
               <ion-item lines="none" color="none">
                 <ion-label>Ativo</ion-label>
@@ -105,8 +159,15 @@
               <th>Ativo</th>
               <th>Revisão</th>
               <th>Id</th>
-              <th>Nome</th>
               <th>Modelo</th>
+              <th>Nome</th>
+              <th>Motor</th>
+              <th>Complemento</th>
+              <th>Câmbio</th>
+              <th>Combustível</th>
+              <th>Anos modelo</th>
+              <th>Imagem</th>
+              <th>Thumbnail</th>
               <th>Criado em</th>
               <th>Criado por</th>
               <th>Modificado em</th>
@@ -124,8 +185,15 @@
                 <ion-icon *ngIf="!version.review" size="large" color="success" name="checkmark-circle"></ion-icon>
               </td>
               <td>{{version._id}}</td>
-              <td>{{version.name}}</td>
               <td>{{version.model?.brand?.name}} {{version.model?.name}}</td>
+              <td>{{version.name}}</td>
+              <td>{{version.engine}}</td>
+              <td>{{version.complement}}</td>
+              <td>{{version.gearbox}}</td>
+              <td>{{version.fuel}}</td>
+              <td>{{version.years}}</td>
+              <td>{{version.image}}</td>
+              <td>{{version.thumb}}</td>
               <td>{{version.created || '-'}}</td>
               <td>{{(version.created_by?.name ? version.created_by.name  : version.created_by) || '-'}}</td>
               <td>{{version.modified || '-'}}</td>

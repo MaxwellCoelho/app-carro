@@ -8,14 +8,42 @@
 
   <form *ngIf="formOpinarCarro" [formGroup]="formOpinarCarro" (submit)="saveFormOpinarCarro()">
     <ion-row *ngIf="carVersions?.length">
-      <ion-col size-lg="12" size-md="12" size-sm="12" size-xs="12">
+      <ion-col size-lg="6" size-md="6" size-sm="5" size-xs="12">
         <ion-item class="input-item">
-          <ion-label position="floating">Versão e ano do modelo</ion-label>
+          <ion-label position="floating">Versão</ion-label>
           <ion-select interface="popover" formControlName="opinarVersao" (ionChange)="chooseVersion()">
-            <ion-select-option *ngFor="let version of carVersions" value="{{version._id}}">{{version.name}}</ion-select-option>
-            <ion-select-option value="another">Outro que não está na lista</ion-select-option>
+            <ion-select-option *ngFor="let version of carVersions" value="{{version._id}}">
+              {{version.engine}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
+            </ion-select-option>
+            <ion-select-option value="anotherVersion">Outra versão</ion-select-option>
           </ion-select>
         </ion-item>
+      </ion-col>
+
+      <ion-col size-lg="4" size-md="4" size-sm="5" size-xs="6" *ngIf="formOpinarCarro.controls?.opinarVersao?.value !== 'anotherVersion'">
+        <ion-item class="input-item">
+          <ion-label position="floating">Ano</ion-label>
+          <ion-select interface="popover" formControlName="opinarAnosVersao" (ionChange)="chooseYear()" [disabled]="!formOpinarCarro.controls.opinarVersao.value">
+            <ion-select-option *ngFor="let year of years" value="{{year}}">
+              {{year}}
+            </ion-select-option>
+            <ion-select-option value="anotherYear">Outro ano</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-lg="2" size-md="2" size-sm="2" size-xs="6"
+        *ngIf="formOpinarCarro.controls.opinarVersao.value !== 'anotherVersion' && newYear">
+        <ion-item class="input-item">
+          <ion-label position="floating">Ano modelo</ion-label>
+          <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
+            placeholder="Ex: 2015"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoModelo?.touched">
+          <span *ngIf="formOpinarCarro.controls.opinarAnoModelo?.errors?.required">Necessário preencher o ano do modelo do carro!</span>
+          <span *ngIf="formOpinarCarro.controls.opinarAnoModelo?.errors?.minlength">Campo preenchido incorretamente! Ex: 2015</span>
+          <span *ngIf="formOpinarCarro.controls.opinarAnoModelo?.errors?.max">Este ano é muito superior ao ano atual!</span>
+        </ion-note>
       </ion-col>
     </ion-row>
 
@@ -43,12 +71,7 @@
         <ion-item class="input-item">
           <ion-label position="floating">Combustível</ion-label>
           <ion-select interface="popover" formControlName="opinarCombustivel">
-            <ion-select-option value="flex">Flex</ion-select-option>
-            <ion-select-option value="gasolina">Gasolina</ion-select-option>
-            <ion-select-option value="etanol">Etanol</ion-select-option>
-            <ion-select-option value="diesel">Diesel</ion-select-option>
-            <ion-select-option value="hibrido">Híbrido</ion-select-option>
-            <ion-select-option value="eletrico">Elétrico</ion-select-option>
+            <ion-select-option *ngFor="let fuel of fuels" value="{{fuel.value}}">{{fuel.name}}</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
@@ -68,10 +91,7 @@
         <ion-item class="input-item">
           <ion-label position="floating">Câmbio</ion-label>
           <ion-select interface="popover" formControlName="opinarCambio">
-            <ion-select-option value="manual">Manual</ion-select-option>
-            <ion-select-option value="automatico">Automático</ion-select-option>
-            <ion-select-option value="automatizado">Automatizado</ion-select-option>
-            <ion-select-option value="cvt">CVT</ion-select-option>
+            <ion-select-option *ngFor="let gearbox of gearboxes" value="{{gearbox.value}}">{{gearbox.name}}</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
