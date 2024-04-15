@@ -3,7 +3,7 @@
   <ion-row class="first-text">
     <ion-col size-md="12" size-sm="12" size-xs="12">
       <strong>Não encontrou a Marca e Modelo que procura?</strong><br>
-      Nos ajude a melhorar! Conte-nos abaixo e disponibilizaremos em breve!
+      Não se preocupe. Basta digita-los abaixo e prosseguir!
     </ion-col>
   </ion-row>
 
@@ -13,7 +13,7 @@
       <ion-col size-md="5" size-sm="6" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Marca</ion-label>
-          <ion-input type="text" maxlength="50" formControlName="opinarBrand" placeholder="Ex: Ford"></ion-input>
+          <ion-input type="text" maxlength="50" formControlName="opinarBrand" (ionInput)="utils.capitalize($event)" placeholder="Ex: Ford"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formModelNotFound.controls.opinarBrand.touched">
           <span *ngIf="formModelNotFound.controls.opinarBrand.errors?.required">Necessário preencher a marca do carro!</span>
@@ -24,8 +24,7 @@
       <ion-col size-md="5" size-sm="6" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Modelo</ion-label>
-          <ion-input type="text" maxlength="50" formControlName="opinarModel"
-          placeholder="Ex: Gol"></ion-input>
+          <ion-input type="text" maxlength="50" formControlName="opinarModel" (ionInput)="utils.capitalize($event)" placeholder="Ex: Gol"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formModelNotFound.controls.opinarModel.touched">
           <span *ngIf="formModelNotFound.controls.opinarModel.errors?.required">Necessário preencher o modelo do carro!</span>

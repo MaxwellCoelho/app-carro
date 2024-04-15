@@ -8,6 +8,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 import { FUEL, GEARBOX } from 'src/app/helpers/forms.helper';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-car-version',
@@ -32,7 +33,8 @@ export class CarVersionPage implements OnInit {
     public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public utils: UtilsService
   ) { }
 
   ngOnInit() {
@@ -44,7 +46,6 @@ export class CarVersionPage implements OnInit {
   public initForm() {
     this.formVersions = this.fb.group({
       editVersionId: this.fb.control(''),
-      newVersionName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
       newVersionModel: this.fb.control('', [Validators.required]),
       newVersionImage: this.fb.control('', [Validators.required, Validators.minLength(3)]),
       newVersionThumb: this.fb.control('', [Validators.required, Validators.minLength(3)]),
@@ -93,7 +94,6 @@ export class CarVersionPage implements OnInit {
     formattedYears.forEach(y =>  finalYears.push(parseInt(y, 10)));
 
     const data = {
-      name: this.formVersions.value.newVersionName,
       model: this.formVersions.value.newVersionModel,
       image: this.formVersions.value.newVersionImage,
       thumb: this.formVersions.value.newVersionThumb,
@@ -113,6 +113,7 @@ export class CarVersionPage implements OnInit {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
         this.formVersions.reset();
         this.versions = res.versions;
+        this.utils.setShouldUpdate(['versions'], true);
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
@@ -129,12 +130,11 @@ export class CarVersionPage implements OnInit {
     this.formVersions.reset({
       editVersionId: version['_id'],
       newVersionModel: version.model['_id'],
-      newVersionName: version.name,
       newVersionImage: version.image,
       newVersionThumb: version.thumb,
       newVersionFuel: version.fuel,
       newVersionYearModel: version.years,
-      newVersionEngine: version.engine,
+      newVersionEngine: version.engine.toFixed(1),
       newVersionGearbox: version.gearbox,
       newVersionComplement: version.complement,
     });
@@ -162,7 +162,7 @@ export class CarVersionPage implements OnInit {
 
   public showConfirmAlert(action: string, version: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${version.newVersionName || version.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${version.editVersionId || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
@@ -251,10 +251,5 @@ export class CarVersionPage implements OnInit {
     }).then(toast => {
       toast.present();
     });
-  }
-
-  public onlyNumbers($event): void {
-    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
-    $event.srcElement.value = onlyNumbers;
   }
 }

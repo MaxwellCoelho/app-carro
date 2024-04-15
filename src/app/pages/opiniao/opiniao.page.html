@@ -137,7 +137,7 @@
 
         <ion-title size="large" color="dark" class="car-info">
           <ion-icon [name]="'car'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">{{modelOpinions.model.brand.name}} {{modelOpinions.model.name}} {{opinion.version?.engine}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br></ion-label>
+          <ion-label class="ion-text-wrap">{{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br></ion-label>
 
           <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
           <ion-label class="ion-text-wrap">Comprou em {{opinion.year_bought}} - Dono há {{opinion.kept_period}} anos<br></ion-label>

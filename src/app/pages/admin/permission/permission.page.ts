@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-permission',
@@ -27,7 +28,8 @@ export class PermissionPage implements OnInit {
     public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public utils: UtilsService,
   ) { }
 
   ngOnInit() {
@@ -41,11 +43,6 @@ export class PermissionPage implements OnInit {
       newRoleName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
       newRoleLevel: this.fb.control('', [Validators.required])
     });
-  }
-
-  public onlyNumbers($event): void {
-    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
-    $event.srcElement.value = onlyNumbers;
   }
 
   public getRoles(): void {

@@ -7,7 +7,7 @@ import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router, Event, NavigationEnd } from '@angular/router';
 
@@ -16,7 +16,7 @@ import { Router, Event, NavigationEnd } from '@angular/router';
   templateUrl: 'opinar.page.html',
   styleUrls: ['opinar.page.scss'],
 })
-export class OpinarPage implements OnInit {
+export class OpinarPage implements OnInit, ViewWillEnter {
 
   @ViewChild('IonContent') content;
 
@@ -44,7 +44,19 @@ export class OpinarPage implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.utils.getShouldUpdate('versions')) {
     this.loadModelInfo();
+    }
+  }
+
+  public ionViewWillEnter(): void {
+    if (this.utils.getShouldUpdate('versions')) {
+      this.utils.setShouldUpdate(['versions'], false);
+      this.selectedModel = null;
+      this.searchService.saveModel(this.selectedModel);
+      this.years = [];
+      this.loadModelInfo();
+    }
   }
 
   public loadModelInfo(): void {
@@ -211,6 +223,7 @@ export class OpinarPage implements OnInit {
         res => {
           if (!subVersion.closed) { subVersion.unsubscribe(); }
           this.finalPayload['aboutCar']['carVersion'] = res['saved']['_id'];
+          this.utils.setShouldUpdate(['versions'], true);
           this.showLoader = false;
           this.sendFinalPayload();
         },

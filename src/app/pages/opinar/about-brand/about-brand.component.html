@@ -33,7 +33,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Título da sua avaliação</ion-label>
-          <ion-input type="text" minlength="4" maxlength="80" formControlName="opinarTitulo"
+          <ion-input type="text" minlength="4" maxlength="80" formControlName="opinarTitulo" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: Melhor carro da categoria"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarMarca.controls.opinarTitulo.touched">
@@ -47,7 +47,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Descreva os pontos positivos</ion-label>
-          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosPositivos" rows="3"
+          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosPositivos" rows="3" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: O carro é confortável, consome pouco combustível na cidade, o porta-malas é espaçoso"></ion-textarea>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarMarca.controls.opinarPontosPositivos.touched">
@@ -61,7 +61,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Descreva os pontos negativos</ion-label>
-          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosNegativos" rows="3"
+          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosNegativos" rows="3" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: A suspenão é dura, consome muito na cidade, pouco espaço interno"></ion-textarea>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarMarca.controls.opinarPontosNegativos.touched">

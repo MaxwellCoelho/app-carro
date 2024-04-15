@@ -29,7 +29,7 @@
             <ion-col size-md="9" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Título da avaliação da marca</ion-label>
-                <ion-input type="text" minlength="4" maxlength="80" formControlName="newOpinionBrandTitle"></ion-input>
+                <ion-input type="text" minlength="4" maxlength="80" (ionInput)="utils.capitalize($event)" formControlName="newOpinionBrandTitle"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -45,13 +45,13 @@
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Pontos positivos da marca</ion-label>
-                <ion-textarea minlength="4" maxlength="300" rows="3" formControlName="newOpinionBrandPositive"></ion-textarea>
+                <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionBrandPositive"></ion-textarea>
               </ion-item>
             </ion-col>
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Pontos negativos da marca</ion-label>
-                <ion-textarea minlength="4" maxlength="300" rows="3" formControlName="newOpinionBrandNegative"></ion-textarea>
+                <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionBrandNegative"></ion-textarea>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -60,7 +60,7 @@
             <ion-col size-md="12" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Título da avaliação do carro</ion-label>
-                <ion-input type="text" minlength="4" maxlength="80" formControlName="newOpinionCarTitle"></ion-input>
+                <ion-input type="text" minlength="4" maxlength="80" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarTitle"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -69,13 +69,13 @@
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Pontos positivos do carro</ion-label>
-                <ion-textarea minlength="4" maxlength="300" rows="3" formControlName="newOpinionCarPositive"></ion-textarea>
+                <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarPositive"></ion-textarea>
               </ion-item>
             </ion-col>
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Pontos negativos do carro</ion-label>
-                <ion-textarea minlength="4" maxlength="300" rows="3" formControlName="newOpinionCarNegative"></ion-textarea>
+                <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarNegative"></ion-textarea>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -132,6 +132,7 @@
               <th>Id</th>
               <th>Modelo</th>
               <th>Versão</th>
+              <th>Ano modelo</th>
               <th>Ano compra</th>
               <th>Km compra</th>
               <th>Permanência</th>
@@ -151,8 +152,9 @@
                 <ion-icon *ngIf="!opinion.active" size="large" color="danger" name="close-circle"></ion-icon>
               </td>
               <td>{{opinion._id}}</td>
-              <td>{{opinion.model?.brand.name}} {{opinion.model?.name}}</td>
-              <td>{{opinion.version?.name || '-'}}</td>
+              <td>{{opinion.model?.brand?.name}} {{opinion.model?.name}}</td>
+              <td>{{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}}</td>
+              <td>{{opinion.year_model}}</td>
               <td>{{opinion.year_bought}}</td>
               <td>{{opinion.km_bought}} 000 Km</td>
               <td>{{opinion.kept_period}} anos</td>

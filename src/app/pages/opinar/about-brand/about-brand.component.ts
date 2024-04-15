@@ -2,6 +2,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VALUATION, VALUATION_ITENS_BRAND } from 'src/app/helpers/valuation.helper';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-about-brand',
@@ -25,6 +26,7 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
   constructor(
     public fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
+    public utils: UtilsService,
   ) { }
 
   ngOnInit() {

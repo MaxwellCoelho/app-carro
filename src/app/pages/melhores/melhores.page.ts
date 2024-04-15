@@ -30,7 +30,9 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   ) {}
 
   public ngOnInit(): void {
-    this.getBestModels();
+    if (!this.utils.getShouldUpdate('bests')) {
+      this.getBestModels();
+    }
   }
 
   public ionViewWillEnter(): void {
