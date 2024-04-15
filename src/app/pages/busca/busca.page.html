@@ -12,7 +12,7 @@
 
       <ion-list *ngIf="!selectedBrand">
         <ion-item *ngIf="!filteredBrands?.length && !showLoader" lines="none">
-          <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
+          <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">A marca que você procura ainda não existe em nossa base.</ion-label>
         </ion-item>
@@ -20,7 +20,7 @@
         <ion-item *ngFor="let brand of filteredBrands" (click)="selectBrand(brand)" class="item-button" button>
           <img src="assets/brands/{{brand.image}}" title="{{brand.name}}" alt="{{brand.name}}"
             onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image">
-          <ion-label>{{brand.name}}</ion-label>
+          <ion-label class="label-name">{{brand.name}}</ion-label>
         </ion-item>
       </ion-list>
 
@@ -41,7 +41,7 @@
 
       <ion-list *ngIf="selectedBrand">
         <ion-item *ngIf="!filteredModels?.length && !showLoader" lines="none">
-          <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
+          <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">O modelo que você procura ainda não existe em nossa base.</ion-label>
         </ion-item>
@@ -49,7 +49,7 @@
         <ion-item *ngFor="let model of filteredModels" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand.url, model.url)" button>
           <img [id]="'item-img-'+model.name" src="assets/models/{{model.thumb}}" title="{{model.name}}" alt="{{model.name}}"
             onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
-          <ion-label [id]="'item-label-'+model.name">{{model.name}}</ion-label>
+          <ion-label [id]="'item-label-'+model.name" class="label-name">{{model.name}}</ion-label>
           <ion-chip outline slot="end" [id]="'bt-'+model.name" title="Opniar sobre esse modelo" color="primary">
             <ion-icon [id]="'bt-'+model.name+'-icon'" [name]="'clipboard-outline'"></ion-icon>
             <ion-label [id]="'bt-'+model.name+'-label'">Opinar</ion-label>
