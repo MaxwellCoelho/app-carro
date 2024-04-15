@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-opinar-send',
@@ -16,6 +17,7 @@ export class OpinarSendComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
+    public utils: UtilsService,
   ) { }
 
   ngOnInit() {

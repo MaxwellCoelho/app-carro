@@ -149,11 +149,6 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public onlyNumbers($event): void {
-    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
-    $event.srcElement.value = onlyNumbers;
-  }
-
   public segmentChanged($event) {
     this.valuationItens.find(item => {
         if (item.value === $event.target.id) {

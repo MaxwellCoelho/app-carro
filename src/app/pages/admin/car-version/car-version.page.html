@@ -48,7 +48,7 @@
               <ion-item class="input-item">
                 <ion-label position="floating">Anos modelo</ion-label>
                 <ion-input type="text" formControlName="newVersionYearModel"
-                  placeholder="Ex: 2015"></ion-input>
+                  placeholder="Ex: 2015,2016,2017"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -74,7 +74,7 @@
             <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item class="input-item">
                 <ion-label position="floating">Detalhes da versão</ion-label>
-                <ion-input type="text" formControlName="newVersionComplement" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
+                <ion-input type="text" formControlName="newVersionComplement" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -160,7 +160,6 @@
               <th>Revisão</th>
               <th>Id</th>
               <th>Modelo</th>
-              <th>Nome</th>
               <th>Motor</th>
               <th>Complemento</th>
               <th>Câmbio</th>
@@ -186,8 +185,7 @@
               </td>
               <td>{{version._id}}</td>
               <td>{{version.model?.brand?.name}} {{version.model?.name}}</td>
-              <td>{{version.name}}</td>
-              <td>{{version.engine}}</td>
+              <td>{{version.engine?.toFixed(1)}}</td>
               <td>{{version.complement}}</td>
               <td>{{version.gearbox}}</td>
               <td>{{version.fuel}}</td>

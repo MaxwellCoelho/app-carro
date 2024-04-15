@@ -7,6 +7,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-customer',
@@ -29,7 +30,8 @@ export class CustomerPage implements OnInit {
     public cryptoService: CryptoService,
     public fb: FormBuilder,
     public alertController: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public utils: UtilsService,
   ) { }
 
   ngOnInit() {

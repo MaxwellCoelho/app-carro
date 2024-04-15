@@ -13,7 +13,7 @@
           <ion-label position="floating">Versão</ion-label>
           <ion-select interface="popover" formControlName="opinarVersao" (ionChange)="chooseVersion()">
             <ion-select-option *ngFor="let version of carVersions" value="{{version._id}}">
-              {{version.engine}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
+              {{version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
             </ion-select-option>
             <ion-select-option value="anotherVersion">Outra versão</ion-select-option>
           </ion-select>
@@ -36,7 +36,7 @@
         *ngIf="formOpinarCarro.controls.opinarVersao.value !== 'anotherVersion' && newYear">
         <ion-item class="input-item">
           <ion-label position="floating">Ano modelo</ion-label>
-          <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
+          <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
             placeholder="Ex: 2015"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoModelo?.touched">
@@ -57,7 +57,7 @@
       <ion-col size-lg="2" size-md="3" size-sm="12" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Ano modelo</ion-label>
-          <ion-input type="tel" (ionInput)="onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
+          <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" minlength="4" maxlength="4" formControlName="opinarAnoModelo"
             placeholder="Ex: 2015"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoModelo.touched">
@@ -99,7 +99,7 @@
       <ion-col size-lg="9" size-md="9" size-sm="6" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Detalhes da versão</ion-label>
-          <ion-input type="text" formControlName="opinarComplemento" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
+          <ion-input type="text" formControlName="opinarComplemento" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -108,7 +108,7 @@
       <ion-col size-lg="3" size-md="3" size-sm="4" size-xs="12">
         <ion-item class="input-item">
           <ion-label position="floating">Ano da compra</ion-label>
-          <ion-input type="tel" (ionInput)="onlyNumbers($event)" (ionChange)="resetOpinaPeriodo()" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"
+          <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" (ionChange)="resetOpinaPeriodo()" minlength="4" maxlength="4" max="newerYear" formControlName="opinarAnoCompra"
             placeholder="Ex: 2017"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarAnoCompra.touched">
@@ -173,7 +173,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Título da sua avaliação</ion-label>
-          <ion-input type="text" minlength="4" maxlength="80" formControlName="opinarTitulo"
+          <ion-input type="text" minlength="4" maxlength="80" formControlName="opinarTitulo" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: Melhor carro da categoria"></ion-input>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarTitulo.touched">
@@ -187,7 +187,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Descreva os pontos positivos</ion-label>
-          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosPositivos" rows="3"
+          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosPositivos" rows="3" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: O carro é confortável, consome pouco combustível na cidade, o porta-malas é espaçoso"></ion-textarea>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarPontosPositivos.touched">
@@ -201,7 +201,7 @@
       <ion-col>
         <ion-item class="input-item">
           <ion-label position="floating">Descreva os pontos negativos</ion-label>
-          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosNegativos" rows="3"
+          <ion-textarea minlength="4" maxlength="300" formControlName="opinarPontosNegativos" rows="3" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: A suspenão é dura, consome muito na cidade, pouco espaço interno"></ion-textarea>
         </ion-item>
         <ion-note color="danger" *ngIf="formOpinarCarro.controls.opinarPontosNegativos.touched">

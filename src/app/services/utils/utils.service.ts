@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
-export type UpdateTypes = 'opinions' | 'bests';
+export type UpdateTypes = 'opinions' | 'bests' | 'versions';
 
 @Injectable({
   providedIn: 'root'
@@ -135,5 +135,15 @@ export class UtilsService {
     const encoded = this.localStorageGetItem(itemName);
     const recovered = encoded ? this.cryptoService.decodeJwt(encoded) : [];
     return recovered;
+  }
+
+  public onlyNumbers($event): void {
+    const onlyNumbers = $event.srcElement.value.replace(/\D/g, '');
+    $event.srcElement.value = onlyNumbers;
+  }
+
+  public capitalize($event): void {
+    const capitalized = $event.srcElement.value.replace(/^./, $event.srcElement.value[0].toUpperCase());
+    $event.srcElement.value = capitalized;
   }
 }

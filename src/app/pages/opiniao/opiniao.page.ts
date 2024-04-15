@@ -50,6 +50,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     if (this.utils.getShouldUpdate('opinions')) {
       this.utils.setShouldUpdate(['opinions'], false);
       this.selectedModel = null;
+      this.searchService.saveModel(this.selectedModel);
       this.modelOpinions = null;
       this.modelAverage = null;
       this.valuationItens = [];
