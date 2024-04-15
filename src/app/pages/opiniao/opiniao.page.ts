@@ -161,9 +161,9 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public getValuationItemByValue(value: any): any {
-    const int = value ? parseInt(value, 10) : 0;
-    const foundVal = this.valuation.find(val => int === val.value);
-    return foundVal || VALUATION_NOT_FOUND;
+    const int = value ? value.toFixed(1) : 0;
+    const foundVal = this.valuation.filter(val => val.value <= int);
+    return foundVal.length ? foundVal[foundVal.length - 1] : VALUATION_NOT_FOUND;
   }
 
   public getUrlParams(): object {
