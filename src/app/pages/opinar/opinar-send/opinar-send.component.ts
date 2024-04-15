@@ -14,6 +14,7 @@ export class OpinarSendComponent implements OnInit {
   @Output() clickForeward = new EventEmitter<any>();
 
   public formOpinarSend: FormGroup;
+  public sessionUser = this.utils.sessionUser;
 
   constructor(
     public fb: FormBuilder,
@@ -21,7 +22,11 @@ export class OpinarSendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.initForm();
+    if (this.sessionUser) {
+      this.saveFormOpinarSend(true);
+    } else {
+      this.initForm();
+    }
   }
 
   public initForm() {
@@ -35,10 +40,10 @@ export class OpinarSendComponent implements OnInit {
     this.clickForeward.emit();
   }
 
-  public saveFormOpinarSend() {
+  public saveFormOpinarSend(logged?: boolean) {
     const userInfoData = {
-      name: this.formOpinarSend.value.opinarNome,
-      email: this.formOpinarSend.value.opinarEmail
+      name: logged ? this.sessionUser.name : this.formOpinarSend.value.opinarNome,
+      email: logged ? this.sessionUser.email : this.formOpinarSend.value.opinarEmail
     };
 
     this.stepSend.emit(userInfoData);
