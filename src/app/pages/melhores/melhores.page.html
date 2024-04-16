@@ -18,10 +18,10 @@
         <ion-item *ngFor="let model of bestModels; let i = index" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand?.url, model?.url)" button>
           <ion-grid>
             <ion-row>
-              <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5">
+              <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5" class="model-position">
                 <div class="position">{{i + 1}}</div>
               </ion-col>
-              <ion-col size-lg="11" size-md="10" size-sm="10" size-xs="9">
+              <ion-col size-lg="11" size-md="10" size-sm="10" size-xs="9" class="model-name">
                 {{model.brand?.name}} <strong>{{model.name}}</strong>
               </ion-col>
               <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5">
@@ -52,7 +52,7 @@
                     </div>
                   </ion-col>
                 </ion-row>
-                <ion-row>
+                <ion-row class="car-info">
                   <ion-col size-lg="4.5" size-md="5" size-sm="4.5" size-xs="12">
                     <ion-label [id]="'item-label-average-'+model.brand?.name+model.name">
                       <ion-icon name="ribbon" color="dark"></ion-icon>

@@ -2,6 +2,31 @@
   max-width: 100px;
 }
 
+.model-name {
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+
+  strong {
+    margin-left: 5px;
+  }
+}
+
+.model-position {
+  display: grid;
+  align-items: center;
+  padding-top: 0;
+}
+
+.car-info ion-label {
+  display: flex;
+  align-items: center;
+
+  ion-icon {
+    margin-right: 0.3rem;
+  }
+}
+
 .brand-image-title {
   text-align: right;
 }
@@ -11,7 +36,7 @@
   --inner-padding-end: 0;
 
   ion-grid {
-    margin: 1rem 0;
+    margin: 0 0 .5rem 0;
   }
 
   .position {
@@ -89,6 +114,10 @@
     &.l {
       .val-bar .box5.l {
         box-shadow: 5px 0px 0px 0px rgba(var(--ion-color-primary-rgb), 0.4);
+
+        @media (max-width: 576px) {
+          box-shadow: 3px 0px 0px 0px rgba(var(--ion-color-primary-rgb), 0.4);
+        }
       }
 
       .val-bar div:not(.box5.r) {
@@ -112,6 +141,10 @@
     &.l {
       .val-bar .box4.l {
         box-shadow: 5px 0px 0px 0px rgba(var(--ion-color-success-rgb), 0.4);
+
+        @media (max-width: 576px) {
+          box-shadow: 3px 0px 0px 0px rgba(var(--ion-color-success-rgb), 0.4);
+        }
       }
 
       .val-bar div:not(.box5, .box4.r) {
@@ -134,6 +167,10 @@
     &.l {
       .val-bar .box3.l {
         box-shadow: 5px 0px 0px 0px rgba(var(--ion-color-secondary-rgb), 0.4);
+
+        @media (max-width: 576px) {
+          box-shadow: 3px 0px 0px 0px rgba(var(--ion-color-secondary-rgb), 0.4);
+        }
       }
 
       .val-bar div:not(.box5, .box4, .box3.r) {
@@ -156,6 +193,10 @@
     &.l {
       .val-bar .box2.l {
         box-shadow: 5px 0px 0px 0px rgba(var(--ion-color-danger-rgb), 0.4);
+
+        @media (max-width: 576px) {
+          box-shadow: 3px 0px 0px 0px rgba(var(--ion-color-danger-rgb), 0.4);
+        }
       }
 
       .val-bar div:not(.box5, .box4, .box3, .box2.r) {
@@ -178,6 +219,10 @@
     &.l {
       .val-bar .box1.l {
         box-shadow: 5px 0px 0px 0px rgba(var(--ion-color-danger-secondary-rgb), 0.4);
+
+        @media (max-width: 576px) {
+          box-shadow: 3px 0px 0px 0px rgba(var(--ion-color-danger-secondary-rgb), 0.4);
+        }
       }
 
       .val-bar div:not(.box5, .box4, .box3, .box2, .box1.r) {

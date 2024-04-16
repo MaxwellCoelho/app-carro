@@ -31,7 +31,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
 
-  public valuation = VALUATION.slice();
+  public valuation = VALUATION.slice().filter(val => val.id.includes(' r'));
   public valuationItens = VALUATION_ITENS_CAR.slice();
 
   public opinarKmCompra: string;

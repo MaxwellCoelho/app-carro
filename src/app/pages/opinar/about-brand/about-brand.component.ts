@@ -20,7 +20,7 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
 
   public hasAllValuations = false;
 
-  public valuation = VALUATION.slice();
+  public valuation = VALUATION.slice().filter(val => val.id.includes(' r'));
   public valuationItens = VALUATION_ITENS_BRAND.slice();
 
   constructor(
