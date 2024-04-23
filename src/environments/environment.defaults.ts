@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  middlewareEndpoint: 'http://localhost:3001/api',
+  middlewareEndpoint: 'http://localhost:3001',
   rolesAction: 'roles',
   customersAction: 'customers',
   categoriesAction: 'cars/categories',
