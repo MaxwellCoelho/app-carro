@@ -78,7 +78,7 @@
     .car-info, .positive-points, .negative-points, .details-button {
       ion-icon {
         vertical-align: middle;
-        margin-right: 0.2rem;
+        margin-right: 0.3rem;
       }
     }
 
@@ -133,22 +133,17 @@
 
       ion-label {
         font-size: medium;
-
-        @media (max-width: 1170px) {
-          position: relative;
-          display: block;
-          padding-left: 1.7rem;
-          margin-top: -1.3rem;
-          margin-bottom: .3rem;
-          line-height: 1.2;
-        }
+        display: flex;
+        align-items: center;
+        line-height: 1.0;
+        margin: 5px 0;
       }
 
       @media (min-width: 1170px) {
         ion-label {
           display: inline-flex;
           padding-right: 1rem;
-          margin-right: 1rem;
+          margin-right: 0.8rem;
           border-right: 1px solid rgba(var(--ion-color-medium-rgb), 0.3);
         }
 

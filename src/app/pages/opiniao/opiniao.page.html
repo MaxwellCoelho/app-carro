@@ -153,14 +153,20 @@
         </ion-row>
 
         <ion-title size="large" color="dark" class="car-info">
-          <ion-icon [name]="'car'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">{{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br></ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-icon [name]="'car'" color="dark"></ion-icon>
+            {{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br>
+          </ion-label>
 
-          <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">Comprou em {{opinion.year_bought}} - Dono há {{opinion.kept_period}} anos<br></ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
+            Comprou em {{opinion.year_bought}} - Dono há {{opinion.kept_period}} anos<br>
+          </ion-label>
 
-          <ion-icon [name]="'speedometer'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">Comprou com {{opinion.km_bought === 99 ? '+' : ''}}{{opinion.km_bought}}.000 Km rodados</ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-icon [name]="'speedometer'" color="dark"></ion-icon>
+            Comprou com {{opinion.km_bought === 99 ? '+' : ''}}{{opinion.km_bought}}.000 Km rodados
+          </ion-label>
         </ion-title>
 
         <ion-row class="opinion-title" [ngClass]="opinion.average.id">
