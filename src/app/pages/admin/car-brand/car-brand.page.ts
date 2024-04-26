@@ -41,8 +41,7 @@ export class CarBrandPage implements OnInit {
   public initForm() {
     this.formBrands = this.fb.group({
       editBrandId: this.fb.control(''),
-      newBrandName: this.fb.control('', [Validators.required, Validators.minLength(3)]),
-      newBrandImage: this.fb.control('', [Validators.required, Validators.minLength(3)])
+      newBrandName: this.fb.control('', [Validators.required, Validators.minLength(3)])
     });
   }
 
@@ -65,7 +64,6 @@ export class CarBrandPage implements OnInit {
     const brandId = this.formBrands.value.editBrandId;
     const data = {
       name: this.formBrands.value.newBrandName,
-      image: this.formBrands.value.newBrandImage,
       active: this.activeChecked,
       review: this.pendingReview
     };
@@ -92,8 +90,7 @@ export class CarBrandPage implements OnInit {
   public editBrand(brand) {
     this.formBrands.reset({
       editBrandId: brand['_id'],
-      newBrandName: brand.name,
-      newBrandImage: brand.image
+      newBrandName: brand.name
     });
 
     this.activeChecked = brand.active;

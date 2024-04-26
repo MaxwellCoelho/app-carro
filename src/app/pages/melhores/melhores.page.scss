@@ -1,5 +1,11 @@
 .model-image {
-  max-width: 100px;
+  width: 100px;
+  height: 55px;
+}
+
+.warning {
+  max-width: 60px;
+  margin: 0.5rem 1rem 0.5rem 0;
 }
 
 .model-name {

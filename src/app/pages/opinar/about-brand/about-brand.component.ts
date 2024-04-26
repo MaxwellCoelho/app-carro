@@ -89,6 +89,10 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
     this.aboutBrand.emit(aboutBrandData);
   }
 
+  public skipFormOpinarMarca() {
+    this.aboutBrand.emit(null);
+  }
+
   public autoFillInfo() {
     if (this.autoFill) {
 

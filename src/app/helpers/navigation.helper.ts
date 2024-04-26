@@ -16,5 +16,7 @@ export const NAVIGATION = {
   carcategories: { title: 'Categorias', icon: 'shapes', route: 'carro-categoria' },
   carbrands: { title: 'Marcas', icon: 'pricetag', route: 'carro-marca' },
   carmodels: { title: 'Modelos', icon: 'car', route: 'carro-modelo' },
-  carversions: { title: 'Versões', icon: 'git-network', route: 'carro-versao' }
+  carversions: { title: 'Versões', icon: 'git-network', route: 'carro-versao' },
+  caropinions: { title: 'Opiniões de Carros', icon: 'reader', route: 'carro-opinioes' },
+  brandopinions: { title: 'Opiniões de Marcas', icon: 'reader', route: 'marca-opinioes' }
 };

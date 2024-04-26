@@ -26,16 +26,10 @@
         <form name="brands" [formGroup]="formBrands" (submit)="showConfirmAlert(formBrands.value.editBrandId ? 'editar' : 'criar', formBrands.value)">
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formBrands.value.editBrandId }">
             <ion-input type="hidden" formControlName="editBrandId"></ion-input>
-            <ion-col size-md="4" size-sm="12" size-xs="12">
+            <ion-col size-md="8" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Nome</ion-label>
                 <ion-input type="text" maxlength="50" formControlName="newBrandName" (ionInput)="utils.capitalize($event)"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size-md="4" size-sm="12" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Imagem</ion-label>
-                <ion-input type="text" formControlName="newBrandImage"></ion-input>
               </ion-item>
             </ion-col>
             <ion-col size-md="2" size-sm="12" size-xs="12">
@@ -104,7 +98,6 @@
               <th>Revisão</th>
               <th>Id</th>
               <th>Nome</th>
-              <th>Imagem</th>
               <th>URL</th>
               <th>Média</th>
               <th>Qtd opiniões</th>
@@ -126,7 +119,6 @@
               </td>
               <td>{{brand._id}}</td>
               <td>{{brand.name}}</td>
-              <td>{{brand.image}}</td>
               <td>{{brand.url}}</td>
               <td>{{brand.average}}</td>
               <td>{{brand.val_length}}</td>

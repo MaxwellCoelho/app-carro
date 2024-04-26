@@ -10,7 +10,7 @@
     <div class="main-body">
       <ion-list>
         <ion-item *ngIf="!bestModels?.length && !showLoader" lines="none">
-          <ion-icon name="alert-circle" color="medium" size="large" class="brand-image"></ion-icon>
+          <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">Não encontramos nada no momento. Volte mais tarde!</ion-label>
         </ion-item>
@@ -25,14 +25,14 @@
                 {{model.brand?.name}} <strong>{{model.name}}</strong>
               </ion-col>
               <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5">
-                <img src="assets/brands/{{model.brand?.image}}" title="{{model.brand?.name}}" alt="{{model.brand?.name}}"
+                <img src="assets/brands/{{model.brand?.url}}.svg" title="{{model.brand?.name}}" alt="{{model.brand?.name}}"
                   onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
               </ion-col>
             </ion-row>
 
             <ion-row>
               <ion-col size-lg="7" size-md="5.5" size-sm="4.25" size-xs="6">
-                <img [id]="'item-img-'+model.name" src="assets/models/{{model.thumb}}" title="{{model.name}}" alt="{{model.name}}"
+                <img [id]="'item-img-'+model.name" src="assets/models/{{model.brand?.url}}/{{model.url}}/{{model.url}}-thumb.png" title="{{model.name}}" alt="{{model.name}}"
                   onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
                </ion-col>
               <ion-col size-lg="5" size-md="6.5" size-sm="7.75" size-xs="6" class="car-data">

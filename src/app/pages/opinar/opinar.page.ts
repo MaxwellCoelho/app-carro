@@ -154,9 +154,11 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     this.content.scrollToTop(700);
   }
 
-  public setAboutBrandPayload($event) {
-    this.finalPayload['aboutBrand'] = $event;
-    this.saveFinalPayload();
+  public setAboutBrandPayload($event?) {
+    if ($event) {
+      this.finalPayload['aboutBrand'] = $event;
+      this.saveFinalPayload();
+    }
     this.currentStep = 3;
     this.content.scrollToTop(700);
   }
@@ -184,33 +186,57 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   public sendFinalPayload() {
     this.showLoader = true;
 
-    const aboutCar = this.finalPayload['aboutCar'];
+    const sendCarOpinion = () => {
+      const aboutCar = this.finalPayload['aboutCar'];
+      this.finalPayload['aboutCar'] = {
+        carVersion : aboutCar['carVersion'],
+        carModel : aboutCar['carModel'],
+        yearModel : aboutCar['yearModel'],
+        yearBought : aboutCar['yearBought'],
+        kmBought : aboutCar['kmBought'],
+        keptPeriod : aboutCar['keptPeriod'],
+        finalWords : aboutCar['finalWords'],
+        valuation : aboutCar['valuation'],
+      };
 
-    this.finalPayload['aboutCar'] = {
-      carVersion : aboutCar['carVersion'],
-      carModel : aboutCar['carModel'],
-      yearModel : aboutCar['yearModel'],
-      yearBought : aboutCar['yearBought'],
-      kmBought : aboutCar['kmBought'],
-      keptPeriod : aboutCar['keptPeriod'],
-      finalWords : aboutCar['finalWords'],
-      valuation : aboutCar['valuation'],
+      const jwtData = { data: this.cryptoService.encondeJwt(this.finalPayload)};
+      const subOpinion = this.dbService.createItem(environment.opinionModelAction, jwtData).subscribe(
+        res => {
+          if (!subOpinion.closed) { subOpinion.unsubscribe(); }
+          this.currentStep = 4;
+          this.content.scrollToTop(700);
+          this.utils.setShouldUpdate(['opinions', 'bests'], true);
+          this.showLoader = false;
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
     };
 
-    const jwtData = { data: this.cryptoService.encondeJwt(this.finalPayload)};
+    if (this.finalPayload['aboutBrand']) {
+      const finalPayloadBrand = {
+        aboutBrand: this.finalPayload['aboutBrand'],
+        userInfo: this.finalPayload['userInfo'],
+        active: this.finalPayload['active']
+      };
 
-    const subOpinion = this.dbService.createItem(environment.opinionAction, jwtData).subscribe(
-      res => {
-        if (!subOpinion.closed) { subOpinion.unsubscribe(); }
-        this.currentStep = 4;
-        this.content.scrollToTop(700);
-        this.utils.setShouldUpdate(['opinions', 'bests'], true);
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+      const jwtBrandData = { data: this.cryptoService.encondeJwt(finalPayloadBrand)};
+      const subBrandOpinion = this.dbService.createItem(environment.opinionBrandAction, jwtBrandData).subscribe(
+        res => {
+          if (!subBrandOpinion.closed) { subBrandOpinion.unsubscribe(); }
+          sendCarOpinion();
+        },
+        err => {
+          if (!subBrandOpinion.closed) { subBrandOpinion.unsubscribe(); }
+          sendCarOpinion();
+        }
+      );
+
+      delete this.finalPayload['aboutBrand'];
+    } else {
+      sendCarOpinion();
+    }
   }
 
   public checkAboutCarPayload(): void {

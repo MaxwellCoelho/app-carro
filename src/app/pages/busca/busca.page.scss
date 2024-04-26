@@ -1,5 +1,6 @@
 .brand-image {
-  max-width: 60px;
+  width: 60px;
+  height: 60px;
   margin: 0.5rem 1.5rem 0.5rem 0.5rem;
 }
 
@@ -13,7 +14,8 @@
 }
 
 .model-image {
-  max-width: 100px;
+  width: 100px;
+  height: 55px;
   margin: 0.5rem 1.5rem 0.5rem 0;
 }
 
@@ -59,7 +61,8 @@ ion-item.item-button::part(native) {
 
 @media (max-width: 410px) {
   .model-image {
-    max-width: 80px;
+    width: 80px;
+    height: 44px;
     margin-right: 1rem;
   }
 

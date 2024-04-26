@@ -11,7 +11,7 @@
       <ion-grid slot="content" class="selected-model-grid">
         <ion-row>
           <ion-col size-lg="1.5" size-md="2" size-sm="2.7" size-xs="12" class="model-logo">
-            <img src="assets/brands/{{selectedModel.brand.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+            <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
               onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </ion-col>
           <ion-col size-lg="9" size-md="8" size-sm="6.7" size-xs="12" class="model-name">
@@ -27,8 +27,8 @@
       </ion-grid>
 
       <ion-item lines="none">
-        <img src="assets/models/{{selectedModel.image}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+        <img src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.url}}.png" title="{{selectedModel.brand.name}} {{selectedModel.name}}"
+          alt="{{selectedModel.brand.name}} {{selectedModel.name}}" onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
 
       <ion-grid slot="content" class="selected-model-grid">
@@ -119,11 +119,11 @@
 
       <ion-grid slot="content" class="selected-model-grid opinion" *ngFor="let opinion of modelOpinions.opinions" id="{{opinion._id}}" [ngClass]="opinion.average.id">
         <ion-row class="customer-info">
-          <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5">
-            <ion-icon name="person-circle-outline" color="dark" style="font-size: 55px"></ion-icon>
+          <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar">
+            <ion-icon name="person-circle-outline" color="dark"></ion-icon>
           </ion-col>
 
-          <ion-col size-lg="7.2" size-md="7" size-sm="5.5" size-xs="9.5">
+          <ion-col size-lg="7.2" size-md="7" size-sm="5.5" size-xs="9.5" class="customer-name">
             <ion-label color="dark" class="item-title"><h1>{{opinion.customer?.name}}</h1></ion-label>
             <ion-label class="ion-text-wrap">{{opinion.created}}</ion-label>
           </ion-col>
@@ -153,14 +153,21 @@
         </ion-row>
 
         <ion-title size="large" color="dark" class="car-info">
-          <ion-icon [name]="'car'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">{{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br></ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-icon [name]="'car'" color="dark"></ion-icon>
+            {{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br>
+          </ion-label>
 
-          <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">Comprou em {{opinion.year_bought}} - Dono há {{opinion.kept_period}} anos<br></ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
+            <span *ngIf="opinion.current_car">Comprou em {{opinion.year_bought}} - Carro atual<br></span>
+            <span *ngIf="!opinion.current_car">Comprou em {{opinion.year_bought}} - Ficou {{opinion.kept_period}} {{opinion.kept_period > 1 ? 'anos' : 'ano'}}<br></span>
+          </ion-label>
 
-          <ion-icon [name]="'speedometer'" color="dark"></ion-icon>
-          <ion-label class="ion-text-wrap">Comprou com {{opinion.km_bought === 99 ? '+' : ''}}{{opinion.km_bought}}.000 Km rodados</ion-label>
+          <ion-label class="ion-text-wrap">
+            <ion-icon [name]="'speedometer'" color="dark"></ion-icon>
+            Comprou {{opinion.km_bought === 0 ? '' : 'com'}} {{opinion.km_bought === 99 ? 'mais de' : ''}} {{ opinion.km_bought }}{{opinion.km_bought === 0 ? ' Km' : '.000 Km'}}
+          </ion-label>
         </ion-title>
 
         <ion-row class="opinion-title" [ngClass]="opinion.average.id">
