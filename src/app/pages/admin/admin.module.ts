@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { AdminPage } from './admin.page';
-import { OpinionPage } from './opinion/opinion.page';
+import { CarOpinionPage } from './car-opinion/car-opinion.page';
+import { BrandOpinionPage } from './brand-opinion/brand-opinion.page';
 import { PermissionPage } from './permission/permission.page';
 import { CustomerPage } from './customer/customer.page';
 import { CarCategoryPage } from './car-category/car-category.page';
@@ -28,7 +29,8 @@ import { AdminPageRoutingModule } from './admin-routing.module';
   ],
   declarations: [
     AdminPage,
-    OpinionPage,
+    CarOpinionPage,
+    BrandOpinionPage,
     PermissionPage,
     CustomerPage,
     CarCategoryPage,

@@ -10,8 +10,8 @@
         <ion-icon [name]="'chevron-forward'" size="small" color="medium"></ion-icon>
       </ion-label>
 
-      <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
-      <ion-label>Opiniões</ion-label>
+      <ion-icon [name]="nav.brandopinions.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.brandopinions.title}}</ion-label>
     </ion-title>
 
     <div class="main-body">
@@ -52,30 +52,6 @@
               <ion-item>
                 <ion-label position="floating">Pontos negativos da marca</ion-label>
                 <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionBrandNegative"></ion-textarea>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-
-          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
-            <ion-col size-md="12" size-sm="12" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Título da avaliação do carro</ion-label>
-                <ion-input type="text" minlength="4" maxlength="80" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarTitle"></ion-input>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-
-          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
-            <ion-col size-md="6" size-sm="12" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Pontos positivos do carro</ion-label>
-                <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarPositive"></ion-textarea>
-              </ion-item>
-            </ion-col>
-            <ion-col size-md="6" size-sm="12" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Pontos negativos do carro</ion-label>
-                <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarNegative"></ion-textarea>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -130,14 +106,8 @@
             <tr>
               <th>Ativo</th>
               <th>Id</th>
-              <th>Modelo</th>
-              <th>Versão</th>
-              <th>Ano modelo</th>
-              <th>Ano compra</th>
-              <th>Km compra</th>
-              <th>Permanência</th>
-              <th>Média Marca</th>
-              <th>Média Carro</th>
+              <th>Marca</th>
+              <th>Média</th>
               <th>Usuário</th>
               <th>Criado em</th>
               <th>Criado por</th>
@@ -152,14 +122,8 @@
                 <ion-icon *ngIf="!opinion.active" size="large" color="danger" name="close-circle"></ion-icon>
               </td>
               <td>{{opinion._id}}</td>
-              <td>{{opinion.model?.brand?.name}} {{opinion.model?.name}}</td>
-              <td>{{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}}</td>
-              <td>{{opinion.year_model}}</td>
-              <td>{{opinion.year_bought}}</td>
-              <td>{{opinion.km_bought}} 000 Km</td>
-              <td>{{opinion.kept_period}} anos</td>
+              <td>{{opinion.brand?.name}}</td>
               <td>{{opinion.brand_val_average}}</td>
-              <td>{{opinion.car_val_average}}</td>
               <td>{{opinion.customer?.name}}</td>
               <td>{{opinion.created || '-'}}</td>
               <td>{{(opinion.created_by?.name ? opinion.created_by.name  : opinion.created_by) || '-'}}</td>

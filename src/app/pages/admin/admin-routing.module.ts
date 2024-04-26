@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPage } from './admin.page';
-import { OpinionPage } from './opinion/opinion.page';
+import { CarOpinionPage } from './car-opinion/car-opinion.page';
+import { BrandOpinionPage } from './brand-opinion/brand-opinion.page';
 import { PermissionPage } from './permission/permission.page';
 import { CustomerPage } from './customer/customer.page';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -13,8 +14,13 @@ import { LoggedAdminGuard } from 'src/app/guard/logged-admin.guard';
 
 const routes: Routes = [
   {
-    path: 'opinioes',
-    component: OpinionPage,
+    path: NAVIGATION.caropinions.route,
+    component: CarOpinionPage,
+    canActivate: [LoggedAdminGuard]
+  },
+  {
+    path: NAVIGATION.brandopinions.route,
+    component: BrandOpinionPage,
     canActivate: [LoggedAdminGuard]
   },
   {

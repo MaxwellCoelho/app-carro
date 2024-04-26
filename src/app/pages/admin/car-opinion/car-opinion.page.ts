@@ -1,3 +1,6 @@
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/naming-convention */
+import { FormControl } from '@angular/forms';
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -10,21 +13,18 @@ import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
-  selector: 'app-car-model',
-  templateUrl: './car-model.page.html',
-  styleUrls: ['./car-model.page.scss'],
+  selector: 'app-car-opinion',
+  templateUrl: './car-opinion.page.html',
+  styleUrls: ['./car-opinion.page.scss'],
 })
-export class CarModelPage implements OnInit {
+export class CarOpinionPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public models: Array<any>;
-  public categories: Array<any>;
-  public brands: Array<any>;
+  public opinions: Array<any>;
   public showLoader: boolean;
-  public formModels: FormGroup;
+  public formOpinions: FormGroup;
   public activeChecked = true;
-  public pendingReview = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -37,26 +37,24 @@ export class CarModelPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getCategories();
-    this.getBrands();
-    this.getModels();
+    this.getOpinions();
   }
 
   public initForm() {
-    this.formModels = this.fb.group({
-      editModelId: this.fb.control(''),
-      newModelName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
-      newModelCategory: this.fb.control('', [Validators.required]),
-      newModelBrand: this.fb.control('', [Validators.required])
+    this.formOpinions = this.fb.group({
+      editOpinionId: this.fb.control(''),
+      newOpinionCarTitle: this.fb.control('', [Validators.required]),
+      newOpinionCarPositive: this.fb.control('', [Validators.required]),
+      newOpinionCarNegative: this.fb.control('', [Validators.required])
     });
   }
 
-  public getCategories(): void {
+  public getOpinions(): void {
     this.showLoader = true;
-    const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
+    const subOpinions = this.dbService.getItens(environment.opinionModelAction).subscribe(
       res => {
-        if (!subCategories.closed) { subCategories.unsubscribe(); }
-        this.categories = res.categories;
+        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
+        this.opinions = res.opinions;
         this.showLoader = false;
       },
       err => {
@@ -65,55 +63,28 @@ export class CarModelPage implements OnInit {
     );
   }
 
-  public getBrands(): void {
+  public createOpinion(action: string) {
     this.showLoader = true;
-    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
-      res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
-  }
-
-  public getModels(): void {
-    this.showLoader = true;
-    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
-      res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models.sort((a, b) => (!a['review']) || -1);
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
-  }
-
-  public createModel(action: string) {
-    this.showLoader = true;
-    const modelId = this.formModels.value.editModelId;
+    const opinionId = this.formOpinions.value.editOpinionId;
     const data = {
-      name: this.formModels.value.newModelName,
-      category: this.formModels.value.newModelCategory,
-      brand: this.formModels.value.newModelBrand,
-      active: this.activeChecked,
-      review: this.pendingReview
+      aboutCar: {
+        finalWords: {
+          title: this.formOpinions.value.newOpinionCarTitle,
+          positive: this.formOpinions.value.newOpinionCarPositive,
+          negative: this.formOpinions.value.newOpinionCarNegative,
+        }
+      },
+      active: this.activeChecked
     };
 
     const jwtData = { data: this.cryptoService.encondeJwt(data)};
-
-    const subModels = this.dbService.createItem(environment.modelsAction, jwtData, modelId).subscribe(
+    const subOpinions = this.dbService.createItem(environment.opinionModelAction, jwtData, opinionId).subscribe(
       res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.formModels.reset();
-        this.models = res.models;
+        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
+        this.formOpinions.reset();
+        this.opinions = res.opinions;
         this.showLoader = false;
         this.activeChecked = true;
-        this.pendingReview = false;
         this.showToast(action, res.saved);
         this.ngOnInit();
       },
@@ -123,26 +94,25 @@ export class CarModelPage implements OnInit {
     );
   }
 
-  public editModel(model) {
-    this.formModels.reset({
-      editModelId: model['_id'],
-      newModelName: model.name,
-      newModelCategory: model.category ? model.category['_id'] : '',
-      newModelBrand: model.brand['_id']
+  public editOpinion(opinion) {
+    this.formOpinions.reset({
+      editOpinionId: opinion['_id'],
+      newOpinionCarTitle: opinion.car_title,
+      newOpinionCarPositive: opinion.car_positive,
+      newOpinionCarNegative: opinion.car_negative
     });
 
-    this.activeChecked = model.active;
-    this.pendingReview = model.review;
+    this.activeChecked = opinion.active;
 
     this.content.scrollToTop(700);
   }
 
-  public deleteModel(modelId: string, action: string) {
+  public deleteOpinion(opinionId: string, action: string) {
     this.showLoader = true;
-    const subModels = this.dbService.deleteItem(environment.modelsAction, modelId).subscribe(
+    const subOpinions = this.dbService.deleteItem(environment.opinionModelAction, opinionId).subscribe(
       res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models;
+        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
+        this.opinions = res.opinions;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -152,31 +122,29 @@ export class CarModelPage implements OnInit {
     );
   }
 
-  public showConfirmAlert(action: string, model: any) {
+  public showConfirmAlert(action: string, opinion: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${model.newModelName || model.name || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${opinion.newOpinionCarTitle || opinion.car_title || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
         case 'excluir':
-          this.deleteModel(model['_id'], 'Item excluído');
+          this.deleteOpinion(opinion['_id'], 'Item excluído');
           break;
         case 'criar':
-          this.createModel('Item criado');
+          this.createOpinion('Item criado');
           break;
         case 'editar':
-          this.createModel('Item editado');
+          this.createOpinion('Item editado');
           break;
         case 'limpar':
-          this.formModels.reset();
+          this.formOpinions.reset();
           this.activeChecked = true;
-          this.pendingReview = false;
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
-          this.formModels.reset();
+          this.formOpinions.reset();
           this.activeChecked = true;
-          this.pendingReview = false;
           this.showToast('Edição descartada');
           break;
       }
@@ -233,15 +201,9 @@ export class CarModelPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    let savedBrand;
-
-    if (item) {
-      savedBrand = this.brands.find(brand => brand['_id'] === item.brand);
-    }
-
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Marca: ${savedBrand.name}, Modelo: ${item.name}` : '',
+      message: item ? `Carro: ${item.car_negative}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

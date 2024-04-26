@@ -102,7 +102,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public getModelOpinions(): void {
-    const action = `${environment.opinionAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
+    const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
       res => {
         if (!subModelOpinions.closed) { subModelOpinions.unsubscribe(); }
@@ -157,6 +157,11 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
       }
 
       opinion['valuationItens'] = newItens;
+
+      const createdDate = opinion['created'] ? opinion['created'].split(' ')[0] : null;
+      const createdYear = createdDate ? createdDate.split('/')[2] : null;
+
+      opinion['current_car'] = createdYear && (parseInt(opinion['year_bought'], 10) + opinion['kept_period'] === parseInt(createdYear, 10));
     }
   }
 

@@ -13,11 +13,11 @@ import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
-  selector: 'app-opinion',
-  templateUrl: './opinion.page.html',
-  styleUrls: ['./opinion.page.scss'],
+  selector: 'app-brand-opinion',
+  templateUrl: './brand-opinion.page.html',
+  styleUrls: ['./brand-opinion.page.scss'],
 })
-export class OpinionPage implements OnInit {
+export class BrandOpinionPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
@@ -45,16 +45,13 @@ export class OpinionPage implements OnInit {
       editOpinionId: this.fb.control(''),
       newOpinionBrandTitle: this.fb.control('', [Validators.required]),
       newOpinionBrandPositive: this.fb.control('', [Validators.required]),
-      newOpinionBrandNegative: this.fb.control('', [Validators.required]),
-      newOpinionCarTitle: this.fb.control('', [Validators.required]),
-      newOpinionCarPositive: this.fb.control('', [Validators.required]),
-      newOpinionCarNegative: this.fb.control('', [Validators.required])
+      newOpinionBrandNegative: this.fb.control('', [Validators.required])
     });
   }
 
   public getOpinions(): void {
     this.showLoader = true;
-    const subOpinions = this.dbService.getItens(environment.opinionAction).subscribe(
+    const subOpinions = this.dbService.getItens(environment.opinionBrandAction).subscribe(
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
         this.opinions = res.opinions;
@@ -77,19 +74,11 @@ export class OpinionPage implements OnInit {
           negative: this.formOpinions.value.newOpinionBrandNegative,
         }
       },
-      aboutCar: {
-        finalWords: {
-          title: this.formOpinions.value.newOpinionCarTitle,
-          positive: this.formOpinions.value.newOpinionCarPositive,
-          negative: this.formOpinions.value.newOpinionCarNegative,
-        }
-      },
       active: this.activeChecked
     };
 
     const jwtData = { data: this.cryptoService.encondeJwt(data)};
-
-    const subOpinions = this.dbService.createItem(environment.opinionAction, jwtData, opinionId).subscribe(
+    const subOpinions = this.dbService.createItem(environment.opinionBrandAction, jwtData, opinionId).subscribe(
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
         this.formOpinions.reset();
@@ -110,10 +99,7 @@ export class OpinionPage implements OnInit {
       editOpinionId: opinion['_id'],
       newOpinionBrandTitle: opinion.brand_title,
       newOpinionBrandPositive: opinion.brand_positive,
-      newOpinionBrandNegative: opinion.brand_negative,
-      newOpinionCarTitle: opinion.car_title,
-      newOpinionCarPositive: opinion.car_positive,
-      newOpinionCarNegative: opinion.car_negative
+      newOpinionBrandNegative: opinion.brand_negative
     });
 
     this.activeChecked = opinion.active;
@@ -123,7 +109,7 @@ export class OpinionPage implements OnInit {
 
   public deleteOpinion(opinionId: string, action: string) {
     this.showLoader = true;
-    const subOpinions = this.dbService.deleteItem(environment.opinionAction, opinionId).subscribe(
+    const subOpinions = this.dbService.deleteItem(environment.opinionBrandAction, opinionId).subscribe(
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
         this.opinions = res.opinions;
@@ -217,7 +203,7 @@ export class OpinionPage implements OnInit {
   public showToast(action: string, item?: any) {
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Marca: ${item.brand_title}, Carro: ${item.car_negative}` : '',
+      message: item ? `Marca: ${item.brand_title}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

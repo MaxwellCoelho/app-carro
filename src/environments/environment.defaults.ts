@@ -13,7 +13,8 @@ export const environment = {
   filterModelsAction: 'cars/models/filter',
   versionsAction: 'cars/versions',
   filterVersionsAction: 'cars/versions/filter',
-  opinionAction: 'opinion',
+  opinionBrandAction: 'opinion/brand',
+  opinionModelAction: 'opinion/model',
   bestBrandsAction: 'best/brands',
   bestModelsAction: 'best/models',
   jstSecret: '-M@x-caRro$*_+'
