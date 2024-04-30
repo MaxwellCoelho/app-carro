@@ -146,4 +146,8 @@ export class UtilsService {
     const capitalized = $event.srcElement.value.replace(/^./, $event.srcElement.value[0].toUpperCase());
     $event.srcElement.value = capitalized;
   }
+
+  public setPageTitle(newTitle: string): void {
+    document.title = `Krro - ${newTitle} - Opinião dos donos`;
+  }
 }

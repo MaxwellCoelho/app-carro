@@ -7,13 +7,14 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
+import { ViewWillEnter } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, ViewWillEnter {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
@@ -32,6 +33,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
+  }
+
+  public ionViewWillEnter(): void {
+    this.utils.setPageTitle('Entrar');
   }
 
   public initForm() {

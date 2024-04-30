@@ -36,6 +36,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
+    this.utils.setPageTitle('Melhores avaliados');
     if (this.utils.getShouldUpdate('bests')) {
       this.utils.setShouldUpdate(['bests'], false);
       this.bestModels = [];

@@ -24,12 +24,27 @@
   padding-top: 0;
 }
 
-.car-info ion-label {
-  display: flex;
-  align-items: center;
+.car-info {
+  padding-left: 0.5rem;
 
-  ion-icon {
-    margin-right: 0.3rem;
+  @media (max-width: 576px) {
+    padding-left: 0;
+  }
+
+  ion-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+
+    strong {
+      margin-right: 0.5rem;
+      padding-right: 0.5rem;
+      border-right: 1px solid #000;
+    }
+
+    ion-icon {
+      margin-right: 0.3rem;
+    }
   }
 }
 

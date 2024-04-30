@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -176,6 +176,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   }
 
   public loadFinalPayload() {
+    this.utils.setPageTitle(`Opinar ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
     const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
 
     if (encoded) {
@@ -305,6 +306,11 @@ export class OpinarPage implements OnInit, ViewWillEnter {
 
   public goSearch() {
     this.router.navigate([NAVIGATION.search.route]);
+  }
+
+  changeModel() {
+    const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
+    this.router.navigate([NAVIGATION.search.route], params);
   }
 
 }
