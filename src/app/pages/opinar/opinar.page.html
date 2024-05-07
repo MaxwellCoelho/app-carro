@@ -38,7 +38,7 @@
       <app-opinar-steps [currentStep]="currentStep" *ngIf="currentStep < 4"></app-opinar-steps>
 
       <app-about-car *ngIf="currentStep === 1" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutCar"
-        (aboutCar)="setAboutCarPayload($event)" (clickForeward)="goBack()"></app-about-car>
+        (aboutCar)="setAboutCarPayload($event)" (loadedVersions)="saveLoadedVersions($event)" (clickForeward)="goBack()"></app-about-car>
 
       <app-about-brand *ngIf="currentStep === 2" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutBrand"
         (aboutBrand)="setAboutBrandPayload($event)" (clickForeward)="goBack(1)"></app-about-brand>

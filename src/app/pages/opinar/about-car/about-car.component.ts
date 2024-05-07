@@ -23,6 +23,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   @Input() selectedModel: object;
   @Input() autoFill: object;
   @Output() aboutCar = new EventEmitter<any>();
+  @Output() loadedVersions = new EventEmitter<any>();
   @Output() clickForeward = new EventEmitter<any>();
 
   public nav = NAVIGATION;
@@ -97,7 +98,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
 
   public getVersions(): void {
     this.showLoader = true;
-    const myFilter = { model: this.selectedModel['_id'] };
+    const myFilter = { ['model._id']: this.selectedModel['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData).subscribe(
       res => {
@@ -223,8 +224,17 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       : this.formOpinarCarro.value.opinarAnosVersao;
 
     const aboutCarData = {
+      carBrand: {
+        _id: this.selectedModel['brand']['_id'],
+        name: this.selectedModel['brand']['name'],
+        url: this.selectedModel['brand']['url']
+      },
       carVersion: selectedCarVersion,
-      carModel: this.selectedModel['_id'],
+      carModel: {
+        _id: this.selectedModel['_id'],
+        name: this.selectedModel['name'],
+        url: this.selectedModel['url']
+      },
       yearModel: selectedYearModel,
       engine: this.opinarMotor,
       fuel: carFuel,
@@ -244,6 +254,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     };
 
     this.aboutCar.emit({aboutCar: aboutCarData, years: this.years});
+    this.loadedVersions.emit(this.carVersions);
   }
 
   public autoFillInfo() {

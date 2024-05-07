@@ -113,7 +113,7 @@ export class BuscaPage implements ViewWillEnter {
   public getModel(): void {
     const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
     this.showLoader = true;
-    const myFilter = { brand: this.selectedBrand['_id'] };
+    const myFilter = { ['brand._id']: this.selectedBrand['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
@@ -160,7 +160,7 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public saveSelectedModel(modelName: string): void{
-    const selectedModel = this.filteredModels.find(mod => mod.name.toLowerCase() === modelName.toLowerCase());
+    const selectedModel = this.filteredModels.find(mod => mod.url.toLowerCase() === modelName.toLowerCase());
     this.searchService.saveModel(selectedModel);
   }
 

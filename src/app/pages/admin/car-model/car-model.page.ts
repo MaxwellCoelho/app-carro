@@ -96,10 +96,19 @@ export class CarModelPage implements OnInit {
   public createModel(action: string) {
     this.showLoader = true;
     const modelId = this.formModels.value.editModelId;
+    const category = this.categories.find(cat => cat['_id'] === this.formModels.value.newModelCategory);
+    const brand = this.brands.find(bra => bra['_id'] === this.formModels.value.newModelBrand);
     const data = {
       name: this.formModels.value.newModelName,
-      category: this.formModels.value.newModelCategory,
-      brand: this.formModels.value.newModelBrand,
+      category: {
+        _id: category['_id'],
+        name: category['name'],
+      },
+      brand: {
+        _id: brand['_id'],
+        name: brand['name'],
+        url: brand['url'],
+      },
       active: this.activeChecked,
       review: this.pendingReview
     };
@@ -233,15 +242,9 @@ export class CarModelPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    let savedBrand;
-
-    if (item) {
-      savedBrand = this.brands.find(brand => brand['_id'] === item.brand);
-    }
-
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Marca: ${savedBrand.name}, Modelo: ${item.name}` : '',
+      message: item ? `Marca: ${item.brand.name}, Modelo: ${item.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

@@ -92,9 +92,14 @@ export class CarVersionPage implements OnInit {
     const formattedYears = Array.isArray(years) ? years : years.split(',');
     const finalYears = [];
     formattedYears.forEach(y =>  finalYears.push(parseInt(y, 10)));
+    const model = this.models.find(mo => mo['_id'] === this.formVersions.value.newVersionModel);
 
     const data = {
-      model: this.formVersions.value.newVersionModel,
+      model: {
+        _id: model['_id'],
+        name: model['name'],
+        url: model['url'],
+      },
       image: this.formVersions.value.newVersionImage,
       thumb: this.formVersions.value.newVersionThumb,
       fuel: this.formVersions.value.newVersionFuel,
