@@ -81,11 +81,17 @@ export class CustomerPage implements OnInit {
   public createCustomer(action: string) {
     this.showLoader = true;
     const userId = this.formCustomers.value.editUserId;
+    const role = this.roles.find(rol => rol['_id'] === this.formCustomers.value.newUserLevel);
+
     const data = {
       name: this.formCustomers.value.newUserName,
       email: this.formCustomers.value.newUserEmail,
       password: this.formCustomers.value.newUserPassword,
-      role: this.formCustomers.value.newUserLevel,
+      role: {
+        _id: role['_id'],
+        name: role['name'],
+        level: role['level'],
+      },
       active: this.activeChecked
     };
 
@@ -215,15 +221,9 @@ export class CustomerPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    let savedRole;
-
-    if (item) {
-      savedRole = this.roles.find(role => role['_id'] === item.role);
-    }
-
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}, nível: ${savedRole.level} - ${savedRole.name}` : '',
+      message: item ? `Nome: ${item.name}, nível: ${item.role.level} - ${item.role.name}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

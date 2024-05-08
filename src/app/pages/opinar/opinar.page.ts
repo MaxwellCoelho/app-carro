@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -26,6 +26,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   public finalPayload = {};
   public currentStep = 1;
   public years = [];
+  public carVersions = [];
 
   constructor(
     public dbService: DataBaseService,
@@ -176,6 +177,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   }
 
   public loadFinalPayload() {
+    this.utils.setPageTitle(`Opinar ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
     const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
 
     if (encoded) {
@@ -189,6 +191,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     const sendCarOpinion = () => {
       const aboutCar = this.finalPayload['aboutCar'];
       this.finalPayload['aboutCar'] = {
+        carBrand : aboutCar['carBrand'],
         carVersion : aboutCar['carVersion'],
         carModel : aboutCar['carModel'],
         yearModel : aboutCar['yearModel'],
@@ -248,7 +251,14 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       const subVersion = this.dbService.createItem(environment.versionsAction, jwtData, id).subscribe(
         res => {
           if (!subVersion.closed) { subVersion.unsubscribe(); }
-          this.finalPayload['aboutCar']['carVersion'] = res['saved']['_id'];
+          const versionPayload = this.setCarVersionPayload(res['saved']);
+          this.finalPayload['aboutCar']['carVersion'] = {
+            ...versionPayload,
+            _id: res['saved']['_id'],
+            years: res['saved']['years'],
+            active: res['saved']['active'],
+            review: res['saved']['review']
+          };
           this.utils.setShouldUpdate(['versions'], true);
           this.showLoader = false;
           this.sendFinalPayload();
@@ -260,20 +270,18 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     };
 
     if (this.finalPayload['aboutCar']['carVersion'] !== 'anotherVersion' && !foundYear) {
-      const id = this.finalPayload['aboutCar']['carVersion'];
+      const versionId = this.finalPayload['aboutCar']['carVersion'];
       const newVersion = {
-        year: yearModel,
+        years: yearModel,
         review: true
       };
       const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
-      setVersion(jwtData, id);
+      setVersion(jwtData, versionId);
     } else if (this.finalPayload['aboutCar']['carVersion'] === 'anotherVersion') {
+      const versionPayload = this.setCarVersionPayload(this.finalPayload['aboutCar']);
       const newVersion = {
-        engine: this.finalPayload['aboutCar']['engine'],
-        fuel: this.finalPayload['aboutCar']['fuel'],
-        gearbox: this.finalPayload['aboutCar']['gearBox'],
-        year: yearModel,
-        complement: this.finalPayload['aboutCar']['complement'],
+        ...versionPayload,
+        years: yearModel,
         model: this.finalPayload['aboutCar']['carModel'],
         active: true,
         review: true
@@ -281,8 +289,29 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
       setVersion(jwtData);
     } else {
+      const versionId = this.finalPayload['aboutCar']['carVersion'];
+      const version = this.carVersions.find(ver => ver['_id'] === versionId);
+      if (version) {
+        const versionPayload = this.setCarVersionPayload(version);
+        this.finalPayload['aboutCar']['carVersion'] = {
+          ...versionPayload,
+          _id: version['_id'],
+          years: version['years'],
+          active: version['active'],
+          review: version['review']
+        };
+      }
       this.sendFinalPayload();
     }
+  }
+
+  public setCarVersionPayload(source: any): any {
+    return {
+      engine: source['engine'],
+      fuel: source['fuel'],
+      gearbox: source['gearbox'],
+      complement: source['complement']
+    };
   }
 
   public clearFinalPayload() {
@@ -307,4 +336,12 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     this.router.navigate([NAVIGATION.search.route]);
   }
 
+  changeModel() {
+    const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
+    this.router.navigate([NAVIGATION.search.route], params);
+  }
+
+  saveLoadedVersions($event) {
+    this.carVersions = $event;
+  }
 }

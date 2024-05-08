@@ -14,13 +14,19 @@
             <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
               onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </ion-col>
-          <ion-col size-lg="9" size-md="8" size-sm="6.7" size-xs="12" class="model-name">
+          <ion-col size-lg="8" size-md="7" size-sm="5.3" size-xs="12" class="model-name">
             <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
           </ion-col>
-          <ion-col size-lg="1.5" size-md="2" size-sm="2.6" size-xs="12" class="model-category">
+          <ion-col size-lg="2.5" size-md="3" size-sm="4" size-xs="12" class="model-change">
+            <ion-chip outline title="Alterar modelo" color="primary" (click)="changeModel()">
+              <ion-icon [name]="'chevron-back-outline'"></ion-icon>
+              <ion-label >Alterar modelo</ion-label>
+            </ion-chip>
+          </ion-col>
+          <!-- <ion-col size-lg="1.5" size-md="2" size-sm="2.6" size-xs="12" class="model-category">
             <ion-icon *ngIf="selectedModel.category" name="car" color="medium" size="large" class="category-image"></ion-icon>
             <ion-label color="medium">{{selectedModel.category?.name}}</ion-label>
-          </ion-col>
+          </ion-col> -->
         </ion-row>
       </ion-grid>
 
@@ -32,7 +38,7 @@
       <app-opinar-steps [currentStep]="currentStep" *ngIf="currentStep < 4"></app-opinar-steps>
 
       <app-about-car *ngIf="currentStep === 1" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutCar"
-        (aboutCar)="setAboutCarPayload($event)" (clickForeward)="goBack()"></app-about-car>
+        (aboutCar)="setAboutCarPayload($event)" (loadedVersions)="saveLoadedVersions($event)" (clickForeward)="goBack()"></app-about-car>
 
       <app-about-brand *ngIf="currentStep === 2" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutBrand"
         (aboutBrand)="setAboutBrandPayload($event)" (clickForeward)="goBack(1)"></app-about-brand>

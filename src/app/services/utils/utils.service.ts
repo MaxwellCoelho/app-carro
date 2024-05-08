@@ -143,7 +143,13 @@ export class UtilsService {
   }
 
   public capitalize($event): void {
-    const capitalized = $event.srcElement.value.replace(/^./, $event.srcElement.value[0].toUpperCase());
-    $event.srcElement.value = capitalized;
+    if ($event.srcElement.value) {
+      const capitalized = $event.srcElement.value.replace(/^./, $event.srcElement.value[0].toUpperCase());
+      $event.srcElement.value = capitalized;
+    }
+  }
+
+  public setPageTitle(newTitle: string): void {
+    document.title = `Krro - ${newTitle} - Opinião dos donos`;
   }
 }

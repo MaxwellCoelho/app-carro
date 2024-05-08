@@ -75,7 +75,13 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
     }
 
     const aboutBrandData = {
-      carBrand: this.selectedModel['brand']['_id'],
+      carBrand: {
+        _id: this.selectedModel['brand']['_id'],
+        name: this.selectedModel['brand']['name'],
+        url: this.selectedModel['brand']['url'],
+        active: this.selectedModel['brand']['active'],
+        review: this.selectedModel['brand']['review']
+      },
       finalWords: {
         title: this.formOpinarMarca.value.opinarTitulo,
         positive: this.formOpinarMarca.value.opinarPontosPositivos,

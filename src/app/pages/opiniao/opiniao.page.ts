@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -102,6 +102,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public getModelOpinions(): void {
+    this.utils.setPageTitle(`${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
     const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
       res => {
@@ -233,5 +234,10 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     setTimeout(() => {
       (ev as InfiniteScrollCustomEvent).target.complete();
     }, 500);
+  }
+
+  changeModel() {
+    const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
+    this.router.navigate([NAVIGATION.search.route], params);
   }
 }

@@ -8,7 +8,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-busca',
@@ -33,9 +33,10 @@ export class BuscaPage implements ViewWillEnter {
     public searchService: SearchService,
     public router: Router,
     public utils: UtilsService,
-  ) {}
+  ) { }
 
   public ionViewWillEnter(): void {
+    this.setInitialTitle();
     this.brands = [];
     this.filteredBrands = [];
     this.selectedBrand = null;
@@ -62,6 +63,15 @@ export class BuscaPage implements ViewWillEnter {
 
         this.filteredBrands = this.brands;
         this.showLoader = false;
+
+        const urlParams = location.search.replace('?','').split('&');
+        urlParams.find(param => {
+          const splitted = param.split('=');
+          if (splitted[0] === 'brand') {
+            const currentBrand = this.brands.find(brand => brand.url === splitted[1]);
+            this.selectBrand(currentBrand);
+          }
+        });
       },
       err => {
         this.showErrorToast(err);
@@ -70,13 +80,21 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public selectBrand(brand) {
+    this.utils.setPageTitle(`Busca por modelos de carro da ${brand['name']}`);
     this.selectedBrand = brand;
     this.getModel();
   }
 
+  public setInitialTitle(): void {
+    this.utils.setPageTitle('Busca por marcas de carro');
+  }
+
   public clearBrand() {
+    this.setInitialTitle();
     this.filteredBrands = this.brands;
     this.selectedBrand = null;
+    const params: NavigationExtras = { queryParams: { brand: null }, queryParamsHandling: 'merge' };
+    this.router.navigate([NAVIGATION.search.route], params);
   }
 
   public searchBrandInput($event) {
@@ -95,7 +113,7 @@ export class BuscaPage implements ViewWillEnter {
   public getModel(): void {
     const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
     this.showLoader = true;
-    const myFilter = { brand: this.selectedBrand['_id'] };
+    const myFilter = { ['brand._id']: this.selectedBrand['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
@@ -142,7 +160,7 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public saveSelectedModel(modelName: string): void{
-    const selectedModel = this.filteredModels.find(mod => mod.name.toLowerCase() === modelName.toLowerCase());
+    const selectedModel = this.filteredModels.find(mod => mod.url.toLowerCase() === modelName.toLowerCase());
     this.searchService.saveModel(selectedModel);
   }
 

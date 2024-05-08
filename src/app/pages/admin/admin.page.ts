@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ViewWillEnter } from '@ionic/angular';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
 })
-export class AdminPage implements OnInit {
+export class AdminPage implements ViewWillEnter {
 
   public nav = NAVIGATION;
   public roles: Array<any>;
@@ -18,11 +20,12 @@ export class AdminPage implements OnInit {
 
   constructor(
     public fb: FormBuilder,
+    public utils: UtilsService,
   ) { }
 
-  ngOnInit() {
+  public ionViewWillEnter(): void {
+    this.utils.setPageTitle('Admin');
   }
-
 
   public accordionChange($event): void {
     const value = $event && $event.detail && $event.detail.value;
