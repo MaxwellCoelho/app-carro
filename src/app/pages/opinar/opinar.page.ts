@@ -255,7 +255,9 @@ export class OpinarPage implements OnInit, ViewWillEnter {
           this.finalPayload['aboutCar']['carVersion'] = {
             ...versionPayload,
             _id: res['saved']['_id'],
-            years: res['saved']['years']
+            years: res['saved']['years'],
+            active: res['saved']['active'],
+            review: res['saved']['review']
           };
           this.utils.setShouldUpdate(['versions'], true);
           this.showLoader = false;
@@ -294,7 +296,9 @@ export class OpinarPage implements OnInit, ViewWillEnter {
         this.finalPayload['aboutCar']['carVersion'] = {
           ...versionPayload,
           _id: version['_id'],
-          years: version['years']
+          years: version['years'],
+          active: version['active'],
+          review: version['review']
         };
       }
       this.sendFinalPayload();

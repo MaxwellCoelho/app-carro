@@ -99,6 +99,8 @@ export class CarVersionPage implements OnInit {
         _id: model['_id'],
         name: model['name'],
         url: model['url'],
+        active: model['active'],
+        review: model['review']
       },
       image: this.formVersions.value.newVersionImage,
       thumb: this.formVersions.value.newVersionThumb,

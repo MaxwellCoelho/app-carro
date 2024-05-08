@@ -227,13 +227,17 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       carBrand: {
         _id: this.selectedModel['brand']['_id'],
         name: this.selectedModel['brand']['name'],
-        url: this.selectedModel['brand']['url']
+        url: this.selectedModel['brand']['url'],
+        active: this.selectedModel['brand']['active'],
+        review: this.selectedModel['brand']['review']
       },
       carVersion: selectedCarVersion,
       carModel: {
         _id: this.selectedModel['_id'],
         name: this.selectedModel['name'],
-        url: this.selectedModel['url']
+        url: this.selectedModel['url'],
+        active: this.selectedModel['active'],
+        review: this.selectedModel['review']
       },
       yearModel: selectedYearModel,
       engine: this.opinarMotor,

@@ -103,11 +103,14 @@ export class CarModelPage implements OnInit {
       category: {
         _id: category['_id'],
         name: category['name'],
+        active: category['active']
       },
       brand: {
         _id: brand['_id'],
         name: brand['name'],
         url: brand['url'],
+        active: brand['active'],
+        review: brand['review']
       },
       active: this.activeChecked,
       review: this.pendingReview
