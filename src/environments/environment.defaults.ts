@@ -1,8 +1,10 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { environment as privateEnv } from './environment.private';
 
 export const environment = {
+  ...privateEnv,
   production: false,
   middlewareEndpoint: 'http://localhost:3001',
   rolesAction: 'roles',
@@ -16,8 +18,7 @@ export const environment = {
   opinionBrandAction: 'opinion/brand',
   opinionModelAction: 'opinion/model',
   bestBrandsAction: 'best/brands',
-  bestModelsAction: 'best/models',
-  jstSecret: '-M@x-caRro$*_+'
+  bestModelsAction: 'best/models'
 };
 
 /*
