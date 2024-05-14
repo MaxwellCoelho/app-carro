@@ -55,7 +55,6 @@ export class ModelNotFoundComponent implements OnInit {
     if ((!this.selectedBrand || typedAnother) && !alreadyExists) {
       const data = {
         name: this.formModelNotFound.value.opinarBrand,
-        image: `${brandName}.svg`,
         url: brandName,
         active: true,
         review: true
@@ -86,9 +85,13 @@ export class ModelNotFoundComponent implements OnInit {
     const data = {
       name: this.formModelNotFound.value.opinarModel,
       category: null,
-      brand: brand['_id'],
-      image: `${modelName}.png`,
-      thumb: `${modelName}-thumb.png`,
+      brand: {
+        _id: brand['_id'],
+        name: brand['name'],
+        url: brand['url'],
+        active: brand['active'],
+        review: brand['review']
+      },
       url: modelName,
       active: true,
       review: true
