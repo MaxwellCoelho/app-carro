@@ -45,12 +45,20 @@
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formModels.value.editModelId }">
 
-            <ion-col size-md="8" size-sm="12" size-xs="12">
+            <ion-col size-md="4" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Categoria</ion-label>
                 <ion-select interface="popover" formControlName="newModelCategory">
                   <ion-select-option *ngFor="let category of categories" [value]="category._id">{{ category.name }}</ion-select-option>
                 </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="6" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Anos modelo</ion-label>
+                <ion-input type="text" formControlName="newModelYearModel"
+                  placeholder="Ex: 2015,2016,2017"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -122,6 +130,7 @@
               <th>Nome</th>
               <th>Marca</th>
               <th>Categoria</th>
+              <th>Anos modelo</th>
               <th>URL</th>
               <th>Média</th>
               <th>Qtd opiniões</th>
@@ -145,6 +154,7 @@
               <td>{{model.name}}</td>
               <td>{{model.brand?.name}}</td>
               <td>{{model.category?.name || '-'}}</td>
+              <td>{{model.years}}</td>
               <td>{{model.url}}</td>
               <td>{{model.average}}</td>
               <td>{{model.val_length}}</td>
