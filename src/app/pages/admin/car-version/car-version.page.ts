@@ -47,8 +47,8 @@ export class CarVersionPage implements OnInit {
     this.formVersions = this.fb.group({
       editVersionId: this.fb.control(''),
       newVersionModel: this.fb.control('', [Validators.required]),
-      newVersionImage: this.fb.control('', [Validators.required, Validators.minLength(3)]),
-      newVersionThumb: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      newVersionImage: this.fb.control(''),
+      newVersionThumb: this.fb.control(''),
       newVersionFuel: this.fb.control('', [Validators.required]),
       newVersionYearModel: this.fb.control('', [Validators.required]),
       newVersionEngine: this.fb.control('', [Validators.required]),
