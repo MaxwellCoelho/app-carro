@@ -44,28 +44,21 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public opinarPeriodoMaxValue;
   public hasAllValuations = false;
   public carVersions: any[];
+  public carVersionsToShow: any[];
   public newVersion = false;
-  public newYear = false;
-  public yearsVersionFormGroup = {
-    opinarAnosVersao: this.fb.control('', [Validators.required]),
-  };
   public mainFormGroup = {
+    opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
     opinarVersao: this.fb.control('', [Validators.required]),
     opinarAnoCompra: this.fb.control('', [Validators.required, Validators.max(this.newerYear)]),
     opinarTitulo: this.fb.control('', [Validators.required]),
     opinarPontosPositivos: this.fb.control('', [Validators.required]),
     opinarPontosNegativos: this.fb.control('', [Validators.required]),
   };
-  public newYearFormGroup = {
-    opinarAnoModelo: this.fb.control('', [Validators.required, Validators.max(this.newerYear + 1)]),
-  };
   public newVersionFormGroup = {
-    ...this.newYearFormGroup,
     opinarCombustivel: this.fb.control('', [Validators.required]),
     opinarCambio: this.fb.control('', [Validators.required]),
     opinarComplemento: this.fb.control('', []),
   };
-  public years = [];
 
   constructor(
     public dbService: DataBaseService,
@@ -131,22 +124,16 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     if (this.newVersion) {
       this.formOpinarCarro.controls.opinarVersao.patchValue('anotherVersion');
       this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.newVersionFormGroup});
-      this.years = [];
     } else {
-      const choosenVersion = this.carVersions.find(v => v['_id'] === this.formOpinarCarro.controls.opinarVersao.value);
-      this.years = choosenVersion ? choosenVersion.years : [];
-      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.yearsVersionFormGroup});
+      this.formOpinarCarro = this.fb.group(this.mainFormGroup);
     }
   }
 
-  public chooseYear(): void {
-    this.newYear = this.formOpinarCarro.controls.opinarAnosVersao.value === 'anotherYear';
-
-    if (this.newYear) {
-      this.formOpinarCarro.controls.opinarAnosVersao.patchValue('anotherYear');
-      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.newYearFormGroup, ...this.yearsVersionFormGroup});
-    } else {
-      this.formOpinarCarro = this.fb.group({...this.mainFormGroup, ...this.yearsVersionFormGroup});
+  public chooseYear(year: string): void {
+    const myYear = parseInt(year, 10);
+    this.carVersionsToShow = this.carVersions.filter(version => version.years.includes(myYear));
+    if (!this.carVersionsToShow.length) {
+      this.carVersionsToShow = this.carVersions;
     }
   }
 
@@ -219,9 +206,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     const carFuel = this.formOpinarCarro.value.opinarCombustivel;
     const versionComplement = this.formOpinarCarro.value.opinarComplemento;
     const selectedGearBox = this.formOpinarCarro.value.opinarCambio;
-    const selectedYearModel = this.newVersion || this.newYear
-      ? this.formOpinarCarro.value.opinarAnoModelo
-      : this.formOpinarCarro.value.opinarAnosVersao;
+    const selectedYearModel =  this.formOpinarCarro.value.opinarAnoModelo;
 
     const aboutCarData = {
       carBrand: {
@@ -257,7 +242,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       }
     };
 
-    this.aboutCar.emit({aboutCar: aboutCarData, years: this.years});
+    const choosenVersion = selectedCarVersion ? this.carVersions.find(v => v['_id'] === selectedCarVersion.value) : null;
+    this.aboutCar.emit({aboutCar: aboutCarData, years: choosenVersion ? choosenVersion.years : []});
     this.loadedVersions.emit(this.carVersions);
   }
 
@@ -266,17 +252,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       this.formOpinarCarro.controls.opinarVersao.patchValue(this.autoFill['carVersion']);
       this.chooseVersion();
 
-      const foundYear = this.years.indexOf(parseInt(this.autoFill['yearModel'], 10)) >= 0;
-      if (this.newVersion || !foundYear) {
-        if (this.formOpinarCarro.controls.opinarAnosVersao) {
-          this.formOpinarCarro.controls.opinarAnosVersao.patchValue('anotherYear');
-          this.chooseYear();
-        }
-        this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
-      } else {
-        this.formOpinarCarro.controls.opinarAnosVersao.patchValue(this.autoFill['yearModel']);
-        this.chooseYear();
-      }
+      this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
+      this.chooseYear(this.autoFill['yearModel']);
 
       if (this.newVersion) {
         this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);

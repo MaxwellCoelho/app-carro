@@ -276,7 +276,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     if (this.finalPayload['aboutCar']['carVersion'] !== 'anotherVersion' && !foundYear) {
       const versionId = this.finalPayload['aboutCar']['carVersion'];
       const newVersion = {
-        years: yearModel,
+        year: yearModel,
         review: true
       };
       const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
@@ -285,7 +285,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       const versionPayload = this.setCarVersionPayload(this.finalPayload['aboutCar']);
       const newVersion = {
         ...versionPayload,
-        years: yearModel,
+        year: yearModel,
         model: this.finalPayload['aboutCar']['carModel'],
         active: true,
         review: true
