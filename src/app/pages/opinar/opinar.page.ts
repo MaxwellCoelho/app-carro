@@ -81,6 +81,10 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
         const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
+        if (!foundModel) {
+          this.showErrorToast({status: 404});
+          return;
+        }
         const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
         const checkReviewBrand = foundModel && !foundModel.brand.review
           || (foundModel.brand.review && recoveredReviewBrands.find(item => item['_id'] === foundModel.brand['_id']));

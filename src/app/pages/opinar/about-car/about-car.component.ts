@@ -152,7 +152,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
 
   public segmentChanged($event) {
     this.valuationItens.find(item => {
-        if (item.value === $event.target.id) {
+        if ($event.target.value && item.value === $event.target.id) {
           const val = this.valuation.find(valItem => valItem.value.toString() === $event.target.value.toString());
           item.valuation = { id: val ? val.id : $event.target.id, value: $event.target.value};
         }
@@ -242,7 +242,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       yearModel: selectedYearModel,
       engine: this.opinarMotor,
       fuel: carFuel,
-      gearBox: selectedGearBox,
+      gearbox: selectedGearBox,
       complement: versionComplement,
       yearBought: this.formOpinarCarro.value.opinarAnoCompra,
       kmBought: this.opinarKmCompraValue,
@@ -280,7 +280,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
 
       if (this.newVersion) {
         this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);
-        this.formOpinarCarro.controls.opinarCambio.patchValue(this.autoFill['gearBox']);
+        this.formOpinarCarro.controls.opinarCambio.patchValue(this.autoFill['gearbox']);
         this.formOpinarCarro.controls.opinarComplemento.patchValue(this.autoFill['complement']);
         this.changeOpinarMotor({ detail: { value: parseFloat(this.autoFill['engine']) }});
       }
