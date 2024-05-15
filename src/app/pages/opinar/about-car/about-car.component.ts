@@ -29,6 +29,8 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public nav = NAVIGATION;
   public fuels = FUEL;
   public gearboxes = GEARBOX;
+  public years = [];
+  public anotherYear = false;
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
 
@@ -69,10 +71,11 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     public router: Router,
     public fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
-    public utils: UtilsService,
+    public utils: UtilsService
   ) {}
 
   ngOnInit(): void {
+    this.getYears();
     this.changeOpinarKmCompra({detail: { value: 0}});
     this.changeOpinarMotor({detail: { value: 1}});
     this.changeOpinarPeriodo({detail: { value: this.newerYear - 1}});
@@ -83,6 +86,16 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.getVersions();
     this.cdRef.detectChanges();
+  }
+
+  public getYears(): void {
+    const start = parseInt(this.selectedModel['yearStart'], 10);
+    const end = parseInt(this.selectedModel['yearEnd'], 10);
+    const diff = end - start;
+
+    for (let i = 0; i <= diff; i++) {
+      this.years.push(start + i);
+    }
   }
 
   public initForm() {
@@ -130,6 +143,11 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   }
 
   public chooseYear(year: string): void {
+    if (year === 'anotherYear') {
+      this.anotherYear = true;
+      this.formOpinarCarro.controls.opinarAnoModelo.patchValue('');
+      return;
+    }
     const myYear = parseInt(year, 10);
     this.carVersionsToShow = this.carVersions.filter(version => version.years.includes(myYear));
     if (!this.carVersionsToShow.length) {

@@ -4,6 +4,10 @@
   margin: 0.5rem 1.5rem 0.5rem 0.5rem;
 }
 
+.item-button:hover {
+  --background-hover: linear-gradient(to right, #fff 150px, currentColor 350px, currentColor);
+}
+
 .warning {
   max-width: 60px;
   margin: 0.5rem 1rem 0.5rem 0;
