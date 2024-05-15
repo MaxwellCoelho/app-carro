@@ -44,6 +44,21 @@
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
+                <ion-label position="floating">Ano modelo</ion-label>
+                <ion-input type="text" formControlName="newOpinionYearModel" placeholder="Ex: 2015"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Ano compra</ion-label>
+                <ion-input type="text" formControlName="newOpinionYearBought" placeholder="Ex: 2017"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
                 <ion-label position="floating">Pontos positivos do carro</ion-label>
                 <ion-textarea minlength="4" maxlength="300" rows="3" (ionInput)="utils.capitalize($event)" formControlName="newOpinionCarPositive"></ion-textarea>
               </ion-item>

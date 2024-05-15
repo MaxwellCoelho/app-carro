@@ -48,7 +48,8 @@ export class CarModelPage implements OnInit {
       newModelName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
       newModelCategory: this.fb.control('', [Validators.required]),
       newModelBrand: this.fb.control('', [Validators.required]),
-      newModelYearModel: this.fb.control('', [Validators.required]),
+      newModelYearStart: this.fb.control('', [Validators.required]),
+      newModelYearEnd: this.fb.control('', [Validators.required])
     });
   }
 
@@ -99,10 +100,6 @@ export class CarModelPage implements OnInit {
     const modelId = this.formModels.value.editModelId;
     const category = this.categories.find(cat => cat['_id'] === this.formModels.value.newModelCategory);
     const brand = this.brands.find(bra => bra['_id'] === this.formModels.value.newModelBrand);
-    const years = this.formModels.value.newModelYearModel;
-    const formattedYears = Array.isArray(years) ? years : years.split(',');
-    const finalYears = [];
-    formattedYears.forEach(y =>  finalYears.push(parseInt(y, 10)));
     const data = {
       name: this.formModels.value.newModelName,
       category: {
@@ -117,7 +114,8 @@ export class CarModelPage implements OnInit {
         active: brand['active'],
         review: brand['review']
       },
-      years: finalYears,
+      yearStart: this.formModels.value.newModelYearStart,
+      yearEnd: this.formModels.value.newModelYearEnd,
       active: this.activeChecked,
       review: this.pendingReview
     };
@@ -147,7 +145,8 @@ export class CarModelPage implements OnInit {
       newModelName: model.name,
       newModelCategory: model.category ? model.category['_id'] : '',
       newModelBrand: model.brand['_id'],
-      newModelYearModel: model.years
+      newModelYearStart: model['yearStart'],
+      newModelYearEnd: model['yearEnd'],
     });
 
     this.activeChecked = model.active;

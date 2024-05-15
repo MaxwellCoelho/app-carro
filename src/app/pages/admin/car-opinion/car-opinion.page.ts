@@ -44,6 +44,8 @@ export class CarOpinionPage implements OnInit {
     this.formOpinions = this.fb.group({
       editOpinionId: this.fb.control(''),
       newOpinionCarTitle: this.fb.control('', [Validators.required]),
+      newOpinionYearModel: this.fb.control('', [Validators.required]),
+      newOpinionYearBought: this.fb.control('', [Validators.required]),
       newOpinionCarPositive: this.fb.control('', [Validators.required]),
       newOpinionCarNegative: this.fb.control('', [Validators.required])
     });
@@ -72,7 +74,9 @@ export class CarOpinionPage implements OnInit {
           title: this.formOpinions.value.newOpinionCarTitle,
           positive: this.formOpinions.value.newOpinionCarPositive,
           negative: this.formOpinions.value.newOpinionCarNegative,
-        }
+        },
+        yearModel: this.formOpinions.value.newOpinionYearModel,
+        yearBought: this.formOpinions.value.newOpinionYearBought
       },
       active: this.activeChecked
     };
@@ -99,7 +103,9 @@ export class CarOpinionPage implements OnInit {
       editOpinionId: opinion['_id'],
       newOpinionCarTitle: opinion.car_title,
       newOpinionCarPositive: opinion.car_positive,
-      newOpinionCarNegative: opinion.car_negative
+      newOpinionCarNegative: opinion.car_negative,
+      newOpinionYearModel: opinion.year_model,
+      newOpinionYearBought: opinion.year_bought
     });
 
     this.activeChecked = opinion.active;

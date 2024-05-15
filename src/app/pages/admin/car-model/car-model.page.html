@@ -54,11 +54,19 @@
               </ion-item>
             </ion-col>
 
-            <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-col size-md="2" size-sm="3" size-xs="12">
               <ion-item class="input-item">
-                <ion-label position="floating">Anos modelo</ion-label>
-                <ion-input type="text" formControlName="newModelYearModel"
-                  placeholder="Ex: 2015,2016,2017"></ion-input>
+                <ion-label position="floating">Ano início</ion-label>
+                <ion-input type="text" formControlName="newModelYearStart"
+                  placeholder="Ex: 2015"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="2" size-sm="3" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Ano fim</ion-label>
+                <ion-input type="text" formControlName="newModelYearEnd"
+                  placeholder="Ex: 2017"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -130,7 +138,8 @@
               <th>Nome</th>
               <th>Marca</th>
               <th>Categoria</th>
-              <th>Anos modelo</th>
+              <th>Ano início</th>
+              <th>Ano fim</th>
               <th>URL</th>
               <th>Média</th>
               <th>Qtd opiniões</th>
@@ -154,7 +163,8 @@
               <td>{{model.name}}</td>
               <td>{{model.brand?.name}}</td>
               <td>{{model.category?.name || '-'}}</td>
-              <td>{{model.years}}</td>
+              <td>{{model.yearStart}}</td>
+              <td>{{model.yearEnd}}</td>
               <td>{{model.url}}</td>
               <td>{{model.average}}</td>
               <td>{{model.val_length}}</td>
