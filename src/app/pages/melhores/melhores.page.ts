@@ -80,6 +80,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
         const valuation = VALUATION.slice();
         const foundVal = valuation.filter(val => val.value <= int);
         model.average = foundVal.length ? foundVal[foundVal.length - 1] : VALUATION_NOT_FOUND;
+        model['model_average'] = average;
         modelWithAverage.push(model);
       }
     });
