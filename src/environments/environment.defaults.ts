@@ -6,7 +6,7 @@ import { environment as privateEnv } from './environment.private';
 export const environment = {
   ...privateEnv,
   production: false,
-  middlewareEndpoint: 'http://localhost:3001',
+  middlewareEndpoint: 'http://localhost:3001/api',
   rolesAction: 'roles',
   customersAction: 'customers',
   categoriesAction: 'cars/categories',
