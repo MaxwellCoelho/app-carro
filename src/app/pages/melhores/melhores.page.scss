@@ -1,3 +1,125 @@
+.podium {
+  margin: 3rem 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+
+  .position, .car {
+    width: 33.33%;
+  }
+
+  .left {
+    border-left: 1px solid #000;
+  }
+
+  .top {
+    border-top: 1px solid #000;
+  }
+
+  .right {
+    border-right: 1px solid #000;
+  }
+
+  .first {
+    border-radius: .5rem .5rem 0 0;
+  }
+
+  .second {
+    border-radius: .5rem 0 0 0;
+  }
+
+  .third {
+    border-radius: 0 .5rem 0 0;
+  }
+
+  .first, .second, .third {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 700px) {
+      display: block;
+    }
+  }
+
+  .car {
+    height: auto;
+    text-align: center;
+
+    .nota {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      margin-bottom: 0.5rem;
+
+      ion-icon {
+        margin-right: 0.3rem;
+      }
+    }
+
+    .nota-first {
+      background-color: var(--ion-color-secondary);
+    }
+
+    .nota-second {
+      background-color: #BDBDBC;
+    }
+
+    .nota-third {
+      background-color: #DB9656;
+    }
+
+    .marca img {
+      max-height: 40px;
+      padding: .3rem .8rem 0 0;
+
+      @media (max-width: 700px) {
+        max-height: 30px;
+        padding: 5px 0 0 0;
+        margin-bottom: -5px;
+      }
+    }
+
+
+
+    .nome span {
+      margin-right: .5rem;
+
+      @media (max-width: 500px) {
+        display: none;
+      }
+    }
+
+    img {
+      padding: 0 3rem;
+
+      @media (max-width: 700px) {
+        padding: 0 2rem;
+      }
+
+      @media (max-width: 530px) {
+        padding: 0 1rem;
+      }
+
+      @media (max-width: 400px) {
+        padding: 0.1rem 0.5rem;
+      }
+    }
+
+    .position {
+      width: 100%;
+      height: 50px;
+      border-color: var(--ion-color-light-shade);
+      background-color: var(--ion-color-light-tint);
+    }
+
+    .position.bottom {
+      box-shadow: inset 0px -30px 20px -15px #fff;
+    }
+  }
+}
+
 .model-image {
   width: 100px;
   height: 55px;
