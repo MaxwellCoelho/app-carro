@@ -44,12 +44,14 @@ export class LoggedGuard implements CanActivate {
 
   public accept(res): any {
     this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+    this.utils.returnLoggedUser();
     this.loggedUser.next(true);
   }
 
   public reject(res): any {
     if (res.status !== 200) {
       this.utils.localStorageRemoveItem('userSession');
+      this.utils.returnLoggedUser();
     }
     this.loggedUser.next(false);
     this.router.navigate([`/${this.nav.login.route}`]);

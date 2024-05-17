@@ -6,6 +6,7 @@ import { MelhoresPage } from './melhores.page';
 import { SharedModule } from '../../shared/shared.module';
 
 import { MelhoresPageRoutingModule } from './melhores-routing.module';
+import { BannerHomeComponent } from 'src/app/components/banner-home/banner-home/banner-home.component';
 
 
 @NgModule({
@@ -16,6 +17,9 @@ import { MelhoresPageRoutingModule } from './melhores-routing.module';
     SharedModule,
     MelhoresPageRoutingModule
   ],
-  declarations: [MelhoresPage]
+  declarations: [
+    MelhoresPage,
+    BannerHomeComponent
+  ]
 })
 export class MelhoresPageModule {}

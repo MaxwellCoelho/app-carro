@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { Subscription, Observable, Subject  } from 'rxjs';
+import { finalize, map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +26,34 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.checkUser();
+  }
+
+  public checkUser(): void {
+    const sessionStorage = this.utils.localStorageGetItem('userSession');
+
+    if (sessionStorage) {
+      let authSubscription = new Subscription();
+      authSubscription = this.authService.checkUser()
+      .subscribe(
+        res => {
+          if (!authSubscription.closed) {authSubscription.unsubscribe(); }
+          if (!res['authorized'].active) {
+            this.rejectUser();
+          } else {
+            this.utils.returnLoggedUser();
+          }
+        },
+        () => {
+          if (!authSubscription.closed) {authSubscription.unsubscribe(); }
+          this.rejectUser();
+        }
+      );
+    }
+  }
+
+  public rejectUser(): void {
+    this.utils.localStorageRemoveItem('userSession');
     this.utils.returnLoggedUser();
   }
 

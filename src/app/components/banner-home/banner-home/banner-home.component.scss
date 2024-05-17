@@ -1,0 +1,47 @@
+.banner-container {
+  background-color: var(--ion-color-primary);
+  border: 1px solid var(--ion-color-primary);
+  box-shadow: inset 0px 0px 0px 5px #fff;
+  padding: 2rem;
+  margin: 0.5rem 0.5rem 2rem 0.5rem;
+  text-align: center;
+  cursor: pointer;
+
+  h1 {
+    color: #fff;
+    margin: 0;
+    font-size: xxx-large;
+  }
+
+  h2 {
+    color: #fff;
+    margin: .5rem;
+    font-size: xx-large;
+    font-weight: 100;
+  }
+
+  ion-chip {
+    background: var(--ion-color-secondary);
+    margin: 1rem 0 .5rem 0;
+    transform: scale(1.2);
+    color: #000;
+    border-color: #000;
+    box-shadow: inset 0px 0px 0px 1px #fff;
+  }
+
+  @media (max-width: 700px) {
+    h1 {
+      font-size: xx-large;
+    }
+
+    h2 {
+      margin: .5rem;
+      font-size: x-large;
+    }
+
+    ion-chip {
+      margin: 1rem 0 .5rem 0;
+      transform: scale(1);
+    }
+  }
+}
