@@ -82,8 +82,11 @@
     }
 
 
-    @media (max-width: 500px) {
-      .nome span {
+
+    .nome span {
+      margin-right: .5rem;
+
+      @media (max-width: 500px) {
         display: none;
       }
     }
