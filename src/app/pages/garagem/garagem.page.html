@@ -1,8 +1,28 @@
 <ion-content [fullscreen]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+
   <div class="main-container">
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="nav.garage.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.garage.title}}</ion-label>
     </ion-title>
+
+    <div class="garage-container">
+      <div class="car" *ngFor="let car of myModelOpinions">
+        <div class="car-image">
+          <img src="assets/models/{{car.model.brand?.url}}/{{car.model.url}}/{{car.model.url}}.png"
+            title="{{car.model.brand?.name + ' ' + car.model.name}}" alt="{{car.model.brand?.name + ' ' + car.model.name}}"
+            onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+        </div>
+        <div class="car-name">
+          <img src="assets/brands/{{car.model.brand?.url}}.svg" title="{{car.model.brand?.name}}" alt="{{car.model.brand?.name}}"
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'">
+          {{car.model.brand?.name}} <strong>{{car.model.name}}</strong>
+        </div>
+        <div class="car-opinions">
+          {{car.opinions.length}} Opiniões
+        </div>
+      </div>
+    </div>
   </div>
 </ion-content>

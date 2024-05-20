@@ -1,0 +1,25 @@
+.garage-container {
+  display: inline-flex;
+  align-items: start;
+  flex-wrap: wrap;
+
+  .car {
+    padding: 1rem;
+
+    .car-image {
+      img {
+        max-height: 8.85rem;
+      }
+    }
+
+    .car-name {
+      display: inline-flex;
+      align-items: center;
+
+      img {
+        max-width: 2.5rem;
+        margin-right: 0.6rem;
+      }
+    }
+  }
+}

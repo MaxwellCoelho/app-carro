@@ -16,7 +16,9 @@ export const environment = {
   versionsAction: 'cars/versions',
   filterVersionsAction: 'cars/versions/filter',
   opinionBrandAction: 'opinion/brand',
+  filterOpinionBrandAction: 'opinion/brand/filter',
   opinionModelAction: 'opinion/model',
+  filterOpinionModelAction: 'opinion/model/filter',
   bestBrandsAction: 'best/brands',
   bestModelsAction: 'best/models'
 };
