@@ -17,7 +17,7 @@
         </div>
         <img [id]="'item-img-'+bestModels[1].name" src="assets/models/{{bestModels[1].brand?.url}}/{{bestModels[1].url}}/{{bestModels[1].url}}.png"
           title="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}" alt="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[1].brand?.url, bestModels[1]?.url)">
         <div class="position left top second bottom">
           <div class="marca">
             <img src="assets/brands/{{bestModels[1].brand?.url}}.svg" title="{{bestModels[1].brand?.name}}" alt="{{bestModels[1].brand?.name}}"
@@ -37,7 +37,7 @@
         </div>
         <img [id]="'item-img-'+bestModels[0].name" src="assets/models/{{bestModels[0].brand?.url}}/{{bestModels[0].url}}/{{bestModels[0].url}}.png"
           title="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}" alt="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[0].brand?.url, bestModels[0]?.url)">
         <div class="position left right top first">
           <div class="marca">
             <img src="assets/brands/{{bestModels[0].brand?.url}}.svg" title="{{bestModels[0].brand?.name}}" alt="{{bestModels[0].brand?.name}}"
@@ -58,7 +58,7 @@
         </div>
         <img [id]="'item-img-'+bestModels[2].name" src="assets/models/{{bestModels[2].brand?.url}}/{{bestModels[2].url}}/{{bestModels[2].url}}.png"
           title="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}" alt="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[2].brand?.url, bestModels[2]?.url)">
         <div class="position right top third bottom">
           <div class="marca">
             <img src="assets/brands/{{bestModels[2].brand?.url}}.svg" title="{{bestModels[2].brand?.name}}" alt="{{bestModels[2].brand?.name}}"

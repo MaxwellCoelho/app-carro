@@ -39,16 +39,7 @@ export class GaragemPage implements ViewWillEnter {
     const subModels = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        const opinions = res.models && res.models.opinions && res.models.opinions.length ? res.models.opinions : [];
-        opinions.forEach(opinion => {
-          const modelIdx = this.myModelOpinions.findIndex(item => item.model._id === opinion.model._id);
-          if (modelIdx > -1) {
-            this.myModelOpinions[modelIdx].opinions.push(opinion);
-          } else {
-            this.myModelOpinions.push({model: opinion.model, opinions: [opinion]});
-          }
-        });
-        console.log(this.myModelOpinions);
+        this.myModelOpinions = res.models && res.models.opinions && res.models.opinions.length ? res.models.opinions : [];
         this.showLoader = false;
       },
       err => {
