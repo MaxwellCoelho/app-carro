@@ -1,0 +1,94 @@
+.favorite-container {
+  display: inline-flex;
+  align-items: start;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .car {
+    padding: 1rem;
+    width: 33.33%;
+    border-top: 1px dashed var(--ion-tab-bar-background-focused, #e0e0e0);
+
+    .car-image {
+      text-align: center;
+
+      img {
+        max-height: 8.85rem;
+      }
+    }
+
+    .car-name {
+      display: inline-flex;
+      align-items: center;
+
+      img {
+        max-width: 2rem;
+        margin-right: 0.3rem;
+      }
+
+      strong {
+        padding-left: .2rem;
+      }
+    }
+
+    .favorite-image {
+      vertical-align: top;
+      transform: scale(0.7);
+      margin: 0.1rem 0rem 0 0.5rem;
+      padding: 0rem 0 0.1rem 1.1rem;
+      border-left: 1px solid var(--ion-color-medium);
+      cursor: pointer;
+    }
+
+    @media (max-width: 950px) {
+      width: 50%;
+    }
+
+    @media (max-width: 550px) {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 951px) {
+    .car:nth-child(1), .car:nth-child(2), .car:nth-child(3) {
+      border-top: 0px
+    }
+  }
+
+  @media (min-width: 551px) and (max-width: 950px) {
+    .car:nth-child(1), .car:nth-child(2) {
+      border-top: 0px
+    }
+  }
+
+  @media (max-width: 550px) {
+    .car:nth-child(1) {
+      border-top: 0px
+    }
+  }
+
+  .car-opinion {
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    background-color: rgba(var(--ion-color-medium-rgb), 0.3);
+
+    ion-label {
+      font-size: large;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      margin: 5px 0;
+    }
+
+    span {
+      font-size: smaller;
+      position: absolute;
+      right: 0.8rem;
+    }
+
+    ion-icon {
+      vertical-align: middle;
+      margin-right: 0.3rem;
+    }
+  }
+}

@@ -4,5 +4,28 @@
       <ion-icon [name]="nav.favorite.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.favorite.title}}</ion-label>
     </ion-title>
+
+    <div class="favorite-container" *ngIf="favoriteModels.length">
+      <div class="car" *ngFor="let car of favoriteModels">
+        <div class="car-name">
+          <img src="assets/brands/{{car.brand?.url}}.svg" title="{{car.brand?.name}}" alt="{{car.brand?.name}}"
+            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'">
+            {{car.brand?.name}} <strong>{{car.name}}</strong>
+            <ion-icon name="heart" color="secondary" size="large" class="favorite-image" (click)="removeFavorite(car)"></ion-icon>
+        </div>
+        <div class="car-image">
+          <img src="assets/models/{{car.brand?.url}}/{{car.url}}/{{car.url}}.png"
+            title="{{car.brand?.name + ' ' + car.name}}" alt="{{car.brand?.name + ' ' + car.name}}"
+            onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+        </div>
+
+        <ion-title size="large" color="dark" class="car-opinion">
+          <ion-label class="ion-text-wrap">
+            <ion-icon name="ribbon" color="dark"></ion-icon>
+            <strong>{{car.average.toFixed(1)}}</strong> <span>{{car.val_length}} {{car.val_length > 1 ? 'opiniões' : 'opinião'}}</span>
+          </ion-label>
+        </ion-title>
+      </div>
+    </div>
   </div>
 </ion-content>

@@ -10,14 +10,16 @@
     <div class="main-body" *ngIf="selectedModel">
       <ion-grid slot="content" class="selected-model-grid">
         <ion-row>
-          <ion-col size-lg="1.5" size-md="2" size-sm="2.7" size-xs="12" class="model-logo">
+          <ion-col size-lg="1.2" size-md="1.7" size-sm="1.5" size-xs="12" class="model-logo">
             <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
               onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </ion-col>
-          <ion-col size-lg="8" size-md="7" size-sm="5.3" size-xs="12" class="model-name">
+          <ion-col size-lg="8.1" size-md="7.3" size-sm="6.8" size-xs="12" class="model-name">
             <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+            <ion-icon *ngIf="isFavorite" name="heart" color="secondary" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
+            <ion-icon *ngIf="!isFavorite" name="heart-outline" color="medium" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
           </ion-col>
-          <ion-col size-lg="2.5" size-md="3" size-sm="4" size-xs="12" class="model-change">
+          <ion-col size-lg="2.5" size-md="3" size-sm="3.7" size-xs="12" class="model-change">
             <ion-chip outline title="Alterar modelo" color="primary" (click)="changeModel()">
               <ion-icon [name]="'chevron-back-outline'"></ion-icon>
               <ion-label >Alterar modelo</ion-label>
