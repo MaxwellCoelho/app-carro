@@ -8,6 +8,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-garagem',
@@ -25,6 +26,7 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     public dbService: DataBaseService,
     public toastController: ToastController,
     public cryptoService: CryptoService,
+    public router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -85,5 +87,10 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public clickCarItem(brand, model) {
+    const pageUrl = `/opiniao/${brand}/${model}`;
+    this.router.navigate([pageUrl]);
   }
 }

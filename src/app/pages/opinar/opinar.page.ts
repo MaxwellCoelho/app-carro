@@ -357,5 +357,20 @@ export class OpinarPage implements OnInit, ViewWillEnter {
 
   addOrRemoveFavorite() {
     this.isFavorite = this.favorite.addOrRemoveFavorite(this.selectedModel);
+    const type = this.isFavorite ? 'adicionado' : 'removido';
+    this.showFavoriteToast(type);
+  }
+
+  public showFavoriteToast(type: string): void {
+    this.toastController.create({
+      header: 'Favoritos:',
+      message: `${this.selectedModel['brand']['name']} ${this.selectedModel['name']} ${type} com sucesso!`,
+      duration: 4000,
+      position: 'middle',
+      icon: type === 'adicionado' ? 'heart' : 'heart-outline',
+      color: 'success'
+    }).then(toast => {
+      toast.present();
+    });
   }
 }

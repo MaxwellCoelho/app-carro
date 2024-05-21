@@ -36,7 +36,7 @@
           onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'">
           {{car.model.brand?.name}} <strong>{{car.model.name}}</strong>
         </div>
-        <div class="car-image">
+        <div class="car-image" (click)="clickCarItem(car.model.brand?.url, car.model.url)">
           <img src="assets/models/{{car.model.brand?.url}}/{{car.model.url}}/{{car.model.url}}.png"
             title="{{car.model.brand?.name + ' ' + car.model.name}}" alt="{{car.model.brand?.name + ' ' + car.model.name}}"
             onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
