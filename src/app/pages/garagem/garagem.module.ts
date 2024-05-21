@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { GaragemPage } from './garagem.page';
+import { SharedModule } from '../../shared/shared.module';
 
 import { GaragemPageRoutingModule } from './garagem-routing.module';
 
@@ -12,6 +13,7 @@ import { GaragemPageRoutingModule } from './garagem-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
+    SharedModule,
     GaragemPageRoutingModule
   ],
   declarations: [GaragemPage]

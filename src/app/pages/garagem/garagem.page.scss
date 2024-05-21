@@ -1,0 +1,115 @@
+.main-title.garage {
+  border-bottom: 0;
+}
+
+.garage-title {
+  font-weight: lighter;
+  margin: 1rem 0.7rem 0 0.7rem;
+}
+
+.garage-subtitle {
+  font-weight: lighter;
+  margin: 0 0.7rem 2rem 0.7rem;
+  font-size: larger;
+}
+
+.personal-data {
+  background-color: rgba(var(--ion-color-medium-rgb), 0.3);
+  border-radius: 0.4rem;
+  padding: 1rem;
+  margin: 1rem 0.7rem 3rem 0.7rem;
+
+  .customer-avatar {
+    ion-icon {
+      display: flex;
+      font-size: 55px;
+    }
+  }
+
+  .customer-info {
+    p {
+      font-size: large;
+      font-weight: lighter;
+      margin: 0;
+    }
+
+    p.member {
+      font-size: small;
+    }
+  }
+}
+
+.garage-container {
+  display: inline-flex;
+  align-items: start;
+  flex-wrap: wrap;
+
+  .car {
+    padding: 1rem;
+    width: 33.33%;
+    border-top: 1px dashed var(--ion-tab-bar-background-focused, #e0e0e0);
+
+    .car-image {
+      text-align: center;
+
+      img {
+        max-height: 8.85rem;
+      }
+    }
+
+    .car-name {
+      display: inline-flex;
+      align-items: center;
+
+      img {
+        max-width: 2rem;
+        margin-right: 0.3rem;
+      }
+
+      strong {
+        padding-left: .2rem;
+      }
+    }
+
+    @media (max-width: 950px) {
+      width: 50%;
+    }
+
+    @media (max-width: 550px) {
+      width: 100%;
+    }
+  }
+
+  .car-info, .car-opinion {
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    background-color: rgba(var(--ion-color-medium-rgb), 0.3);
+
+    ion-label {
+      font-size: medium;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      margin: 5px 0;
+    }
+
+    ion-icon {
+      vertical-align: middle;
+      margin-right: 0.3rem;
+    }
+  }
+
+  .car-opinion {
+    background: none;
+
+    ion-label {
+      font-size: large;
+    }
+
+    span {
+      font-size: smaller;
+      position: absolute;
+      right: 0.8rem;
+    }
+  }
+}

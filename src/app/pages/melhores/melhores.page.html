@@ -2,9 +2,6 @@
   <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
-
-    <app-banner-home></app-banner-home>
-
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="nav.best.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.best.title}} avaliados</ion-label>
@@ -13,11 +10,14 @@
     <div class="podium" *ngIf="bestModels?.length && !showLoader">
       <div class="car" *ngIf="bestModels[1]">
         <div class="nota nota-second">
-          <strong>{{bestModels[1].model_average?.toFixed(1)}}</strong>
+          <ion-label>
+            <ion-icon name="ribbon" color="dark"></ion-icon>
+            <strong>{{bestModels[1].model_average?.toFixed(1)}}</strong>{{bestModels[1].average?.name}}<br>
+          </ion-label>
         </div>
         <img [id]="'item-img-'+bestModels[1].name" src="assets/models/{{bestModels[1].brand?.url}}/{{bestModels[1].url}}/{{bestModels[1].url}}.png"
           title="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}" alt="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[1].brand?.url, bestModels[1]?.url)">
         <div class="position left top second bottom">
           <div class="marca">
             <img src="assets/brands/{{bestModels[1].brand?.url}}.svg" title="{{bestModels[1].brand?.name}}" alt="{{bestModels[1].brand?.name}}"
@@ -30,11 +30,14 @@
       </div>
       <div class="car" *ngIf="bestModels[0]">
         <div class="nota nota-first">
-          <strong>{{bestModels[0].model_average?.toFixed(1)}}</strong>
+          <ion-label>
+            <ion-icon name="ribbon" color="dark"></ion-icon>
+            <strong>{{bestModels[0].model_average?.toFixed(1)}}</strong>{{bestModels[0].average?.name}}<br>
+          </ion-label>
         </div>
         <img [id]="'item-img-'+bestModels[0].name" src="assets/models/{{bestModels[0].brand?.url}}/{{bestModels[0].url}}/{{bestModels[0].url}}.png"
           title="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}" alt="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[0].brand?.url, bestModels[0]?.url)">
         <div class="position left right top first">
           <div class="marca">
             <img src="assets/brands/{{bestModels[0].brand?.url}}.svg" title="{{bestModels[0].brand?.name}}" alt="{{bestModels[0].brand?.name}}"
@@ -48,11 +51,14 @@
       </div>
       <div class="car" *ngIf="bestModels[2]">
         <div class="nota nota-third">
-          <strong>{{bestModels[2].model_average?.toFixed(1)}}</strong>
+          <ion-label>
+            <ion-icon name="ribbon" color="dark"></ion-icon>
+            <strong>{{bestModels[2].model_average?.toFixed(1)}}</strong>{{bestModels[2].average?.name}}<br>
+          </ion-label>
         </div>
         <img [id]="'item-img-'+bestModels[2].name" src="assets/models/{{bestModels[2].brand?.url}}/{{bestModels[2].url}}/{{bestModels[2].url}}.png"
           title="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}" alt="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[2].brand?.url, bestModels[2]?.url)">
         <div class="position right top third bottom">
           <div class="marca">
             <img src="assets/brands/{{bestModels[2].brand?.url}}.svg" title="{{bestModels[2].brand?.name}}" alt="{{bestModels[2].brand?.name}}"
@@ -64,6 +70,8 @@
         </div>
       </div>
     </div>
+
+    <app-banner-home></app-banner-home>
 
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
