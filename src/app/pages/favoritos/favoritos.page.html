@@ -7,7 +7,7 @@
 
     <h2 class="favorite-subtitle">Para adicionar um favorito basta clicar no <ion-icon [name]="'heart-outline'" color="medium"></ion-icon> quando encontrar um!</h2>
 
-    <div class="favorite-container" *ngIf="favoriteModels.length">
+    <div class="favorite-container">
       <div class="car" *ngFor="let car of favoriteModels">
         <div class="car-name">
           <img src="assets/brands/{{car.brand?.url}}.svg" title="{{car.brand?.name}}" alt="{{car.brand?.name}}"
