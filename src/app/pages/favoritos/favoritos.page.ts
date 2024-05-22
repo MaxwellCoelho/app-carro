@@ -34,9 +34,13 @@ export class FavoritosPage implements ViewWillEnter {
     this.favoriteModels = this.favorite.recoveryFavorites();
   }
 
-  public clickCarItem(brand, model) {
-    const pageUrl = `/opiniao/${brand}/${model}`;
+  public clickCarItem(page: string, brand: string, model: string) {
+    const pageUrl = `/${page}/${brand}/${model}`;
     this.router.navigate([pageUrl]);
+  }
+
+  public clickOtherCars() {
+    this.router.navigate(['/busca']);
   }
 
   public showConfirmAlert(car: any) {

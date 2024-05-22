@@ -8,6 +8,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
 import { ViewWillEnter } from '@ionic/angular';
+import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginPage implements OnInit, ViewWillEnter {
     public router: Router,
     public fb: FormBuilder,
     public alertController: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public favorite: FavoriteService,
   ) { }
 
   ngOnInit() {
@@ -64,6 +66,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
         this.formLogin.reset();
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
         this.utils.returnLoggedUser();
+        this.favorite.syncFavorites();
         this.router.navigate([`/${this.nav.garage.route}`]);
       },
       err => {

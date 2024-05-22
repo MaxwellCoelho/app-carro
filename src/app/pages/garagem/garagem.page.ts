@@ -93,4 +93,8 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     const pageUrl = `/opiniao/${brand}/${model}`;
     this.router.navigate([pageUrl]);
   }
+
+  public clickOtherCars() {
+    this.router.navigate(['/busca']);
+  }
 }

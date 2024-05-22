@@ -1,3 +1,13 @@
+.favorite-subtitle {
+  font-weight: lighter;
+  margin: 2rem 1rem;
+  font-size: larger;
+
+  ion-icon {
+    margin: 0 0.3rem -0.2rem 0.3rem;
+  }
+}
+
 .favorite-container {
   display: inline-flex;
   align-items: start;
@@ -11,7 +21,6 @@
 
     .car-image {
       text-align: center;
-      cursor: pointer;
 
       img {
         max-height: 8.85rem;
@@ -21,6 +30,7 @@
     .car-name {
       display: inline-flex;
       align-items: center;
+      width: 100%;
 
       img {
         max-width: 2rem;
@@ -32,13 +42,55 @@
       }
     }
 
+    .buttons {
+      margin: 0.5rem 0.3rem;
+
+      ion-chip {
+        width: 100%;
+        margin: 0;
+
+        ion-icon {
+          margin-left: auto;
+        }
+
+        ion-label {
+          margin-right: auto;
+        }
+      }
+    }
+
     .favorite-image {
       vertical-align: top;
       transform: scale(0.7);
-      margin: 0.1rem 0rem 0 0.5rem;
-      padding: 0rem 0 0.1rem 1.1rem;
-      border-left: 1px solid var(--ion-color-medium);
+      margin: 0 0.3rem 0 auto;
       cursor: pointer;
+    }
+
+    .other-models {
+      background-color: var(--ion-color-light);
+      height: 13.7rem;
+      margin: .5rem .8rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      cursor: pointer;
+      border-radius: 1rem;
+
+      &:hover {
+        background-color: rgba(215, 216, 218, 0.4);
+      }
+
+      ion-icon {
+        width: 100%;
+        height: 3rem;
+        margin-top: auto;
+      }
+
+      ion-label {
+        margin: 0 auto auto auto;
+        color: var(--ion-color-medium);
+        font-size: larger;
+      }
     }
 
     @media (max-width: 950px) {
@@ -65,31 +117,6 @@
   @media (max-width: 550px) {
     .car:nth-child(1) {
       border-top: 0px
-    }
-  }
-
-  .car-opinion {
-    border-radius: 0.4rem;
-    padding: 0.5rem 0.8rem;
-    background-color: rgba(var(--ion-color-medium-rgb), 0.3);
-
-    ion-label {
-      font-size: large;
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      margin: 5px 0;
-    }
-
-    span {
-      font-size: smaller;
-      position: absolute;
-      right: 0.8rem;
-    }
-
-    ion-icon {
-      vertical-align: middle;
-      margin-right: 0.3rem;
     }
   }
 }
