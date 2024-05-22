@@ -26,10 +26,19 @@
         <form name="opinions" [formGroup]="formOpinions" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
             <ion-input type="hidden" formControlName="editOpinionId"></ion-input>
-            <ion-col size-md="9" size-sm="12" size-xs="12">
+            <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Título da avaliação da marca</ion-label>
                 <ion-input type="text" minlength="4" maxlength="80" (ionInput)="utils.capitalize($event)" formControlName="newOpinionBrandTitle"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Marca</ion-label>
+                <ion-select interface="popover" formControlName="newOpinionBrand">
+                  <ion-select-option *ngFor="let brand of brands" [value]="brand._id">{{ brand.name }}</ion-select-option>
+                </ion-select>
               </ion-item>
             </ion-col>
 
