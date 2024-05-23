@@ -29,6 +29,15 @@
             </ion-card-header>
           </ion-card>
         </ion-col>
+
+        <ion-col size-md="3" size-sm="6" size-xs="6">
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.feedback.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.feedback.icon"></ion-icon>
+              <ion-card-title>{{nav.feedback.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
       </ion-row>
 
       <ion-row>

@@ -29,6 +29,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   public years = [];
   public carVersions = [];
   public isFavorite: boolean;
+  public user;
 
   constructor(
     public dbService: DataBaseService,
@@ -220,6 +221,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
           this.content.scrollToTop(700);
           this.utils.setShouldUpdate(['opinions', 'bests'], true);
           this.showLoader = false;
+          this.user = res['saved']['created_by'];
         },
         err => {
           this.showErrorToast(err);

@@ -1,0 +1,115 @@
+
+.feedback-container {
+  padding: 1rem;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px dashed var(--ion-color-medium);
+
+  .valuation-row {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+  }
+
+  .item-col-val {
+    margin: 0.5rem 0;
+    padding-right: 1rem;
+
+    @media (max-width: 576px) {
+      margin: 0;
+      padding-right: 0;
+    }
+  }
+
+  .item-col-val-itens {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+  }
+
+  .segment-button-checked.otimo::part(indicator-background) {
+    background: var(--ion-color-primary);
+  }
+
+  .segment-button-checked.bom::part(indicator-background) {
+    background: var(--ion-color-success);
+  }
+
+  .segment-button-checked.regular::part(indicator-background) {
+    background: var(--ion-color-secondary);
+  }
+
+  .segment-button-checked.ruim::part(indicator-background) {
+    background: var(--ion-color-danger);
+  }
+
+  .segment-button-checked.pessimo::part(indicator-background) {
+    background: var(--ion-color-danger-secondary);
+  }
+
+  .segment-button-checked ion-label {
+    color: #fff;
+  }
+
+  ion-segment-button {
+    margin: 0;
+    background: var(--ion-color-light);
+    margin: 0 2px;
+
+    &::before {
+      border: 0;
+    }
+
+    &::part(indicator) {
+      padding-inline: 0px;
+    }
+  }
+
+  ion-row.item-medium, ion-row.item-otimo, ion-row.item-bom, ion-row.item-regular, ion-row.item-ruim, ion-row.item-pessimo {
+    border-radius: 0;
+  }
+
+  ion-row.item-otimo ion-segment-button {
+    background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+    // border: 1px solid rgba(var(--ion-color-primary-rgb), 1);
+  }
+
+  ion-row.item-bom ion-segment-button {
+    background-color: rgba(var(--ion-color-success-rgb), 0.1);
+  }
+
+  ion-row.item-regular ion-segment-button {
+    background-color: rgba(var(--ion-color-secondary-rgb), 0.1);
+  }
+
+  ion-row.item-ruim ion-segment-button {
+    background-color: rgba(var(--ion-color-danger-rgb), 0.1);
+  }
+
+  ion-row.item-pessimo ion-segment-button {
+    background-color: rgba(var(--ion-color-danger-secondary-rgb), 0.1);
+  }
+
+  ion-item.input-item::part(native) {
+    background: var(--ion-color-light);
+    background: var(--ion-color-light);
+    border-radius: 0.3rem 0.3rem 0 0;
+  }
+
+  ion-button {
+    width: 25rem;
+    margin-top: 1rem;
+
+    ion-icon {
+      margin-left: 0.5rem;
+    }
+
+    @media (max-width: 767px) {
+      width: auto;
+    }
+  }
+
+  .form-title {
+    margin: 0;
+    font-weight: lighter;
+  }
+}

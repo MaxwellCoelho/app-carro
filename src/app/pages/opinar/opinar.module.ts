@@ -8,7 +8,7 @@ import { AboutCarComponent } from './about-car/about-car.component';
 import { AboutBrandComponent } from './about-brand/about-brand.component';
 import { OpinarSendComponent } from './opinar-send/opinar-send.component';
 import { OpinarStepsComponent } from './opinar-steps/opinar-steps.component';
-
+import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
 import { OpinarPageRoutingModule } from './opinar-routing.module';
 
 
@@ -19,7 +19,7 @@ import { OpinarPageRoutingModule } from './opinar-routing.module';
     ReactiveFormsModule,
     IonicModule,
     OpinarPageRoutingModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     FormBuilder
@@ -29,7 +29,8 @@ import { OpinarPageRoutingModule } from './opinar-routing.module';
     AboutCarComponent,
     AboutBrandComponent,
     OpinarSendComponent,
-    OpinarStepsComponent
+    OpinarStepsComponent,
+    FeedbackComponent
   ]
 })
 export class OpinarPageModule {}

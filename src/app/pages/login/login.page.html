@@ -11,13 +11,13 @@
       <ion-grid slot="content">
         <ion-row>
           <ion-col>
-            <h1>Entrar</h1>
+            <br>
           </ion-col>
         </ion-row>
 
         <form name="login" [formGroup]="formLogin" (submit)="authUser()">
           <ion-row class="grid-content">
-            <ion-col size-md="6" size-sm="12" size-xs="12">
+            <ion-col size-md="4" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Email</ion-label>
                 <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
@@ -27,7 +27,7 @@
                 <span *ngIf="formLogin.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
               </ion-note>
             </ion-col>
-            <ion-col size-md="6" size-sm="12" size-xs="12">
+            <ion-col size-md="4" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Senha</ion-label>
                 <ion-input type="password" maxlength="80" formControlName="userPassword"></ion-input>
@@ -35,6 +35,12 @@
               <ion-note color="danger" *ngIf="formLogin.controls.userPassword.touched">
                 <span *ngIf="formLogin.controls.userPassword.errors?.required">Necessário preencher sua senha!</span>
               </ion-note>
+            </ion-col>
+            <ion-col size-md="4" size-sm="12" size-xs="12">
+              <ion-item lines="none" color="none">
+                <ion-label>Lembrar email</ion-label>
+                <ion-toggle color="primary" [(ngModel)]="remindChecked"  [ngModelOptions]="{standalone: true}"></ion-toggle>
+              </ion-item>
             </ion-col>
           </ion-row>
 

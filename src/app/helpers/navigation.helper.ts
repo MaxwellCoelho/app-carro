@@ -13,6 +13,7 @@ export const NAVIGATION = {
   admin: { title: 'Admin', icon: 'hammer', route: 'admin' },
   permission: { title: 'Permissões', icon: 'lock-open', route: 'permissao' },
   customer: { title: 'Usuários', icon: 'person', route: 'usuario' },
+  feedback: { title: 'Feedbacks', icon: 'megaphone', route: 'feedback' },
   carcategories: { title: 'Categorias', icon: 'shapes', route: 'carro-categoria' },
   carbrands: { title: 'Marcas', icon: 'pricetag', route: 'carro-marca' },
   carmodels: { title: 'Modelos', icon: 'car', route: 'carro-modelo' },

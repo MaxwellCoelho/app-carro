@@ -258,16 +258,17 @@ h2 {
 
   .range-label {
     margin: 0;
+    padding-top: 1rem;
 
     p {
-      font-size: initial;
+      font-size: large;
       color: #000;
       margin: 0;
     }
 
     @media (max-width: 576px) {
       p {
-        font-size: larger;
+        font-size: medium;
       }
     }
   }
@@ -325,11 +326,27 @@ ion-button ion-icon {
 }
 
 .suggestions {
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: 1px dashed var(--ion-color-medium);
+  margin-top: 1rem;
 
   ion-col {
-    text-align: center;
+    display: inline-flex;
+
+    ion-chip {
+      width: 100%;
+
+      ion-icon {
+        margin-left: auto;
+      }
+
+      ion-label {
+        margin-right: auto;
+      }
+    }
+  }
+}
+
+.success-container {
+  .col-model, .col-congrats {
+    align-content: center;
   }
 }

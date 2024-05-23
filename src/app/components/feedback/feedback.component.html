@@ -1,0 +1,26 @@
+<div class="feedback-container" *ngIf="showForm">
+  <form name="feedback" [formGroup]="formFeedback" (submit)="submitFeedback()" *ngIf="!alreadySent">
+    <h1 class="form-title">Como foi sua experiência em nosso site até o momento?</h1>
+    <ion-row class="valuation-row" [ngClass]="valuationItem ? 'item-'+valuationItem.id : 'item-medium'">
+      <ion-col size-md="12" size-sm="12" size-xs="12" class="item-col-val-itens">
+        <ion-segment (ionChange)="segmentChanged($event)" mode="ios" color="light" [id]="valuationItem.value" [value]="valuationItem.valuation?.value">
+          <ion-segment-button *ngFor="let val of valuation" [id]="valuationItem.value+'-'+val.id" value="{{val.value}}" [ngClass]="val.id">
+            <ion-label>{{val.name}}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+
+    <ion-item class="input-item">
+      <ion-label position="floating">Deixe um comentário</ion-label>
+      <ion-textarea minlength="4" maxlength="400" rows="3" (ionInput)="utils.capitalize($event)" formControlName="feedbackComments"></ion-textarea>
+    </ion-item>
+
+    <ion-button size="default" title="Enviar" expand="block" color="success" mode="ios" type="submit" [disabled]="formFeedback.status === 'INVALID' || !valuationItem.value">
+      <ion-icon size="default" name="paper-plane-outline"></ion-icon>
+      <ion-label slot="start">Enviar</ion-label>
+    </ion-button>
+  </form>
+
+  <h1 *ngIf="alreadySent" class="form-title">Muito obrigado por compartilhar sua opinião!</h1>
+</div>

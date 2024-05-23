@@ -31,7 +31,7 @@ export class FavoritosPage implements ViewWillEnter {
   }
 
   public getFavoriteModels(): void {
-    this.favoriteModels = this.favorite.recoveryFavorites();
+    this.favoriteModels = this.favorite.recoveryFavorites().reverse();
   }
 
   public clickCarItem(page: string, brand: string, model: string) {

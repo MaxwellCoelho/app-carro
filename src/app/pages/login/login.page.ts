@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -21,6 +22,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public nav = NAVIGATION;
   public showLoader: boolean;
   public formLogin: FormGroup;
+  public remindChecked = false;
 
   constructor(
     public authService: AuthService,
@@ -35,6 +37,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
 
   ngOnInit() {
     this.initForm();
+    this.recoveryUserEmail();
   }
 
   public ionViewWillEnter(): void {
@@ -65,6 +68,9 @@ export class LoginPage implements OnInit, ViewWillEnter {
 
         this.formLogin.reset();
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+        this.remindChecked
+          ? this.utils.localStorageSetItem('userEmail', res.authorized.email)
+          : this.utils.localStorageRemoveItem('userEmail');
         this.utils.returnLoggedUser();
         this.favorite.syncFavorites();
         this.router.navigate([`/${this.nav.garage.route}`]);
@@ -73,6 +79,15 @@ export class LoginPage implements OnInit, ViewWillEnter {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public recoveryUserEmail(): void {
+    const recovered = this.utils.localStorageGetItem('userEmail');
+
+    if (recovered) {
+      this.formLogin.controls.userEmail.patchValue(recovered);
+      this.remindChecked = true;
+    }
   }
 
   public forgotPassword(): void {
