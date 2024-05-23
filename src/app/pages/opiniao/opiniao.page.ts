@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 
 @Component({
   selector: 'app-opiniao',
@@ -30,6 +31,8 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   public page = 1;
   public pagination = 20;
 
+  public isFavorite: boolean;
+
   constructor(
     public dbService: DataBaseService,
     public toastController: ToastController,
@@ -37,7 +40,8 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     public route: ActivatedRoute,
     public searchService: SearchService,
     public router: Router,
-    public utils: UtilsService
+    public utils: UtilsService,
+    public favorite: FavoriteService
   ) {}
 
   public ngOnInit(): void {
@@ -57,6 +61,8 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
       this.page = 1;
       this.pagination = 20;
       this.loadModelInfo();
+    } else if (this.selectedModel) {
+      this.isFavorite = this.favorite.isFavorite(this.selectedModel);
     }
   }
 
@@ -106,6 +112,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public getModelOpinions(): void {
+    this.isFavorite = this.favorite.isFavorite(this.selectedModel);
     this.utils.setPageTitle(`${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
     const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
@@ -243,5 +250,24 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   changeModel() {
     const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
     this.router.navigate([NAVIGATION.search.route], params);
+  }
+
+  addOrRemoveFavorite() {
+    this.isFavorite = this.favorite.addOrRemoveFavorite(this.selectedModel);
+    const type = this.isFavorite ? 'adicionado' : 'removido';
+    this.showFavoriteToast(type);
+  }
+
+  public showFavoriteToast(type: string): void {
+    this.toastController.create({
+      header: 'Favoritos:',
+      message: `${this.selectedModel['brand']['name']} ${this.selectedModel['name']} ${type} com sucesso!`,
+      duration: 4000,
+      position: 'middle',
+      icon: type === 'adicionado' ? 'heart' : 'heart-outline',
+      color: 'success'
+    }).then(toast => {
+      toast.present();
+    });
   }
 }

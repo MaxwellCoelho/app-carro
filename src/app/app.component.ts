@@ -5,8 +5,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { Subscription, Observable, Subject  } from 'rxjs';
-import { finalize, map, catchError } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',

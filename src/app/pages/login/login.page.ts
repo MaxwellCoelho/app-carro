@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -8,6 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
 import { ViewWillEnter } from '@ionic/angular';
+import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +22,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public nav = NAVIGATION;
   public showLoader: boolean;
   public formLogin: FormGroup;
+  public remindChecked = false;
 
   constructor(
     public authService: AuthService,
@@ -28,11 +31,13 @@ export class LoginPage implements OnInit, ViewWillEnter {
     public router: Router,
     public fb: FormBuilder,
     public alertController: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public favorite: FavoriteService,
   ) { }
 
   ngOnInit() {
     this.initForm();
+    this.recoveryUserEmail();
   }
 
   public ionViewWillEnter(): void {
@@ -63,13 +68,26 @@ export class LoginPage implements OnInit, ViewWillEnter {
 
         this.formLogin.reset();
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+        this.remindChecked
+          ? this.utils.localStorageSetItem('userEmail', res.authorized.email)
+          : this.utils.localStorageRemoveItem('userEmail');
         this.utils.returnLoggedUser();
+        this.favorite.syncFavorites();
         this.router.navigate([`/${this.nav.garage.route}`]);
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public recoveryUserEmail(): void {
+    const recovered = this.utils.localStorageGetItem('userEmail');
+
+    if (recovered) {
+      this.formLogin.controls.userEmail.patchValue(recovered);
+      this.remindChecked = true;
+    }
   }
 
   public forgotPassword(): void {

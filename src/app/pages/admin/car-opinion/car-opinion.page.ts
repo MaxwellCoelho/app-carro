@@ -25,6 +25,7 @@ export class CarOpinionPage implements OnInit {
   public showLoader: boolean;
   public formOpinions: FormGroup;
   public activeChecked = true;
+  public models: Array<any>;
 
   constructor(
     public dbService: DataBaseService,
@@ -38,17 +39,33 @@ export class CarOpinionPage implements OnInit {
   ngOnInit() {
     this.initForm();
     this.getOpinions();
+    this.getModels();
   }
 
   public initForm() {
     this.formOpinions = this.fb.group({
       editOpinionId: this.fb.control(''),
+      newOpinionModel: this.fb.control('', [Validators.required]),
       newOpinionCarTitle: this.fb.control('', [Validators.required]),
       newOpinionYearModel: this.fb.control('', [Validators.required]),
       newOpinionYearBought: this.fb.control('', [Validators.required]),
       newOpinionCarPositive: this.fb.control('', [Validators.required]),
       newOpinionCarNegative: this.fb.control('', [Validators.required])
     });
+  }
+
+  public getModels(): void {
+    this.showLoader = true;
+    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+      res => {
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.models = res.models.sort((a, b) => (a['brand']['name'] > b['brand']['name']) || -1);
+        this.showLoader = false;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
   }
 
   public getOpinions(): void {
@@ -68,8 +85,24 @@ export class CarOpinionPage implements OnInit {
   public createOpinion(action: string) {
     this.showLoader = true;
     const opinionId = this.formOpinions.value.editOpinionId;
+    const model = this.models.find(mo => mo['_id'] === this.formOpinions.value.newOpinionModel);
+
     const data = {
       aboutCar: {
+        carBrand: {
+          _id: model['brand']['_id'],
+          name: model['brand']['name'],
+          url: model['brand']['url'],
+          active: model['brand']['active'],
+          review: model['brand']['review']
+        },
+        carModel: {
+          _id: model['_id'],
+          name: model['name'],
+          url: model['url'],
+          active: model['active'],
+          review: model['review']
+        },
         finalWords: {
           title: this.formOpinions.value.newOpinionCarTitle,
           positive: this.formOpinions.value.newOpinionCarPositive,
@@ -101,6 +134,7 @@ export class CarOpinionPage implements OnInit {
   public editOpinion(opinion) {
     this.formOpinions.reset({
       editOpinionId: opinion['_id'],
+      newOpinionModel: opinion.model['_id'],
       newOpinionCarTitle: opinion.car_title,
       newOpinionCarPositive: opinion.car_positive,
       newOpinionCarNegative: opinion.car_negative,

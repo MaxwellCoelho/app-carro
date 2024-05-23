@@ -9,15 +9,15 @@
           <ion-icon slot="start" [name]="nav.search.icon"></ion-icon>
           {{nav.search.title}}
         </ion-button>
-        <!-- FAVORITOS | COMPARAR -->
+        <!-- COMPARAR -->
         <!-- <ion-button routerDirection="root" [routerLink]="'/'+ nav.compare.route" routerLinkActive="selected" class="desktop-menu">
           <ion-icon slot="start" [name]="nav.compare.icon"></ion-icon>
           {{nav.compare.title}}
-        </ion-button>
+        </ion-button>-->
         <ion-button routerDirection="root" [routerLink]="'/'+ nav.favorite.route" routerLinkActive="selected" class="desktop-menu">
           <ion-icon slot="start" [name]="nav.favorite.icon"></ion-icon>
           {{nav.favorite.title}}
-        </ion-button> -->
+        </ion-button>
         <ion-button *ngIf="utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.garage.route" routerLinkActive="selected" class="desktop-menu">
           <ion-icon slot="start" [name]="nav.garage.icon"></ion-icon>
           {{nav.garage.title}}

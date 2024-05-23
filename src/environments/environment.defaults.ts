@@ -20,7 +20,8 @@ export const environment = {
   opinionModelAction: 'opinion/model',
   filterOpinionModelAction: 'opinion/model/filter',
   bestBrandsAction: 'best/brands',
-  bestModelsAction: 'best/models'
+  bestModelsAction: 'best/models',
+  feedbackAction: 'feedback'
 };
 
 /*

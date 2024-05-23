@@ -5,6 +5,7 @@ import { CarOpinionPage } from './car-opinion/car-opinion.page';
 import { BrandOpinionPage } from './brand-opinion/brand-opinion.page';
 import { PermissionPage } from './permission/permission.page';
 import { CustomerPage } from './customer/customer.page';
+import { FeedbackPage } from './feedback/feedback.page';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { CarCategoryPage } from './car-category/car-category.page';
 import { CarBrandPage } from './car-brand/car-brand.page';
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path: NAVIGATION.customer.route,
     component: CustomerPage,
+    canActivate: [LoggedAdminGuard]
+  },
+  {
+    path: NAVIGATION.feedback.route,
+    component: FeedbackPage,
     canActivate: [LoggedAdminGuard]
   },
   {

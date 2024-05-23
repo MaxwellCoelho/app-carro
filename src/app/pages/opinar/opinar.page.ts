@@ -10,6 +10,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router, Event, NavigationEnd } from '@angular/router';
+import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 
 @Component({
   selector: 'app-opinar',
@@ -27,6 +28,8 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   public currentStep = 1;
   public years = [];
   public carVersions = [];
+  public isFavorite: boolean;
+  public user;
 
   constructor(
     public dbService: DataBaseService,
@@ -35,7 +38,8 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     public route: ActivatedRoute,
     public searchService: SearchService,
     public router: Router,
-    public utils: UtilsService
+    public utils: UtilsService,
+    public favorite: FavoriteService
   ) {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd && this.currentStep >= 4) {
@@ -57,6 +61,8 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       this.searchService.saveModel(this.selectedModel);
       this.years = [];
       this.loadModelInfo();
+    } else if (this.selectedModel) {
+      this.isFavorite = this.favorite.isFavorite(this.selectedModel);
     }
   }
 
@@ -181,6 +187,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
   }
 
   public loadFinalPayload() {
+    this.isFavorite = this.favorite.isFavorite(this.selectedModel);
     this.utils.setPageTitle(`Opinar ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
     const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
 
@@ -214,6 +221,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
           this.content.scrollToTop(700);
           this.utils.setShouldUpdate(['opinions', 'bests'], true);
           this.showLoader = false;
+          this.user = res['saved']['created_by'];
         },
         err => {
           this.showErrorToast(err);
@@ -347,5 +355,24 @@ export class OpinarPage implements OnInit, ViewWillEnter {
 
   saveLoadedVersions($event) {
     this.carVersions = $event;
+  }
+
+  addOrRemoveFavorite() {
+    this.isFavorite = this.favorite.addOrRemoveFavorite(this.selectedModel);
+    const type = this.isFavorite ? 'adicionado' : 'removido';
+    this.showFavoriteToast(type);
+  }
+
+  public showFavoriteToast(type: string): void {
+    this.toastController.create({
+      header: 'Favoritos:',
+      message: `${this.selectedModel['brand']['name']} ${this.selectedModel['name']} ${type} com sucesso!`,
+      duration: 4000,
+      position: 'middle',
+      icon: type === 'adicionado' ? 'heart' : 'heart-outline',
+      color: 'success'
+    }).then(toast => {
+      toast.present();
+    });
   }
 }

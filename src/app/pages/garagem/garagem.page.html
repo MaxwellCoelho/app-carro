@@ -36,7 +36,7 @@
           onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'">
           {{car.model.brand?.name}} <strong>{{car.model.name}}</strong>
         </div>
-        <div class="car-image">
+        <div class="car-image" (click)="clickCarItem(car.model.brand?.url, car.model.url)">
           <img src="assets/models/{{car.model.brand?.url}}/{{car.model.url}}/{{car.model.url}}.png"
             title="{{car.model.brand?.name + ' ' + car.model.name}}" alt="{{car.model.brand?.name + ' ' + car.model.name}}"
             onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
@@ -65,6 +65,12 @@
             Comprou {{car.km_bought === 0 ? '' : 'com'}} {{car.km_bought === 99 ? 'mais de' : ''}} {{ car.km_bought }}{{car.km_bought === 0 ? ' Km' : '.000 Km'}}
           </ion-label>
         </ion-title>
+      </div>
+      <div class="car">
+        <div class="other-models" (click)="clickOtherCars()">
+          <ion-icon [name]="'car-sport-outline'" color="medium"></ion-icon>
+          <ion-label>Buscar novos carros</ion-label>
+        </div>
       </div>
     </div>
   </div>

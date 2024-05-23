@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -99,6 +100,7 @@ export class CarVersionPage implements OnInit {
         _id: model['_id'],
         name: model['name'],
         url: model['url'],
+        brand: model['brand'],
         active: model['active'],
         review: model['review']
       },
@@ -169,7 +171,10 @@ export class CarVersionPage implements OnInit {
 
   public showConfirmAlert(action: string, version: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${version.editVersionId || ''}</strong>?`;
+    const myItem = version.editVersionId
+      ? version.editVersionId
+      : `${version.model.brand.name} ${version.model.name} ${version.engine.toFixed(1)} ${version.complement || ''} ${version.gearbox || ''} ${version.fuel}`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${myItem || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
@@ -248,9 +253,10 @@ export class CarVersionPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
+    const myItem = `${item.model.brand.name} ${item.model.name} ${item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}`;
     this.toastController.create({
       header: `${action} com sucesso!`,
-      message: item ? `Nome: ${item.name}` : '',
+      message: item ? `Nome: ${myItem}` : '',
       duration: 4000,
       position: 'middle',
       icon: 'checkmark-outline',

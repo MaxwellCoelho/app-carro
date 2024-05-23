@@ -1,0 +1,67 @@
+<ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+
+  <div class="main-container">
+    <ion-title size="large" color="primary" class="main-title">
+      <ion-icon [routerLink]="'/' + nav.admin.route" [name]="'arrow-back'" color="secondary" style="cursor: pointer"></ion-icon>
+      <ion-label [routerLink]="'/' + nav.admin.route" style="cursor: pointer">{{nav.admin.title}}</ion-label>
+
+      <ion-label>
+        <ion-icon [name]="'chevron-forward'" size="small" color="medium"></ion-icon>
+      </ion-label>
+
+      <ion-icon [name]="nav.feedback.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.feedback.title}}</ion-label>
+    </ion-title>
+
+    <div class="main-body">
+     <ion-grid slot="content">
+        <ion-row>
+          <ion-col><h1>Feedbacks {{feedbacks ? '('+feedbacks.length+')' : ''}}</h1></ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="!feedbacks" class="grid-content">
+          <ion-col style="text-align: center; margin: 2rem 0">
+            <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
+            <br>
+            <ion-label color="medium">Não há nada por aqui ainda!</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div class="table-container" *ngIf="feedbacks">
+          <table>
+            <tr>
+              <th>Id</th>
+              <th>Página</th>
+              <th>Nota</th>
+              <th>Comentários</th>
+              <th>Criado em</th>
+              <th>Criado por</th>
+              <!-- <th>Modificado em</th>
+              <th>Modificado por</th> -->
+              <th>Ação</th>
+            </tr>
+
+            <tr *ngFor="let feed of feedbacks">
+              <td>{{feed._id}}</td>
+              <td>{{feed.page}}</td>
+              <td>{{feed.valuation}}</td>
+              <td>{{feed.comments}}</td>
+              <td>{{feed.created || '-'}}</td>
+              <td>{{(feed.created_by?.name ? feed.created_by.name  : feed.created_by) || '-'}}</td>
+              <!-- <td>{{feed.modified || '-'}}</td>
+              <td>{{(feed.modified_by?.name ? feed.modified_by?.name : feed.modified_by) || '-'}}</td> -->
+              <td style="display: flex">
+                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', feed)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </ion-grid>
+    </div>
+
+  </div>
+
+</ion-content>

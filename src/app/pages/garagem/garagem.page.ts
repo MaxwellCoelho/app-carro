@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -8,13 +8,14 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-garagem',
   templateUrl: 'garagem.page.html',
   styleUrls: ['garagem.page.scss'],
 })
-export class GaragemPage implements ViewWillEnter {
+export class GaragemPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
   public showLoader: boolean;
@@ -25,11 +26,22 @@ export class GaragemPage implements ViewWillEnter {
     public dbService: DataBaseService,
     public toastController: ToastController,
     public cryptoService: CryptoService,
+    public router: Router
   ) {}
+
+  public ngOnInit(): void {
+    if (!this.utils.getShouldUpdate('opinions')) {
+      this.getModelOpinions();
+    }
+  }
 
   public ionViewWillEnter(): void {
     this.utils.setPageTitle('Minha garagem');
-    this.getModelOpinions();
+    if (this.utils.getShouldUpdate('opinions')) {
+      this.utils.setShouldUpdate(['opinions'], false);
+      this.myModelOpinions = [];
+      this.getModelOpinions();
+    }
   }
 
   public getModelOpinions(): void {
@@ -75,5 +87,14 @@ export class GaragemPage implements ViewWillEnter {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public clickCarItem(brand, model) {
+    const pageUrl = `/opiniao/${brand}/${model}`;
+    this.router.navigate([pageUrl]);
+  }
+
+  public clickOtherCars() {
+    this.router.navigate(['/busca']);
   }
 }

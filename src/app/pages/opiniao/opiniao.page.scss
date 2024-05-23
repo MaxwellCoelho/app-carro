@@ -1,5 +1,5 @@
 .brand-image-title {
-  max-width: 100px;
+  max-width: 100%;
   margin: 0 1.5rem 0 0rem;
 }
 
@@ -10,6 +10,10 @@
 
   span {
     font-weight: bold;
+  }
+
+  @media (max-width: 700px) {
+    font-size: x-large;
   }
 }
 
@@ -25,6 +29,21 @@
   margin-top: -0.2rem;
   vertical-align: middle;
   transform: scale(0.7);
+}
+
+.favorite-image {
+  vertical-align: top;
+  transform: scale(0.7);
+  margin: 0.4rem 0.5rem 0 0.5rem;
+  padding: 0.3rem 0 .5rem 1.1rem;
+  border-left: 1px solid var(--ion-color-medium);
+  cursor: pointer;
+
+  @media (max-width: 700px) {
+    margin-top: 0.3rem;
+    padding-top: 0.4rem;
+    margin-right: -0.6rem;
+  }
 }
 
 .selected-model-grid {
@@ -245,22 +264,37 @@
   }
 
   .model-name {
-    padding-top: 2.2rem;
+    display: flex;
+    align-items: center;
   }
 
   .model-change {
-    text-align: right;
-    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+
+    ion-chip {
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .model-name, .model-change {
+      justify-content: center;
+    }
+
+    .model-change ion-chip {
+      margin-left: 0;
+    }
   }
 
   .model-opinions {
     text-align: right;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 575px) {
     .model-name {
       text-align: center;
-      padding-top: 0;
+      padding: 0;
     }
 
     .model-logo {

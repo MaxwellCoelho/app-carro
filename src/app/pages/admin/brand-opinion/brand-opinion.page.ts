@@ -22,6 +22,7 @@ export class BrandOpinionPage implements OnInit {
 
   public nav = NAVIGATION;
   public opinions: Array<any>;
+  public brands: Array<any>;
   public showLoader: boolean;
   public formOpinions: FormGroup;
   public activeChecked = true;
@@ -38,16 +39,33 @@ export class BrandOpinionPage implements OnInit {
   ngOnInit() {
     this.initForm();
     this.getOpinions();
+    this.getBrands();
   }
 
   public initForm() {
     this.formOpinions = this.fb.group({
       editOpinionId: this.fb.control(''),
+      newOpinionBrand: this.fb.control('', [Validators.required]),
       newOpinionBrandTitle: this.fb.control('', [Validators.required]),
       newOpinionBrandPositive: this.fb.control('', [Validators.required]),
       newOpinionBrandNegative: this.fb.control('', [Validators.required])
     });
   }
+
+  public getBrands(): void {
+    this.showLoader = true;
+    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+      res => {
+        if (!subBrands.closed) { subBrands.unsubscribe(); }
+        this.brands = res.brands.sort((a, b) => (!a['review']) || -1);
+        this.showLoader = false;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
 
   public getOpinions(): void {
     this.showLoader = true;
@@ -66,8 +84,17 @@ export class BrandOpinionPage implements OnInit {
   public createOpinion(action: string) {
     this.showLoader = true;
     const opinionId = this.formOpinions.value.editOpinionId;
+    const brand = this.brands.find(mo => mo['_id'] === this.formOpinions.value.newOpinionBrand);
+
     const data = {
       aboutBrand: {
+        carBrand: {
+          _id: brand['_id'],
+          name: brand['name'],
+          url: brand['url'],
+          active: brand['active'],
+          review: brand['review']
+        },
         finalWords: {
           title: this.formOpinions.value.newOpinionBrandTitle,
           positive: this.formOpinions.value.newOpinionBrandPositive,
@@ -98,6 +125,7 @@ export class BrandOpinionPage implements OnInit {
     this.formOpinions.reset({
       editOpinionId: opinion['_id'],
       newOpinionBrandTitle: opinion.brand_title,
+      newOpinionBrand: opinion.brand['_id'],
       newOpinionBrandPositive: opinion.brand_positive,
       newOpinionBrandNegative: opinion.brand_negative
     });
