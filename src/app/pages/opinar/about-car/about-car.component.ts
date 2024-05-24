@@ -94,7 +94,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     const diff = end - start;
 
     for (let i = 0; i <= diff; i++) {
-      this.years.push(start + i);
+      this.years.unshift(start + i);
     }
   }
 

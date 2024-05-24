@@ -22,15 +22,16 @@
         </div>
         <ion-row class="buttons">
           <ion-col size-md="6" size-sm="6" size-xs="12">
-            <ion-chip title="Ver opiniões" color="primary" (click)="clickCarItem('opiniao', car.brand?.url, car.url)">
-              <ion-icon [name]="'reader-outline'"></ion-icon>
-              <ion-label >Opiniões</ion-label>
+            <ion-chip title="Opinar" color="primary" (click)="clickCarItem('opinar', car.brand?.url, car.url)">
+              <ion-icon [name]="'paper-plane'"></ion-icon>
+              <ion-label>Opinar</ion-label>
             </ion-chip>
           </ion-col>
+
           <ion-col size-md="6" size-sm="6" size-xs="12">
-            <ion-chip title="Opinar" color="primary" (click)="clickCarItem('opinar', car.brand?.url, car.url)">
-              <ion-icon [name]="'paper-plane-outline'"></ion-icon>
-              <ion-label>Opinar</ion-label>
+            <ion-chip outline title="Ver opiniões" color="primary" (click)="clickCarItem('opiniao', car.brand?.url, car.url)">
+              <ion-icon [name]="'reader-outline'"></ion-icon>
+              <ion-label >Opiniões</ion-label>
             </ion-chip>
           </ion-col>
         </ion-row>

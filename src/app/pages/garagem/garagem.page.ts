@@ -20,6 +20,7 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public nav = NAVIGATION;
   public showLoader: boolean;
   public myModelOpinions = [];
+  public modalContent: object;
 
   constructor(
     public utils: UtilsService,
@@ -89,12 +90,21 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     });
   }
 
-  public clickCarItem(brand, model) {
-    const pageUrl = `/opiniao/${brand}/${model}`;
+  public clickCarItem(page: string, brand: string, model: string) {
+    const pageUrl = `/${page}/${brand}/${model}`;
     this.router.navigate([pageUrl]);
   }
 
   public clickOtherCars() {
     this.router.navigate(['/busca']);
+  }
+
+  public clickMyOpinion(car: any): void {
+    this.modalContent = car;
+    console.log(car);
+  }
+
+  closeModal() {
+    this.modalContent = null;
   }
 }
