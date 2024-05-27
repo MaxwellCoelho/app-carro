@@ -13,13 +13,11 @@ export class OpinionComponent implements OnInit, AfterViewInit {
 
   constructor() { }
 
-  ngOnInit() {
-    console.log(this.opinions);
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
     if (this.expanded) {
-      this.expandDetials(this.opinions[0]['_id']);
+      this.expandDetials(`${this.opinions[0]['_id']}-ex`);
     }
   }
 

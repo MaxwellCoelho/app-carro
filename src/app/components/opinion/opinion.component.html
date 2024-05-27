@@ -1,4 +1,4 @@
-<ion-grid slot="content" *ngFor="let opinion of opinions" id="{{opinion._id}}" class="selected-model-grid opinion" [ngClass]="opinion.average?.id">
+<ion-grid slot="content" *ngFor="let opinion of opinions" id="{{opinion._id}}{{expanded ? '-ex' : ''}}" class="selected-model-grid opinion" [ngClass]="opinion.average?.id">
   <ion-row class="customer-info">
     <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar">
       <ion-icon name="person-circle-outline" color="dark"></ion-icon>
