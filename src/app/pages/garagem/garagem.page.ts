@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
@@ -9,6 +10,7 @@ import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { Router } from '@angular/router';
+import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 
 @Component({
   selector: 'app-garagem',
@@ -21,6 +23,7 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public showLoader: boolean;
   public myModelOpinions = [];
   public modalContent: object;
+  public valuation = VALUATION.slice();
 
   constructor(
     public utils: UtilsService,
@@ -101,7 +104,36 @@ export class GaragemPage implements OnInit, ViewWillEnter {
 
   public clickMyOpinion(car: any): void {
     this.modalContent = car;
-    console.log(car);
+    this.setOpinionValuation();
+  }
+
+  public setOpinionValuation() {
+    this.modalContent['average'] = this.getValuationItemByValue(this.modalContent['car_val_average']);
+
+    const valItens = [...VALUATION_ITENS_CAR];
+    const newItens = [];
+
+    for (const valItem of valItens) {
+      const newItem = {
+        ...valItem,
+        valuation: this.getValuationItemByValue(this.modalContent[`car_val_${valItem.value}`])
+      };
+
+      newItens.push(newItem);
+    }
+
+    this.modalContent['valuationItens'] = newItens;
+
+    const createdDate = this.modalContent['created'] ? this.modalContent['created'].split(' ')[0] : null;
+    const createdYear = createdDate ? createdDate.split('/')[2] : null;
+
+    this.modalContent['current_car'] = createdYear && (parseInt(this.modalContent['year_bought'], 10) + this.modalContent['kept_period'] === parseInt(createdYear, 10));
+  }
+
+  public getValuationItemByValue(value: any): any {
+    const int = value ? value.toFixed(1) : 0;
+    const foundVal = this.valuation.filter(val => val.value <= int);
+    return foundVal.length ? foundVal[foundVal.length - 1] : VALUATION_NOT_FOUND;
   }
 
   closeModal() {

@@ -110,18 +110,7 @@
               <ion-col size-lg="5" size-md="6.5" size-sm="7.75" size-xs="6" class="car-data">
                 <ion-row class="average-row average-small" [ngClass]="model.average?.id">
                   <ion-col size-md="12" size-sm="12" size-xs="12">
-                    <div class="val-bar">
-                      <div class="box1 l"></div>
-                      <div class="box1 r"></div>
-                      <div class="box2 l"></div>
-                      <div class="box2 r"></div>
-                      <div class="box3 l"></div>
-                      <div class="box3 r"></div>
-                      <div class="box4 l"></div>
-                      <div class="box4 r"></div>
-                      <div class="box5 l"></div>
-                      <div class="box5 r"></div>
-                    </div>
+                    <app-valuation-bar [small]="true" [valuationId]="model.average?.id"></app-valuation-bar>
                   </ion-col>
                 </ion-row>
                 <ion-row class="car-info">

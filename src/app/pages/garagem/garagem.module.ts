@@ -6,6 +6,8 @@ import { GaragemPage } from './garagem.page';
 import { SharedModule } from '../../shared/shared.module';
 
 import { GaragemPageRoutingModule } from './garagem-routing.module';
+import { OpinionComponent } from 'src/app/components/opinion/opinion.component';
+import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuation-bar.component';
 
 
 @NgModule({
@@ -16,6 +18,10 @@ import { GaragemPageRoutingModule } from './garagem-routing.module';
     SharedModule,
     GaragemPageRoutingModule
   ],
-  declarations: [GaragemPage]
+  declarations: [
+    GaragemPage,
+    ValuationBarComponent,
+    OpinionComponent
+  ]
 })
 export class GaragemPageModule {}

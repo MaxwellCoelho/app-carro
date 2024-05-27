@@ -6,6 +6,8 @@ import { OpiniaoPage } from './opiniao.page';
 import { SharedModule } from '../../shared/shared.module';
 
 import { OpiniaoPageRoutingModule } from './opiniao-routing.module';
+import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuation-bar.component';
+import { OpinionComponent } from 'src/app/components/opinion/opinion.component';
 
 
 @NgModule({
@@ -16,6 +18,10 @@ import { OpiniaoPageRoutingModule } from './opiniao-routing.module';
     OpiniaoPageRoutingModule,
     SharedModule
   ],
-  declarations: [OpiniaoPage]
+  declarations: [
+    OpiniaoPage,
+    ValuationBarComponent,
+    OpinionComponent
+  ]
 })
 export class OpiniaoPageModule {}

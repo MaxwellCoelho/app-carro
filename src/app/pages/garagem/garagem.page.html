@@ -55,12 +55,15 @@
   <ion-modal [isOpen]="!!modalContent">
     <ng-template>
         <ion-toolbar>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeModal()" [strong]="true">x</ion-button>
+          <ion-buttons slot="end" >
+            <ion-chip title="Fechar" color="primary" (click)="closeModal()" style="border: 1px solid rgba(27, 117, 187, 0.32)">
+              <ion-icon [name]="'close-outline'"></ion-icon>
+              <ion-label >Fechar</ion-label>
+            </ion-chip>
           </ion-buttons>
         </ion-toolbar>
       <ion-content class="ion-padding" *ngIf="modalContent">
-        {{modalContent.model.brand.name}} {{modalContent.model.name}}
+        <app-opinion [expanded]="true" [opinions]="[modalContent]"></app-opinion>
       </ion-content>
     </ng-template>
   </ion-modal>
