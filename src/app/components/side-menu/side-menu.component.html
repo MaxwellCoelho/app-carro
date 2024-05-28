@@ -7,6 +7,10 @@
         <ion-label>{{utils.sessionUser.name}}</ion-label>
       </ion-item>
 
+      <ion-item button (click)="clickItem(nav.login.route)" *ngIf="!utils.sessionUser" [routerLink]="'/'+ nav.login.route" color="primary" routerDirection="root" lines="full" detail="false" routerLinkActive="selected">
+        <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
+        <ion-label>{{nav.login.title}}</ion-label>
+      </ion-item>
       <!-- <ion-item *ngIf="!utils.sessionUser" (click)="clickItem(nav.login.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.login.route" lines="none" detail="false">
         <ion-icon slot="start" [name]="nav.login.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.login.title}}</ion-label>
@@ -14,9 +18,9 @@
     </ion-menu-toggle>
     <ion-buttons slot="primary">
       <ion-menu-toggle auto-hide="false">
-        <ion-button *ngIf="utils.sessionUser" (click)="clickItem(nav.settings.route)" routerDirection="root" [routerLink]="'/'+ nav.settings.route">
+        <!-- <ion-button *ngIf="utils.sessionUser" (click)="clickItem(nav.settings.route)" routerDirection="root" [routerLink]="'/'+ nav.settings.route">
           <ion-icon slot="start" [name]="nav.settings.icon + '-outline'"></ion-icon>
-        </ion-button>
+        </ion-button> -->
       </ion-menu-toggle>
     </ion-buttons>
   </ion-toolbar>

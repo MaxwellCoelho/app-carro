@@ -6,7 +6,7 @@ export const NAVIGATION = {
   favorite: { title: 'Favoritos', icon: 'heart', route: 'favoritos' },
   garage: { title: 'Garagem', icon: 'car-sport', route: 'garagem' },
   best: { title: 'Melhores', icon: 'trophy', route: 'melhores' },
-  perfil: { title: 'Perfil', icon: 'person-circle', route: 'perfil' },
+  perfil: { title: 'Meus dados', icon: 'person', route: 'perfil' },
   term: { title: 'Termo de uso', icon: 'document', route: 'termo-de-uso' },
   login: { title: 'Entrar', icon: 'enter', route: 'login' },
   logout: { title: 'Sair', icon: 'exit', route: 'logout' },

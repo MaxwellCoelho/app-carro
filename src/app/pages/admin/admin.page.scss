@@ -1,4 +1,12 @@
 
-ion-card-title {
-  margin-top: 3rem;
+ion-card {
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--ion-color-primary-shade);
+  }
+
+  ion-card-title {
+    margin-top: 2rem;
+  }
 }

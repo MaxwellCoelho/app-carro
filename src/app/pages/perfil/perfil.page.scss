@@ -1,0 +1,81 @@
+.personal-data {
+  padding: 1.5rem 0;
+  margin: 1rem 0.7rem 1rem 0.7rem;
+  border-bottom: 1px solid #ddd;
+
+  .customer-avatar {
+    ion-icon {
+      display: flex;
+      font-size: 55px;
+    }
+  }
+
+  .customer-info {
+    p {
+      font-size: large;
+      font-weight: lighter;
+      margin: 0;
+    }
+
+    p.member {
+      font-size: small;
+    }
+  }
+
+  .column-div {
+    border-left: 1px dashed var(--ion-tab-bar-background-focused, #e0e0e0);
+    padding-left: 1rem;
+
+    ion-chip {
+      border: 1px solid rgba(27, 117, 187, 0.32);
+      padding: 1rem;
+    }
+
+    @media (max-width: 575px) {
+      border-left: 0;
+      padding-left: 0;
+      padding-top: 1rem;
+
+      ion-chip {
+        width: 100%;
+
+        ion-icon {
+          margin-left: auto;
+        }
+
+        ion-label {
+          margin-right: auto;
+        }
+      }
+    }
+  }
+}
+
+ion-card {
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--ion-color-primary-shade);
+  }
+
+  ion-card-title {
+    margin-top: 2rem;
+  }
+}
+
+ion-item.input-item::part(native) {
+  background: var(--ion-color-light);
+  background: var(--ion-color-light);
+  border-radius: 0.3rem 0.3rem 0 0;
+  align-items: center;
+}
+
+ion-modal {
+  --max-width: 800px;
+
+  ion-button {
+    ion-label {
+      text-transform: capitalize;
+    }
+  }
+}

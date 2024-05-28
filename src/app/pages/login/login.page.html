@@ -20,7 +20,7 @@
             Digite seu email e senha para ter acesso a sua garagem!
           </h2>
           <ion-row class="grid-content">
-            <ion-col size-md="4" size-sm="12" size-xs="12">
+            <ion-col size-lg="4.5" size-md="4.5" size-sm="12" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Email</ion-label>
                 <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
@@ -30,16 +30,19 @@
                 <span *ngIf="formLogin.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
               </ion-note>
             </ion-col>
-            <ion-col size-md="4" size-sm="12" size-xs="12">
-              <ion-item>
+            <ion-col size-lg="4" size-md="3.8" size-sm="12" size-xs="12">
+              <ion-item class="input-item">
                 <ion-label position="floating">Senha</ion-label>
-                <ion-input type="password" maxlength="80" formControlName="userPassword"></ion-input>
+                <ion-input [type]="userPasswordType" maxlength="80" formControlName="userPassword"></ion-input>
+                <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('userPasswordType')">
+                  <ion-icon slot="icon-only" name="eye{{userPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+                </ion-button>
               </ion-item>
               <ion-note color="danger" *ngIf="formLogin.controls.userPassword.touched">
                 <span *ngIf="formLogin.controls.userPassword.errors?.required">Necessário preencher sua senha!</span>
               </ion-note>
             </ion-col>
-            <ion-col size-md="4" size-sm="12" size-xs="12">
+            <ion-col size-lg="3.5" size-md="3.7" size-sm="12" size-xs="12">
               <ion-item lines="none" color="none">
                 <ion-label>Lembrar email</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="remindChecked"  [ngModelOptions]="{standalone: true}"></ion-toggle>

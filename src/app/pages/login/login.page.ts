@@ -25,6 +25,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public formRecovery: FormGroup;
   public remindChecked = false;
   public showForgotPassword = false;
+  public userPasswordType = 'password';
 
   constructor(
     public authService: AuthService,
@@ -39,11 +40,11 @@ export class LoginPage implements OnInit, ViewWillEnter {
 
   ngOnInit() {
     this.initForm();
-    this.recoveryUserEmail();
   }
 
   public ionViewWillEnter(): void {
     this.utils.setPageTitle('Entrar');
+    this.recoveryUserEmail();
   }
 
   public initForm() {
@@ -178,5 +179,9 @@ export class LoginPage implements OnInit, ViewWillEnter {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public showOrHideField(field: string): void {
+    this[field] = this[field] === 'password' ? 'text' : 'password';
   }
 }

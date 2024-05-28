@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { Subscription } from 'rxjs';
 
@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
     public authService: AuthService,
     public utils: UtilsService,
     public router: Router,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public alertController: AlertController
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +60,7 @@ export class AppComponent implements OnInit {
   public checkClickedItem($event) {
     switch ($event) {
       case this.nav.logout.route:
-        this.logoutUser();
+        this.showConfirmAlert();
         break;
     }
   }
@@ -106,6 +107,34 @@ export class AppComponent implements OnInit {
       color: type
     }).then(toast => {
       toast.present();
+    });
+  }
+
+  public showConfirmAlert() {
+    const alertMessage = `Deseja realmente sair da área logada?`;
+
+    const confirmHandler = () => {
+      this.logoutUser();
+    };
+
+    const alertObj = {
+      header: 'Atenção!',
+      message: alertMessage,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          id: 'cancel-button'
+        }, {
+          text: 'Confirmar',
+          id: 'confirm-button',
+          handler: confirmHandler
+        }
+      ]
+    };
+
+    this.alertController.create(alertObj).then(alert => {
+      alert.present();
     });
   }
 }
