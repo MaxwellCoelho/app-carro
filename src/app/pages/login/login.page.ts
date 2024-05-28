@@ -22,7 +22,9 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public nav = NAVIGATION;
   public showLoader: boolean;
   public formLogin: FormGroup;
+  public formRecovery: FormGroup;
   public remindChecked = false;
+  public showForgotPassword = false;
 
   constructor(
     public authService: AuthService,
@@ -48,6 +50,12 @@ export class LoginPage implements OnInit, ViewWillEnter {
     this.formLogin = this.fb.group({
       userEmail: this.fb.control('', [Validators.required]),
       userPassword: this.fb.control('', [Validators.required, Validators.minLength(4)])
+    });
+  }
+
+  public initRecoveryForm() {
+    this.formRecovery = this.fb.group({
+      userEmail: this.fb.control('', [Validators.required])
     });
   }
 
@@ -91,7 +99,19 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public forgotPassword(): void {
-    console.log('esqueceu');
+    this.initRecoveryForm();
+    this.formRecovery.controls.userEmail.patchValue(this.formLogin.controls.userEmail.value);
+    this.showForgotPassword = true;
+  }
+
+  public sendRecovery(): void {
+    this.showRecoveryToast();
+    this.backToLogin();
+  }
+
+  public backToLogin(): void {
+    this.formLogin.controls.userEmail.patchValue(this.formRecovery.controls.userEmail.value);
+    this.showForgotPassword = false;
   }
 
   public showErrorAlert(err) {
@@ -145,4 +165,18 @@ export class LoginPage implements OnInit, ViewWillEnter {
     });
   }
 
+  public showRecoveryToast() {
+    this.showLoader = false;
+
+    this.toastController.create({
+      header: 'Senha enviada com sucesso!',
+      message: 'Verifique a sua caixa de email e retorne aqui posteriormente.',
+      duration: 4000,
+      position: 'middle',
+      icon: 'paper-plane-outline',
+      color: 'success'
+    }).then(toast => {
+      toast.present();
+    });
+  }
 }
