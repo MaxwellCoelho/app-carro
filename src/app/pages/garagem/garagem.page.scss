@@ -1,37 +1,15 @@
-.garage-title {
-  font-weight: lighter;
-  margin: 1rem 0.7rem 0 0.7rem;
-}
+ion-modal {
+  --width: 1200px;
+  --max-width: 90%;
+  --height: 90%;
 
-.garage-subtitle {
-  font-weight: lighter;
-  margin: 0 0.7rem 2rem 0.7rem;
-  font-size: larger;
-}
-
-.personal-data {
-  background-color: rgba(var(--ion-color-medium-rgb), 0.3);
-  border-radius: 0.4rem;
-  padding: 1rem;
-  margin: 1rem 0.7rem 3rem 0.7rem;
-
-  .customer-avatar {
-    ion-icon {
-      display: flex;
-      font-size: 55px;
-    }
+  @media (max-width: 767px) {
+    --max-width: 100%;
+    --height: 100%;
   }
 
-  .customer-info {
-    p {
-      font-size: large;
-      font-weight: lighter;
-      margin: 0;
-    }
-
-    p.member {
-      font-size: small;
-    }
+  ::ng-deep .selected-model-grid {
+    margin: 0 !important;
   }
 }
 
@@ -48,7 +26,6 @@
 
     .car-image {
       text-align: center;
-      cursor: pointer;
 
       img {
         max-height: 8.85rem;
@@ -71,7 +48,7 @@
 
     .other-models {
       background-color: var(--ion-color-light);
-      height: 13.7rem;
+      height: 17.8rem;
       margin: .5rem .8rem;
       display: flex;
       align-items: center;
@@ -93,6 +70,24 @@
         margin: 0 auto auto auto;
         color: var(--ion-color-medium);
         font-size: larger;
+      }
+    }
+
+    .buttons {
+      margin: 0.5rem 0;
+
+      ion-chip {
+        width: 100%;
+        margin: 0;
+        border: 1px solid rgba(27, 117, 187, 0.32);
+
+        ion-icon {
+          margin-left: auto;
+        }
+
+        ion-label {
+          margin-right: auto;
+        }
       }
     }
 
@@ -123,15 +118,13 @@
     }
   }
 
-  .car-info, .car-opinion {
-    border-radius: 0.4rem;
-    padding: 0.5rem 0.8rem;
-    background-color: rgba(var(--ion-color-medium-rgb), 0.3);
+  .car-info {
+    padding: 0 0.5rem;
 
     ion-label {
-      font-size: medium;
+      font-size: small;
       display: flex;
-      align-items: center;
+      align-items: normal;
       line-height: 1;
       margin: 5px 0;
     }
@@ -139,20 +132,8 @@
     ion-icon {
       vertical-align: middle;
       margin-right: 0.3rem;
-    }
-  }
-
-  .car-opinion {
-    background: none;
-
-    ion-label {
-      font-size: large;
-    }
-
-    span {
-      font-size: smaller;
-      position: absolute;
-      right: 0.8rem;
+      margin-top: -0.05rem;
+      font-size: medium;
     }
   }
 }

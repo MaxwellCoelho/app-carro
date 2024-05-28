@@ -1,0 +1,88 @@
+<ion-grid slot="content" *ngFor="let opinion of opinions" id="{{opinion._id}}{{expanded ? '-ex' : ''}}" class="selected-model-grid opinion" [ngClass]="opinion.average?.id">
+  <ion-row class="customer-info">
+    <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar">
+      <ion-icon name="person-circle-outline" color="dark"></ion-icon>
+    </ion-col>
+
+    <ion-col size-lg="7.2" size-md="7" size-sm="5.5" size-xs="9.5" class="customer-name">
+      <ion-label color="dark" class="item-title"><h1>{{opinion.created_by?.name}}</h1></ion-label>
+      <ion-label class="ion-text-wrap">{{opinion.created}}</ion-label>
+    </ion-col>
+
+    <ion-col size-lg="4" size-md="4" size-sm="5" size-xs="12" class="col-average">
+      <ion-row class="average-row average-small" [ngClass]="opinion.average?.id" style="padding: 0">
+        <ion-col size-md="12" size-sm="12" size-xs="12" style="display: block">
+          <ion-icon name="ribbon" color="dark" style="font-size: 25px; margin-left: 0.5rem"></ion-icon>
+          <ion-label color="dark" *ngIf="opinion.car_val_average">{{opinion.car_val_average.toFixed(1)}} | {{opinion.average?.name}}</ion-label>
+          <ion-label color="dark" *ngIf="!opinion.car_val_average">{{opinion.average?.name}}</ion-label>
+          <app-valuation-bar [small]="true" [valuationId]="opinion.average?.id"></app-valuation-bar>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <ion-title size="large" color="dark" class="car-info">
+    <ion-label class="ion-text-wrap">
+      <ion-icon [name]="'car'" color="dark"></ion-icon>
+      {{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br>
+    </ion-label>
+
+    <ion-label class="ion-text-wrap">
+      <ion-icon [name]="'pricetag'" color="dark"></ion-icon>
+      <span *ngIf="opinion.current_car">Comprou em {{opinion.year_bought}} - Carro atual<br></span>
+      <span *ngIf="!opinion.current_car">Comprou em {{opinion.year_bought}} - Ficou {{opinion.kept_period}} {{opinion.kept_period > 1 ? 'anos' : 'ano'}}<br></span>
+    </ion-label>
+
+    <ion-label class="ion-text-wrap">
+      <ion-icon [name]="'speedometer'" color="dark"></ion-icon>
+      Comprou {{opinion.km_bought === 0 ? '' : 'com'}} {{opinion.km_bought === 99 ? 'mais de' : ''}} {{ opinion.km_bought }}{{opinion.km_bought === 0 ? ' Km' : '.000 Km'}}
+    </ion-label>
+  </ion-title>
+
+  <ion-row class="opinion-title" [ngClass]="opinion.average?.id">
+    <ion-col size-md="12" size-sm="12" size-xs="12">
+      <ion-label class="ion-text-wrap" color="light"><h1>"{{opinion.car_title}}"</h1></ion-label>
+    </ion-col>
+  </ion-row>
+
+  <div class="details">
+    <ion-row *ngFor="let item of opinion.valuationItens; let i = index" class="average-row average-small"
+      [ngClass]="item.valuation ? item.valuation.id : ''">
+      <ion-col size-md="6" size-sm="7" size-xs="6.5">
+        <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
+      </ion-col>
+      <ion-col size-md="4" size-sm="5" size-xs="5.5">
+        <app-valuation-bar [small]="true" [valuationId]="item.valuation ? item.valuation.id : ''"></app-valuation-bar>
+      </ion-col>
+      <ion-col size-md="6" size-sm="7" size-xs="12" class="col-subtitle" [ngStyle]="{'border-bottom-width': i === opinion.valuationItens.length - 1 ? '0px' : '1px'}">
+        <ion-label class="item-subtitle"><p>{{item.subtitle}}</p></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="points">
+      <ion-col size-md="6" size-sm="6" size-xs="12">
+        <ion-title size="small" color="dark" class="positive-points" size-md="6" size-sm="6" size-xs="12">
+          <ion-icon [name]="'thumbs-up'" color="dark"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            Pontos positivos:<br>
+            <span>{{opinion.car_positive}}</span>
+          </ion-label>
+        </ion-title>
+      </ion-col>
+
+      <ion-col size-md="6" size-sm="6" size-xs="12">
+        <ion-title size="small" color="dark" class="negative-points" size-md="6" size-sm="6" size-xs="12">
+          <ion-icon [name]="'thumbs-down'" color="dark"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            Pontos negativos:<br>
+            <span>{{opinion.car_negative}}</span>
+          </ion-label>
+        </ion-title>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <ion-title size="large" color="dark" class="details-button" (click)="expandDetials(opinion._id)">
+    <ion-label>Expandir detalhes</ion-label>
+    <ion-icon [name]="'chevron-down'" color="dark"></ion-icon>
+  </ion-title>
+</ion-grid>

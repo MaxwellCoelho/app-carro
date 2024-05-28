@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { MelhoresPageRoutingModule } from './melhores-routing.module';
 import { BannerHomeComponent } from 'src/app/components/banner-home/banner-home/banner-home.component';
+import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuation-bar.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { BannerHomeComponent } from 'src/app/components/banner-home/banner-home/
   ],
   declarations: [
     MelhoresPage,
-    BannerHomeComponent
+    BannerHomeComponent,
+    ValuationBarComponent
   ]
 })
 export class MelhoresPageModule {}

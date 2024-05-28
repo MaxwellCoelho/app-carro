@@ -232,11 +232,6 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     this.router.navigate(['/opinar/'+ this.selectedModel['brand']['url'] + '/' + this.selectedModel['url']]);
   }
 
-  public expandDetials(opinionId: string): void {
-    document.getElementById(opinionId).querySelector('.details').classList.add('expand-details');
-    document.getElementById(opinionId).querySelector('.details-button').classList.add('hide-button');
-  }
-
   onIonInfinite(ev) {
     if (this.modelOpinions['opinions'].length === ((this.page - 1)*this.pagination)) {
       this.getModelOpinions();

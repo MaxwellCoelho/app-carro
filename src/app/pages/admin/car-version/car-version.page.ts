@@ -171,10 +171,7 @@ export class CarVersionPage implements OnInit {
 
   public showConfirmAlert(action: string, version: any) {
     const compl = action === 'descartar' ? 'a edição do' : '';
-    const myItem = version.editVersionId
-      ? version.editVersionId
-      : `${version.model.brand.name} ${version.model.name} ${version.engine.toFixed(1)} ${version.complement || ''} ${version.gearbox || ''} ${version.fuel}`;
-    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${myItem || ''}</strong>?`;
+    const alertMessage = `Deseja realmente ${action} ${compl} o item <strong>${version.editVersionId || version.newVersionModel || version['_id'] || ''}</strong>?`;
 
     const confirmHandler = () => {
       switch (action) {
