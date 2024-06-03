@@ -10,6 +10,7 @@ export const NAVIGATION = {
   term: { title: 'Termo de uso', icon: 'document', route: 'termo-de-uso' },
   login: { title: 'Entrar', icon: 'enter', route: 'login' },
   logout: { title: 'Sair', icon: 'exit', route: 'logout' },
+  recoverypassword: { title: 'Recuperar senha', icon: 'key', route: 'recuperar-senha' },
   admin: { title: 'Admin', icon: 'hammer', route: 'admin' },
   permission: { title: 'Permissões', icon: 'lock-open', route: 'permissao' },
   customer: { title: 'Usuários', icon: 'person', route: 'usuario' },

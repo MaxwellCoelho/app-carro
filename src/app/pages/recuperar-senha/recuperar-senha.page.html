@@ -1,0 +1,63 @@
+<ion-content [fullscreen]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+  <div class="main-container">
+    <ion-title size="large" color="primary" class="main-title">
+      <ion-icon [name]="nav.recoverypassword.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.recoverypassword.title}}</ion-label>
+    </ion-title>
+
+    <ion-grid slot="content">
+      <ion-row>
+        <ion-col>
+          <br>
+        </ion-col>
+      </ion-row>
+
+      <form name="login" [formGroup]="formPassword" (submit)="submitChangePassword()">
+        <h2 class="login-subtitle">
+          Digite uma nova senha para seu acesso.
+        </h2>
+        <ion-row class="grid-content">
+          <ion-col size-md="6" size-sm="12" size-xs="12">
+            <ion-item class="input-item">
+              <ion-label position="floating">Nova senha</ion-label>
+              <ion-input [type]="newPasswordType" maxlength="80" formControlName="newPassword"></ion-input>
+              <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('newPasswordType')">
+                <ion-icon slot="icon-only" name="eye{{newPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-note color="danger" *ngIf="formPassword.controls.newPassword.touched">
+              <span *ngIf="formPassword.controls.newPassword.errors?.required">Necessário preencher sua nova senha!</span>
+            </ion-note>
+          </ion-col>
+
+          <ion-col size-md="6" size-sm="12" size-xs="12">
+            <ion-item class="input-item">
+              <ion-label position="floating">Repita a nova senha</ion-label>
+              <ion-input [type]="repeatNewPasswordType" minlength="{{formPassword.controls.newPassword.value?.length}}" maxlength="80" formControlName="repeatNewPassword"></ion-input>
+              <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('repeatNewPasswordType')">
+                <ion-icon slot="icon-only" name="eye{{repeatNewPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-note color="danger" *ngIf="formPassword.controls.repeatNewPassword.touched">
+              <span *ngIf="formPassword.controls.repeatNewPassword.errors?.required">Necessário repetir sua nova senha!</span>
+            </ion-note>
+            <ion-note color="danger" *ngIf="formPassword.controls.repeatNewPassword.value">
+              <span *ngIf="formPassword.controls.repeatNewPassword.value !== formPassword.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
+            </ion-note>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="grid-content">
+          <ion-col size-md="3" size-sm="12" size-xs="12">
+            <ion-button size="default" title="Entrar" expand="block" color="success" type="submit"
+              [disabled]="formPassword.controls.repeatNewPassword.value !== formPassword.controls.newPassword.value || formPassword.status === 'INVALID'">
+              <ion-icon name="key-outline" slot="start"></ion-icon>
+              <ion-label slot="end">Alterar senha</ion-label>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-grid>
+  </div>
+</ion-content>

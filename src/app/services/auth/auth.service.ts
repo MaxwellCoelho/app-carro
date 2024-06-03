@@ -31,4 +31,18 @@ export class AuthService {
 
     return this.http.post(url, null, { withCredentials: true });
   }
+
+  public recoveryPassword(data: any): any {
+    const myAction = 'password/forgot';
+
+    const url = `${environment.middlewareEndpoint}/${myAction}`;
+    return this.http.post(url, data, { withCredentials: true });
+  }
+
+  public resetPassword(data: any): any {
+    const myAction = 'password/reset';
+
+    const url = `${environment.middlewareEndpoint}/${myAction}`;
+    return this.http.post(url, data, { withCredentials: true });
+  }
 }

@@ -106,8 +106,30 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public sendRecovery(): void {
-    this.showRecoveryToast();
-    this.backToLogin();
+    this.showLoader = true;
+
+    const data = {
+      email: this.formRecovery.value.userEmail
+    };
+
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+
+    const submit = () => {
+      if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+      this.showLoader = false;
+
+      this.showRecoveryToast();
+      this.backToLogin();
+    };
+
+    const subCustomers = this.authService.recoveryPassword(jwtData).subscribe(
+      res => {
+        submit();
+      },
+      err => {
+        submit();
+      }
+    );
   }
 
   public backToLogin(): void {
