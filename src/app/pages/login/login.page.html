@@ -52,14 +52,14 @@
 
           <ion-row class="grid-content">
             <ion-col size-lg="3" size-md="4.5" size-sm="6" size-xs="12">
-              <ion-button size="default" title="Entrar" expand="block" color="success" type="submit" [disabled]="formLogin.status === 'INVALID'">
+              <ion-button size="default" title="Entrar" expand="block" color="success" mode="ios" type="submit" [disabled]="formLogin.status === 'INVALID'">
                 <ion-icon name="enter-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Entrar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-lg="3" size-md="4.5" size-sm="6" size-xs="12">
-              <ion-button size="default" title="Esqueci a senha" expand="block" color="medium" type="button" (click)="forgotPassword()">
+              <ion-button size="default" title="Esqueci a senha" expand="block" color="medium" mode="ios" type="button" (click)="forgotPassword()">
                 <ion-icon name="key-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Esqueci a senha</ion-label>
               </ion-button>
@@ -86,14 +86,14 @@
 
           <ion-row class="grid-content">
             <ion-col size-lg="4" size-md="6" size-sm="12" size-xs="12">
-              <ion-button size="default" title="Enviar nova senha" expand="block" color="success" type="submit" [disabled]="formRecovery.status === 'INVALID'">
+              <ion-button size="default" title="Enviar nova senha" expand="block" color="success" mode="ios" type="submit" [disabled]="formRecovery.status === 'INVALID'">
                 <ion-icon name="paper-plane-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Enviar nova senha</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-lg="4" size-md="6" size-sm="12" size-xs="12">
-              <ion-button size="default" title="Voltar para login" expand="block" color="medium" type="button" (click)="backToLogin()">
+              <ion-button size="default" title="Voltar para login" expand="block" color="medium" mode="ios" type="button" (click)="backToLogin()">
                 <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Voltar para login</ion-label>
               </ion-button>

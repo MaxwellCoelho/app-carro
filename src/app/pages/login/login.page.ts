@@ -2,9 +2,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { GENERIC, INVALID_USER, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
+import { GENERIC, INVALID_USER, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { AlertController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
@@ -33,7 +33,6 @@ export class LoginPage implements OnInit, ViewWillEnter {
     public utils: UtilsService,
     public router: Router,
     public fb: FormBuilder,
-    public alertController: AlertController,
     public toastController: ToastController,
     public favorite: FavoriteService,
   ) { }
@@ -135,28 +134,6 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public backToLogin(): void {
     this.formLogin.controls.userEmail.patchValue(this.formRecovery.controls.userEmail.value);
     this.showForgotPassword = false;
-  }
-
-  public showErrorAlert(err) {
-    console.error(err);
-
-    const alertObj = {
-      header: 'Ops...',
-      message: err.status === 404 ? NOT_FOUND : GENERIC,
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'cancel',
-          id: 'cancel-button'
-        }
-      ]
-    };
-
-    this.showLoader = false;
-
-    this.alertController.create(alertObj).then(alert => {
-      alert.present();
-    });
   }
 
   public showErrorToast(err) {

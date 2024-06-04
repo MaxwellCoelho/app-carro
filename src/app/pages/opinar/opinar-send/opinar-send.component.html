@@ -1,14 +1,73 @@
 <ion-grid slot="content" class="valuation-itens" *ngIf="!sessionUser">
+  <app-loader [showLoader]="showLoader"></app-loader>
   <ion-row>
-    <ion-col>
-      <h1 class="form-title">Agora vamos finalizar e enviar sua opinião!</h1>
+    <ion-col size-md="5.5" size-sm="12" size-xs="12">
+      <h1 class="form-title">Já possui cadastro?</h1>
+      <p *ngIf="!showForgotPassword">Basta preencher o email e senha</p>
+      <p *ngIf="showForgotPassword">Digite seu email, enviaremos um link para você redefinir a sua senha.</p><br>
+      <form *ngIf="!showForgotPassword" name="login" [formGroup]="formLogin" (submit)="authUser()">
+        <ion-item class="input-item">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formLogin.controls.userEmail.touched">
+          <span *ngIf="formLogin.controls.userEmail.errors?.required">Necessário preencher seu email!</span>
+          <span *ngIf="formLogin.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
+        </ion-note>
+        <br>
+        <ion-item class="input-item">
+          <ion-label position="floating">Senha</ion-label>
+          <ion-input [type]="userPasswordType" maxlength="80" formControlName="userPassword"></ion-input>
+          <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('userPasswordType')">
+            <ion-icon slot="icon-only" name="eye{{userPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formLogin.controls.userPassword.touched">
+          <span *ngIf="formLogin.controls.userPassword.errors?.required">Necessário preencher sua senha!</span>
+        </ion-note>
+        <br>
+        <ion-button size="default" title="Entrar" expand="block" color="success" mode="ios" type="submit" [disabled]="formLogin.status === 'INVALID'">
+          <ion-icon name="paper-plane-outline" slot="start"></ion-icon>
+          <ion-label slot="end">Enviar Opinião</ion-label>
+        </ion-button>
+        <br>
+        <ion-button size="default" title="Esqueci a senha" expand="block" color="medium" mode="ios" type="button" (click)="forgotPassword()">
+          <ion-icon name="key-outline" slot="start"></ion-icon>
+          <ion-label slot="end">Esqueci a senha</ion-label>
+        </ion-button>
+      </form>
+
+      <form *ngIf="showForgotPassword" name="login" [formGroup]="formRecovery" (submit)="sendRecovery()">
+        <ion-item class="input-item">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formRecovery.controls.userEmail.touched">
+          <span *ngIf="formRecovery.controls.userEmail.errors?.required">Necessário preencher seu email!</span>
+          <span *ngIf="formRecovery.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
+        </ion-note>
+        <br>
+        <ion-button size="default" title="Enviar nova senha" expand="block" color="success" mode="ios" type="submit" [disabled]="formRecovery.status === 'INVALID'">
+          <ion-icon name="paper-plane-outline" slot="start"></ion-icon>
+          <ion-label slot="end">Enviar nova senha</ion-label>
+        </ion-button>
+        <br>
+        <ion-button size="default" title="Voltar para login" expand="block" color="medium" mode="ios" type="button" (click)="backToLogin()">
+          <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+          <ion-label slot="end">Voltar para login</ion-label>
+        </ion-button>
+      </form>
     </ion-col>
-  </ion-row>
 
-  <form [formGroup]="formOpinarSend" (submit)="saveFormOpinarSend()">
+    <ion-col size-md="1" size-sm="12" size-xs="12">
+      <h1 class="or-title">OU</h1>
+      <div class="or-division"></div>
+    </ion-col>
 
-    <ion-row>
-      <ion-col size-md="6" size-sm="12" size-xs="12">
+    <ion-col size-md="5.5" size-sm="12" size-xs="12">
+      <h1 class="form-title">Ainda não possui cadastro?</h1>
+      <p>Basta preencher os campos abaixo</p><br>
+      <form [formGroup]="formOpinarSend" (submit)="saveFormOpinarSend()">
         <ion-item class="input-item">
           <ion-label position="floating">Seu nome</ion-label>
           <ion-input type="text" minlength="3" maxlength="80" formControlName="opinarNome" (ionInput)="utils.capitalize($event)"
@@ -18,9 +77,7 @@
           <span *ngIf="formOpinarSend.controls.opinarNome.errors?.required">Necessário preencher o seu nome!</span>
           <span *ngIf="formOpinarSend.controls.opinarNome.errors?.minlength">Campo preenchido incorretamente! Ex: João</span>
         </ion-note>
-      </ion-col>
-
-      <ion-col size-md="6" size-sm="12" size-xs="12">
+        <br>
         <ion-item class="input-item">
           <ion-label position="floating">Seu email (não será divulgado)</ion-label>
           <ion-input type="email" pattern=".+@.+\..+" maxlength="50"
@@ -30,23 +87,47 @@
           <span *ngIf="formOpinarSend.controls.opinarEmail.errors?.required">Necessário preencher o seu email! Fique tranquilo, não vamos digulgá-lo!</span>
           <span *ngIf="formOpinarSend.controls.opinarEmail.errors?.pattern">Campo preenchido incorretamente! Ex: joao@provedor.com</span>
         </ion-note>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col size-md="6" size-sm="12" size-xs="12">
+        <br>
+        <ion-item class="input-item">
+          <ion-label position="floating">Nova senha</ion-label>
+          <ion-input [type]="newPasswordType" maxlength="80" formControlName="newPassword"></ion-input>
+          <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('newPasswordType')">
+            <ion-icon slot="icon-only" name="eye{{newPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarSend.controls.newPassword.touched">
+          <span *ngIf="formOpinarSend.controls.newPassword.errors?.required">Necessário preencher sua nova senha!</span>
+        </ion-note>
+        <br>
+        <ion-item class="input-item">
+          <ion-label position="floating">Repita a nova senha</ion-label>
+          <ion-input [type]="repeatNewPasswordType" minlength="{{formOpinarSend.controls.newPassword.value?.length}}" maxlength="80" formControlName="repeatNewPassword"></ion-input>
+          <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('repeatNewPasswordType')">
+            <ion-icon slot="icon-only" name="eye{{repeatNewPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-note color="danger" *ngIf="formOpinarSend.controls.repeatNewPassword.touched">
+          <span *ngIf="formOpinarSend.controls.repeatNewPassword.errors?.required">Necessário repetir sua nova senha!</span>
+        </ion-note>
+        <ion-note color="danger" *ngIf="formOpinarSend.controls.repeatNewPassword.value">
+          <span *ngIf="formOpinarSend.controls.repeatNewPassword.value !== formOpinarSend.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
+        </ion-note>
         <br>
         <ion-button size="default" title="Próximo" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinarSend.status === 'INVALID'">
-          <ion-icon size="default" name="paper-plane-outline"></ion-icon>
-          <ion-label slot="start">Enviar </ion-label>
+          <ion-icon size="default" name="paper-plane-outline" slot="start"></ion-icon>
+          <ion-label slot="start">Enviar Opinião</ion-label>
         </ion-button>
+      </form>
+    </ion-col>
+  </ion-row>
 
-        <br>
-        <ion-chip outline title="Anterior" mode="ios" color="medium" (click)="goBack()">
-          <ion-icon name="arrow-back-outline"></ion-icon>
-          <ion-label>Anterior</ion-label>
-        </ion-chip>
-      </ion-col>
-    </ion-row>
-  </form>
+  <ion-row>
+    <ion-col size-md="6" size-sm="12" size-xs="12">
+      <ion-chip outline title="Anterior" mode="ios" color="medium" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <ion-label>Anterior</ion-label>
+      </ion-chip>
+    </ion-col>
+  </ion-row>
+
 </ion-grid>
