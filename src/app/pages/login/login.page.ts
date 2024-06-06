@@ -183,4 +183,8 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public showOrHideField(field: string): void {
     this[field] = this[field] === 'password' ? 'text' : 'password';
   }
+
+  goToSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
+  }
 }

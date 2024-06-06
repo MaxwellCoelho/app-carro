@@ -137,6 +137,9 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       case 401:
         response = UNAUTHORIZED;
         break;
+      case 409:
+        response = 'Este email já está em uso. Utilize outro ou tente recuperar a senha.';
+        break;
       default:
         response = GENERIC;
     }
@@ -153,7 +156,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       color: 'danger'
     }).then(toast => {
       toast.present();
-      this.router.navigate([NAVIGATION.search.route]);
+      // this.router.navigate([NAVIGATION.search.route]);
     });
   }
 
@@ -282,7 +285,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     };
 
     if (this.finalPayload['aboutCar']['carVersion'] !== 'anotherVersion' && !foundYear) {
-      const versionId = this.finalPayload['aboutCar']['carVersion'];
+      const versionId = this.finalPayload['aboutCar']['carVersion']['_id'];
       const newVersion = {
         year: yearModel,
         review: true
@@ -301,7 +304,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       const jwtData = { data: this.cryptoService.encondeJwt(newVersion)};
       setVersion(jwtData);
     } else {
-      const versionId = this.finalPayload['aboutCar']['carVersion'];
+      const versionId = this.finalPayload['aboutCar']['carVersion']['_id'];
       const version = this.carVersions.find(ver => ver['_id'] === versionId);
       if (version) {
         const versionPayload = this.setCarVersionPayload(version);
