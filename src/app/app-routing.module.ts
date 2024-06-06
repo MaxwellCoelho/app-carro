@@ -28,8 +28,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/ajuda/ajuda.module').then( m => m.AjudaPageModule)
   },
   {
-    path: NAVIGATION.term.route,
-    loadChildren: () => import('./pages/termo-de-uso/termo-de-uso.module').then( m => m.TermoDeUsoPageModule)
+    path: NAVIGATION.recoverypassword.route,
+    loadChildren: () => import('./pages/recuperar-senha/recuperar-senha.module').then( m => m.RecuperarSenhaPageModule)
   },
   {
     path: NAVIGATION.settings.route,

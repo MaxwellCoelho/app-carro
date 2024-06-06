@@ -2,21 +2,21 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PerfilPage } from './perfil.page';
+import { RecuperarSenhaPage } from './recuperar-senha.page';
 
-import { PerfilPageRoutingModule } from './perfil-routing.module';
+import { RecuperarSenhaPageRoutingModule } from './recuperar-senha-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    SharedModule,
-    PerfilPageRoutingModule
+    RecuperarSenhaPageRoutingModule
   ],
-  declarations: [PerfilPage]
+  declarations: [RecuperarSenhaPage]
 })
-export class PerfilPageModule {}
+export class RecuperarSenhaPageModule {}

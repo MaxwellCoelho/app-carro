@@ -2,9 +2,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
-import { GENERIC, INVALID_USER, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
+import { GENERIC, INVALID_USER, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { AlertController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
@@ -22,7 +22,10 @@ export class LoginPage implements OnInit, ViewWillEnter {
   public nav = NAVIGATION;
   public showLoader: boolean;
   public formLogin: FormGroup;
+  public formRecovery: FormGroup;
   public remindChecked = false;
+  public showForgotPassword = false;
+  public userPasswordType = 'password';
 
   constructor(
     public authService: AuthService,
@@ -30,24 +33,29 @@ export class LoginPage implements OnInit, ViewWillEnter {
     public utils: UtilsService,
     public router: Router,
     public fb: FormBuilder,
-    public alertController: AlertController,
     public toastController: ToastController,
     public favorite: FavoriteService,
   ) { }
 
   ngOnInit() {
     this.initForm();
-    this.recoveryUserEmail();
   }
 
   public ionViewWillEnter(): void {
     this.utils.setPageTitle('Entrar');
+    this.recoveryUserEmail();
   }
 
   public initForm() {
     this.formLogin = this.fb.group({
       userEmail: this.fb.control('', [Validators.required]),
       userPassword: this.fb.control('', [Validators.required, Validators.minLength(4)])
+    });
+  }
+
+  public initRecoveryForm() {
+    this.formRecovery = this.fb.group({
+      userEmail: this.fb.control('', [Validators.required])
     });
   }
 
@@ -91,29 +99,41 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public forgotPassword(): void {
-    console.log('esqueceu');
+    this.initRecoveryForm();
+    this.formRecovery.controls.userEmail.patchValue(this.formLogin.controls.userEmail.value);
+    this.showForgotPassword = true;
   }
 
-  public showErrorAlert(err) {
-    console.error(err);
+  public sendRecovery(): void {
+    this.showLoader = true;
 
-    const alertObj = {
-      header: 'Ops...',
-      message: err.status === 404 ? NOT_FOUND : GENERIC,
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'cancel',
-          id: 'cancel-button'
-        }
-      ]
+    const data = {
+      email: this.formRecovery.value.userEmail
     };
 
-    this.showLoader = false;
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
-    this.alertController.create(alertObj).then(alert => {
-      alert.present();
-    });
+    const submit = () => {
+      if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+      this.showLoader = false;
+
+      this.showRecoveryToast();
+      this.backToLogin();
+    };
+
+    const subCustomers = this.authService.recoveryPassword(jwtData).subscribe(
+      res => {
+        submit();
+      },
+      err => {
+        submit();
+      }
+    );
+  }
+
+  public backToLogin(): void {
+    this.formLogin.controls.userEmail.patchValue(this.formRecovery.controls.userEmail.value);
+    this.showForgotPassword = false;
   }
 
   public showErrorToast(err) {
@@ -145,4 +165,26 @@ export class LoginPage implements OnInit, ViewWillEnter {
     });
   }
 
+  public showRecoveryToast() {
+    this.showLoader = false;
+
+    this.toastController.create({
+      header: 'Senha enviada com sucesso!',
+      message: 'Verifique a sua caixa de email e retorne aqui posteriormente.',
+      duration: 4000,
+      position: 'middle',
+      icon: 'paper-plane-outline',
+      color: 'success'
+    }).then(toast => {
+      toast.present();
+    });
+  }
+
+  public showOrHideField(field: string): void {
+    this[field] = this[field] === 'password' ? 'text' : 'password';
+  }
+
+  goToSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
+  }
 }

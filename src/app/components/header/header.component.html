@@ -22,13 +22,21 @@
           <ion-icon slot="start" [name]="nav.garage.icon"></ion-icon>
           {{nav.garage.title}}
         </ion-button>
-        <ion-button *ngIf="utils.sessionUser && utils.sessionUser?.role?.level <= 1" routerDirection="root" [routerLink]="'/'+ nav.admin.route" routerLinkActive="selected" class="desktop-menu">
+        <!-- <ion-button *ngIf="utils.sessionUser && utils.sessionUser?.role?.level <= 1" routerDirection="root" [routerLink]="'/'+ nav.admin.route" routerLinkActive="selected" class="desktop-menu">
           <ion-icon slot="start" [name]="nav.admin.icon"></ion-icon>
           {{nav.admin.title}}
         </ion-button>
         <ion-button *ngIf="utils.sessionUser" routerDirection="root" (click)="clickItem(nav.logout.route)" routerLinkActive="selected" class="desktop-menu">
           <ion-icon slot="start" [name]="nav.logout.icon"></ion-icon>
           {{nav.logout.title}}
+        </ion-button> -->
+        <ion-button *ngIf="!utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.login.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.login.icon"></ion-icon>
+          {{nav.login.title}}
+        </ion-button>
+        <ion-button *ngIf="utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" routerLinkActive="selected" class="desktop-menu">
+          <ion-icon slot="start" [name]="nav.perfil.icon"></ion-icon>
+          {{utils.sessionUser.name.split(' ')[0]}}
         </ion-button>
         <ion-menu-button auto-hide="false" class="mobile-menu"></ion-menu-button>
       </ion-buttons>

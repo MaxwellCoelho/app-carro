@@ -350,3 +350,42 @@ ion-button ion-icon {
     align-content: center;
   }
 }
+
+ion-item.input-item::part(native) {
+  align-items: center;
+}
+
+.or-title {
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  margin-top: 8.5rem;
+  padding: 1rem 0.5rem 1rem 0;
+}
+
+.or-division {
+  border-right: 1px dashed #444;
+  height: 100%;
+  width: 50%;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 767px) {
+  .or-title {
+    position: relative;
+    width: 5rem;
+    background-color: #fff;
+    margin: 0 auto -2.5rem auto;
+    padding: 2rem 0 1rem 0;
+  }
+
+  .or-division {
+    border-right: 0;
+    border-bottom: 1px dashed #444;
+    height: 10px;
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
+}
