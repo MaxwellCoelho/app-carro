@@ -5,21 +5,6 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <url>
-    <loc>https://krro.com.br/opinar/</loc>
-    <lastmod>2024-06-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://krro.com.br/opiniao/</loc>
-    <lastmod>2024-06-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-
   <url>
     <loc>https://krro.com.br/melhores</loc>
     <lastmod>2024-06-07</lastmod>
@@ -39,5 +24,425 @@
     <lastmod>2024-06-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/audi/a3</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/chevrolet/onix</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/chevrolet/tracker</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/citroen/c3</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/fiat/argo</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/fiat/fastback</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/fiat/mobi</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/fiat/punto</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/fiat/strada</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/fiat/toro</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/ford/fusion</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/ford/ranger</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/hyundai/creta</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/hyundai/elantra</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/hyundai/hb20</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/jeep/compass</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/kia/optima</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/nissan/kicks</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/peugeot/206</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/peugeot/207</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/peugeot/408</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/renault/fluence</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/renault/kwid</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/renault/sandero</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/toyota/hilux</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/volkswagen/jetta</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/volkswagen/polo</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/volkswagen/saveiro</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/volkswagen/t-cross</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opinar/volkswagen/tiguan</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/audi/a3</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/chevrolet/onix</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/chevrolet/tracker</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/citroen/c3</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/fiat/argo</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/fiat/fastback</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/fiat/mobi</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/fiat/punto</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/fiat/strada</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/fiat/toro</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/ford/fusion</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/ford/ranger</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/hyundai/creta</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/hyundai/elantra</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/hyundai/hb20</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/jeep/compass</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/kia/optima</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/nissan/kicks</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/peugeot/206</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/peugeot/207</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/peugeot/408</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/renault/fluence</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/renault/kwid</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/renault/sandero</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/toyota/hilux</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/volkswagen/jetta</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/volkswagen/polo</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/volkswagen/saveiro</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/volkswagen/t-cross</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/volkswagen/tiguan</loc>
+    <lastmod>2024-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

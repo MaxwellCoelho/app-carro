@@ -16,14 +16,13 @@
 
     <div class="main-body">
       <ion-grid slot="content">
-        <ion-row [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
+        <ion-row *ngIf="formOpinions.value.editOpinionId" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
           <ion-col>
-            <h1 *ngIf="!formOpinions.value.editOpinionId">Criar nova opinião:</h1>
-            <h1 *ngIf="formOpinions.value.editOpinionId">Editar a opinião <strong>{{formOpinions.value.editOpinionId}}</strong>:</h1>
+            <h1>Editar a opinião <strong>{{formOpinions.value.editOpinionId}}</strong>:</h1>
           </ion-col>
         </ion-row>
 
-        <form name="opinions" [formGroup]="formOpinions" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
+        <form name="opinions" [formGroup]="formOpinions" *ngIf="formOpinions.value.editOpinionId" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
             <ion-input type="hidden" formControlName="editOpinionId"></ion-input>
             <ion-col size-md="9" size-sm="12" size-xs="12">
@@ -42,7 +41,7 @@
           </ion-row>
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Modelo</ion-label>
                 <ion-select interface="popover" formControlName="newOpinionModel">
@@ -50,13 +49,26 @@
                 </ion-select>
               </ion-item>
             </ion-col>
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Versão</ion-label>
+                <ion-select interface="popover" formControlName="newOpinarVersao">
+                    <ion-select-option *ngFor="let version of versions" value="{{version._id}}">
+                      {{version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
+                    </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Ano modelo</ion-label>
                 <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newOpinionYearModel" placeholder="Ex: 2015"></ion-input>
               </ion-item>
             </ion-col>
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Ano compra</ion-label>
                 <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newOpinionYearBought" placeholder="Ex: 2017"></ion-input>

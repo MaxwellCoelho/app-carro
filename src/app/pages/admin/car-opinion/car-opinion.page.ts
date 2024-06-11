@@ -26,6 +26,7 @@ export class CarOpinionPage implements OnInit {
   public formOpinions: FormGroup;
   public activeChecked = true;
   public models: Array<any>;
+  public versions: Array<any>;
 
   constructor(
     public dbService: DataBaseService,
@@ -46,6 +47,7 @@ export class CarOpinionPage implements OnInit {
     this.formOpinions = this.fb.group({
       editOpinionId: this.fb.control(''),
       newOpinionModel: this.fb.control('', [Validators.required]),
+      newOpinarVersao: this.fb.control('', [Validators.required]),
       newOpinionCarTitle: this.fb.control('', [Validators.required]),
       newOpinionYearModel: this.fb.control('', [Validators.required]),
       newOpinionYearBought: this.fb.control('', [Validators.required]),
@@ -86,6 +88,7 @@ export class CarOpinionPage implements OnInit {
     this.showLoader = true;
     const opinionId = this.formOpinions.value.editOpinionId;
     const model = this.models.find(mo => mo['_id'] === this.formOpinions.value.newOpinionModel);
+    const choosenVersion = this.versions.find(v => v['_id'] === this.formOpinions.value.newOpinarVersao);
 
     const data = {
       aboutCar: {
@@ -96,6 +99,7 @@ export class CarOpinionPage implements OnInit {
           active: model['brand']['active'],
           review: model['brand']['review']
         },
+        carVersion: choosenVersion,
         carModel: {
           _id: model['_id'],
           name: model['name'],
@@ -132,6 +136,7 @@ export class CarOpinionPage implements OnInit {
   }
 
   public editOpinion(opinion) {
+    this.getVersions(opinion);
     this.formOpinions.reset({
       editOpinionId: opinion['_id'],
       newOpinionModel: opinion.model['_id'],
@@ -158,6 +163,30 @@ export class CarOpinionPage implements OnInit {
       },
       err => {
         this.showErrorToast(err);
+      }
+    );
+  }
+
+  public getVersions(opinion): void {
+    this.showLoader = true;
+    const myFilter = { ['model._id']: opinion.model['_id'] };
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData).subscribe(
+      res => {
+        if (!subVersions.closed) { subVersions.unsubscribe(); }
+        const versions = [];
+        for (const version of res.versions) {
+          if (version.active) {
+            versions.push(version);
+          }
+        }
+        this.formOpinions.controls.newOpinarVersao.patchValue(opinion.version['_id']);
+        this.versions = versions;
+        this.showLoader = false;
+      },
+      err => {
+        this.versions = [];
+        this.showLoader = false;
       }
     );
   }

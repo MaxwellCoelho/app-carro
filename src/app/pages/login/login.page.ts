@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -72,16 +73,21 @@ export class LoginPage implements OnInit, ViewWillEnter {
     const subCustomers = this.authService.authUser(jwtData).subscribe(
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.showLoader = false;
 
         this.formLogin.reset();
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+        this.utils.setShouldUpdate(['opinions'], true);
         this.remindChecked
           ? this.utils.localStorageSetItem('userEmail', res.authorized.email)
           : this.utils.localStorageRemoveItem('userEmail');
+        this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
         this.utils.returnLoggedUser();
         this.favorite.syncFavorites();
         this.router.navigate([`/${this.nav.garage.route}`]);
+
+        setTimeout(() => {
+          this.showLoader = false;
+        }, 1000);
       },
       err => {
         this.showErrorToast(err);

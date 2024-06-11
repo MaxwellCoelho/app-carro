@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -31,7 +32,11 @@ export class FavoritosPage implements ViewWillEnter {
   }
 
   public getFavoriteModels(): void {
-    this.favoriteModels = this.favorite.recoveryFavorites().reverse();
+    const recovered = this.favorite.recoveryFavorites();
+    const lastUser = this.utils.localStorageGetItem('lastUser');
+    const from = lastUser ? lastUser : 'local';
+    const favorites = recovered[from];
+    this.favoriteModels = favorites ? favorites.reverse() : [];
   }
 
   public clickCarItem(page: string, brand: string, model: string) {

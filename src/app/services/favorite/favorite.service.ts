@@ -20,9 +20,11 @@ export class FavoriteService {
 
   public isFavorite(model: any): boolean {
     const recoveredFavorites = this.recoveryFavorites();
+    const lastUser = this.utils.localStorageGetItem('lastUser');
+    const from = lastUser ? lastUser : 'local';
 
-    if (recoveredFavorites && recoveredFavorites.length) {
-      const recIdx = recoveredFavorites.findIndex(rec => rec._id === model._id);
+    if (recoveredFavorites && recoveredFavorites[from]) {
+      const recIdx = recoveredFavorites[from].findIndex(rec => rec._id === model._id);
 
       if (recIdx > -1) {
         return true;
@@ -34,26 +36,33 @@ export class FavoriteService {
 
   public addOrRemoveFavorite(model: any): boolean {
     const recoveredFavorites = this.recoveryFavorites(true);
+    const lastUser = this.utils.localStorageGetItem('lastUser');
+    const from = lastUser ? lastUser : 'local';
 
-    if (recoveredFavorites && recoveredFavorites.length) {
-      const recIdx = recoveredFavorites.findIndex(rec => rec._id === model._id);
+    if (recoveredFavorites && recoveredFavorites[from]) {
+        const recIdx = recoveredFavorites[from].findIndex(rec => rec._id === model._id);
 
-      if (recIdx > -1) {
-        if (recoveredFavorites[recIdx]['removed']) {
-          delete recoveredFavorites[recIdx]['removed'];
-          this.saveFavorites(recoveredFavorites);
+        if (recIdx > -1) {
+          if (recoveredFavorites[from][recIdx]['removed']) {
+            delete recoveredFavorites[from][recIdx]['removed'];
+            this.saveFavorites(recoveredFavorites);
+          } else {
+            recoveredFavorites[from][recIdx]['removed'] = true;
+            this.saveFavorites(recoveredFavorites);
+            this.syncFavorites();
+            return false;
+          }
         } else {
-          recoveredFavorites[recIdx]['removed'] = true;
+          recoveredFavorites[from].push(this.resumeModelPayload(model));
           this.saveFavorites(recoveredFavorites);
-          this.syncFavorites();
-          return false;
         }
+    } else {
+      if (!recoveredFavorites) {
+        this.saveFavorites({ [from]: [this.resumeModelPayload(model)]});
       } else {
-        recoveredFavorites.push(this.resumeModelPayload(model));
+        recoveredFavorites[from] = [this.resumeModelPayload(model)];
         this.saveFavorites(recoveredFavorites);
       }
-    } else {
-      this.saveFavorites([this.resumeModelPayload(model)]);
     }
 
     this.syncFavorites();
@@ -73,24 +82,47 @@ export class FavoriteService {
     };
   }
 
-  public saveFavorites(favoritesArray: any[]): void {
-    const jwtData = this.cryptoService.encondeJwt(favoritesArray);
-    this.utils.localStorageSetItem('favorites', jwtData);
+  public saveFavorites(favoritesArray: any, userId?: string): void {
+    if (userId) {
+      const recovered = this.recoveryFavorites(true);
+      recovered[userId] = favoritesArray;
+      delete recovered['local'];
+      const jwtData = this.cryptoService.encondeJwt(recovered);
+      this.utils.localStorageSetItem('favorites', jwtData);
+    } else {
+      const jwtData = this.cryptoService.encondeJwt(favoritesArray);
+      this.utils.localStorageSetItem('favorites', jwtData);
+    }
   }
 
   public recoveryFavorites(includeRemoved?: boolean): any[] {
     const jwtData = this.utils.localStorageGetItem('favorites');
-    const decoded = this.cryptoService.decodeJwt(jwtData) || [];
+    const decoded = this.cryptoService.decodeJwt(jwtData) || {};
+    const lastUser = this.utils.localStorageGetItem('lastUser');
 
-    if (!includeRemoved) {
-      for (let i = 0; i < decoded.length; i++) {
-        if (decoded[i].removed) {
-          decoded.splice(i, 1);
-        }
+    if (lastUser && decoded[lastUser]) {
+      if (!includeRemoved) {
+        decoded[lastUser] = this.filterRemoved(decoded[lastUser]);
+      }
+    }
+
+    if (decoded.local) {
+      if (!includeRemoved) {
+        decoded.local = this.filterRemoved(decoded.local);
       }
     }
 
     return decoded;
+  }
+
+  public filterRemoved(itens: any[]): any[] {
+    for (let i = 0; i < itens.length; i++) {
+      if (itens[i].removed) {
+        itens.splice(i, 1);
+      }
+    }
+
+    return itens;
   }
 
   public syncFavorites(): void {
@@ -99,21 +131,41 @@ export class FavoriteService {
       const baseFavorites = this.utils.sessionUser['favorites'] || [];
       const localFavorites = this.recoveryFavorites(true);
 
-      localFavorites.forEach(fav => {
-        if (fav['removed']) {
-          const foundIdx = baseFavorites.findIndex(item => item._id === fav['_id']);
+      if (localFavorites && localFavorites['local'] && localFavorites['local'].length) {
+        localFavorites['local'].forEach(fav => {
+          if (fav['removed']) {
+            const foundIdx = baseFavorites.findIndex(item => item._id === fav['_id']);
 
-          if (foundIdx > -1) {
-            baseFavorites.splice(foundIdx, 1);
-          }
-        } else {
-          const found = baseFavorites.find(item => item._id === fav['_id']);
+            if (foundIdx > -1) {
+              baseFavorites.splice(foundIdx, 1);
+            }
+          } else {
+            const found = baseFavorites.find(item => item._id === fav['_id']);
 
-          if (!found) {
-            baseFavorites.push(fav);
+            if (!found) {
+              baseFavorites.push(fav);
+            }
           }
-        }
-      });
+        });
+      }
+
+      if (localFavorites && localFavorites[userId] && localFavorites[userId].length) {
+        localFavorites[userId].forEach(fav => {
+          if (fav['removed']) {
+            const foundIdx = baseFavorites.findIndex(item => item._id === fav['_id']);
+
+            if (foundIdx > -1) {
+              baseFavorites.splice(foundIdx, 1);
+            }
+          } else {
+            const found = baseFavorites.find(item => item._id === fav['_id']);
+
+            if (!found) {
+              baseFavorites.push(fav);
+            }
+          }
+        });
+      }
 
       const data = {
         favorites: baseFavorites
@@ -124,7 +176,7 @@ export class FavoriteService {
         res => {
           if (!subCustomers.closed) { subCustomers.unsubscribe(); }
           this.utils.sessionUser['favorites'] = res['saved']['favorites'];
-          this.saveFavorites(res['saved']['favorites']);
+          this.saveFavorites(res['saved']['favorites'], this.utils.sessionUser._id);
         }
       );
     }
