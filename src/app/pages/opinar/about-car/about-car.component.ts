@@ -225,7 +225,9 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     const versionComplement = this.formOpinarCarro.value.opinarComplemento;
     const selectedGearBox = this.formOpinarCarro.value.opinarCambio;
     const selectedYearModel =  this.formOpinarCarro.value.opinarAnoModelo;
-    const choosenVersion = selectedCarVersion ? this.carVersions.find(v => v['_id'] === selectedCarVersion) : null;
+    const choosenVersion = selectedCarVersion !== 'anotherVersion'
+      ? this.carVersions.find(v => v['_id'] === selectedCarVersion)
+      : selectedCarVersion;
 
     const aboutCarData = {
       carBrand: {
@@ -261,7 +263,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       }
     };
 
-    this.aboutCar.emit({aboutCar: aboutCarData, years: choosenVersion ? choosenVersion.years : []});
+    this.aboutCar.emit({aboutCar: aboutCarData, years: selectedCarVersion !== 'anotherVersion' ? choosenVersion.years : []});
     this.loadedVersions.emit(this.carVersions);
   }
 
