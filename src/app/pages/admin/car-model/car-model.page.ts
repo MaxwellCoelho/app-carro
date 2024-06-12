@@ -55,14 +55,21 @@ export class CarModelPage implements OnInit {
   }
 
   public getGenAsArray(): object[] {
-    return Object.entries(this.generations);
+    return this.generations ? Object.entries(this.generations) : [];
   }
 
   public includeGen() {
-    this.generations[`g${this.getGenAsArray().length + 1}`] = {
+    const genLeng = this.getGenAsArray().length;
+    const obj = {
       yearStart: parseInt(this.formModels.value.newModelYearStart, 10),
       yearEnd: parseInt(this.formModels.value.newModelYearEnd, 10)
     };
+
+    if (genLeng) {
+      this.generations[`g${this.getGenAsArray().length + 1}`] = obj;
+    } else {
+      this.generations = {[`g${this.getGenAsArray().length + 1}`]: obj};
+    }
     this.formModels.controls.newModelYearStart.reset();
     this.formModels.controls.newModelYearEnd.reset();
   }
@@ -160,6 +167,7 @@ export class CarModelPage implements OnInit {
         this.pendingReview = false;
         this.generations = {};
         this.showToast(action, res.saved);
+        this.utils.setShouldUpdate(['opinions'], true);
         this.ngOnInit();
       },
       err => {
