@@ -54,6 +54,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
         const modelWithAverage = this.setModelAverages(res.bestModels);
         this.bestModels = [...this.bestModels, ...modelWithAverage];
+
+        for (let i = 0; i < 3; i++) {
+          this.bestModels[i]['img'] = this.utils.getModelImg(this.bestModels[i]['url'], this.bestModels[i]['generation']);
+        }
+
         if (this.page === 1) { this.showLoader = false; }
         this.page++;
       },

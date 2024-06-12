@@ -37,6 +37,10 @@ export class FavoritosPage implements ViewWillEnter {
     const from = lastUser ? lastUser : 'local';
     const favorites = recovered[from];
     this.favoriteModels = favorites ? favorites.reverse() : [];
+
+    this.favoriteModels.forEach(fav => {
+      fav['img'] = this.utils.getModelImg(fav['url'], fav['generation']);
+    });
   }
 
   public clickCarItem(page: string, brand: string, model: string) {

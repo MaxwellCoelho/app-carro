@@ -18,8 +18,8 @@
         </ion-item>
 
         <ion-item *ngFor="let brand of filteredBrands" (click)="selectBrand(brand)" class="item-button" button>
-          <img src="assets/brands/{{brand.url}}.svg" title="{{brand.name}}" alt="{{brand.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image">
+          <img src="assets/brands/{{brand.url}}.svg" title="{{brand.name}}" alt="{{brand.name}}" loading="lazy"
+            onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image">
           <ion-label class="label-name">{{brand.name}}</ion-label>
         </ion-item>
       </ion-list>
@@ -27,8 +27,8 @@
       <app-model-not-found *ngIf="brands.length && !selectedBrand" [brandList]="brands"></app-model-not-found>
 
       <ion-item lines="none" *ngIf="selectedBrand" class="selected-brand">
-        <img src="assets/brands/{{selectedBrand.url}}.svg" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+        <img src="assets/brands/{{selectedBrand.url}}.svg" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}" loading="lazy"
+          onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
         <ion-label class="brand-label-title">{{selectedBrand.name}}</ion-label>
         <ion-chip outline title="Alterar marca" color="primary" (click)="clearBrand()">
           <ion-icon [name]="'chevron-back-outline'"></ion-icon>
@@ -48,7 +48,7 @@
 
         <ion-item *ngFor="let model of filteredModels" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand.url, model.url)" button>
           <img [id]="'item-img-'+model.name" src="assets/models/{{model.brand?.url}}/{{model.url}}/{{model.url}}-thumb.png" title="{{model.name}}" alt="{{model.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" loading="lazy" class="model-image">
           <ion-label [id]="'item-label-'+model.name" class="label-name">{{model.name}}</ion-label>
           <ion-chip outline slot="end" [id]="'bt-'+model.name" title="Opniar sobre esse modelo" color="primary">
             <ion-icon [id]="'bt-'+model.name+'-icon'" [name]="'clipboard-outline'"></ion-icon>

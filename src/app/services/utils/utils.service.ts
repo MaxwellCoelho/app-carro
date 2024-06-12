@@ -152,4 +152,24 @@ export class UtilsService {
   public setPageTitle(newTitle: string): void {
     document.title = `Krro - ${newTitle} - Opinião dos donos`;
   }
+
+  public getModelImg(modelUrl: string, generations: object, yearModel?: string): string {
+    let imgName = `${modelUrl}.png`;
+
+    if (generations && Object.keys(generations).length) {
+      const myYear = yearModel ? parseInt(yearModel, 10) : null;
+
+      if (myYear) {
+        Object.entries(generations).forEach(entrie => {
+          if (myYear >= parseInt(entrie[1].yearStart, 10) && myYear <= parseInt(entrie[1].yearEnd, 10)) {
+            imgName = `${modelUrl}-${entrie[0]}.png`;
+          }
+        });
+      } else {
+        imgName = `${modelUrl}-${Object.keys(generations)[Object.keys(generations).length - 1]}.png`;
+      }
+    }
+
+    return imgName;
+  }
 }

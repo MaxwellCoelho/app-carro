@@ -70,6 +70,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     this.selectedModel = this.searchService.getModel();
 
     if (this.selectedModel) {
+      this.setModelImage();
       this.searchService.clearModel();
       this.getModelOpinions();
     } else {
@@ -100,6 +101,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
 
         if (foundModel && checkReviewBrand && checkReviewModel) {
           this.selectedModel = foundModel;
+          this.setModelImage();
           this.getModelOpinions();
         } else {
           this.showErrorToast({status: 404});
@@ -109,6 +111,10 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public setModelImage() {
+    this.selectedModel['img'] = this.utils.getModelImg(this.selectedModel['url'], this.selectedModel['generation']);
   }
 
   public getModelOpinions(): void {

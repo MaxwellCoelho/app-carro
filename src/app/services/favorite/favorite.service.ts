@@ -74,6 +74,7 @@ export class FavoriteService {
       _id: model._id,
       name: model.name,
       url: model.url,
+      generation: model.generation,
       brand: {
         _id: model.brand._id,
         name: model.brand.name,

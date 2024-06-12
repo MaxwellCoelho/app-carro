@@ -25,6 +25,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   @Output() aboutCar = new EventEmitter<any>();
   @Output() loadedVersions = new EventEmitter<any>();
   @Output() clickForeward = new EventEmitter<any>();
+  @Output() yearSelected = new EventEmitter<any>();
 
   public nav = NAVIGATION;
   public fuels = FUEL;
@@ -89,12 +90,17 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   }
 
   public getYears(): void {
-    const start = parseInt(this.selectedModel['yearStart'], 10);
-    const end = parseInt(this.selectedModel['yearEnd'], 10);
-    const diff = end - start;
+    const generations = this.selectedModel['generation'];
+    if (generations && Object.keys(generations).length) {
+      Object.values(generations).forEach(gen => {
+        const start = parseInt(gen['yearStart'], 10);
+        const end = parseInt(gen['yearEnd'], 10);
+        const diff = end - start;
 
-    for (let i = 0; i <= diff; i++) {
-      this.years.unshift(start + i);
+        for (let i = 0; i <= diff; i++) {
+          this.years.unshift(start + i);
+        }
+      });
     }
   }
 
@@ -149,6 +155,9 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       return;
     }
     const myYear = parseInt(year, 10);
+    if (myYear.toString().length >= 4) {
+      this.yearSelected.emit(myYear);
+    }
     this.carVersionsToShow = this.carVersions.filter(version => version.years.includes(myYear));
     if (!this.carVersionsToShow.length) {
       this.carVersionsToShow = this.carVersions;
@@ -242,6 +251,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
         _id: this.selectedModel['_id'],
         name: this.selectedModel['name'],
         url: this.selectedModel['url'],
+        generation: this.selectedModel['generation'],
         active: this.selectedModel['active'],
         review: this.selectedModel['review']
       },

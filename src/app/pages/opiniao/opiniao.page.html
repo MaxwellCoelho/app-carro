@@ -12,7 +12,7 @@
         <ion-row>
           <ion-col size-lg="1.2" size-md="1.7" size-sm="1.5" size-xs="12" class="model-logo">
             <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-              onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+              onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </ion-col>
           <ion-col size-lg="8.1" size-md="7.3" size-sm="6.8" size-xs="12" class="model-name">
             <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
@@ -35,8 +35,8 @@
       </ion-grid>
 
       <ion-item lines="none">
-        <img src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.url}}.png" title="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          alt="{{selectedModel.brand.name}} {{selectedModel.name}}" onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+        <img *ngIf="selectedModel.img" src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.img}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}"
+          alt="{{selectedModel.brand.name}} {{selectedModel.name}}" onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" class="model-image">
       </ion-item>
 
       <ion-grid slot="content" class="selected-model-grid">

@@ -56,6 +56,11 @@ export class GaragemPage implements OnInit, ViewWillEnter {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
         this.myModelOpinions = res.models && res.models.opinions && res.models.opinions.length ? res.models.opinions : [];
+
+        this.myModelOpinions.forEach(model => {
+          model.img = this.utils.getModelImg(model.model.url, model.model.generation, model.year_model);
+        });
+
         this.showLoader = false;
       },
       err => {

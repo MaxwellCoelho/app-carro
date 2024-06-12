@@ -15,13 +15,13 @@
             <strong>{{bestModels[1].model_average?.toFixed(1)}}</strong>{{bestModels[1].average?.name}}<br>
           </ion-label>
         </div>
-        <img [id]="'item-img-'+bestModels[1].name" src="assets/models/{{bestModels[1].brand?.url}}/{{bestModels[1].url}}/{{bestModels[1].url}}.png"
+        <img [id]="'item-img-'+bestModels[1].name" src="assets/models/{{bestModels[1].brand?.url}}/{{bestModels[1].url}}/{{bestModels[1].img}}"
           title="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}" alt="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[1].brand?.url, bestModels[1]?.url)">
+          onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[1].brand?.url, bestModels[1]?.url)">
         <div class="position left top second bottom">
           <div class="marca">
             <img src="assets/brands/{{bestModels[1].brand?.url}}.svg" title="{{bestModels[1].brand?.name}}" alt="{{bestModels[1].brand?.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+            onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </div>
           <div class="nome">
             <span>{{bestModels[1].brand?.name}}</span> <strong>{{bestModels[1].name}}</strong>
@@ -35,13 +35,13 @@
             <strong>{{bestModels[0].model_average?.toFixed(1)}}</strong>{{bestModels[0].average?.name}}<br>
           </ion-label>
         </div>
-        <img [id]="'item-img-'+bestModels[0].name" src="assets/models/{{bestModels[0].brand?.url}}/{{bestModels[0].url}}/{{bestModels[0].url}}.png"
+        <img [id]="'item-img-'+bestModels[0].name" src="assets/models/{{bestModels[0].brand?.url}}/{{bestModels[0].url}}/{{bestModels[0].img}}"
           title="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}" alt="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[0].brand?.url, bestModels[0]?.url)">
+          onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[0].brand?.url, bestModels[0]?.url)">
         <div class="position left right top first">
           <div class="marca">
             <img src="assets/brands/{{bestModels[0].brand?.url}}.svg" title="{{bestModels[0].brand?.name}}" alt="{{bestModels[0].brand?.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+            onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </div>
           <div class="nome">
             <span>{{bestModels[0].brand?.name}}</span> <strong>{{bestModels[0].name}}</strong>
@@ -56,13 +56,13 @@
             <strong>{{bestModels[2].model_average?.toFixed(1)}}</strong>{{bestModels[2].average?.name}}<br>
           </ion-label>
         </div>
-        <img [id]="'item-img-'+bestModels[2].name" src="assets/models/{{bestModels[2].brand?.url}}/{{bestModels[2].url}}/{{bestModels[2].url}}.png"
+        <img [id]="'item-img-'+bestModels[2].name" src="assets/models/{{bestModels[2].brand?.url}}/{{bestModels[2].url}}/{{bestModels[2].img}}"
           title="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}" alt="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[2].brand?.url, bestModels[2]?.url)">
+          onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[2].brand?.url, bestModels[2]?.url)">
         <div class="position right top third bottom">
           <div class="marca">
             <img src="assets/brands/{{bestModels[2].brand?.url}}.svg" title="{{bestModels[2].brand?.name}}" alt="{{bestModels[2].brand?.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+            onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </div>
           <div class="nome">
             <span>{{bestModels[2].brand?.name}}</span> <strong>{{bestModels[2].name}}</strong>
@@ -96,16 +96,16 @@
                 {{model.brand?.name}} <strong>{{model.name}}</strong>
               </ion-col>
               <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5">
-                <img src="assets/brands/{{model.brand?.url}}.svg" title="{{model.brand?.name}}" alt="{{model.brand?.name}}"
-                  onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+                <img src="assets/brands/{{model.brand?.url}}.svg" title="{{model.brand?.name}}" alt="{{model.brand?.name}}" loading="lazy"
+                  onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
               </ion-col>
             </ion-row>
 
             <ion-row>
               <ion-col size-lg="7" size-md="5.5" size-sm="4.25" size-xs="6">
-                <img [id]="'item-img-'+model.name" src="assets/models/{{model.brand?.url}}/{{model.url}}/{{model.url}}-thumb.png"
+                <img [id]="'item-img-'+model.name" src="assets/models/{{model.brand?.url}}/{{model.url}}/{{model.url}}-thumb.png" loading="lazy"
                   title="{{model.brand?.name + ' ' + model.name}}" alt="{{model.brand?.name + ' ' + model.name}}"
-                  onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+                  onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" class="model-image">
                </ion-col>
               <ion-col size-lg="5" size-md="6.5" size-sm="7.75" size-xs="6" class="car-data">
                 <ion-row class="average-row average-small" [ngClass]="model.average?.id">

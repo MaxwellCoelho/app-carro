@@ -25,6 +25,7 @@ export class CarModelPage implements OnInit {
   public formModels: FormGroup;
   public activeChecked = true;
   public pendingReview = false;
+  public generations = {};
 
   constructor(
     public dbService: DataBaseService,
@@ -48,9 +49,26 @@ export class CarModelPage implements OnInit {
       newModelName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
       newModelCategory: this.fb.control('', [Validators.required]),
       newModelBrand: this.fb.control('', [Validators.required]),
-      newModelYearStart: this.fb.control('', [Validators.required]),
-      newModelYearEnd: this.fb.control('', [Validators.required])
+      newModelYearStart: this.fb.control(''),
+      newModelYearEnd: this.fb.control('')
     });
+  }
+
+  public getGenAsArray(): object[] {
+    return Object.entries(this.generations);
+  }
+
+  public includeGen() {
+    this.generations[`g${this.getGenAsArray().length + 1}`] = {
+      yearStart: parseInt(this.formModels.value.newModelYearStart, 10),
+      yearEnd: parseInt(this.formModels.value.newModelYearEnd, 10)
+    };
+    this.formModels.controls.newModelYearStart.reset();
+    this.formModels.controls.newModelYearEnd.reset();
+  }
+
+  public excludeGen(genKey: string) {
+    delete this.generations[genKey];
   }
 
   public getCategories(): void {
@@ -87,6 +105,17 @@ export class CarModelPage implements OnInit {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
         this.models = res.models.sort((a, b) => (!a['review']) || -1);
+        this.models.forEach(model => {
+          if (model.generation) {
+            let plainGen = '';
+            Object.entries(model.generation).forEach(ent => {
+              plainGen += `${plainGen.length > 0 ? ', ' : ''}${ent[0]}: ${ent[1]['yearStart']}-${ent[1]['yearEnd']}`;
+            });
+            model['generations'] = plainGen;
+          } else {
+            model['generations'] = '-';
+          }
+        });
         this.showLoader = false;
       },
       err => {
@@ -114,8 +143,7 @@ export class CarModelPage implements OnInit {
         active: brand['active'],
         review: brand['review']
       },
-      yearStart: this.formModels.value.newModelYearStart,
-      yearEnd: this.formModels.value.newModelYearEnd,
+      generation: this.generations,
       active: this.activeChecked,
       review: this.pendingReview
     };
@@ -130,6 +158,7 @@ export class CarModelPage implements OnInit {
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
+        this.generations = {};
         this.showToast(action, res.saved);
         this.ngOnInit();
       },
@@ -145,10 +174,10 @@ export class CarModelPage implements OnInit {
       newModelName: model.name,
       newModelCategory: model.category ? model.category['_id'] : '',
       newModelBrand: model.brand['_id'],
-      newModelYearStart: model['yearStart'],
-      newModelYearEnd: model['yearEnd'],
+      generation: model['generation'],
     });
 
+    this.generations = model.generation;
     this.activeChecked = model.active;
     this.pendingReview = model.review;
 
@@ -189,12 +218,14 @@ export class CarModelPage implements OnInit {
           this.formModels.reset();
           this.activeChecked = true;
           this.pendingReview = false;
+          this.generations = {};
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
           this.formModels.reset();
           this.activeChecked = true;
           this.pendingReview = false;
+          this.generations = {};
           this.showToast('Edição descartada');
           break;
       }

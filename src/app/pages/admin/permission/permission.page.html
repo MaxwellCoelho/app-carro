@@ -42,28 +42,28 @@
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formRoles.value.editRoleId }">
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formRoles.value.editRoleId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formRoles.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" mode="ios" [disabled]="formRoles.status === 'INVALID'">
                 <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formRoles.value.editRoleId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formRoles.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formRoles.status === 'INVALID'">
                 <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Salvar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formRoles.value.editRoleId && !formRoles.pristine">
-              <ion-button size="default" title="Limpar" expand="block" color="medium" type="button" (click)="showConfirmAlert('limpar', formRoles.value)">
+              <ion-button size="default" title="Limpar" expand="block" color="medium" mode="ios" type="button" (click)="showConfirmAlert('limpar', formRoles.value)">
                 <ion-icon name="backspace-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Limpar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formRoles.value.editRoleId">
-              <ion-button size="default" title="Descartar" expand="block" color="danger" type="button" (click)="showConfirmAlert('descartar', formRoles.value)">
+              <ion-button size="default" title="Descartar" expand="block" color="danger" mode="ios" type="button" (click)="showConfirmAlert('descartar', formRoles.value)">
                 <ion-icon name="close-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Descartar</ion-label>
               </ion-button>
@@ -107,10 +107,10 @@
               <td>{{role.modified || '-'}}</td>
               <td>{{(role.modified_by?.name ? role.modified_by?.name : role.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editRole(role)">
+                <ion-button size="small" title="Editar" expand="block" mode="ios" color="warning" (click)="editRole(role)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
-                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', role)">
+                <ion-button size="small" title="Excluir" expand="block" mode="ios" color="danger" (click)="showConfirmAlert('excluir', role)">
                   <ion-icon name="trash-outline"></ion-icon>
                 </ion-button>
               </td>
