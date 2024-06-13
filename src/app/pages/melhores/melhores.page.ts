@@ -1,5 +1,6 @@
+import { element } from 'protractor';
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
@@ -16,11 +17,14 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class MelhoresPage implements OnInit, ViewWillEnter {
 
+  @ViewChild('IonContent') content;
+
   public nav = NAVIGATION;
   public bestModels: Array<any> = [];
   public showLoader: boolean;
   public page = 1;
   public pagination = 20;
+  public showTopButton = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -28,6 +32,10 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     public router: Router,
     public utils: UtilsService
   ) {}
+
+  handleScroll(event) {
+    this.showTopButton = event.detail.scrollTop > 700;
+  }
 
   public ngOnInit(): void {
     if (!this.utils.getShouldUpdate('bests')) {
@@ -138,5 +146,9 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     setTimeout(() => {
       (ev as InfiniteScrollCustomEvent).target.complete();
     }, 500);
+  }
+
+  up() {
+    this.content.scrollToTop(700);
   }
 }

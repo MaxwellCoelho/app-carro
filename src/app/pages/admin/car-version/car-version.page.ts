@@ -48,8 +48,6 @@ export class CarVersionPage implements OnInit {
     this.formVersions = this.fb.group({
       editVersionId: this.fb.control(''),
       newVersionModel: this.fb.control('', [Validators.required]),
-      newVersionImage: this.fb.control(''),
-      newVersionThumb: this.fb.control(''),
       newVersionFuel: this.fb.control('', [Validators.required]),
       newVersionYearModel: this.fb.control('', [Validators.required]),
       newVersionEngine: this.fb.control('', [Validators.required]),
@@ -104,8 +102,6 @@ export class CarVersionPage implements OnInit {
         active: model['active'],
         review: model['review']
       },
-      image: this.formVersions.value.newVersionImage,
-      thumb: this.formVersions.value.newVersionThumb,
       fuel: this.formVersions.value.newVersionFuel,
       years: finalYears,
       engine: this.formVersions.value.newVersionEngine,
@@ -139,8 +135,6 @@ export class CarVersionPage implements OnInit {
     this.formVersions.reset({
       editVersionId: version['_id'],
       newVersionModel: version.model['_id'],
-      newVersionImage: version.image,
-      newVersionThumb: version.thumb,
       newVersionFuel: version.fuel,
       newVersionYearModel: version.years,
       newVersionEngine: version.engine.toFixed(1),

@@ -1,5 +1,7 @@
-<ion-content [fullscreen]="true">
+<ion-content #IonContent [fullscreen]="true" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
   <app-loader [showLoader]="showLoader"></app-loader>
+
+  <ion-icon *ngIf="showTopButton" class="bt-top" name="arrow-up-circle" size="large" color="primary" (click)="up()"></ion-icon>
 
   <div class="main-container">
     <ion-title size="large" color="primary" class="main-title">

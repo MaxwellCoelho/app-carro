@@ -135,6 +135,18 @@
   }
 }
 
+.bt-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 3rem;
+  z-index: 1;
+  transform: scale(1.5);
+  background-color: #fff;
+  border-radius: 5rem;
+  box-shadow: 0px 0px 10px 5px #fff;
+  cursor: pointer;
+}
+
 .model-image {
   width: 100px;
   height: 55px;
@@ -315,5 +327,4 @@
       padding-bottom: 0rem;
     }
   }
-
 }

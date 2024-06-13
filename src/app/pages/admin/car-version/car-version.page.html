@@ -54,7 +54,7 @@
           </ion-row>
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
-            <ion-col size-md="2" size-sm="2" size-xs="12">
+            <ion-col size-md="4" size-sm="4" size-xs="4">
               <ion-item class="input-item">
                 <ion-label position="floating">Motor</ion-label>
                 <ion-input type="text" pattern="[0-9]{1}[\.]?[0-9]{1}" minlength="3" maxlength="3" formControlName="newVersionEngine"
@@ -62,7 +62,7 @@
               </ion-item>
             </ion-col>
 
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="8" size-sm="8" size-xs="8">
               <ion-item class="input-item">
                 <ion-label position="floating">Câmbio</ion-label>
                 <ion-select interface="popover" formControlName="newVersionGearbox">
@@ -70,37 +70,23 @@
                 </ion-select>
               </ion-item>
             </ion-col>
+          </ion-row>
 
-            <ion-col size-md="6" size-sm="6" size-xs="12">
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
+            <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item class="input-item">
                 <ion-label position="floating">Detalhes da versão</ion-label>
                 <ion-input type="text" formControlName="newVersionComplement" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
               </ion-item>
             </ion-col>
-          </ion-row>
 
-          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
-            <ion-col size-md="4" size-sm="6" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Imagem</ion-label>
-                <ion-input type="text" formControlName="newVersionImage"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size-md="4" size-sm="6" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Thumbnail</ion-label>
-                <ion-input type="text" formControlName="newVersionThumb"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size-md="2" size-sm="6" size-xs="6">
+            <ion-col size-md="3" size-sm="6" size-xs="6">
               <ion-item lines="none" color="none">
                 <ion-label>Ativo</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="activeChecked"  [ngModelOptions]="{standalone: true}"></ion-toggle>
               </ion-item>
             </ion-col>
-            <ion-col size-md="2" size-sm="6" size-xs="6">
+            <ion-col size-md="3" size-sm="6" size-xs="6">
               <ion-item lines="none" color="none">
                 <ion-label>Revisão</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="pendingReview"  [ngModelOptions]="{standalone: true}"></ion-toggle>
@@ -165,8 +151,6 @@
               <th>Câmbio</th>
               <th>Combustível</th>
               <th>Anos versão</th>
-              <th>Imagem</th>
-              <th>Thumbnail</th>
               <th>Criado em</th>
               <th>Criado por</th>
               <th>Modificado em</th>
@@ -190,8 +174,6 @@
               <td>{{version.gearbox}}</td>
               <td>{{version.fuel}}</td>
               <td>{{version.years}}</td>
-              <td>{{version.image}}</td>
-              <td>{{version.thumb}}</td>
               <td>{{version.created || '-'}}</td>
               <td>{{(version.created_by?.name ? version.created_by.name  : version.created_by) || '-'}}</td>
               <td>{{version.modified || '-'}}</td>

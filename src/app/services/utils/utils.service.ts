@@ -160,11 +160,17 @@ export class UtilsService {
       const myYear = yearModel ? parseInt(yearModel, 10) : null;
 
       if (myYear) {
+        let foundName;
+        let gen = 0;
+
         Object.entries(generations).forEach(entrie => {
+          gen++;
           if (myYear >= parseInt(entrie[1].yearStart, 10) && myYear <= parseInt(entrie[1].yearEnd, 10)) {
-            imgName = `${modelUrl}-${entrie[0]}.png`;
+            foundName = `${modelUrl}-${entrie[0]}.png`;
           }
         });
+
+        imgName = foundName ? foundName : `${modelUrl}-g${gen}.png`;
       } else {
         imgName = `${modelUrl}-${Object.keys(generations)[Object.keys(generations).length - 1]}.png`;
       }
