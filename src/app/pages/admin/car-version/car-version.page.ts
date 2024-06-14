@@ -137,7 +137,7 @@ export class CarVersionPage implements OnInit {
       newVersionModel: version.model['_id'],
       newVersionFuel: version.fuel,
       newVersionYearModel: version.years,
-      newVersionEngine: version.engine.toFixed(1),
+      newVersionEngine: this.utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine : version.engine.toFixed(1),
       newVersionGearbox: version.gearbox,
       newVersionComplement: version.complement,
     });
@@ -244,7 +244,7 @@ export class CarVersionPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    const myItem = `${item.model.brand.name} ${item.model.name} ${item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}`;
+    const myItem = item ? `${item.model.brand.name} ${item.model.name} ${this.utils.sanitizeText(item?.fuel) === 'el-trico' ? item.engine : item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}` : '';
     this.toastController.create({
       header: `${action} com sucesso!`,
       message: item ? `Nome: ${myItem}` : '',

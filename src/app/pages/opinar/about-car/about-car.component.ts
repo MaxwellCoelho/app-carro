@@ -34,6 +34,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public anotherYear = false;
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
+  public isElectric = false;
 
   public valuation = VALUATION.slice().filter(val => val.id.includes(' r'));
   public valuationItens = VALUATION_ITENS_CAR.slice();
@@ -188,7 +189,25 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public changeOpinarMotor($event) {
     const value = $event.detail.value;
 
-    this.opinarMotor = value.toFixed(1);
+    this.opinarMotor = this.formOpinarCarro && this.utils.sanitizeText(this.formOpinarCarro.controls.opinarCombustivel.value) === 'el-trico'
+      ? value : value.toFixed(1);
+  }
+
+  public chooseFuel() {
+    let val: number;
+    const currentEletric = this.isElectric;
+
+    if (this.utils.sanitizeText(this.formOpinarCarro.controls.opinarCombustivel.value) === 'el-trico') {
+      this.isElectric = true;
+      val = 25;
+    } else {
+      this.isElectric = false;
+      val = 1;
+    }
+
+    if (currentEletric !== this.isElectric) {
+      this.changeOpinarMotor({detail: { value: val}});
+    }
   }
 
   public changeOpinarPeriodo($event) {

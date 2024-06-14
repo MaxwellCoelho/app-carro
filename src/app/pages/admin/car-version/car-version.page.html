@@ -46,23 +46,23 @@
 
             <ion-col size-md="4" size-sm="4" size-xs="12">
               <ion-item class="input-item">
-                <ion-label position="floating">Anos versão</ion-label>
-                <ion-input type="text" formControlName="newVersionYearModel"
-                  placeholder="Ex: 2015,2016,2017"></ion-input>
+                <ion-label position="floating">Motor</ion-label>
+                <ion-input type="text" pattern="[0-9]{3} || [0-9]{1}[\.]?[0-9]{1}"
+                  minlength="2" maxlength="3" formControlName="newVersionEngine"
+                  placeholder="Ex: 1.6"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
-            <ion-col size-md="4" size-sm="4" size-xs="4">
+            <ion-col size-md="8" size-sm="7" size-xs="12">
               <ion-item class="input-item">
-                <ion-label position="floating">Motor</ion-label>
-                <ion-input type="text" pattern="[0-9]{1}[\.]?[0-9]{1}" minlength="3" maxlength="3" formControlName="newVersionEngine"
-                  placeholder="Ex: 1.6"></ion-input>
+                <ion-label position="floating">Detalhes da versão</ion-label>
+                <ion-input type="text" formControlName="newVersionComplement" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col size-md="8" size-sm="8" size-xs="8">
+            <ion-col size-md="4" size-sm="5" size-xs="12">
               <ion-item class="input-item">
                 <ion-label position="floating">Câmbio</ion-label>
                 <ion-select interface="popover" formControlName="newVersionGearbox">
@@ -75,8 +75,9 @@
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
             <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item class="input-item">
-                <ion-label position="floating">Detalhes da versão</ion-label>
-                <ion-input type="text" formControlName="newVersionComplement" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
+                <ion-label position="floating">Anos versão</ion-label>
+                <ion-input type="text" formControlName="newVersionYearModel"
+                  placeholder="Ex: 2015,2016,2017"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -169,7 +170,7 @@
               </td>
               <td>{{version._id}}</td>
               <td>{{version.model?.brand?.name}} {{version.model?.name}}</td>
-              <td>{{version.engine?.toFixed(1)}}</td>
+              <td>{{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine : version.engine?.toFixed(1)}}</td>
               <td>{{version.complement}}</td>
               <td>{{version.gearbox}}</td>
               <td>{{version.fuel}}</td>

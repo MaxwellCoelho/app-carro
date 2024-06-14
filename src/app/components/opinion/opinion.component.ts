@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-opinion',
@@ -11,7 +12,9 @@ export class OpinionComponent implements OnInit, AfterViewInit {
   @Input() opinions: object[];
   @Input() expanded = false;
 
-  constructor() { }
+  constructor(
+    public utils: UtilsService
+  ) { }
 
   ngOnInit() { }
 
