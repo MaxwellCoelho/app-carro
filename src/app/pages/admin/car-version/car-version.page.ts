@@ -22,12 +22,15 @@ export class CarVersionPage implements OnInit {
   public nav = NAVIGATION;
   public fuels = FUEL;
   public gearboxes = GEARBOX;
+  public reviewVersions: Array<any>;
   public versions: Array<any>;
+  public finalVersions: Array<any>;
   public models: Array<any>;
   public showLoader: boolean;
   public formVersions: FormGroup;
   public activeChecked = true;
   public pendingReview = false;
+  public modelFilter: string;
 
   constructor(
     public dbService: DataBaseService,
@@ -40,7 +43,7 @@ export class CarVersionPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getVersions();
+    this.getVersions(true);
     this.getModels();
   }
 
@@ -56,18 +59,41 @@ export class CarVersionPage implements OnInit {
     });
   }
 
-  public getVersions(): void {
+  public getVersions(review?: boolean, modelId?: string): void {
     this.showLoader = true;
-    const subVersions = this.dbService.getItens(environment.versionsAction).subscribe(
+    const myFilter = review ? { review: true } : { review: false};
+
+    if (modelId) {
+      myFilter['model._id'] = modelId;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
-        this.versions = res.versions.sort((a, b) => (!a['review']) || -1);
+        const myList = review ? 'reviewVersions' : 'versions';
+        this[myList] = res.versions;
+
+        const reviews = this.reviewVersions || [];
+        const versions = this.versions || [];
+        this.finalVersions = [...reviews, ...versions];
         this.showLoader = false;
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public filterByModel($event) {
+    this.modelFilter = $event.detail.value;
+    if (this.modelFilter === 'nothing') {
+      this.modelFilter = null;
+      this.versions = [];
+      this.finalVersions = this.reviewVersions;
+    } else {
+      this.getVersions(false, this.modelFilter);
+    }
   }
 
   public getModels(): void {
@@ -116,14 +142,22 @@ export class CarVersionPage implements OnInit {
     const subVersions = this.dbService.createItem(environment.versionsAction, jwtData, versionId).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
+
+        if (this.reviewVersions.find(mod => mod['_id'] === versionId) || this.pendingReview) {
+          this.getVersions(true);
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
+        } else {
+          this.getVersions(false, this.modelFilter);
+        }
+
         this.formVersions.reset();
-        this.versions = res.versions;
         this.utils.setShouldUpdate(['versions'], true);
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
         this.showToast(action, res.saved);
-        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);
@@ -153,7 +187,7 @@ export class CarVersionPage implements OnInit {
     const subVersions = this.dbService.deleteItem(environment.versionsAction, versionId).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
-        this.versions = res.versions;
+        this.versions = this.utils.sortByReview(res.versions);
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

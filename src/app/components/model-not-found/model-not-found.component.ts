@@ -82,34 +82,43 @@ export class ModelNotFoundComponent implements OnInit {
 
   public createModel(brand: any): void {
     const modelName = this.utils.sanitizeText(this.formModelNotFound.value.opinarModel);
-    const data = {
-      name: this.formModelNotFound.value.opinarModel,
-      category: null,
-      brand: {
-        _id: brand['_id'],
-        name: brand['name'],
-        url: brand['url'],
-        active: brand['active'],
-        review: brand['review']
-      },
-      url: modelName,
-      active: true,
-      review: true
-    };
+    const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
+    const alreadyCreated = recoveredReviewModel
+      ? recoveredReviewModel.find(item => item['brand']['url'] === brand['url'] && item['url'] === modelName)
+      : false;
 
-    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+    if (alreadyCreated) {
+      this.showErrorToast({status: 409});
+    } else {
+      const data = {
+        name: this.formModelNotFound.value.opinarModel,
+        category: null,
+        brand: {
+          _id: brand['_id'],
+          name: brand['name'],
+          url: brand['url'],
+          active: brand['active'],
+          review: brand['review']
+        },
+        url: modelName,
+        active: true,
+        review: true
+      };
 
-    const subModels = this.dbService.createItem(environment.modelsAction, jwtData).subscribe(
-      res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.utils.saveCreatedItem(res.saved, 'createdModel');
-        this.router.navigate([`/opinar/${brand['url']}/${res.saved['url']}`]);
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+      const jwtData = { data: this.cryptoService.encondeJwt(data)};
+
+      const subModels = this.dbService.createItem(environment.modelsAction, jwtData).subscribe(
+        res => {
+          if (!subModels.closed) { subModels.unsubscribe(); }
+          this.utils.saveCreatedItem(res.saved, 'createdModel');
+          this.router.navigate([`/opinar/${brand['url']}/${res.saved['url']}`]);
+          this.showLoader = false;
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
   }
 
   public showErrorToast(err) {
@@ -121,6 +130,9 @@ export class ModelNotFoundComponent implements OnInit {
         break;
       case 401:
         response = UNAUTHORIZED;
+        break;
+      case 409:
+        response = 'Este modelo já existe!';
         break;
       default:
         response = GENERIC;

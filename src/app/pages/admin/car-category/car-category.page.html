@@ -77,7 +77,7 @@
           <ion-col><h1>Categorias de carro {{categories ? '('+categories.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!categories" class="grid-content">
+        <ion-row *ngIf="!categories || (categories && !categories.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -85,7 +85,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="categories">
+        <div class="table-container" *ngIf="categories && categories.length">
           <table>
             <tr>
               <th>Ativo</th>

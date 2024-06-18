@@ -100,7 +100,7 @@
           <ion-col><h1>Usuários {{users ? '('+users.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!users" class="grid-content">
+        <ion-row *ngIf="!users || (users && !users.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -108,7 +108,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="users">
+        <div class="table-container" *ngIf="users && users.length">
           <table>
             <tr>
               <th>Ativo</th>

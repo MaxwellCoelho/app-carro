@@ -20,15 +20,15 @@
           <ion-col><h1>Feedbacks {{feedbacks ? '('+feedbacks.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!feedbacks" class="grid-content">
+        <ion-row *ngIf="!feedbacks || (feedbacks && !feedbacks.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
-            <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
+            <ion-icon name="happy-outline" color="medium" size="large"></ion-icon>
             <br>
-            <ion-label color="medium">Não há nada por aqui ainda!</ion-label>
+            <ion-label color="medium">Nada de novo por aqui ainda!</ion-label>
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="feedbacks">
+        <div class="table-container" *ngIf="feedbacks && feedbacks.length">
           <table>
             <tr>
               <th>Id</th>

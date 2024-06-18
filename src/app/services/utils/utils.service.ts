@@ -178,4 +178,38 @@ export class UtilsService {
 
     return imgName;
   }
+
+  public sortByReview(itens: any): any {
+    return itens && itens.length ? itens.sort((a, b) => (!a['review']) || -1) : itens;
+  }
+
+  public findActiveModel(models: object[], brandUrl: string): object {
+    const foundModels = models.filter(mod => mod['brand'].url === brandUrl && mod['active']);
+    let foundModel;
+
+    if (!foundModels.length) {
+      return null;
+    }
+
+    foundModels.forEach(model => {
+      const recoveredReviewBrands = this.recoveryCreatedItem('createdBrand');
+      const recoveredReviewModel = this.recoveryCreatedItem('createdModel');
+      let checkReviewBrand = false;
+      let checkReviewModel = false;
+
+      if (!model['brand'].review || (model['brand'].review && recoveredReviewBrands.find(item => item['_id'] === model['brand']['_id']))) {
+        checkReviewBrand = true;
+      }
+
+      if (!model['review'] || (model['review'] && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
+        checkReviewModel = true;
+      }
+
+      if (checkReviewBrand && checkReviewModel) {
+        foundModel = model;
+      }
+    });
+
+    return foundModel;
+  }
 }

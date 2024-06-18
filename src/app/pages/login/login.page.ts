@@ -176,7 +176,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
 
     this.toastController.create({
       header: 'Senha enviada com sucesso!',
-      message: 'Verifique a sua caixa de email e retorne aqui posteriormente.',
+      message: 'Verifique a sua caixa de email e spam e retorne aqui posteriormente.',
       duration: 4000,
       position: 'middle',
       icon: 'paper-plane-outline',

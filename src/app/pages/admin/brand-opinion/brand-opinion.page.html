@@ -102,7 +102,7 @@
           <ion-col><h1>Opiniões {{opinions ? '('+opinions.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!opinions" class="grid-content">
+        <ion-row *ngIf="!opinions || (opinions && !opinions.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -110,7 +110,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="opinions">
+        <div class="table-container" *ngIf="opinions && opinions.length">
           <table>
             <tr>
               <th>Ativo</th>

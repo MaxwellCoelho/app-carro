@@ -50,7 +50,7 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands.sort((a, b) => (!a['review']) || -1);
+        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
       },
       err => {
@@ -74,7 +74,7 @@ export class CarBrandPage implements OnInit {
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
         this.formBrands.reset();
-        this.brands = res.brands;
+        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
@@ -104,7 +104,7 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.deleteItem(environment.brandsAction, brandId).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
+        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

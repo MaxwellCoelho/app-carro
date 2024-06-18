@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -18,7 +19,9 @@ export class CarModelPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
+  public reviewModels: Array<any>;
   public models: Array<any>;
+  public finalModels: Array<any>;
   public categories: Array<any>;
   public brands: Array<any>;
   public showLoader: boolean;
@@ -26,6 +29,7 @@ export class CarModelPage implements OnInit {
   public activeChecked = true;
   public pendingReview = false;
   public generations = {};
+  public brandFilter: string;
 
   constructor(
     public dbService: DataBaseService,
@@ -40,7 +44,7 @@ export class CarModelPage implements OnInit {
     this.initForm();
     this.getCategories();
     this.getBrands();
-    this.getModels();
+    this.getModels(true);
   }
 
   public initForm() {
@@ -106,13 +110,21 @@ export class CarModelPage implements OnInit {
     );
   }
 
-  public getModels(): void {
+  public getModels(review?: boolean, brandId?: string): void {
     this.showLoader = true;
-    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+    const myFilter = review ? { review: true } : { review: false};
+
+    if (brandId) {
+      myFilter['brand._id'] = brandId;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models.sort((a, b) => (!a['review']) || -1);
-        this.models.forEach(model => {
+        const myList = review ? 'reviewModels' : 'models';
+        this[myList] = res.models;
+        this[myList].forEach(model => {
           if (model.generation) {
             let plainGen = '';
             Object.entries(model.generation).forEach(ent => {
@@ -123,12 +135,27 @@ export class CarModelPage implements OnInit {
             model['generations'] = '-';
           }
         });
+
+        const reviews = this.reviewModels || [];
+        const models = this.models || [];
+        this.finalModels = [...reviews, ...models];
         this.showLoader = false;
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public filterByBrand($event) {
+    this.brandFilter = $event.detail.value;
+    if (this.brandFilter === 'nothing') {
+      this.brandFilter = null;
+      this.models = [];
+      this.finalModels = this.reviewModels;
+    } else {
+      this.getModels(false, this.brandFilter);
+    }
   }
 
   public createModel(action: string) {
@@ -160,15 +187,23 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.createItem(environment.modelsAction, jwtData, modelId).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
+
+        if (this.reviewModels.find(mod => mod['_id'] === modelId) || this.pendingReview) {
+          this.getModels(true);
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
+        } else {
+          this.getModels(false, this.brandFilter);
+        }
+
         this.formModels.reset();
-        this.models = res.models;
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
         this.generations = {};
         this.showToast(action, res.saved);
         this.utils.setShouldUpdate(['opinions'], true);
-        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);
@@ -197,7 +232,6 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.deleteItem(environment.modelsAction, modelId).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

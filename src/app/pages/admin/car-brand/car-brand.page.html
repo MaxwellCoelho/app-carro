@@ -83,7 +83,7 @@
           <ion-col><h1>Marcas de carro {{brands ? '('+brands.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!brands" class="grid-content">
+        <ion-row *ngIf="!brands || (brands && !brands.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -91,7 +91,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="brands">
+        <div class="table-container" *ngIf="brands && brands.length">
           <table>
             <tr>
               <th>Ativo</th>

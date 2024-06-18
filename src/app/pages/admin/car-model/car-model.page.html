@@ -95,7 +95,7 @@
             </ion-col>
 
             <ion-col size-md="4" size-sm="4.5" size-xs="6">
-              <ion-item class="input-item">
+              <ion-item>
                 <ion-label position="floating">Ano início da geração</ion-label>
                 <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newModelYearStart"
                   placeholder="Ex: 2015"></ion-input>
@@ -103,7 +103,7 @@
             </ion-col>
 
             <ion-col size-md="4" size-sm="4.5" size-xs="6">
-              <ion-item class="input-item">
+              <ion-item>
                 <ion-label position="floating">Ano fim da geração</ion-label>
                 <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newModelYearEnd"
                   placeholder="Ex: 2017"></ion-input>
@@ -152,18 +152,33 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Modelos de carros {{models ? '('+models.length+')' : ''}}</h1></ion-col>
-        </ion-row>
+          <ion-col size-md="8" size-sm="6" size-xs="12">
+            <h1>Modelos de carros {{finalModels ? '('+finalModels.length+')' : ''}}</h1>
+          </ion-col>
 
-        <ion-row *ngIf="!models" class="grid-content">
-          <ion-col style="text-align: center; margin: 2rem 0">
-            <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
-            <br>
-            <ion-label color="medium">Não há nada por aqui ainda!</ion-label>
+          <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-item class="input-item">
+              <ion-label position="floating">Filtrar por marca</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByBrand($event)" [value]="'nothing'">
+                <ion-select-option value="nothing">Nenhuma</ion-select-option>
+                <ion-select-option value="">Todas</ion-select-option>
+                <ion-select-option *ngFor="let brand of brands" [value]="brand._id">{{ brand.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="models">
+        <ion-row><ion-col><br></ion-col></ion-row>
+
+        <ion-row *ngIf="!finalModels || (finalModels && !finalModels.length)" class="grid-content">
+          <ion-col style="text-align: center; margin: 2rem 0">
+            <ion-icon name="happy-outline" color="medium" size="large"></ion-icon>
+            <br>
+            <ion-label color="medium">Nada de novo por aqui ainda!</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div class="table-container" *ngIf="finalModels && finalModels.length">
           <table>
             <tr>
               <th>Ativo</th>
@@ -183,7 +198,7 @@
               <th>Ação</th>
             </tr>
 
-            <tr *ngFor="let model of models" [ngClass]="{'pending-review': model.review }">
+            <tr *ngFor="let model of finalModels" [ngClass]="{'pending-review': model.review }">
               <td>
                 <ion-icon *ngIf="model.active" size="large" color="success" name="checkmark-circle"></ion-icon>
                 <ion-icon *ngIf="!model.active" size="large" color="danger" name="close-circle"></ion-icon>
@@ -215,6 +230,9 @@
             </tr>
           </table>
         </div>
+
+        <ion-row><ion-col><br></ion-col></ion-row>
+        <ion-row><ion-col><br></ion-col></ion-row>
       </ion-grid>
     </div>
 

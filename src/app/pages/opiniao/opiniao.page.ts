@@ -87,19 +87,9 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
-        if (!foundModel) {
-          this.showErrorToast({status: 404});
-          return;
-        }
-        const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
-        const checkReviewBrand = foundModel && !foundModel.brand.review
-          || (foundModel.brand.review && recoveredReviewBrands.find(item => item['_id'] === foundModel.brand['_id']));
-        const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
-        const checkReviewModel = foundModel && !foundModel.review
-          || (foundModel.review && recoveredReviewModel.find(item => item['_id'] === foundModel['_id']));
+        const foundModel = this.utils.findActiveModel(res.models, urlParams['brand']);
 
-        if (foundModel && checkReviewBrand && checkReviewModel) {
+        if (foundModel) {
           this.selectedModel = foundModel;
           this.setModelImage();
           this.getModelOpinions();
