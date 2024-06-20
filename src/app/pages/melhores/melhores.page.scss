@@ -210,7 +210,8 @@
   --inner-padding-end: 0;
 
   ion-grid {
-    margin: 0 0 .5rem 0;
+    margin: .5rem 0 .5rem 0;
+    padding: 0;
   }
 
   .position {
@@ -273,8 +274,8 @@
 .average-small {
   border: 0px;
   padding: 0;
-  padding-bottom: 1rem;
-  margin-top: -0.5rem;
+  padding-bottom: 0rem;
+  margin-top: -1rem;
 
   ion-col {
     padding-bottom: 0px;
@@ -303,8 +304,6 @@
 
   @media (max-width: 576px) {
     padding: 0;
-    padding-bottom: 0.5rem;
-    margin-top: -0.5rem;
 
     .item-title {
       text-align: center;
