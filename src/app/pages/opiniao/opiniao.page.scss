@@ -23,6 +23,10 @@
 
 .model-image {
   margin: auto;
+  background: URL('assets/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 6rem;
 }
 
 .category-image {
@@ -40,8 +44,7 @@
   cursor: pointer;
 
   @media (max-width: 700px) {
-    margin-top: 0.3rem;
-    padding-top: 0.4rem;
+    margin-top: 0;
     margin-right: -0.6rem;
   }
 }

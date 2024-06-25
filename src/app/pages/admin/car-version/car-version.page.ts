@@ -187,6 +187,16 @@ export class CarVersionPage implements OnInit {
     const subVersions = this.dbService.deleteItem(environment.versionsAction, versionId).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
+
+        if (this.reviewVersions.find(mod => mod['_id'] === versionId) || this.pendingReview) {
+          this.getVersions(true);
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
+        } else {
+          this.getVersions(false, this.modelFilter);
+        }
+
         this.versions = this.utils.sortByReview(res.versions);
         this.showLoader = false;
         this.showToast(action, res.removed);
@@ -278,7 +288,7 @@ export class CarVersionPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    const myItem = item ? `${item.model.brand.name} ${item.model.name} ${this.utils.sanitizeText(item?.fuel) === 'el-trico' ? item.engine : item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}` : '';
+    const myItem = item ? `${item.model.brand.name} ${item.model.name} ${this.utils.sanitizeText(item?.fuel) === 'el-trico' ? item.engine  + ' kW' : item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}` : '';
     this.toastController.create({
       header: `${action} com sucesso!`,
       message: item ? `Nome: ${myItem}` : '',

@@ -24,7 +24,7 @@
   <ion-title size="large" color="dark" class="car-info">
     <ion-label class="ion-text-wrap">
       <ion-icon [name]="'car'" color="dark"></ion-icon>
-      {{utils.sanitizeText(opinion.version.fuel) === 'el-trico' ? opinion.version.engine : opinion.version.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br>
+      {{utils.sanitizeText(opinion.version.fuel) === 'el-trico' ? opinion.version.engine + ' kW' : opinion.version.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}} {{opinion.year_model}}<br>
     </ion-label>
 
     <ion-label class="ion-text-wrap">

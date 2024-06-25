@@ -185,7 +185,7 @@
               </td>
               <td>{{version._id}}</td>
               <td>{{version.model?.brand?.name}} {{version.model?.name}}</td>
-              <td>{{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine : version.engine?.toFixed(1)}}</td>
+              <td>{{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine + ' kW' : version.engine?.toFixed(1)}}</td>
               <td>{{version.complement}}</td>
               <td>{{version.gearbox}}</td>
               <td>{{version.fuel}}</td>

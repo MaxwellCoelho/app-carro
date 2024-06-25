@@ -298,11 +298,11 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
 
   public autoFillInfo() {
     if (this.autoFill) {
-      this.formOpinarCarro.controls.opinarVersao.patchValue(this.autoFill['carVersion']);
-      this.chooseVersion();
-
       this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
       this.chooseYear(this.autoFill['yearModel']);
+
+      this.formOpinarCarro.controls.opinarVersao.patchValue(this.autoFill['carVersion']['_id']);
+      this.chooseVersion();
 
       if (this.newVersion) {
         this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);

@@ -150,6 +150,10 @@
 .model-image {
   width: 100px;
   height: 55px;
+  background: URL('assets/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 6rem;
 }
 
 .item-button:hover {

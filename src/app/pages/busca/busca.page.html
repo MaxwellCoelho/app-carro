@@ -8,6 +8,7 @@
     </ion-title>
 
     <div class="main-body">
+      <h1 class="form-title" *ngIf="!selectedBrand">Primeiro escolha uma das marca listadas abaixo ou digite no campo de busca.</h1>
       <ion-searchbar *ngIf="!selectedBrand" mode="ios" placeholder="Digite o nome da marca" (ionInput)="searchBrandInput($event)"></ion-searchbar>
 
       <ion-list *ngIf="!selectedBrand">
@@ -36,7 +37,9 @@
         </ion-chip>
       </ion-item>
 
-
+      <h1 class="form-title" style="margin-top: 0.5rem" *ngIf="selectedBrand">
+        Clique no modelo para ver todas as opiniões, ou deixe a sua clicando em <strong>Opinar</strong>!
+      </h1>
       <ion-searchbar *ngIf="selectedBrand" mode="ios" placeholder="Digite o nome do modelo" (ionInput)="searchModelInput($event)"></ion-searchbar>
 
       <ion-list *ngIf="selectedBrand">
@@ -51,7 +54,7 @@
             onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" loading="lazy" class="model-image">
           <ion-label [id]="'item-label-'+model.name" class="label-name">{{model.name}}</ion-label>
           <ion-chip outline slot="end" [id]="'bt-'+model.name" title="Opniar sobre esse modelo" color="primary">
-            <ion-icon [id]="'bt-'+model.name+'-icon'" [name]="'clipboard-outline'"></ion-icon>
+            <ion-icon [id]="'bt-'+model.name+'-icon'" [name]="'paper-plane-outline'"></ion-icon>
             <ion-label [id]="'bt-'+model.name+'-label'">Opinar</ion-label>
           </ion-chip>
         </ion-item>

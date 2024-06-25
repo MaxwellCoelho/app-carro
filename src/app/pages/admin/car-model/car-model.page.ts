@@ -232,6 +232,16 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.deleteItem(environment.modelsAction, modelId).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
+
+        if (this.reviewModels.find(mod => mod['_id'] === modelId) || this.pendingReview) {
+          this.getModels(true);
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
+        } else {
+          this.getModels(false, this.brandFilter);
+        }
+
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

@@ -54,7 +54,7 @@
                 <ion-label position="floating">Versão</ion-label>
                 <ion-select interface="popover" formControlName="newOpinarVersao">
                     <ion-select-option *ngFor="let version of versions" value="{{version._id}}">
-                      {{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine : version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
+                      {{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine + ' kW' : version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
                     </ion-select-option>
                 </ion-select>
               </ion-item>
@@ -162,7 +162,7 @@
               </td>
               <td>{{opinion._id}}</td>
               <td>{{opinion.model?.brand?.name}} {{opinion.model?.name}}</td>
-              <td>{{utils.sanitizeText(opinion.version?.fuel) === 'el-trico' ? opinion.version?.engine : opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}}</td>
+              <td>{{utils.sanitizeText(opinion.version?.fuel) === 'el-trico' ? opinion.version?.engine + ' kW' : opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}}</td>
               <td>{{opinion.year_model}}</td>
               <td>{{opinion.year_bought}}</td>
               <td>{{opinion.km_bought}} 000 Km</td>

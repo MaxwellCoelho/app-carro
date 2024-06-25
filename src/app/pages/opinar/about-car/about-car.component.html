@@ -37,7 +37,7 @@
           <ion-select interface="popover" formControlName="opinarVersao" (ionChange)="chooseVersion()"
             [disabled]="!formOpinarCarro.controls.opinarAnoModelo?.value || formOpinarCarro.controls.opinarAnoModelo?.value.length < 4">
               <ion-select-option *ngFor="let version of carVersionsToShow" value="{{version._id}}">
-                {{version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
+                {{utils.sanitizeText(version.fuel) === 'el-trico' ? version.engine + ' kW' : version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
               </ion-select-option>
               <ion-select-option value="anotherVersion">Outra versão</ion-select-option>
           </ion-select>

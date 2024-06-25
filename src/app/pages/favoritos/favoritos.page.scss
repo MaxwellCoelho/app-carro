@@ -24,6 +24,10 @@
 
       img {
         max-height: 8.85rem;
+        background: URL('assets/loading.gif');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 6rem;
       }
     }
 
