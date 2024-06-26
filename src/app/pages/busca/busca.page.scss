@@ -46,6 +46,16 @@
   text-transform: capitalize;
   --padding-start: 0;
   --inner-padding-end: 0;
+
+  @media (min-width: 800px) {
+    width: calc(50% - 2rem);
+    display: inline-flex;
+    margin-right: 4rem;
+
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
+  }
 }
 
 ion-searchbar {
