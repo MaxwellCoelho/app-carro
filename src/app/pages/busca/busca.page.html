@@ -8,10 +8,10 @@
     </ion-title>
 
     <div class="main-body">
-      <h1 class="form-title" *ngIf="!selectedBrand">Primeiro escolha uma das marca listadas abaixo ou digite no campo de busca.</h1>
-      <ion-searchbar *ngIf="!selectedBrand" mode="ios" placeholder="Digite o nome da marca" (ionInput)="searchBrandInput($event)"></ion-searchbar>
+      <h1 class="form-title" *ngIf="!selectedBrand && !otherBrand">Primeiro escolha uma das marca listadas abaixo ou digite no campo de busca.</h1>
+      <ion-searchbar *ngIf="!selectedBrand && !otherBrand" mode="ios" placeholder="Digite o nome da marca" (ionInput)="searchBrandInput($event)"></ion-searchbar>
 
-      <ion-list *ngIf="!selectedBrand">
+      <ion-list *ngIf="!selectedBrand && !otherBrand">
         <ion-item *ngIf="!filteredBrands?.length && !showLoader" lines="none">
           <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
@@ -37,12 +37,12 @@
         </ion-chip>
       </ion-item>
 
-      <h1 class="form-title" style="margin-top: 0.5rem" *ngIf="selectedBrand">
+      <h1 class="form-title" style="margin-top: 0.5rem" *ngIf="selectedBrand && !otherModel">
         Clique no modelo para ver todas as opiniões, ou deixe a sua opinião clicando em <strong>Opinar</strong>!
       </h1>
-      <ion-searchbar *ngIf="selectedBrand" mode="ios" placeholder="Digite o nome do modelo" (ionInput)="searchModelInput($event)"></ion-searchbar>
+      <ion-searchbar *ngIf="selectedBrand  && !otherModel" mode="ios" placeholder="Digite o nome do modelo" (ionInput)="searchModelInput($event)"></ion-searchbar>
 
-      <ion-list *ngIf="selectedBrand">
+      <ion-list *ngIf="selectedBrand  && !otherModel">
         <ion-item *ngIf="!filteredModels?.length && !showLoader" lines="none">
           <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>

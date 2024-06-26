@@ -5,7 +5,7 @@
       <ion-label>{{nav.best.title}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="{{nav.search.route}}">
+    <ion-tab-button tab="{{nav.search.route}}" (click)="goToWithoutParams(nav.search.route)">
       <ion-icon name="{{nav.search.icon}}"></ion-icon>
       <ion-label>{{nav.search.title}}</ion-label>
     </ion-tab-button>

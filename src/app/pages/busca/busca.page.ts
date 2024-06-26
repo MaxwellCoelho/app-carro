@@ -25,6 +25,8 @@ export class BuscaPage implements ViewWillEnter {
   public filteredModels = [];
   public selectedModel: object;
   public showLoader: boolean;
+  public otherBrand = false;
+  public otherModel = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -33,7 +35,11 @@ export class BuscaPage implements ViewWillEnter {
     public searchService: SearchService,
     public router: Router,
     public utils: UtilsService,
-  ) { }
+  ) {
+    this.searchService.clearSearch$.subscribe(
+      () => this.ionViewWillEnter()
+    );
+  }
 
   public ionViewWillEnter(): void {
     this.setInitialTitle();
@@ -61,17 +67,30 @@ export class BuscaPage implements ViewWillEnter {
           }
         }
 
-        this.filteredBrands = this.brands;
-        this.showLoader = false;
-
         const urlParams = location.search.replace('?','').split('&');
+        let currentBrand;
+        let searchTerm;
         urlParams.find(param => {
           const splitted = param.split('=');
           if (splitted[0] === 'brand') {
-            const currentBrand = this.brands.find(brand => brand.url === splitted[1]);
+            currentBrand = this.brands.find(brand => brand.url === splitted[1]);
             this.selectBrand(currentBrand);
           }
+
+          if (splitted[0] === 'search') {
+            searchTerm = splitted[1];
+          }
         });
+
+        if (searchTerm && !currentBrand) {
+          this.otherBrand = true;
+          this.searchBrandInput({target: {value: 'outro'}});
+        } else {
+          this.otherBrand = false;
+          this.filteredBrands = this.brands;
+        }
+
+        this.showLoader = false;
       },
       err => {
         this.showErrorToast(err);
@@ -93,7 +112,7 @@ export class BuscaPage implements ViewWillEnter {
     this.setInitialTitle();
     this.filteredBrands = this.brands;
     this.selectedBrand = null;
-    const params: NavigationExtras = { queryParams: { brand: null }, queryParamsHandling: 'merge' };
+    const params: NavigationExtras = { queryParams: { brand: null, search: null }, queryParamsHandling: 'merge' };
     this.router.navigate([NAVIGATION.search.route], params);
   }
 
@@ -127,7 +146,24 @@ export class BuscaPage implements ViewWillEnter {
           }
         }
 
-        this.filteredModels = this.models;
+        const urlParams = location.search.replace('?','').split('&');
+        let searchTerm;
+        urlParams.find(param => {
+          const splitted = param.split('=');
+
+          if (splitted[0] === 'search') {
+            searchTerm = splitted[1];
+          }
+        });
+
+        if (searchTerm) {
+          this.otherModel = true;
+          this.searchModelInput({target: {value: 'outro'}});
+        } else {
+          this.otherModel = false;
+          this.filteredModels = this.models;
+        }
+
         this.showLoader = false;
       },
       err => {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -6,6 +7,7 @@ import { Injectable } from '@angular/core';
 export class SearchService {
 
   public selectedModel: object;
+  public clearSearch$: Subject<any> = new Subject<any>();
 
   constructor() { }
 
@@ -19,5 +21,9 @@ export class SearchService {
 
   public clearModel(): void {
     this.selectedModel = null;
+  }
+
+  public clearSearch() {
+    this.clearSearch$.next(true);
   }
 }

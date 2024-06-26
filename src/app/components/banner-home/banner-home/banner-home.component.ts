@@ -30,8 +30,14 @@ export class BannerHomeComponent implements OnInit {
   goToOpinar() {
     if (!this.selectedBrand) {
       this.router.navigate([NAVIGATION.search.route]);
+    } else if (this.selectedBrand === 'anotherBrand') {
+      const params: NavigationExtras = { queryParams: { search: 'outro' }, queryParamsHandling: 'merge' };
+      this.router.navigate([NAVIGATION.search.route], params);
     } else if (!this.selectedModel) {
       const params: NavigationExtras = { queryParams: { brand: this.selectedBrand }, queryParamsHandling: 'merge' };
+      this.router.navigate([NAVIGATION.search.route], params);
+    } else if (this.selectedModel === 'anotherModel') {
+      const params: NavigationExtras = { queryParams: { brand: this.selectedBrand, search: 'outro' }, queryParamsHandling: 'merge' };
       this.router.navigate([NAVIGATION.search.route], params);
     } else {
       const opinarUrl = `opinar/${this.selectedBrand}/${this.selectedModel}`;
@@ -62,13 +68,25 @@ export class BannerHomeComponent implements OnInit {
   }
 
   public chooseBrand($event) {
-    this.selectedBrand = $event.detail.value;
+    const selected = $event.detail.value;
     this.selectedModel = null;
-    this.getModels();
+    this.models = null;
+    this.selectedBrand = selected;
+
+    if (selected === 'anotherBrand') {
+      this.goToOpinar();
+    } else {
+      this.getModels();
+    }
   }
 
   public chooseModel($event) {
-    this.selectedModel = $event.detail.value;
+    const selected = $event.detail.value;
+    this.selectedModel = selected;
+
+    if (selected === 'anotherModel') {
+      this.goToOpinar();
+    }
   }
 
 }
