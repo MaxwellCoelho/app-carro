@@ -1,8 +1,43 @@
-<div class="banner-container" (click)="goToSearch()">
-  <h1>Você tem ou já teve um carro?</h1>
-  <h2>Queremos saber a sua opinião!</h2>
-  <ion-chip outline title="Clique aqui para opinar" color="primary">
-    <ion-icon [name]="'paper-plane'"></ion-icon>
-    <ion-label>Clique para opinar</ion-label>
-  </ion-chip>
+<div class="banner-container">
+  <ion-row style="align-items: center">
+    <ion-col size-md="6" size-sm="6" size-xs="12" class="col-text">
+      <h1>Você tem ou já teve um carro?</h1>
+      <h2>Queremos saber a sua opinião!</h2>
+    </ion-col>
+
+    <ion-col size-md="6" size-sm="6" size-xs="12" class="col-form">
+      <ion-row>
+        <ion-col size-md="12" size-sm="12" size-xs="12">
+          <span class="small-text">Escolha um modelo de carro</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="6" size-sm="12" size-xs="12">
+          <ion-item>
+            <ion-label position="floating">Marca</ion-label>
+            <ion-select interface="popover" (ionChange)="chooseBrand($event)">
+              <ion-select-option *ngFor="let brand of brands" [value]="brand.url">{{ brand.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size-md="6" size-sm="12" size-xs="12">
+          <ion-item>
+            <ion-label position="floating">Modelo</ion-label>
+            <ion-select interface="popover" [disabled]="!models || !models.length" (ionChange)="chooseModel($event)">
+              <ion-select-option *ngFor="let model of models" [value]="model.url">{{ model.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="6" size-sm="12" size-xs="12">
+          <ion-chip class="opinar" outline title="Opinar" color="primary" (click)="goToOpinar()">
+            <ion-icon [name]="'paper-plane'"></ion-icon>
+            <ion-label>Opinar</ion-label>
+          </ion-chip>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
 </div>
