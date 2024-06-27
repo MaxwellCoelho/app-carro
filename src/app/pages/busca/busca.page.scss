@@ -47,6 +47,14 @@
   --padding-start: 0;
   --inner-padding-end: 0;
 
+  ion-chip {
+    margin-right: 1rem;
+
+    @media (max-width: 800px) {
+      margin-right: 0;
+    }
+  }
+
   @media (min-width: 800px) {
     width: calc(50% - 2rem);
     display: inline-flex;

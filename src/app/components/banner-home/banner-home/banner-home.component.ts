@@ -31,21 +31,19 @@ export class BannerHomeComponent implements OnInit {
   }
 
   goToOpinar() {
-    if (!this.selectedBrand) {
-      this.router.navigate([NAVIGATION.search.route]);
-    } else if (this.selectedBrand === 'anotherBrand') {
+    if (this.selectedBrand === 'anotherBrand') {
       const params: NavigationExtras = { queryParams: { search: 'outro' }, queryParamsHandling: 'merge' };
-      this.router.navigate([NAVIGATION.search.route], params);
-    } else if (!this.selectedModel) {
-      const params: NavigationExtras = { queryParams: { brand: this.selectedBrand }, queryParamsHandling: 'merge' };
       this.router.navigate([NAVIGATION.search.route], params);
     } else if (this.selectedModel === 'anotherModel') {
       const params: NavigationExtras = { queryParams: { brand: this.selectedBrand, search: 'outro' }, queryParamsHandling: 'merge' };
       this.router.navigate([NAVIGATION.search.route], params);
-    } else {
+    } else if (this.selectedBrand && this.selectedModel) {
       const opinarUrl = `opinar/${this.selectedBrand}/${this.selectedModel}`;
       this.router.navigate([opinarUrl]);
     }
+
+    this.selectedModel = null;
+    this.selectedBrand = null;
   }
 
   public getBrands(): void {
@@ -103,9 +101,7 @@ export class BannerHomeComponent implements OnInit {
     const selected = $event.detail.value;
     this.selectedModel = selected;
 
-    if (selected === 'anotherModel') {
-      this.goToOpinar();
-    }
+    this.goToOpinar();
   }
 
 }
