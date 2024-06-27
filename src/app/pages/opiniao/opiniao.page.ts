@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
@@ -51,6 +52,9 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
+    if (this.selectedModel) {
+      this.setPageTitle();
+    }
     if (this.utils.getShouldUpdate('opinions')) {
       this.utils.setShouldUpdate(['opinions'], false);
       this.selectedModel = null;
@@ -64,6 +68,10 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     } else if (this.selectedModel) {
       this.isFavorite = this.favorite.isFavorite(this.selectedModel);
     }
+  }
+
+  public setPageTitle() {
+    this.utils.setPageTitle(`${this.selectedModel['brand'].name} ${this.selectedModel['name']}`, `Opiniões reais e sincera dos donos de ${this.selectedModel['brand'].name} ${this.selectedModel['name']}.`, `${this.selectedModel['brand'].name} ${this.selectedModel['name']}, ${this.selectedModel['brand'].name}, ${this.selectedModel['name']}`);
   }
 
   public loadModelInfo(): void {
@@ -109,7 +117,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public getModelOpinions(): void {
     this.isFavorite = this.favorite.isFavorite(this.selectedModel);
-    this.utils.setPageTitle(`${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
+    this.setPageTitle();
     const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
       res => {

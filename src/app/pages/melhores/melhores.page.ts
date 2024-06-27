@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { element } from 'protractor';
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -44,7 +45,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
-    this.utils.setPageTitle('Melhores avaliados');
+    this.utils.setPageTitle('Melhores avaliados', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'melhor, melhores, ranking');
     if (this.utils.getShouldUpdate('bests')) {
       this.utils.setShouldUpdate(['bests'], false);
       this.bestModels = [];

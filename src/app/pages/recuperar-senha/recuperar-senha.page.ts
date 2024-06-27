@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Component, OnInit } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -36,7 +37,7 @@ export class RecuperarSenhaPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
-    this.utils.setPageTitle('Recuperar senha');
+    this.utils.setPageTitle('Recuperar senha', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'esqueci, recuperar, senha');
     this.checkTokenParam();
   }
 

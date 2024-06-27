@@ -43,7 +43,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
-    this.utils.setPageTitle('Entrar');
+    this.utils.setPageTitle('Entrar', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'login, entrar');
     this.recoveryUserEmail();
   }
 

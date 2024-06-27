@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
@@ -149,8 +151,16 @@ export class UtilsService {
     }
   }
 
-  public setPageTitle(newTitle: string): void {
-    document.title = `Krro - ${newTitle} - Opinião dos donos`;
+  public setPageTitle(newTitle: string, newDescription?: string, newKeywords?: string): void {
+    const defaultTitle = 'Opinião dos donos';
+    const defaultDescription = 'Para quem busca mais informação na hora de decidir qual carro comprar.';
+    const defaultKeywords = 'opinião, opiniões, dono, donos, opinar, carro, carros, automóvel, positivo, negativo, marca, fabricante, montadora, garagem, dirigir, conforto, autonomia, ano, motor, krro, krros, karro, karros';
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+
+    document.title = `Krro - ${newTitle} - ${defaultTitle}`;
+    metaDescription['content'] = metaDescription && newDescription ? `${newDescription} ${defaultDescription}` : defaultDescription;
+    metaKeywords['content'] = metaKeywords && newKeywords ? `${newKeywords}, ${defaultKeywords}` : defaultKeywords;
   }
 
   public getModelImg(modelUrl: string, generations: object, yearModel?: string): string {

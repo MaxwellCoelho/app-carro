@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -99,13 +100,13 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public selectBrand(brand) {
-    this.utils.setPageTitle(`Busca por modelos de carro da ${brand['name']}`);
+    this.utils.setPageTitle(`Busca por modelos de carro da ${brand['name']}`, `Opiniões reais e sincera dos donos de carros da ${brand['name']}.`, `${brand['name']}`);
     this.selectedBrand = brand;
     this.getModel();
   }
 
   public setInitialTitle(): void {
-    this.utils.setPageTitle('Busca por marcas de carro');
+    this.utils.setPageTitle('Busca por marcas de carro', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.');
   }
 
   public clearBrand() {

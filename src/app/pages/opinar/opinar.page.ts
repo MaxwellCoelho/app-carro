@@ -209,7 +209,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
 
   public loadFinalPayload() {
     this.isFavorite = this.favorite.isFavorite(this.selectedModel);
-    this.utils.setPageTitle(`Opinar ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
+    this.utils.setPageTitle(`Opinar sobre ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`, `Deixe sua opinião real e sincera sobre o ${this.selectedModel['brand'].name} ${this.selectedModel['name']}.`, `${this.selectedModel['brand'].name} ${this.selectedModel['name']}, ${this.selectedModel['brand'].name}, ${this.selectedModel['name']}`);
     const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
 
     if (encoded) {

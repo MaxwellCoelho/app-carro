@@ -27,7 +27,7 @@ export class FavoritosPage implements ViewWillEnter {
   ) {}
 
   public ionViewWillEnter(): void {
-    this.utils.setPageTitle('Meus favoritos');
+    this.utils.setPageTitle('Meus favoritos', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.');
     this.getFavoriteModels();
   }
 

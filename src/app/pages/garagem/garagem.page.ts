@@ -40,7 +40,7 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
-    this.utils.setPageTitle('Minha garagem');
+    this.utils.setPageTitle('Minha garagem', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'minha garagem, garagem, meus carros, meu carro');
     if (this.utils.getShouldUpdate('opinions')) {
       this.utils.setShouldUpdate(['opinions'], false);
       this.myModelOpinions = [];
