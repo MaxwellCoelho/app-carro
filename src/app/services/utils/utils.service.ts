@@ -155,12 +155,16 @@ export class UtilsService {
     const defaultTitle = 'Opinião dos donos';
     const defaultDescription = 'Para quem busca mais informação na hora de decidir qual carro comprar.';
     const defaultKeywords = 'opinião, opiniões, dono, donos, opinar, carro, carros, automóvel, positivo, negativo, marca, fabricante, montadora, garagem, dirigir, conforto, autonomia, ano, motor, krro, krros, karro, karros';
+    const defaultCanonical = 'https://krro.com.br';
+    const currentPath = location.pathname;
     const metaDescription = document.querySelector('meta[name="description"]');
     const metaKeywords = document.querySelector('meta[name="keywords"]');
+    const linkCanonical = document.querySelector('link[rel="canonical"]');
 
     document.title = `Krro - ${newTitle} - ${defaultTitle}`;
     metaDescription['content'] = metaDescription && newDescription ? `${newDescription} ${defaultDescription}` : defaultDescription;
     metaKeywords['content'] = metaKeywords && newKeywords ? `${newKeywords}, ${defaultKeywords}` : defaultKeywords;
+    linkCanonical['href'] = linkCanonical && !currentPath.includes('melhores') ? `${defaultCanonical}${currentPath}` : defaultCanonical;
   }
 
   public getModelImg(modelUrl: string, generations: object, yearModel?: string): string {
