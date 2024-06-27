@@ -162,9 +162,11 @@ export class GaragemPage implements OnInit, ViewWillEnter {
 
   public chooseModel($event) {
     const selected = $event.detail.value;
-    this.selectedModel = selected;
 
-    this.goToOpinar();
+    if (selected) {
+      this.selectedModel = selected;
+      this.goToOpinar();
+    }
   }
 
   public getBrands(): void {
