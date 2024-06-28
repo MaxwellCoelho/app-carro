@@ -149,7 +149,9 @@ export class CarVersionPage implements OnInit {
             this.getVersions(false, this.modelFilter);
           }
         } else {
-          this.getVersions(false, this.modelFilter);
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
         }
 
         this.formVersions.reset();
@@ -194,7 +196,9 @@ export class CarVersionPage implements OnInit {
             this.getVersions(false, this.modelFilter);
           }
         } else {
-          this.getVersions(false, this.modelFilter);
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
         }
 
         this.versions = this.utils.sortByReview(res.versions);

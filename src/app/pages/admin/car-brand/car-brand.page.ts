@@ -8,6 +8,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { SearchService } from 'src/app/services/search/search.service';
 
 @Component({
   selector: 'app-car-brand',
@@ -31,6 +32,7 @@ export class CarBrandPage implements OnInit {
     public alertController: AlertController,
     public toastController: ToastController,
     public utils: UtilsService,
+    public searchService: SearchService,
   ) { }
 
   ngOnInit() {
@@ -79,6 +81,7 @@ export class CarBrandPage implements OnInit {
         this.activeChecked = true;
         this.pendingReview = false;
         this.showToast(action, res.saved);
+        this.searchService.clearAllBrands();
         this.ngOnInit();
       },
       err => {

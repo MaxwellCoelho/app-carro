@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { NavigationExtras, Router } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
+import { SearchService } from 'src/app/services/search/search.service';
 
 @Component({
   selector: 'app-garagem',
@@ -24,7 +25,6 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public myModelOpinions = [];
   public modalContent: object;
   public valuation = VALUATION.slice();
-  public brands: Array<any>;
   public models: Array<any>;
   public selectedBrand: string;
   public selectedModel: string;
@@ -34,15 +34,14 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     public dbService: DataBaseService,
     public toastController: ToastController,
     public cryptoService: CryptoService,
-    public router: Router
+    public router: Router,
+    public searchService: SearchService,
   ) {}
 
   public ngOnInit(): void {
     if (!this.utils.getShouldUpdate('opinions')) {
       this.getModelOpinions();
     }
-
-    this.getBrands();
   }
 
   public ionViewWillEnter(): void {
@@ -52,6 +51,8 @@ export class GaragemPage implements OnInit, ViewWillEnter {
       this.myModelOpinions = [];
       this.getModelOpinions();
     }
+
+    this.getBrands();
   }
 
   public getModelOpinions(): void {
@@ -170,41 +171,53 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   }
 
   public getBrands(): void {
-    const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
-    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
-      res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = [];
-        for (const brand of res.brands) {
-          if (brand.active) {
-            if (!brand.review || (brand.review && recoveredReviewBrands.find(item => item['_id'] === brand['_id']))) {
-              this.brands.push(brand);
+    if (!this.searchService.getAllBrands().length) {
+      const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+        res => {
+          if (!subBrands.closed) { subBrands.unsubscribe(); }
+          const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
+          const brands = [];
+          for (const brand of res.brands) {
+            if (brand.active) {
+              if (!brand.review || (brand.review && recoveredReviewBrands.find(item => item['_id'] === brand['_id']))) {
+                brands.push(brand);
+              }
             }
           }
-        }
-      },
-      err => {}
-    );
+
+          this.searchService.saveAllBrands(brands);
+        },
+        err => {}
+      );
+    }
   }
 
   public getModels(): void {
-    const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
-    const myFilter = { ['brand.url']: this.selectedBrand };
-    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
-      res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = [];
-        for (const model of res.models) {
-          if (model.active) {
-            if (!model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
-              this.models.push(model);
+    const mododelsBybrand = this.searchService.getModelsByBrand(this.selectedBrand);
+
+    if (!mododelsBybrand.length) {
+      const myFilter = { ['brand.url']: this.selectedBrand };
+      const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+      const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
+        res => {
+          if (!subModels.closed) { subModels.unsubscribe(); }
+          const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
+          this.models = [];
+          for (const model of res.models) {
+            if (model.active) {
+              if (!model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
+                this.models.push(model);
+              }
             }
           }
-        }
-      },
-      err => {}
-    );
+
+          this.searchService.saveModels(this.models);
+        },
+        err => {}
+      );
+    } else {
+      this.models = mododelsBybrand;
+    }
   }
 
   goToOpinar() {

@@ -73,7 +73,7 @@
       </div>
     </div>
 
-    <app-banner-home></app-banner-home>
+    <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
 
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>

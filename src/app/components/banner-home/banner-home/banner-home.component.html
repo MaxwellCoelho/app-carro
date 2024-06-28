@@ -15,7 +15,7 @@
         <ion-col size-md="6" size-sm="12" size-xs="12">
           <ion-item>
             <ion-label position="floating">Marca</ion-label>
-            <ion-select *ngIf="brands" interface="popover" (ionChange)="chooseBrand($event)" [value]="selectedBrand">
+            <ion-select *ngIf="brands.length" interface="popover" (ionChange)="chooseBrand($event)" [value]="selectedBrand">
               <ion-select-option *ngFor="let brand of brands" [value]="brand.url">{{ brand.name }}</ion-select-option>
               <ion-select-option value="anotherBrand">Outra marca</ion-select-option>
             </ion-select>

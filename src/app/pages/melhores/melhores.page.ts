@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { VALUATION, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 import { Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { SearchService } from 'src/app/services/search/search.service';
 
 @Component({
   selector: 'app-melhores',
@@ -31,7 +32,8 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     public dbService: DataBaseService,
     public toastController: ToastController,
     public router: Router,
-    public utils: UtilsService
+    public utils: UtilsService,
+    public searchService: SearchService,
   ) {}
 
   handleScroll(event) {
@@ -52,6 +54,30 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
       this.page = 1;
       this.pagination = 20;
       this.getBestModels();
+    }
+
+    this.getBrands();
+  }
+
+  public getBrands(): void {
+    if (!this.searchService.getAllBrands().length) {
+      const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+        res => {
+          if (!subBrands.closed) { subBrands.unsubscribe(); }
+          const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
+          const brands = [];
+          for (const brand of res.brands) {
+            if (brand.active) {
+              if (!brand.review || (brand.review && recoveredReviewBrands.find(item => item['_id'] === brand['_id']))) {
+                brands.push(brand);
+              }
+            }
+          }
+
+          this.searchService.saveAllBrands(brands);
+        },
+        err => {}
+      );
     }
   }
 

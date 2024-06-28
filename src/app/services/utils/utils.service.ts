@@ -4,7 +4,7 @@
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
-export type UpdateTypes = 'opinions' | 'bests' | 'versions';
+export type UpdateTypes = 'opinions' | 'bests' | 'versions' | 'models';
 
 @Injectable({
   providedIn: 'root'

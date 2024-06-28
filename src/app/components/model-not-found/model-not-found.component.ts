@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Router } from '@angular/router';
+import { SearchService } from 'src/app/services/search/search.service';
 
 @Component({
   selector: 'app-model-not-found',
@@ -29,6 +30,7 @@ export class ModelNotFoundComponent implements OnInit {
     public toastController: ToastController,
     public utils: UtilsService,
     public router: Router,
+    public searchService: SearchService,
   ) { }
 
   ngOnInit() {
@@ -111,6 +113,7 @@ export class ModelNotFoundComponent implements OnInit {
         res => {
           if (!subModels.closed) { subModels.unsubscribe(); }
           this.utils.saveCreatedItem(res.saved, 'createdModel');
+          this.searchService.clearAllBrands();
           this.router.navigate([`/opinar/${brand['url']}/${res.saved['url']}`]);
           this.showLoader = false;
         },

@@ -25,7 +25,7 @@
         </ion-item>
       </ion-list>
 
-      <app-model-not-found *ngIf="brands.length && !selectedBrand" [brandList]="brands"></app-model-not-found>
+      <app-model-not-found *ngIf="searchService.getAllBrands().length && !selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
 
       <ion-item lines="none" *ngIf="selectedBrand" class="selected-brand">
         <img src="assets/brands/{{selectedBrand.url}}.svg" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}" loading="lazy"
@@ -60,7 +60,7 @@
         </ion-item>
       </ion-list>
 
-      <app-model-not-found *ngIf="brands.length && selectedBrand" [selectedBrand]="selectedBrand" [brandList]="brands"></app-model-not-found>
+      <app-model-not-found *ngIf="searchService.getAllBrands().length && selectedBrand" [selectedBrand]="selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
     </div>
   </div>
 </ion-content>

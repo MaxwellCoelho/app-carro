@@ -194,7 +194,9 @@ export class CarModelPage implements OnInit {
             this.getModels(false, this.brandFilter);
           }
         } else {
-          this.getModels(false, this.brandFilter);
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
         }
 
         this.formModels.reset();
@@ -203,7 +205,7 @@ export class CarModelPage implements OnInit {
         this.pendingReview = false;
         this.generations = {};
         this.showToast(action, res.saved);
-        this.utils.setShouldUpdate(['opinions'], true);
+        this.utils.setShouldUpdate(['opinions', 'models'], true);
       },
       err => {
         this.showErrorToast(err);
@@ -239,7 +241,9 @@ export class CarModelPage implements OnInit {
             this.getModels(false, this.brandFilter);
           }
         } else {
-          this.getModels(false, this.brandFilter);
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
         }
 
         this.showLoader = false;
