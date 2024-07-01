@@ -65,6 +65,13 @@
               </ion-col>
               <ion-col size-lg="9.5" size-md="9" size-sm="9" size-xs="12" class="sent-item-text">
                 <ion-label class="ion-text-wrap">
+                  <!-- Google tag (gtag.js) event -->
+                  <script>
+                    gtag('event', 'conversion_event_page_view_2', {
+                      // <event_parameters>
+                    });
+                  </script>
+
                   <h1 class="form-title">
                     <span class="success">Parabéns {{user?.name.split(' ')[0]}}!</span>
                     <br>Sua opinião sobre o <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span> foi enviada com sucesso!
