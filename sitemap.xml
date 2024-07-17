@@ -1385,6 +1385,13 @@
   </url>
 
   <url>
+    <loc>https://krro.com.br/opinar/peugeot/307-sedan</loc>
+    <lastmod>2024-07-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
     <loc>https://krro.com.br/opinar/peugeot/308</loc>
     <lastmod>2024-07-01</lastmod>
     <changefreq>daily</changefreq>
@@ -3270,6 +3277,13 @@
   <url>
     <loc>https://krro.com.br/opiniao/peugeot/307</loc>
     <lastmod>2024-07-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://krro.com.br/opiniao/peugeot/307-sedan</loc>
+    <lastmod>2024-07-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>

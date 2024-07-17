@@ -3,6 +3,5 @@ Sitemap: https://krro.com.br/sitemap.xml
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /login
 Disallow: /logout
 Disallow: /recuperar-senha
