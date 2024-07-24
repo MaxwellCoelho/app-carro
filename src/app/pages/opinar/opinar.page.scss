@@ -275,6 +275,17 @@ h2 {
   }
 }
 
+.disclaimer {
+  margin-top: 1.5rem;
+
+  ion-label {
+    padding: 0 0rem 0 0.5rem;
+    margin: 0;
+    font-size: 11px;
+    line-height: 12px;
+  }
+}
+
 .form-title {
   margin-top: 2.5rem;
   font-weight: lighter;
