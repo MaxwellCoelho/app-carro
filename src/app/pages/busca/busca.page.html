@@ -52,7 +52,18 @@
         <ion-item *ngFor="let model of filteredModels" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand.url, model.url)" button>
           <img [id]="'item-img-'+model.name" src="assets/models/{{model.brand?.url}}/{{model.url}}/{{model.url}}-thumb.png" title="{{model.name}}" alt="{{model.name}}"
             onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" loading="lazy" class="model-image">
-          <ion-label [id]="'item-label-'+model.name" class="label-name">{{model.name}}</ion-label>
+          <ion-label [id]="'item-label-'+model.name" class="car-label-name">{{model.name}}</ion-label>
+
+          <ion-item lines="none" class="sub-info average">
+            <ion-icon size="small" [name]="'ribbon'" color="medium"></ion-icon>
+            <ion-label color="medium">{{ model.average > 0 ? model.average.toFixed(2) : model.average}}</ion-label>
+          </ion-item>
+
+          <ion-item lines="none" class="sub-info">
+            <ion-icon size="small" [name]="'clipboard'" color="medium"></ion-icon>
+            <ion-label color="medium">{{model.val_length}}</ion-label>
+          </ion-item>
+
           <ion-chip outline slot="end" [id]="'bt-'+model.name" title="Opniar sobre esse modelo" color="primary">
             <ion-icon [id]="'bt-'+model.name+'-icon'" [name]="'paper-plane-outline'"></ion-icon>
             <ion-label [id]="'bt-'+model.name+'-label'">Opinar</ion-label>

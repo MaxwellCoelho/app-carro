@@ -18,14 +18,14 @@
   margin: 0.5rem 1rem 0.5rem 0;
 }
 
-.label-name {
+.label-name, .car-label-name {
   font-size: larger;
 }
 
 .model-image {
   width: 100px;
   height: 55px;
-  margin: 0.5rem 1.5rem 0.5rem 0;
+  margin: 0.5rem 0.5rem 0.5rem 0;
   background: URL('assets/loading.gif');
   background-repeat: no-repeat;
   background-position: center;
@@ -48,14 +48,23 @@
   --inner-padding-end: 0;
 
   ion-chip {
-    margin-right: 1rem;
+    margin: 0 1rem 0 0;
 
     @media (max-width: 800px) {
       margin-right: 0;
     }
+
+    @media (max-width: 480px) {
+      font-size: 12px;
+
+      ion-icon {
+        font-size: 15px;
+        margin-right: 0.3rem;
+      }
+    }
   }
 
-  @media (min-width: 800px) {
+  @media (min-width: 980px) {
     width: calc(50% - 2rem);
     display: inline-flex;
     margin-right: 4rem;
@@ -79,6 +88,31 @@ ion-item.item-button::part(native) {
   --inner-padding-end: 0;
 }
 
+.sub-info {
+  --background: transparent;
+  --background-focused: transparent;
+  --background-hover: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  min-width: 3.2rem;
+  font-size: smaller;
+
+  ion-icon {
+    transform: scale(0.8);
+    margin-right: 1px;
+  }
+
+  &.average {
+    @media (max-width: 400px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 350px) {
+    display: none;
+  }
+}
+
 @media (max-width: 576px) {
   .brand-image-title {
     max-width: 50px;
@@ -94,11 +128,14 @@ ion-item.item-button::part(native) {
   }
 }
 
-@media (max-width: 410px) {
+@media (max-width: 480px) {
   .model-image {
     width: 80px;
     height: 44px;
-    margin-right: 1rem;
+  }
+
+  .car-label-name {
+    font-size: smaller;
   }
 
   .selected-brand {
