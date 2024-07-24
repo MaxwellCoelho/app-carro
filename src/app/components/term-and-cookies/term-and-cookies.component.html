@@ -1,0 +1,12 @@
+<ion-grid class="floating-term" *ngIf="showTerm()">
+  <ion-row>
+    <ion-col class="term-content" size-md="11" size-sm="10" size-xs="9.5">
+      Utilizamos cookies e tecnologias similares para aprimorar sua experiência de navegação de acordo com a nossa Política de Privacidade. Ao continuar navegando você concorda com estas condições.
+    </ion-col>
+    <ion-col class="term-content" size-md="1" size-sm="2" size-xs="2.5">
+      <ion-button size="small" title="Ok" expand="block" color="success" mode="ios" type="button" (click)="acceptTerm()">
+        <ion-label slot="end">Ok</ion-label>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>

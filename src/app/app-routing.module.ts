@@ -24,8 +24,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
-    path: NAVIGATION.help.route,
-    loadChildren: () => import('./pages/ajuda/ajuda.module').then( m => m.AjudaPageModule)
+    path: NAVIGATION.term.route,
+    loadChildren: () => import('./pages/termo-de-uso/termo-de-uso.module').then( m => m.TermoDeUsoPageModule)
   },
   {
     path: NAVIGATION.recoverypassword.route,

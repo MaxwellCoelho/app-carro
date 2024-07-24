@@ -1,0 +1,77 @@
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    <ion-title size="large" color="primary" class="main-title">
+      <ion-icon [name]="nav.term.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.term.title}}</ion-label>
+    </ion-title>
+
+    <ion-grid slot="content">
+      <ion-row>
+        <ion-col class="term-content" size-md="12" size-sm="12" size-xs="12">
+          <h1>Política de Privacidade e Segurança de Dados - KRRO.COM.BR</h1>
+
+          <p>Esta política de privacidade visa explicar como coletamos, usamos, armazenamos e protegemos suas informações pessoais quando você visita nosso site.</p>
+
+          <h2>Coleta de Informações</h2>
+          <p>Coletamos informações pessoais de diversas maneiras, incluindo, mas não se limitando a, quando você visita nosso site, se registra, preenche um formulário ou interage de outra forma com nossos serviços. As informações coletadas podem incluir, mas não estão limitadas a:</p>
+
+          <ul>
+            <li>Nome</li>
+            <li>Endereço de e-mail</li>
+            <li>Informações de contato</li>
+            <li>Dados de navegação e comportamento no site</li>
+          </ul>
+
+          <h2>Uso de Cookies</h2>
+          <p>Utilizamos cookies para melhorar sua experiência em nosso site. Cookies são pequenos arquivos de texto que são armazenados em seu dispositivo quando você visita nosso site. Eles nos ajudam a:</p>
+
+          <ul>
+            <li>Lembrar suas preferências e configurações</li>
+            <li>Entender como você utiliza nosso site e melhorar sua funcionalidade</li>
+            <li>Fornecer conteúdo personalizado e publicidade relevante</li>
+            <li>Você pode controlar o uso de cookies ajustando as configurações do seu navegador. No entanto, desabilitar cookies pode afetar a funcionalidade do site.</li>
+          </ul>
+
+          <h2>Uso das Informações</h2>
+          <p>As informações que coletamos podem ser usadas para:</p>
+
+          <ul>
+            <li>Personalizar sua experiência no site</li>
+            <li>Melhorar nosso site e serviços</li>
+            <li>Enviar e-mails periódicos (se você optar por recebê-los)</li>
+            <li>Responder a solicitações e fornecer suporte ao cliente</li>
+          </ul>
+
+
+          <h2>Compartilhamento de Informações</h2>
+          <p>Não vendemos, trocamos ou transferimos suas informações pessoais a terceiros, exceto quando necessário para:</p>
+
+          <ul>
+            <li>Cumprir a lei</li>
+            <li>Proteger nossos direitos e propriedades</li>
+            <li>Fornecer serviços solicitados por você (por exemplo, parceiros que ajudam na operação do site)</li>
+          </ul>
+
+
+          <h2>Segurança dos Dados</h2>
+          <p>Adotamos medidas de segurança adequadas para proteger suas informações pessoais contra acesso não autorizado, alteração, divulgação ou destruição. Utilizamos tecnologias avançadas de criptografia e implementamos políticas rigorosas de segurança.</p>
+
+
+          <h2>Alterações nesta Política</h2>
+          <p>Podemos atualizar esta política de privacidade periodicamente sem prévio aviso. Recomendamos que você revise esta política regularmente para se manter informado sobre nossas práticas de privacidade.</p>
+
+          <p>Ao continuar navegando em nosso site, você concorda com o uso de cookies e com as práticas descritas nesta política.</p>
+        </ion-col>
+
+        <ion-col size-md="5" size-sm="12" size-xs="12">
+          <ion-button size="default" title="Ok, continuar navegando" expand="block" color="success" mode="ios" type="button" (click)="acceptTerm()">
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            <ion-label slot="end">Ok, continuar navegando</ion-label>
+          </ion-button>
+        </ion-col>
+
+        <ion-col size-md="7" size-sm="12" size-xs="12"></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

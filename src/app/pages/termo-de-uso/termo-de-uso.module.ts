@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { AjudaPage } from './ajuda.page';
+import { TermoDeUsoPage } from './termo-de-uso.page';
 
-import { AjudaPageRoutingModule } from './ajuda-routing.module';
+import { TermoDeUsoPageRoutingModule } from './termo-de-uso-routing.module';
 
 
 @NgModule({
@@ -12,8 +12,8 @@ import { AjudaPageRoutingModule } from './ajuda-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    AjudaPageRoutingModule
+    TermoDeUsoPageRoutingModule
   ],
-  declarations: [AjudaPage]
+  declarations: [TermoDeUsoPage]
 })
-export class AjudaPageModule {}
+export class TermoDeUsoPageModule {}
