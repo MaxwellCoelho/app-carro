@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
@@ -9,8 +10,11 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 })
 export class TermAndCookiesComponent implements OnInit {
 
+  public nav = NAVIGATION;
+
   constructor(
     public utils: UtilsService,
+    public router: Router,
   ) { }
 
   ngOnInit() {}
@@ -20,9 +24,13 @@ export class TermAndCookiesComponent implements OnInit {
   }
 
   showTerm(): boolean {
-    const isTermPage = location.pathname.includes(NAVIGATION.term.route);
+    const isTermPage = location.pathname.includes(this.nav.term.route);
     const alreadyAccepted = this.utils.localStorageGetItem('acceptedTermAndCookies');
 
     return !isTermPage && !alreadyAccepted;
+  }
+
+  goToTerm() {
+    this.router.navigate([`/${this.nav.term.route}`]);
   }
 }
