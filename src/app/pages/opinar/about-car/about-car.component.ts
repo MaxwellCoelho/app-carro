@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { NAVIGATION, DISCLAIMER } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
@@ -28,6 +28,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   @Output() yearSelected = new EventEmitter<any>();
 
   public nav = NAVIGATION;
+  public disclaimer = DISCLAIMER;
   public fuels = FUEL;
   public gearboxes = GEARBOX;
   public years = [];

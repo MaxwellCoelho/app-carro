@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDe
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VALUATION, VALUATION_ITENS_BRAND } from 'src/app/helpers/valuation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { DISCLAIMER } from 'src/app/helpers/navigation.helper';
 
 @Component({
   selector: 'app-about-brand',
@@ -16,10 +17,9 @@ export class AboutBrandComponent implements OnInit, AfterViewInit {
   @Output() aboutBrand = new EventEmitter<any>();
   @Output() clickForeward = new EventEmitter<any>();
 
+  public disclaimer = DISCLAIMER;
   public formOpinarMarca: FormGroup;
-
   public hasAllValuations = false;
-
   public valuation = VALUATION.slice().filter(val => val.id.includes(' r'));
   public valuationItens = VALUATION_ITENS_BRAND.slice();
 

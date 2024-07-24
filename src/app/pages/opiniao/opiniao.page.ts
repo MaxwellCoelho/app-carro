@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
-import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { NAVIGATION, DISCLAIMER } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
@@ -22,6 +22,7 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
+  public disclaimer = DISCLAIMER;
   public selectedModel: object;
   public modelOpinions: object;
   public showLoader: boolean;
