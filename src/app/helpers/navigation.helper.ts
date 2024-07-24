@@ -7,7 +7,7 @@ export const NAVIGATION = {
   garage: { title: 'Garagem', icon: 'car-sport', route: 'garagem' },
   best: { title: 'Melhores', icon: 'trophy', route: 'melhores' },
   perfil: { title: 'Meus dados', icon: 'person', route: 'perfil' },
-  term: { title: 'Termo de uso', icon: 'document', route: 'termo-de-uso' },
+  term: { title: 'Política de Privacidade', icon: 'finger-print', route: 'politica-de-privacidade' },
   login: { title: 'Entrar', icon: 'enter', route: 'login' },
   logout: { title: 'Sair', icon: 'exit', route: 'logout' },
   recoverypassword: { title: 'Recuperar senha', icon: 'key', route: 'recuperar-senha' },
