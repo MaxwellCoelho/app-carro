@@ -11,6 +11,7 @@ import { VALUATION, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper
 import { Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { SearchService } from 'src/app/services/search/search.service';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
 @Component({
   selector: 'app-melhores',
@@ -27,6 +28,8 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   public page = 1;
   public pagination = 20;
   public showTopButton = false;
+  public brandIdFilter: string;
+  public categoryIdFilter: string;
 
   constructor(
     public dbService: DataBaseService,
@@ -34,6 +37,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     public router: Router,
     public utils: UtilsService,
     public searchService: SearchService,
+    public cryptoService: CryptoService,
   ) {}
 
   handleScroll(event) {
@@ -50,13 +54,18 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     this.utils.setPageTitle('Melhores avaliados', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'melhor, melhores, ranking');
     if (this.utils.getShouldUpdate('bests')) {
       this.utils.setShouldUpdate(['bests'], false);
-      this.bestModels = [];
-      this.page = 1;
-      this.pagination = 20;
+      this.clearBestModels();
       this.getBestModels();
     }
 
     this.getBrands();
+    this.getCategories();
+  }
+
+  public clearBestModels(): void {
+    this.bestModels = [];
+    this.page = 1;
+    this.pagination = 20;
   }
 
   public getBrands(): void {
@@ -81,6 +90,19 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     }
   }
 
+  public getCategories(): void {
+    const recoveredCategories = this.searchService.getAllCategories();
+    if (!recoveredCategories.length) {
+      const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
+        res => {
+          if (!subCategories.closed) { subCategories.unsubscribe(); }
+          this.searchService.saveAllCategories(res.categories);
+        },
+        err => {}
+      );
+    }
+  }
+
   public getBestModels(): void {
     if (this.page === 1) { this.showLoader = true; }
 
@@ -91,7 +113,9 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
         this.bestModels = [...this.bestModels, ...modelWithAverage];
 
         for (let i = 0; i < 3; i++) {
-          this.bestModels[i]['img'] = this.utils.getModelImg(this.bestModels[i]['url'], this.bestModels[i]['generation']);
+          if (this.bestModels[i]) {
+            this.bestModels[i]['img'] = this.utils.getModelImg(this.bestModels[i]['url'], this.bestModels[i]['generation']);
+          }
         }
 
         if (this.page === 1) { this.showLoader = false; }
@@ -101,7 +125,53 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
         this.showErrorToast(err);
       }
     );
+  }
 
+  public filterBestModels(): void {
+    const myFilter = {};
+
+    if (this.brandIdFilter) {
+      myFilter['brand._id'] = this.brandIdFilter;
+    }
+
+    if (this.categoryIdFilter) {
+      myFilter['category._id'] = this.categoryIdFilter;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subBrands = this.dbService.filterItem(environment.filterBestModelsAction, jwtData, this.page.toString(), this.pagination.toString()).subscribe(
+      res => {
+        if (!subBrands.closed) { subBrands.unsubscribe(); }
+        const modelWithAverage = this.setModelAverages(res.bestModels);
+        this.bestModels = [...this.bestModels, ...modelWithAverage];
+
+        for (let i = 0; i < 3; i++) {
+          if (this.bestModels[i]) {
+            this.bestModels[i]['img'] = this.utils.getModelImg(this.bestModels[i]['url'], this.bestModels[i]['generation']);
+          }
+        }
+
+        if (this.page === 1) { this.showLoader = false; }
+        this.page++;
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  filterBrand($event) {
+    const value = $event.detail.value;
+    this.brandIdFilter = value === 'allBrands' ? null : value;
+    this.clearBestModels();
+    this.filterBestModels();
+  }
+
+  filterCategory($event) {
+    const value = $event.detail.value;
+    this.categoryIdFilter = value === 'allCategories' ? null : value;
+    this.clearBestModels();
+    this.filterBestModels();
   }
 
   public setModelAverages(models: any): any {
@@ -167,7 +237,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   onIonInfinite(ev) {
     if (this.bestModels.length === ((this.page - 1)*this.pagination)) {
-      this.getBestModels();
+      if (!this.brandIdFilter && !this.categoryIdFilter) {
+        this.getBestModels();
+      } else {
+        this.filterBestModels();
+      }
     }
 
     setTimeout(() => {

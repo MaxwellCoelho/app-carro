@@ -21,6 +21,7 @@ export const environment = {
   filterOpinionModelAction: 'opinion/model/filter',
   bestBrandsAction: 'best/brands',
   bestModelsAction: 'best/models',
+  filterBestModelsAction: 'best/models/filter',
   feedbackAction: 'feedback',
   resetPassword: 'password/reset',
 };

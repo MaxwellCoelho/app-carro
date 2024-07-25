@@ -205,6 +205,53 @@
   }
 }
 
+.main-title {
+  .filter {
+    padding: 0;
+
+    ion-col {
+      padding: 0;
+      align-content: end;
+
+      ion-item {
+        --min-height: auto;
+        --padding-start: 0;
+        --inner-padding-end: 0;
+        --background: transparent;
+        --background-focused: transparent;
+        --background-hover: transparent;
+
+        margin-right: 1rem;
+        padding-right: 1rem;
+        border-right: 1px solid #000;
+
+        ion-select {
+          padding: 0;
+          width: 100%;
+          padding-left: .3rem;
+          font-size: small;
+
+          &::part(placeholder) {
+            opacity: 1;
+          }
+        }
+
+        @media (max-width: 576px) {
+          margin-top: 1rem;
+        }
+      }
+    }
+
+    ion-col:last-child {
+      ion-item {
+        border-right: 0;
+        margin-right: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}
+
 .brand-image-title {
   text-align: right;
 }

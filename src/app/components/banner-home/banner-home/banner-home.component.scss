@@ -83,3 +83,9 @@
     }
   }
 }
+
+@media (max-width: 576px) {
+  ion-item:not(.ion-focused, .item-has-focus, .item-has-value) .label-floating.sc-ion-label-md-h {
+      font-size: medium;
+  }
+}

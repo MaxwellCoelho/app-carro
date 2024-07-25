@@ -35,8 +35,13 @@ export class DataBaseService {
     return this.http.post(url, data, { withCredentials: true });
   }
 
-  public filterItem(action: string, data: any): any {
+  public filterItem(action: string, data: any, page?: string, perPage?: string): any {
     const url = `${environment.middlewareEndpoint}/${action}`;
-    return this.http.post(url, data, { withCredentials: true });
+    const params = {};
+    if (page && perPage) {
+      params['page'] = page;
+      params['perpage'] = perPage;
+    }
+    return this.http.post(url, data, { params, withCredentials: true });
   }
 }

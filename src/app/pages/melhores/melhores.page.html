@@ -74,10 +74,36 @@
     </div>
 
     <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
-
+    <br>
     <ion-title size="large" color="primary" class="main-title">
-      <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
-      <ion-label>Lista completa</ion-label>
+      <ion-grid class="filter">
+        <ion-row>
+          <ion-col size-md="8" size-sm="6" size-xs="12" class="col-title">
+            <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
+            <ion-label>Lista completa</ion-label>
+          </ion-col>
+
+          <ion-col size-md="2" size-sm="3" size-xs="6">
+            <ion-item lines="none">
+              <ion-icon size="small" [name]="'pricetag'" color="dark"></ion-icon>
+              <ion-select *ngIf="searchService.getAllBrands().length" interface="popover" (ionChange)="filterBrand($event)" placeholder="Marca">
+                <ion-select-option value="allBrands">Todas</ion-select-option>
+                <ion-select-option *ngFor="let brand of searchService.getAllBrands()" [value]="brand._id">{{ brand.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-md="2" size-sm="3" size-xs="6">
+            <ion-item lines="none">
+              <ion-icon size="small" [name]="'car'" color="dark"></ion-icon>
+              <ion-select *ngIf="searchService.getAllCategories().length" interface="popover" (ionChange)="filterCategory($event)" placeholder="Carroceria">
+                <ion-select-option value="allCategories">Todas</ion-select-option>
+                <ion-select-option *ngFor="let category of searchService.getAllCategories()" [value]="category._id">{{ category.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-title>
 
     <div class="main-body">

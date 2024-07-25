@@ -11,6 +11,7 @@ export class SearchService {
   public clearSearch$: Subject<any> = new Subject<any>();
   public allBrands = [];
   public allModels = [];
+  public allCategories = [];
 
   constructor() { }
 
@@ -60,5 +61,17 @@ export class SearchService {
         this.allModels = [...this.allModels, ...models];
       }
     }
+  }
+
+  public clearAllCategories(): void {
+    this.allCategories = [];
+  }
+
+  public saveAllCategories(categories: object[]): void {
+    this.allCategories = categories;
+  }
+
+  public getAllCategories(): object[] {
+    return this.allCategories;
   }
 }
