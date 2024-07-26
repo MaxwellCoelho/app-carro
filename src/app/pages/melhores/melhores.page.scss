@@ -46,6 +46,25 @@
     height: auto;
     text-align: center;
 
+    .car-img-container {
+      display: flex;
+      align-items: center;
+      height: calc(((100vw/3) - 4rem)/1.83);
+      max-height: 170px;
+
+      @media (max-width: 530px) {
+        height: calc(((100vw/3) - 2rem)/1.83);
+      }
+
+      @media (max-width: 400px) {
+        height: calc(((100vw/3) - 1rem)/1.83);
+      }
+
+      .no-car {
+        opacity: 0.2;
+      }
+    }
+
     .nota {
       display: inline-flex;
       align-items: center;
@@ -53,6 +72,7 @@
       border-radius: 2rem;
       margin-bottom: 0.5rem;
       font-size: 0.9rem;
+      min-height: 29px;
 
       ion-label {
         display: flex;
@@ -206,6 +226,8 @@
 }
 
 .main-title {
+  margin-bottom: 0.2rem;
+
   .filter {
     padding: 0;
 

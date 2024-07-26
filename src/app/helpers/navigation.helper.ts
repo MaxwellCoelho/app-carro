@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 export const NAVIGATION = {
   help: { title: 'Ajuda', icon: 'help-buoy', route: 'ajuda' },
-  search: { title: 'Opiniões', icon: 'clipboard', route: 'busca' },
+  search: { title: 'Opiniões', icon: 'reader', route: 'busca' },
   compare: { title: 'Comparar', icon: 'git-compare', route: 'comparar' },
   settings: { title: 'Configurações', icon: 'settings', route: 'configuracoes' },
   favorite: { title: 'Favoritos', icon: 'heart', route: 'favoritos' },

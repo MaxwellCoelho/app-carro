@@ -46,7 +46,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   public ngOnInit(): void {
     if (!this.utils.getShouldUpdate('bests')) {
-      this.getBestModels();
+      this.filterBestModels();
     }
   }
 
@@ -55,7 +55,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     if (this.utils.getShouldUpdate('bests')) {
       this.utils.setShouldUpdate(['bests'], false);
       this.clearBestModels();
-      this.getBestModels();
+      this.filterBestModels();
     }
 
     this.getBrands();
@@ -103,31 +103,8 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     }
   }
 
-  public getBestModels(): void {
-    if (this.page === 1) { this.showLoader = true; }
-
-    const subBrands = this.dbService.getItens(environment.bestModelsAction, this.page.toString(), this.pagination.toString()).subscribe(
-      res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        const modelWithAverage = this.setModelAverages(res.bestModels);
-        this.bestModels = [...this.bestModels, ...modelWithAverage];
-
-        for (let i = 0; i < 3; i++) {
-          if (this.bestModels[i]) {
-            this.bestModels[i]['img'] = this.utils.getModelImg(this.bestModels[i]['url'], this.bestModels[i]['generation']);
-          }
-        }
-
-        if (this.page === 1) { this.showLoader = false; }
-        this.page++;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
-  }
-
   public filterBestModels(): void {
+    if (this.page === 1) { this.showLoader = true; }
     const myFilter = {};
 
     if (this.brandIdFilter) {
@@ -237,11 +214,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   onIonInfinite(ev) {
     if (this.bestModels.length === ((this.page - 1)*this.pagination)) {
-      if (!this.brandIdFilter && !this.categoryIdFilter) {
-        this.getBestModels();
-      } else {
-        this.filterBestModels();
-      }
+      this.filterBestModels();
     }
 
     setTimeout(() => {
