@@ -42,6 +42,10 @@
     }
   }
 
+  .no-car {
+    opacity: 0.2;
+  }
+
   .car {
     height: auto;
     text-align: center;
@@ -60,9 +64,6 @@
         height: calc(((100vw/3) - 1rem)/1.83);
       }
 
-      .no-car {
-        opacity: 0.2;
-      }
     }
 
     .nota {

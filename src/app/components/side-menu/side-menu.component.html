@@ -33,7 +33,7 @@
         <ion-label>{{nav.best.title}}</ion-label>
       </ion-item>
 
-      <ion-item (click)="clickItem(nav.search.route)" routerDirection="root" (click)="goToWithoutParams(nav.search.route)" lines="full" detail="false" routerLinkActive="selected">
+      <ion-item (click)="clickItem(nav.search.route)" routerDirection="root" [routerLink]="''" (click)="goToWithoutParams(nav.search.route)" lines="full" detail="false" routerLinkActive="selected">
         <ion-icon slot="start" [name]="nav.search.icon + '-outline'"></ion-icon>
         <ion-label>{{nav.search.title}}</ion-label>
       </ion-item>

@@ -2,7 +2,7 @@
   &.opinion {
     font-family: calibri, arial, verdana;
     padding: 0rem;
-    border: 1px solid #000;
+    border: 1px solid var(--ion-color-light-shade) !important;
     border-radius:  0.5rem;
     margin: 2rem 0.3rem;
 
@@ -50,14 +50,6 @@
         }
       }
 
-      @media (max-width: 576px) {
-        padding-bottom: 1rem;
-
-        .col-average {
-          border-top: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
-        }
-      }
-
       .item-title {
         h1 {
           margin-bottom: -5px;
@@ -72,6 +64,8 @@
       ion-icon {
         vertical-align: middle;
         margin-right: 0.3rem;
+        min-width: 13px;
+        min-height: 13px;
       }
     }
 
@@ -113,37 +107,65 @@
         border-top: 1px dashed #fff;
         padding-top: 1rem !important;
       }
-
-      .points {
-        margin-top: 1.2rem;
-      }
     }
 
     .car-info {
-      border-radius: 0.4rem 0.4rem 0 0;
+      @media (min-width: 576px) {
+        float: left;
+        background-color: transparent;
+        display: block;
+        width: 40%;
+
+        div {
+          display: block !important;
+          float: none !important;
+          width: 100% !important;
+
+          &:first-child {
+            float: left;
+            width: 80px;
+            margin-bottom: 1rem;
+            border-bottom: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
+            padding-bottom: 0.5rem;
+          }
+        }
+      }
+
+      border-radius: 0 0 0.4rem 0.4rem;
       padding: .5rem .8rem;
 
+      div {
+        width: calc(100% - 100px);
+        display: inline-grid;
+
+        &:first-child {
+          float: left;
+          width: 80px;
+          margin-right: 1rem;
+          border-right: 1px dashed #fff;
+        }
+      }
+
+      .customer-name {
+        flex-wrap: wrap;
+
+        strong {
+          font-size: large;
+          width: 100%;
+        }
+
+        span {
+          font-size: smaller;
+          padding-top: 0.2rem;
+        }
+      }
+
       ion-label {
-        font-size: medium;
+        font-size: small;
         display: flex;
         align-items: center;
         line-height: 1.0;
         margin: 5px 0;
-      }
-
-      @media (min-width: 1170px) {
-        ion-label {
-          display: inline-flex;
-          padding-right: 1rem;
-          margin-right: 0.8rem;
-          border-right: 1px solid rgba(var(--ion-color-medium-rgb), 0.3);
-        }
-
-        ion-label:last-child {
-          padding-right: 0;
-          margin-right: 0;
-          border-right: 0
-        }
       }
     }
 
@@ -151,10 +173,12 @@
       text-align: center;
       padding: .2rem;
       border-top: 1px solid #fff;
-      background-color: var(--ion-color-dark);
+      // background-color: var(--ion-color-dark);
+      background-color: rgba(var(--ion-color-medium-rgb), 0.3) !important;
+      border-bottom: 1px solid #fff;
 
       h1 {
-        color: var(--ion-color-light);
+        color: var(--ion-color-dark) !important;
         font-style: italic;
         font-size: x-large;
         margin: 0;
@@ -208,6 +232,14 @@
         height: initial;
         padding-top: 0.5rem;
       }
+
+      app-valuation-bar ::ng-deep {
+        .val-bar.small div {
+          margin-top: 0;
+          margin-bottom: 0;
+          height: 8px;
+        }
+      }
     }
   }
 
@@ -232,6 +264,15 @@
       ion-col:nth-child(1) {
         text-align: right;
       }
+
+      ion-label {
+        font-size: large;
+      }
+
+      ion-icon {
+        font-size: 22px !important;
+        margin: 0 0.3rem;
+      }
     }
   }
 
@@ -240,7 +281,7 @@
     padding: 0 .8rem;
 
     ion-col {
-      padding-bottom: 0px;
+      padding: 0px;
       display: grid;
       align-items: center;
     }
@@ -251,6 +292,7 @@
       h1 {
         font-weight: bolder;
         padding-right: 1rem;
+        font-size: 20px;
       }
     }
 
@@ -282,11 +324,11 @@
 
     @media (max-width: 576px) {
       .item-title {
-        text-align: left;
+        margin-right: 1rem;
 
         h1 {
           padding-right: 0;
-          font-size: 20px;
+          font-size: 18px;
         }
       }
 
@@ -305,8 +347,9 @@
       }
 
       ion-col:nth-child(1) {
-        text-align: center;
+        text-align: left;
         padding-bottom: 0rem;
+        padding-top: 0.25rem;
       }
     }
 

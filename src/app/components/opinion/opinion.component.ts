@@ -10,7 +10,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 export class OpinionComponent implements OnInit, AfterViewInit {
 
   @Input() opinions: object[];
-  @Input() expanded = false;
+  @Input() expanded = true;
 
   constructor(
     public utils: UtilsService
