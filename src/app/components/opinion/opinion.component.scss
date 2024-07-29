@@ -2,7 +2,7 @@
   &.opinion {
     font-family: calibri, arial, verdana;
     padding: 0rem;
-    border: 1px solid var(--ion-color-light-shade) !important;
+    border: 1px solid var(--ion-color-light-shade);
     border-radius:  0.5rem;
     margin: 2rem 0.3rem;
 
@@ -71,7 +71,6 @@
 
     .car-info, .points {
       background-color: rgba(var(--ion-color-medium-rgb), 0.3);
-      border-radius: 0.4rem;
       padding: 1rem;
       margin: 0;
     }
@@ -110,28 +109,9 @@
     }
 
     .car-info {
-      @media (min-width: 576px) {
-        float: left;
-        background-color: transparent;
-        display: block;
-        width: 40%;
-
-        div {
-          display: block !important;
-          float: none !important;
-          width: 100% !important;
-
-          &:first-child {
-            float: left;
-            width: 80px;
-            margin-bottom: 1rem;
-            border-bottom: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
-            padding-bottom: 0.5rem;
-          }
-        }
-      }
-
-      border-radius: 0 0 0.4rem 0.4rem;
+      background-color: transparent;
+      border-bottom: 1px solid #dedfe1;
+      border-radius: 0;
       padding: .5rem .8rem;
 
       div {
@@ -142,7 +122,7 @@
           float: left;
           width: 80px;
           margin-right: 1rem;
-          border-right: 1px dashed #fff;
+          border-right: 1px dashed #dedfe1;
         }
       }
 
@@ -157,7 +137,21 @@
         span {
           font-size: smaller;
           padding-top: 0.2rem;
+          color: var(--ion-color-medium);
         }
+      }
+
+      .customer-name.mobile {
+        display: flex;
+        margin: 0;
+
+        span {
+          padding-top: 0rem;
+        }
+      }
+
+      .customer-name.desktop {
+        display: none;
       }
 
       ion-label {
@@ -165,7 +159,41 @@
         display: flex;
         align-items: center;
         line-height: 1.0;
-        margin: 5px 0;
+        margin: 3px 0;
+      }
+
+      @media (min-width: 576px) {
+        float: left;
+        display: block;
+        width: 40%;
+        border-bottom: 0;
+
+        div {
+          display: block !important;
+          float: none !important;
+          width: 100% !important;
+
+          &:first-child {
+            float: left;
+            width: 80px;
+            margin-bottom: 1rem;
+            border-bottom: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
+            padding-bottom: 0.5rem;
+            border-right: 0;
+          }
+        }
+
+        .customer-name.mobile {
+          display: none;
+        }
+
+        .customer-name.desktop {
+          display: flex;
+        }
+
+        ion-label {
+          margin: 5px 0;
+        }
       }
     }
 
@@ -279,6 +307,7 @@
   .average-small {
     border: 0px;
     padding: 0 .8rem;
+    align-items: center;
 
     ion-col {
       padding: 0px;
@@ -349,7 +378,7 @@
       ion-col:nth-child(1) {
         text-align: left;
         padding-bottom: 0rem;
-        padding-top: 0.25rem;
+        padding-top: 0rem;
       }
     }
 

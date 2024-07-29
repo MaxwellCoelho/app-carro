@@ -7,6 +7,28 @@
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="nav.best.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.best.title}} avaliados</ion-label>
+
+      <div class="active-filters">
+        <ion-item lines="none" class="filter-title" *ngIf="brandIdFilter || categoryIdFilter">
+          <ion-icon size="small" [name]="'funnel-outline'" color="medium"></ion-icon>
+          <ion-label color="medium">:</ion-label>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="brandIdFilter" title="Remover filtro de marca {{brandIdFilter.name}}" (click)="filterBrand({detail: {value: 'allBrands'}})">
+          <ion-label color="medium">{{brandIdFilter.name}}</ion-label>
+          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="categoryIdFilter" title="Remover filtro de carroceria {{categoryIdFilter.name}}" (click)="filterCategory({detail: {value: 'allCategories'}})">
+          <ion-label color="medium">{{categoryIdFilter.name}}</ion-label>
+          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="showDateFilter" title="Remover filtro de {{filterYearValue.lower}} até {{filterYearValue.upper}}"  (click)="filterYear({detail: {value:{ lower: 1965, upper: this.newerYear + 1 }}}); this.clearBestModels(); filterBestModels()">
+          <ion-label color="medium">de {{filterYearValue.lower}} até {{filterYearValue.upper}}</ion-label>
+          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+        </ion-item>
+      </div>
     </ion-title>
 
     <div class="podium">
@@ -121,35 +143,64 @@
     <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
     <br>
     <ion-title size="large" color="primary" class="main-title">
-      <ion-grid class="filter">
-        <ion-row>
-          <ion-col size-md="8" size-sm="6" size-xs="12" class="col-title">
-            <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
-            <ion-label>Lista completa</ion-label>
-          </ion-col>
+      <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
+      <ion-label>Lista completa</ion-label>
 
-          <ion-col size-md="2" size-sm="3" size-xs="6">
-            <ion-item lines="none">
-              <ion-icon size="small" [name]="'pricetag'" color="dark"></ion-icon>
-              <ion-select *ngIf="searchService.getAllBrands().length" interface="popover" (ionChange)="filterBrand($event)" placeholder="Marca">
-                <ion-select-option value="allBrands">Todas</ion-select-option>
-                <ion-select-option *ngFor="let brand of searchService.getAllBrands()" [value]="brand._id">{{ brand.name }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
+      <div class="active-filters">
+        <ion-item lines="none" class="filter-title" *ngIf="brandIdFilter || categoryIdFilter">
+          <ion-icon size="small" [name]="'funnel-outline'" color="medium"></ion-icon>
+          <ion-label color="medium">:</ion-label>
+        </ion-item>
 
-          <ion-col size-md="2" size-sm="3" size-xs="6">
-            <ion-item lines="none">
-              <ion-icon size="small" [name]="'car'" color="dark"></ion-icon>
-              <ion-select *ngIf="searchService.getAllCategories().length" interface="popover" (ionChange)="filterCategory($event)" placeholder="Carroceria">
-                <ion-select-option value="allCategories">Todas</ion-select-option>
-                <ion-select-option *ngFor="let category of searchService.getAllCategories()" [value]="category._id">{{ category.name }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+        <ion-item lines="none" *ngIf="brandIdFilter" title="Remover filtro de marca {{brandIdFilter.name}}" (click)="filterBrand({detail: {value: 'allBrands'}})">
+          <ion-label color="medium">{{brandIdFilter.name}}</ion-label>
+          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="categoryIdFilter" title="Remover filtro de carroceria {{categoryIdFilter.name}}"  (click)="filterCategory({detail: {value: 'allCategories'}})">
+          <ion-label color="medium">{{categoryIdFilter.name}}</ion-label>
+          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="showDateFilter" title="Remover filtro de {{filterYearValue.lower}} até {{filterYearValue.upper}}"  (click)="filterYear({detail: {value:{ lower: 1965, upper: this.newerYear + 1 }}}); this.clearBestModels(); filterBestModels()">
+          <ion-label color="medium">de {{filterYearValue.lower}} até {{filterYearValue.upper}}</ion-label>
+          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+        </ion-item>
+      </div>
     </ion-title>
+
+    <ion-grid class="custom-filter">
+      <ion-row>
+        <ion-col size-lg="2" size-md="3" size-sm="6" size-xs="6">
+          <ion-item lines="none">
+            <ion-icon size="small" [name]="'pricetag'" color="dark"></ion-icon>
+            <ion-select id="brandSelect" *ngIf="searchService.getAllBrands().length" interface="popover" (ionChange)="filterBrand($event)" placeholder="Marca">
+              <ion-select-option value="allBrands">Todas</ion-select-option>
+              <ion-select-option *ngFor="let brand of searchService.getAllBrands()" [value]="{name: brand.name, id: brand._id}">{{ brand.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size-lg="2" size-md="3" size-sm="6" size-xs="6">
+          <ion-item lines="none">
+            <ion-icon size="small" [name]="'car'" color="dark"></ion-icon>
+            <ion-select id="categorySelect" *ngIf="searchService.getAllCategories().length" interface="popover" (ionChange)="filterCategory($event)" placeholder="Carroceria">
+              <ion-select-option value="allCategories">Todas</ion-select-option>
+              <ion-select-option *ngFor="let category of searchService.getAllCategories()" [value]="{name: category.name, id: category._id}">{{ category.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size-lg="8" size-md="6" size-sm="12" size-xs="12">
+          <ion-item lines="none" class="year-range">
+            <ion-note slot="start" color="dark">De<br><strong>{{filterYearValue.lower}}</strong></ion-note>
+            <ion-note slot="end" color="dark">até<br><strong>{{filterYearValue.upper}}</strong></ion-note>
+          </ion-item>
+
+          <ion-range [min]="1965" [max]="2025" [dualKnobs]="true" [value]="filterYearValue" (ionChange)="filterYear($event)" (ionKnobMoveEnd)="this.clearBestModels(); filterBestModels()"></ion-range>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
     <div class="main-body">
       <ion-list>

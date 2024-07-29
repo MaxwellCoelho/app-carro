@@ -28,8 +28,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   public page = 1;
   public pagination = 20;
   public showTopButton = false;
-  public brandIdFilter: string;
-  public categoryIdFilter: string;
+  public brandIdFilter: object;
+  public categoryIdFilter: object;
+  public newerYear = new Date().getFullYear();
+  public filterYearValue = { lower: 1965, upper: this.newerYear + 1 };
+  public showDateFilter = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -105,14 +108,17 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   public filterBestModels(): void {
     if (this.page === 1) { this.showLoader = true; }
-    const myFilter = {};
+    const myFilter = {
+      'generation.g1.yearStart': { $lte: this.filterYearValue.upper },
+      'generation.g1.yearEnd': { $gte: this.filterYearValue.lower }
+    };
 
     if (this.brandIdFilter) {
-      myFilter['brand._id'] = this.brandIdFilter;
+      myFilter['brand._id'] = this.brandIdFilter['id'];
     }
 
     if (this.categoryIdFilter) {
-      myFilter['category._id'] = this.categoryIdFilter;
+      myFilter['category._id'] = this.categoryIdFilter['id'];
     }
 
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
@@ -140,6 +146,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   filterBrand($event) {
     const value = $event.detail.value;
     this.brandIdFilter = value === 'allBrands' ? null : value;
+
+    if (value === 'allBrands') {
+      document.getElementById('brandSelect')['value'] = null;
+    }
+
     this.clearBestModels();
     this.filterBestModels();
   }
@@ -147,8 +158,19 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   filterCategory($event) {
     const value = $event.detail.value;
     this.categoryIdFilter = value === 'allCategories' ? null : value;
+
+    if (value === 'allCategories') {
+      document.getElementById('categorySelect')['value'] = null;
+    }
+
     this.clearBestModels();
     this.filterBestModels();
+  }
+
+  public filterYear($event) {
+    const value = $event.detail.value;
+    this.filterYearValue = value;
+    this.showDateFilter = value.upper < this.newerYear + 1 || value.lower > 1965;
   }
 
   public setModelAverages(models: any): any {
