@@ -31,8 +31,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   public brandIdFilter: object;
   public categoryIdFilter: object;
   public newerYear = new Date().getFullYear();
-  public filterYearValue = { lower: 1965, upper: this.newerYear + 1 };
+  public yearMinValue = 1980;
+  public filterYearValue = { lower: this.yearMinValue, upper: this.newerYear + 1 };
   public showDateFilter = false;
+  public podium: Array<any> = [];
+  public isClearAllFilters = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -110,7 +113,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     if (this.page === 1) { this.showLoader = true; }
     const myFilter = {
       'generation.g1.yearStart': { $lte: this.filterYearValue.upper },
-      'generation.g1.yearEnd': { $gte: this.filterYearValue.lower }
+      'generation.g1.yearEnd': { $gte: this.filterYearValue.lower === this.yearMinValue ? 1900 : this.filterYearValue.lower }
     };
 
     if (this.brandIdFilter) {
@@ -132,6 +135,10 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
           if (this.bestModels[i]) {
             this.bestModels[i]['img'] = this.utils.getModelImg(this.bestModels[i]['url'], this.bestModels[i]['generation']);
           }
+
+          if (this.podium.length < 3) {
+            this.podium.push(this.bestModels[i]);
+          }
         }
 
         if (this.page === 1) { this.showLoader = false; }
@@ -147,30 +154,50 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     const value = $event.detail.value;
     this.brandIdFilter = value === 'allBrands' ? null : value;
 
-    if (value === 'allBrands') {
-      document.getElementById('brandSelect')['value'] = null;
+    if (!this.isClearAllFilters) {
+      this.clearBestModels();
+      this.filterBestModels();
     }
-
-    this.clearBestModels();
-    this.filterBestModels();
   }
 
   filterCategory($event) {
     const value = $event.detail.value;
     this.categoryIdFilter = value === 'allCategories' ? null : value;
 
-    if (value === 'allCategories') {
-      document.getElementById('categorySelect')['value'] = null;
+    if (!this.isClearAllFilters) {
+      this.clearBestModels();
+      this.filterBestModels();
     }
+  }
 
+  clearFilter(filter) {
+    switch (filter) {
+      case 'allCategories':
+        document.getElementById('categorySelect')['value'] = filter;
+        break;
+      case 'allBrands':
+        document.getElementById('brandSelect')['value'] = filter;
+        break;
+    }
+  }
+
+  clearAllFilters() {
+    this.isClearAllFilters = true;
+    this.clearFilter('allCategories');
+    this.clearFilter('allBrands');
+    this.filterYearValue = { lower: this.yearMinValue, upper: this.newerYear + 1 };
     this.clearBestModels();
     this.filterBestModels();
+
+    setTimeout(() => {
+      this.isClearAllFilters = false;
+    }, 1000);
   }
 
   public filterYear($event) {
     const value = $event.detail.value;
     this.filterYearValue = value;
-    this.showDateFilter = value.upper < this.newerYear + 1 || value.lower > 1965;
+    this.showDateFilter = value.upper < this.newerYear + 1 || value.lower > this.yearMinValue;
   }
 
   public setModelAverages(models: any): any {

@@ -7,97 +7,75 @@
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="nav.best.icon + '-outline'" color="secondary"></ion-icon>
       <ion-label>{{nav.best.title}} avaliados</ion-label>
-
-      <div class="active-filters">
-        <ion-item lines="none" class="filter-title" *ngIf="brandIdFilter || categoryIdFilter">
-          <ion-icon size="small" [name]="'funnel-outline'" color="medium"></ion-icon>
-          <ion-label color="medium">:</ion-label>
-        </ion-item>
-
-        <ion-item lines="none" *ngIf="brandIdFilter" title="Remover filtro de marca {{brandIdFilter.name}}" (click)="filterBrand({detail: {value: 'allBrands'}})">
-          <ion-label color="medium">{{brandIdFilter.name}}</ion-label>
-          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
-        </ion-item>
-
-        <ion-item lines="none" *ngIf="categoryIdFilter" title="Remover filtro de carroceria {{categoryIdFilter.name}}" (click)="filterCategory({detail: {value: 'allCategories'}})">
-          <ion-label color="medium">{{categoryIdFilter.name}}</ion-label>
-          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
-        </ion-item>
-
-        <ion-item lines="none" *ngIf="showDateFilter" title="Remover filtro de {{filterYearValue.lower}} até {{filterYearValue.upper}}"  (click)="filterYear({detail: {value:{ lower: 1965, upper: this.newerYear + 1 }}}); this.clearBestModels(); filterBestModels()">
-          <ion-label color="medium">de {{filterYearValue.lower}} até {{filterYearValue.upper}}</ion-label>
-          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
-        </ion-item>
-      </div>
     </ion-title>
 
     <div class="podium">
       <div class="car">
         <div class="nota nota-second">
-          <ion-label *ngIf="bestModels[1]">
+          <ion-label *ngIf="podium[1]">
             <ion-icon name="ribbon" color="dark"></ion-icon>
-            <strong>{{bestModels[1].model_average?.toFixed(2)}}</strong>{{bestModels[1].average?.name}}<br>
+            <strong>{{podium[1].model_average?.toFixed(2)}}</strong>{{podium[1].average?.name}}<br>
           </ion-label>
 
-          <ion-label *ngIf="!bestModels[1]" class="no-car">
+          <ion-label *ngIf="!podium[1]" class="no-car">
             <ion-icon name="ribbon" color="dark"></ion-icon>
             <strong>0.0</strong>Nenhum<br>
           </ion-label>
         </div>
         <div class="car-img-container">
-          <img *ngIf="!bestModels[1]" class="no-car" [id]="'item-img-no-car-2'" src="assets/models/no-model.png" title="Nenhum carro no momento" alt="Nenhum carro no momento">
-          <img *ngIf="bestModels[1]" [id]="'item-img-'+bestModels[1].name" src="assets/models/{{bestModels[1].brand?.url}}/{{bestModels[1].url}}/{{bestModels[1].img}}"
-            title="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}" alt="{{bestModels[1].brand?.name + ' ' + bestModels[1].name}}"
-            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[1].brand?.url, bestModels[1]?.url)">
+          <img *ngIf="!podium[1]" class="no-car" [id]="'item-img-no-car-2'" src="assets/models/no-model.png" title="Nenhum carro no momento" alt="Nenhum carro no momento">
+          <img *ngIf="podium[1]" [id]="'item-img-'+podium[1].name" src="assets/models/{{podium[1].brand?.url}}/{{podium[1].url}}/{{podium[1].img}}"
+            title="{{podium[1].brand?.name + ' ' + podium[1].name}}" alt="{{podium[1].brand?.name + ' ' + podium[1].name}}"
+            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, podium[1].brand?.url, podium[1]?.url)">
         </div>
         <div class="position left top second bottom">
-          <div *ngIf="bestModels[1]" class="marca">
-            <img src="assets/brands/{{bestModels[1].brand?.url}}.svg" title="{{bestModels[1].brand?.name}}" alt="{{bestModels[1].brand?.name}}"
+          <div *ngIf="podium[1]" class="marca">
+            <img src="assets/brands/{{podium[1].brand?.url}}.svg" title="{{podium[1].brand?.name}}" alt="{{podium[1].brand?.name}}"
             onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </div>
-          <div *ngIf="bestModels[1]" class="nome">
-            <span>{{bestModels[1].brand?.name}}</span> <strong>{{bestModels[1].name}}</strong>
+          <div *ngIf="podium[1]" class="nome">
+            <span>{{podium[1].brand?.name}}</span> <strong>{{podium[1].name}}</strong>
           </div>
 
-          <div *ngIf="!bestModels[1]" class="marca">
+          <div *ngIf="!podium[1]" class="marca">
             <img src="assets/brands/no-brand.svg" title="Nenhum ainda" alt="Nenhum ainda" class="brand-image-title">
           </div>
-          <div *ngIf="!bestModels[1]" class="nome">
+          <div *ngIf="!podium[1]" class="nome">
             <strong>Nenhum Ainda!</strong>
           </div>
         </div>
       </div>
       <div class="car">
         <div class="nota nota-first">
-          <ion-label *ngIf="bestModels[0]">
+          <ion-label *ngIf="podium[0]">
             <ion-icon name="ribbon" color="dark"></ion-icon>
-            <strong>{{bestModels[0].model_average?.toFixed(2)}}</strong>{{bestModels[0].average?.name}}<br>
+            <strong>{{podium[0].model_average?.toFixed(2)}}</strong>{{podium[0].average?.name}}<br>
           </ion-label>
 
-          <ion-label *ngIf="!bestModels[0]" class="no-car">
+          <ion-label *ngIf="!podium[0]" class="no-car">
             <ion-icon name="ribbon" color="dark"></ion-icon>
             <strong>0.0</strong>Nenhum<br>
           </ion-label>
         </div>
         <div class="car-img-container">
-          <img *ngIf="!bestModels[0]" class="no-car" [id]="'item-img-no-car-1'" src="assets/models/no-model.png" title="Nenhum carro no momento" alt="Nenhum carro no momento">
-          <img *ngIf="bestModels[0]" [id]="'item-img-'+bestModels[0].name" src="assets/models/{{bestModels[0].brand?.url}}/{{bestModels[0].url}}/{{bestModels[0].img}}"
-            title="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}" alt="{{bestModels[0].brand?.name + ' ' + bestModels[0].name}}"
-            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[0].brand?.url, bestModels[0]?.url)">
+          <img *ngIf="!podium[0]" class="no-car" [id]="'item-img-no-car-1'" src="assets/models/no-model.png" title="Nenhum carro no momento" alt="Nenhum carro no momento">
+          <img *ngIf="podium[0]" [id]="'item-img-'+podium[0].name" src="assets/models/{{podium[0].brand?.url}}/{{podium[0].url}}/{{podium[0].img}}"
+            title="{{podium[0].brand?.name + ' ' + podium[0].name}}" alt="{{podium[0].brand?.name + ' ' + podium[0].name}}"
+            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, podium[0].brand?.url, podium[0]?.url)">
         </div>
         <div class="position left right top first">
-          <div *ngIf="bestModels[0]" class="marca">
-            <img src="assets/brands/{{bestModels[0].brand?.url}}.svg" title="{{bestModels[0].brand?.name}}" alt="{{bestModels[0].brand?.name}}"
+          <div *ngIf="podium[0]" class="marca">
+            <img src="assets/brands/{{podium[0].brand?.url}}.svg" title="{{podium[0].brand?.name}}" alt="{{podium[0].brand?.name}}"
             onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </div>
-          <div *ngIf="bestModels[0]" class="nome">
-            <span>{{bestModels[0].brand?.name}}</span> <strong>{{bestModels[0].name}}</strong>
+          <div *ngIf="podium[0]" class="nome">
+            <span>{{podium[0].brand?.name}}</span> <strong>{{podium[0].name}}</strong>
           </div>
 
-          <div *ngIf="!bestModels[0]" class="marca">
+          <div *ngIf="!podium[0]" class="marca">
             <img src="assets/brands/no-brand.svg" title="Nenhum ainda" alt="Nenhum ainda" class="brand-image-title">
           </div>
-          <div *ngIf="!bestModels[0]" class="nome">
+          <div *ngIf="!podium[0]" class="nome">
             <strong>Nenhum Ainda!</strong>
           </div>
         </div>
@@ -105,35 +83,35 @@
       </div>
       <div class="car">
         <div class="nota nota-third">
-          <ion-label *ngIf="bestModels[2]">
+          <ion-label *ngIf="podium[2]">
             <ion-icon name="ribbon" color="dark"></ion-icon>
-            <strong>{{bestModels[2].model_average?.toFixed(2)}}</strong>{{bestModels[2].average?.name}}<br>
+            <strong>{{podium[2].model_average?.toFixed(2)}}</strong>{{podium[2].average?.name}}<br>
           </ion-label>
 
-          <ion-label *ngIf="!bestModels[2]" class="no-car">
+          <ion-label *ngIf="!podium[2]" class="no-car">
             <ion-icon name="ribbon" color="dark"></ion-icon>
             <strong>0.0</strong>Nenhum<br>
           </ion-label>
         </div>
         <div class="car-img-container">
-          <img *ngIf="!bestModels[2]" class="no-car" [id]="'item-img-no-car-3'" src="assets/models/no-model.png" title="Nenhum carro no momento" alt="Nenhum carro no momento">
-          <img *ngIf="bestModels[2]" [id]="'item-img-'+bestModels[2].name" src="assets/models/{{bestModels[2].brand?.url}}/{{bestModels[2].url}}/{{bestModels[2].img}}"
-            title="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}" alt="{{bestModels[2].brand?.name + ' ' + bestModels[2].name}}"
-            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, bestModels[2].brand?.url, bestModels[2]?.url)">
+          <img *ngIf="!podium[2]" class="no-car" [id]="'item-img-no-car-3'" src="assets/models/no-model.png" title="Nenhum carro no momento" alt="Nenhum carro no momento">
+          <img *ngIf="podium[2]" [id]="'item-img-'+podium[2].name" src="assets/models/{{podium[2].brand?.url}}/{{podium[2].url}}/{{podium[2].img}}"
+            title="{{podium[2].brand?.name + ' ' + podium[2].name}}" alt="{{podium[2].brand?.name + ' ' + podium[2].name}}"
+            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (click)="clickCarItem($event, podium[2].brand?.url, podium[2]?.url)">
         </div>
         <div class="position right top third bottom">
-          <div *ngIf="bestModels[2]" class="marca">
-            <img src="assets/brands/{{bestModels[2].brand?.url}}.svg" title="{{bestModels[2].brand?.name}}" alt="{{bestModels[2].brand?.name}}"
+          <div *ngIf="podium[2]" class="marca">
+            <img src="assets/brands/{{podium[2].brand?.url}}.svg" title="{{podium[2].brand?.name}}" alt="{{podium[2].brand?.name}}"
             onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </div>
-          <div *ngIf="bestModels[2]" class="nome">
-            <span>{{bestModels[2].brand?.name}}</span> <strong>{{bestModels[2].name}}</strong>
+          <div *ngIf="podium[2]" class="nome">
+            <span>{{podium[2].brand?.name}}</span> <strong>{{podium[2].name}}</strong>
           </div>
 
-          <div *ngIf="!bestModels[2]" class="marca">
+          <div *ngIf="!podium[2]" class="marca">
             <img src="assets/brands/no-brand.svg" title="Nenhum ainda" alt="Nenhum ainda" class="brand-image-title">
           </div>
-          <div *ngIf="!bestModels[2]" class="nome">
+          <div *ngIf="!podium[2]" class="nome">
             <strong>Nenhum Ainda!</strong>
           </div>
         </div>
@@ -144,29 +122,7 @@
     <br>
     <ion-title size="large" color="primary" class="main-title">
       <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
-      <ion-label>Lista completa</ion-label>
-
-      <div class="active-filters">
-        <ion-item lines="none" class="filter-title" *ngIf="brandIdFilter || categoryIdFilter">
-          <ion-icon size="small" [name]="'funnel-outline'" color="medium"></ion-icon>
-          <ion-label color="medium">:</ion-label>
-        </ion-item>
-
-        <ion-item lines="none" *ngIf="brandIdFilter" title="Remover filtro de marca {{brandIdFilter.name}}" (click)="filterBrand({detail: {value: 'allBrands'}})">
-          <ion-label color="medium">{{brandIdFilter.name}}</ion-label>
-          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
-        </ion-item>
-
-        <ion-item lines="none" *ngIf="categoryIdFilter" title="Remover filtro de carroceria {{categoryIdFilter.name}}"  (click)="filterCategory({detail: {value: 'allCategories'}})">
-          <ion-label color="medium">{{categoryIdFilter.name}}</ion-label>
-          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
-        </ion-item>
-
-        <ion-item lines="none" *ngIf="showDateFilter" title="Remover filtro de {{filterYearValue.lower}} até {{filterYearValue.upper}}"  (click)="filterYear({detail: {value:{ lower: 1965, upper: this.newerYear + 1 }}}); this.clearBestModels(); filterBestModels()">
-          <ion-label color="medium">de {{filterYearValue.lower}} até {{filterYearValue.upper}}</ion-label>
-          <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
-        </ion-item>
-      </div>
+      <ion-label>Ranking</ion-label>
     </ion-title>
 
     <ion-grid class="custom-filter">
@@ -193,14 +149,42 @@
 
         <ion-col size-lg="8" size-md="6" size-sm="12" size-xs="12">
           <ion-item lines="none" class="year-range">
-            <ion-note slot="start" color="dark">De<br><strong>{{filterYearValue.lower}}</strong></ion-note>
+            <ion-note *ngIf="filterYearValue.lower > yearMinValue" slot="start" color="dark">De<br><strong>{{filterYearValue.lower}}</strong></ion-note>
+            <ion-note *ngIf="filterYearValue.lower <= yearMinValue"slot="start" color="dark">Mais<br><strong>antigo</strong></ion-note>
             <ion-note slot="end" color="dark">até<br><strong>{{filterYearValue.upper}}</strong></ion-note>
           </ion-item>
 
-          <ion-range [min]="1965" [max]="2025" [dualKnobs]="true" [value]="filterYearValue" (ionChange)="filterYear($event)" (ionKnobMoveEnd)="this.clearBestModels(); filterBestModels()"></ion-range>
+          <ion-range [min]="yearMinValue" [max]="2025" [dualKnobs]="true" [value]="filterYearValue" (ionChange)="filterYear($event)" (ionKnobMoveEnd)="this.clearBestModels(); filterBestModels()"></ion-range>
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <div class="active-filters" *ngIf="brandIdFilter || categoryIdFilter || showDateFilter">
+      <ion-item lines="none" class="filter-title" *ngIf="brandIdFilter || categoryIdFilter || showDateFilter">
+        <ion-icon size="small" [name]="'funnel-outline'" color="medium"></ion-icon>
+        <ion-label color="medium">Filtro:</ion-label>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="brandIdFilter" title="Remover filtro de marca {{brandIdFilter.name}}" (click)="clearFilter('allBrands')">
+        <ion-label color="medium">{{brandIdFilter.name}}</ion-label>
+        <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="categoryIdFilter" title="Remover filtro de carroceria {{categoryIdFilter.name}}"  (click)="clearFilter('allCategories')">
+        <ion-label color="medium">{{categoryIdFilter.name}}</ion-label>
+        <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="showDateFilter" title="Remover filtro de {{filterYearValue.lower}} até {{filterYearValue.upper}}"  (click)="filterYear({detail: {value:{ lower: yearMinValue, upper: newerYear + 1 }}}); this.clearBestModels(); filterBestModels()">
+        <ion-label color="medium">de {{filterYearValue.lower}} até {{filterYearValue.upper}}</ion-label>
+        <ion-icon size="small" [name]="'close-circle-outline'" color="medium"></ion-icon>
+      </ion-item>
+
+      <ion-item lines="none" title="Limpar todos"  (click)="clearAllFilters()">
+        <ion-label color="medium">Limpar</ion-label>
+        <ion-icon size="small" [name]="'trash-outline'" color="medium"></ion-icon>
+      </ion-item>
+    </div>
 
     <div class="main-body">
       <ion-list>
