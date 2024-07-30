@@ -24,6 +24,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
   public bestModels: Array<any> = [];
+  public bestModelsToShow: Array<any> = [];
   public showLoader: boolean;
   public page = 1;
   public pagination = 20;
@@ -140,6 +141,8 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
             this.podium.push(this.bestModels[i]);
           }
         }
+
+        this.bestModelsToShow = this.bestModels;
 
         if (this.page === 1) { this.showLoader = false; }
         this.page++;
