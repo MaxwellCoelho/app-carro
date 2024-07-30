@@ -116,6 +116,7 @@
               <th>Nome</th>
               <th>Email</th>
               <th>Nível</th>
+              <th>Url</th>
               <th>Criado em</th>
               <th>Criado por</th>
               <th>Modificado em</th>
@@ -132,6 +133,7 @@
               <td>{{user.name}}</td>
               <td>{{user.email}}</td>
               <td>{{user.role.level}} - {{user.role.name}}</td>
+              <td>{{user.url || '-'}}</td>
               <td>{{user.created || '-'}}</td>
               <td>{{(user.created_by?.name ? user.created_by.name  : user.created_by) || '-'}}</td>
               <td>{{user.modified || '-'}}</td>
