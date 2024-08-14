@@ -370,8 +370,8 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   }
 
   changeModel() {
-    const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
-    this.router.navigate([NAVIGATION.search.route], params);
+    const buscaUrl = `${NAVIGATION.search.route}/${this.selectedModel['brand'].url}`;
+    this.router.navigate([buscaUrl]);
   }
 
   saveLoadedVersions($event) {

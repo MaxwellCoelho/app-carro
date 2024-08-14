@@ -9,7 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-busca',
@@ -34,6 +34,7 @@ export class BuscaPage implements ViewWillEnter {
     public cryptoService: CryptoService,
     public searchService: SearchService,
     public router: Router,
+    public route: ActivatedRoute,
     public utils: UtilsService,
   ) {
     this.searchService.clearSearch$.subscribe(
@@ -69,6 +70,18 @@ export class BuscaPage implements ViewWillEnter {
     }
   }
 
+  public getUrlParams(): object {
+    let brandParam;
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      brandParam = params.get('marca');
+    });
+
+    return {
+      brand: brandParam
+    };
+  }
+
   public getBrandSuccess(res?) {
     if (res) {
       const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
@@ -85,15 +98,17 @@ export class BuscaPage implements ViewWillEnter {
     }
 
     const urlParams = location.search.replace('?','').split('&');
+    const searchBrand = this.getUrlParams();
     let currentBrand;
     let searchTerm;
+
+    if (searchBrand['brand']) {
+      currentBrand = this.searchService.getAllBrands().find(brand => brand['url'] === searchBrand['brand']);
+      this.selectBrand(currentBrand);
+    }
+
     urlParams.find(param => {
       const splitted = param.split('=');
-      if (splitted[0] === 'brand') {
-        currentBrand = this.searchService.getAllBrands().find(brand => brand['url'] === splitted[1]);
-        this.selectBrand(currentBrand);
-      }
-
       if (splitted[0] === 'search') {
         searchTerm = splitted[1];
       }

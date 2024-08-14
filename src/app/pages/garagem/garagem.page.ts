@@ -225,8 +225,9 @@ export class GaragemPage implements OnInit, ViewWillEnter {
       const params: NavigationExtras = { queryParams: { search: 'outro' }, queryParamsHandling: 'merge' };
       this.router.navigate([NAVIGATION.search.route], params);
     } else if (this.selectedModel === 'anotherModel') {
-      const params: NavigationExtras = { queryParams: { brand: this.selectedBrand, search: 'outro' }, queryParamsHandling: 'merge' };
-      this.router.navigate([NAVIGATION.search.route], params);
+      const params: NavigationExtras = { queryParams: { search: 'outro' }, queryParamsHandling: 'merge' };
+      const buscaUrl = `${NAVIGATION.search.route}/${this.selectedBrand}`;
+      this.router.navigate([buscaUrl], params);
     } else if (this.selectedBrand && this.selectedModel) {
       const opinarUrl = `opinar/${this.selectedBrand}/${this.selectedModel}`;
       this.router.navigate([opinarUrl]);

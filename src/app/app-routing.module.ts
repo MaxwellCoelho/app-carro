@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/busca/busca.module').then( m => m.BuscaPageModule)
   },
   {
+    path: `${NAVIGATION.search.route}/:marca`,
+    loadChildren: () => import('./pages/busca/busca.module').then( m => m.BuscaPageModule)
+  },
+  {
     path: NAVIGATION.compare.route,
     loadChildren: () => import('./pages/comparar/comparar.module').then( m => m.CompararPageModule)
   },
@@ -54,6 +58,16 @@ const routes: Routes = [
   {
     path: 'opinar/:marca/:modelo',
     loadChildren: () => import('./pages/opinar/opinar.module').then( m => m.OpinarPageModule)
+  },
+  {
+    path: 'opinar/:marca',
+    pathMatch: 'full',
+    redirectTo: `${NAVIGATION.search.route}/:marca`
+  },
+  {
+    path: 'opiniao/:marca',
+    pathMatch: 'full',
+    redirectTo: `${NAVIGATION.search.route}/:marca`
   },
   {
     path: 'opinar',
