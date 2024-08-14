@@ -332,6 +332,11 @@ ion-button ion-icon {
     font-size: xx-large;
   }
 
+  span.warning {
+    color: var(--ion-color-secondary);
+    font-size: xx-large;
+  }
+
   @media (max-width: 576px) {
     text-align: center;
   }

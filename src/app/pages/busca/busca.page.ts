@@ -104,7 +104,9 @@ export class BuscaPage implements ViewWillEnter {
 
     if (searchBrand['brand']) {
       currentBrand = this.searchService.getAllBrands().find(brand => brand['url'] === searchBrand['brand']);
-      this.selectBrand(currentBrand);
+      if (currentBrand) {
+        this.selectBrand(currentBrand);
+      }
     }
 
     urlParams.find(param => {

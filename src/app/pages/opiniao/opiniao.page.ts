@@ -220,17 +220,17 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     this.showLoader = false;
     console.error(err);
 
-    this.toastController.create({
-      header: 'Atenção!',
-      message: response,
-      duration: 4000,
-      position: 'middle',
-      icon: 'warning-outline',
-      color: 'danger'
-    }).then(toast => {
-      toast.present();
-      this.router.navigate([NAVIGATION.search.route]);
-    });
+    // this.toastController.create({
+    //   header: 'Atenção!',
+    //   message: response,
+    //   duration: 4000,
+    //   position: 'middle',
+    //   icon: 'warning-outline',
+    //   color: 'danger'
+    // }).then(toast => {
+    //   toast.present();
+    //   this.router.navigate([NAVIGATION.search.route]);
+    // });
   }
 
   public goToOpinar() {
@@ -269,5 +269,9 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public goSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
   }
 }

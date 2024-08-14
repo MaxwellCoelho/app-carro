@@ -163,19 +163,21 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
     this.showLoader = false;
     console.error(err);
 
-    this.toastController.create({
-      header: 'Atenção!',
-      message: response,
-      duration: 4000,
-      position: 'middle',
-      icon: 'warning-outline',
-      color: 'danger'
-    }).then(toast => {
-      toast.present();
-      if (err.status !== 409) {
-       this.router.navigate([NAVIGATION.search.route]);
-      }
-    });
+    if (err.status !== 404) {
+      this.toastController.create({
+        header: 'Atenção!',
+        message: response,
+        duration: 4000,
+        position: 'middle',
+        icon: 'warning-outline',
+        color: 'danger'
+      }).then(toast => {
+        toast.present();
+        if (err.status !== 409) {
+        this.router.navigate([NAVIGATION.search.route]);
+        }
+      });
+    }
   }
 
   public setAboutCarPayload($event) {
