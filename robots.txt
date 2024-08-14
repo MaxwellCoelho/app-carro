@@ -1,0 +1,7 @@
+Sitemap: https://krro.com.br/sitemap.xml
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /logout
+Disallow: /recuperar-senha

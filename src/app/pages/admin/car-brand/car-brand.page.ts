@@ -8,6 +8,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { SearchService } from 'src/app/services/search/search.service';
 
 @Component({
   selector: 'app-car-brand',
@@ -31,6 +32,7 @@ export class CarBrandPage implements OnInit {
     public alertController: AlertController,
     public toastController: ToastController,
     public utils: UtilsService,
+    public searchService: SearchService,
   ) { }
 
   ngOnInit() {
@@ -50,7 +52,7 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands.sort((a, b) => (!a['review']) || -1);
+        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
       },
       err => {
@@ -74,11 +76,12 @@ export class CarBrandPage implements OnInit {
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
         this.formBrands.reset();
-        this.brands = res.brands;
+        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
         this.showToast(action, res.saved);
+        this.searchService.clearAllBrands();
         this.ngOnInit();
       },
       err => {
@@ -104,7 +107,7 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.deleteItem(environment.brandsAction, brandId).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
+        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

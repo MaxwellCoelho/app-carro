@@ -14,12 +14,12 @@ export const VALUATION = [
 export const VALUATION_NOT_FOUND = { name: 'Indisponível', id: 'indisponivel', value: 0 };
 
 export const VALUATION_ITENS_CAR = [
-  { title: 'Interior', subtitle: 'Beleza, acabamento e espaço', value:'inside', valuation: null },
-  { title: 'Exterior', subtitle: 'Beleza e acabamento', value:'outside', valuation: null },
-  { title: 'Conforto', subtitle: 'Dirigibilidade e itens de série', value:'confort', valuation: null },
+  { title: 'Exterior', subtitle: 'Beleza, acabamento e design', value:'outside', valuation: null },
+  { title: 'Interior', subtitle: 'Acabamento, espaço e conforto', value:'inside', valuation: null },
+  { title: 'Dirigibilidade', subtitle: 'Volante, câmbio e instrumentos', value:'confort', valuation: null },
+  { title: 'Desempenho', subtitle: 'Potência do motor e retomadas', value:'durability', valuation: null },
   { title: 'Segurança', subtitle: 'Estabilidade e frenagem', value:'safety', valuation: null },
-  { title: 'Consumo', subtitle: 'Autonomia e manutenção', value:'consumption', valuation: null },
-  { title: 'Durabilidade', subtitle: 'Reparos e manutenção', value:'durability', valuation: null },
+  { title: 'Autonomia', subtitle: 'Consumo na cidade e estrada', value:'consumption', valuation: null },
   { title: 'Custo-benefício', subtitle: 'Vale a pena? Recomendaria?', value:'worth', valuation: null }
 ];
 

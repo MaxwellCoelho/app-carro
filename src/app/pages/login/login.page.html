@@ -10,18 +10,12 @@
     <div class="main-body">
       <ion-grid slot="content">
         <ion-row>
-          <ion-col>
-            <br>
-          </ion-col>
-        </ion-row>
-
-        <form *ngIf="!showForgotPassword" name="login" [formGroup]="formLogin" (submit)="authUser()">
-          <h2 class="login-subtitle">
-            Digite seu email e senha para ter acesso a sua garagem!
-          </h2>
-          <ion-row class="grid-content">
-            <ion-col size-lg="4.5" size-md="4.5" size-sm="12" size-xs="12">
-              <ion-item>
+          <ion-col size-md="5.5" size-sm="12" size-xs="12">
+            <h1 class="form-title">Já possui cadastro?</h1>
+            <p *ngIf="!showForgotPassword">Basta preencher o email e senha para acessar a sua garagem</p>
+            <p *ngIf="showForgotPassword">Digite seu email, enviaremos um link para você redefinir a sua senha.</p><br>
+            <form *ngIf="!showForgotPassword" name="login" [formGroup]="formLogin" (submit)="authUser()">
+              <ion-item class="input-item">
                 <ion-label position="floating">Email</ion-label>
                 <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
               </ion-item>
@@ -29,8 +23,7 @@
                 <span *ngIf="formLogin.controls.userEmail.errors?.required">Necessário preencher seu email!</span>
                 <span *ngIf="formLogin.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
               </ion-note>
-            </ion-col>
-            <ion-col size-lg="4" size-md="3.8" size-sm="12" size-xs="12">
+              <br>
               <ion-item class="input-item">
                 <ion-label position="floating">Senha</ion-label>
                 <ion-input [type]="userPasswordType" maxlength="80" formControlName="userPassword"></ion-input>
@@ -41,39 +34,25 @@
               <ion-note color="danger" *ngIf="formLogin.controls.userPassword.touched">
                 <span *ngIf="formLogin.controls.userPassword.errors?.required">Necessário preencher sua senha!</span>
               </ion-note>
-            </ion-col>
-            <ion-col size-lg="3.5" size-md="3.7" size-sm="12" size-xs="12">
+              <br>
               <ion-item lines="none" color="none">
                 <ion-label>Lembrar email</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="remindChecked"  [ngModelOptions]="{standalone: true}"></ion-toggle>
               </ion-item>
-            </ion-col>
-          </ion-row>
-
-          <ion-row class="grid-content">
-            <ion-col size-lg="3" size-md="4.5" size-sm="6" size-xs="12">
+              <br>
               <ion-button size="default" title="Entrar" expand="block" color="success" mode="ios" type="submit" [disabled]="formLogin.status === 'INVALID'">
                 <ion-icon name="enter-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Entrar</ion-label>
               </ion-button>
-            </ion-col>
-
-            <ion-col size-lg="3" size-md="4.5" size-sm="6" size-xs="12">
+              <br>
               <ion-button size="default" title="Esqueci a senha" expand="block" color="medium" mode="ios" type="button" (click)="forgotPassword()">
                 <ion-icon name="key-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Esqueci a senha</ion-label>
               </ion-button>
-            </ion-col>
-          </ion-row>
-        </form>
+            </form>
 
-        <form *ngIf="showForgotPassword" name="login" [formGroup]="formRecovery" (submit)="sendRecovery()">
-          <h2 class="login-subtitle">
-            Digite seu email, enviaremos um link para você redefinir a sua senha.
-          </h2>
-          <ion-row class="grid-content">
-            <ion-col size-md="12" size-sm="12" size-xs="12">
-              <ion-item>
+            <form *ngIf="showForgotPassword" name="login" [formGroup]="formRecovery" (submit)="sendRecovery()">
+              <ion-item class="input-item">
                 <ion-label position="floating">Email</ion-label>
                 <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
               </ion-item>
@@ -81,33 +60,80 @@
                 <span *ngIf="formRecovery.controls.userEmail.errors?.required">Necessário preencher seu email!</span>
                 <span *ngIf="formRecovery.controls.userEmail.errors?.pattern">Necessário preencher seu email corretamente!</span>
               </ion-note>
-            </ion-col>
-          </ion-row>
-
-          <ion-row class="grid-content">
-            <ion-col size-lg="4" size-md="6" size-sm="12" size-xs="12">
+              <br>
               <ion-button size="default" title="Enviar nova senha" expand="block" color="success" mode="ios" type="submit" [disabled]="formRecovery.status === 'INVALID'">
                 <ion-icon name="paper-plane-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Enviar nova senha</ion-label>
               </ion-button>
-            </ion-col>
-
-            <ion-col size-lg="4" size-md="6" size-sm="12" size-xs="12">
+              <br>
               <ion-button size="default" title="Voltar para login" expand="block" color="medium" mode="ios" type="button" (click)="backToLogin()">
                 <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Voltar para login</ion-label>
               </ion-button>
-            </ion-col>
-          </ion-row>
-        </form>
-        <br><br><br>
-        <h2 class="login-subtitle">
-          Se você não tem cadastro ainda basta mandar sua primeira opinião, clicando no botão abaixo!
-        </h2>
-        <ion-chip title="Clique aqui para opinar" color="primary" class="chip-opinar" (click)="goToSearch()">
-          <ion-icon [name]="'paper-plane'"></ion-icon>
-          <ion-label>Clique para opinar</ion-label>
-        </ion-chip>
+            </form>
+          </ion-col>
+
+          <ion-col size-md="1" size-sm="12" size-xs="12" *ngIf="showNewUserForm">
+            <h1 class="or-title">OU</h1>
+            <div class="or-division"></div>
+          </ion-col>
+
+          <ion-col size-md="5.5" size-sm="12" size-xs="12" *ngIf="showNewUserForm">
+            <h1 class="form-title">Ainda não possui cadastro?</h1>
+            <p>Basta preencher os campos abaixo para criar seu acesso</p><br>
+            <form [formGroup]="formCreateUser" (submit)="showConfirmEmailAlert()">
+              <ion-item class="input-item">
+                <ion-label position="floating">Seu nome</ion-label>
+                <ion-input type="text" minlength="3" maxlength="80" formControlName="createNome" (ionInput)="utils.capitalize($event)"
+                  placeholder="Ex: João ou Paulo"></ion-input>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formCreateUser.controls.createNome.touched">
+                <span *ngIf="formCreateUser.controls.createNome.errors?.required">Necessário preencher o seu nome!</span>
+                <span *ngIf="formCreateUser.controls.createNome.errors?.minlength">Campo preenchido incorretamente! Ex: João</span>
+              </ion-note>
+              <br>
+              <ion-item class="input-item">
+                <ion-label position="floating">Seu email (não será divulgado)</ion-label>
+                <ion-input type="email" pattern=".+@.+\..+" maxlength="50"
+                  formControlName="createEmail" placeholder="Ex: joao@provedor.com"></ion-input>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formCreateUser.controls.createEmail.touched">
+                <span *ngIf="formCreateUser.controls.createEmail.errors?.required">Necessário preencher o seu email! Fique tranquilo, não vamos digulgá-lo!</span>
+                <span *ngIf="formCreateUser.controls.createEmail.errors?.pattern">Campo preenchido incorretamente! Ex: joao@provedor.com</span>
+              </ion-note>
+              <br>
+              <ion-item class="input-item">
+                <ion-label position="floating">Nova senha</ion-label>
+                <ion-input [type]="newPasswordType" maxlength="80" formControlName="newPassword"></ion-input>
+                <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('newPasswordType')">
+                  <ion-icon slot="icon-only" name="eye{{newPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formCreateUser.controls.newPassword.touched">
+                <span *ngIf="formCreateUser.controls.newPassword.errors?.required">Necessário preencher sua nova senha!</span>
+              </ion-note>
+              <br>
+              <ion-item class="input-item">
+                <ion-label position="floating">Repita a nova senha</ion-label>
+                <ion-input [type]="repeatNewPasswordType" minlength="{{formCreateUser.controls.newPassword.value?.length}}" maxlength="80" formControlName="repeatNewPassword"></ion-input>
+                <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('repeatNewPasswordType')">
+                  <ion-icon slot="icon-only" name="eye{{repeatNewPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formCreateUser.controls.repeatNewPassword.touched">
+                <span *ngIf="formCreateUser.controls.repeatNewPassword.errors?.required">Necessário repetir sua nova senha!</span>
+              </ion-note>
+              <ion-note color="danger" *ngIf="formCreateUser.controls.repeatNewPassword.value">
+                <span *ngIf="formCreateUser.controls.repeatNewPassword.value !== formCreateUser.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
+              </ion-note>
+              <br>
+              <ion-button size="default" title="Criar meu cadastro" expand="block" color="success" mode="ios" type="submit" [disabled]="formCreateUser.status === 'INVALID'">
+                <ion-icon name="person-add-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Criar meu cadastro</ion-label>
+              </ion-button>
+            </form>
+          </ion-col>
+        </ion-row>
       </ion-grid>
     </div>
   </div>

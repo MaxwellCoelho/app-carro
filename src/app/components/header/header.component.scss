@@ -1,11 +1,11 @@
 #main-header {
 
   .mobile-menu {
-    display: none;
+    display: block;
 
-    @media (max-width: 700px) {
-      display: block;
-    }
+    // @media (max-width: 700px) {
+    //   display: block;
+    // }
   }
 
   .desktop-menu {
@@ -21,9 +21,9 @@
     border-right: 1px dashed var(--ion-color-primary-tint);
     padding-right: 0.25rem;
 
-    &:nth-last-child(-n+2) {
-      border-right: 0px;
-    }
+    // &:nth-last-child(-n+2) {
+    //   border-right: 0px;
+    // }
 
     @media (max-width: 880px) {
       ion-icon {

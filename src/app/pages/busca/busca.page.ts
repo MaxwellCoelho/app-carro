@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -18,13 +19,14 @@ import { NavigationExtras, Router } from '@angular/router';
 export class BuscaPage implements ViewWillEnter {
 
   public nav = NAVIGATION;
-  public brands = [];
   public filteredBrands = [];
   public selectedBrand: object;
   public models = [];
   public filteredModels = [];
   public selectedModel: object;
   public showLoader: boolean;
+  public otherBrand = false;
+  public otherModel = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -33,67 +35,96 @@ export class BuscaPage implements ViewWillEnter {
     public searchService: SearchService,
     public router: Router,
     public utils: UtilsService,
-  ) { }
+  ) {
+    this.searchService.clearSearch$.subscribe(
+      () => this.ionViewWillEnter()
+    );
+  }
 
   public ionViewWillEnter(): void {
     this.setInitialTitle();
-    this.brands = [];
+
     this.filteredBrands = [];
     this.selectedBrand = null;
-    this.models = [];
     this.filteredModels = [];
     this.selectedModel = null;
+    this.models = [];
+
     this.getBrands();
   }
 
   public getBrands(): void {
-    const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
     this.showLoader = true;
-    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
-      res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = [];
-        for (const brand of res.brands) {
-          if (brand.active) {
-            if (!brand.review || (brand.review && recoveredReviewBrands.find(item => item['_id'] === brand['_id']))) {
-              this.brands.push(brand);
-            }
+
+    if (!this.searchService.getAllBrands().length) {
+      const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+        res => {
+          if (!subBrands.closed) { subBrands.unsubscribe(); }
+          this.getBrandSuccess(res);
+        },
+        err => this.showErrorToast(err)
+      );
+    } else {
+      this.getBrandSuccess();
+    }
+  }
+
+  public getBrandSuccess(res?) {
+    if (res) {
+      const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
+      const brands = [];
+      for (const brand of res.brands) {
+        if (brand.active) {
+          if (!brand.review || (brand.review && recoveredReviewBrands.find(item => item['_id'] === brand['_id']))) {
+            brands.push(brand);
           }
         }
-
-        this.filteredBrands = this.brands;
-        this.showLoader = false;
-
-        const urlParams = location.search.replace('?','').split('&');
-        urlParams.find(param => {
-          const splitted = param.split('=');
-          if (splitted[0] === 'brand') {
-            const currentBrand = this.brands.find(brand => brand.url === splitted[1]);
-            this.selectBrand(currentBrand);
-          }
-        });
-      },
-      err => {
-        this.showErrorToast(err);
       }
-    );
+
+      this.searchService.saveAllBrands(brands);
+    }
+
+    const urlParams = location.search.replace('?','').split('&');
+    let currentBrand;
+    let searchTerm;
+    urlParams.find(param => {
+      const splitted = param.split('=');
+      if (splitted[0] === 'brand') {
+        currentBrand = this.searchService.getAllBrands().find(brand => brand['url'] === splitted[1]);
+        this.selectBrand(currentBrand);
+      }
+
+      if (splitted[0] === 'search') {
+        searchTerm = splitted[1];
+      }
+    });
+
+    if (searchTerm && !currentBrand) {
+      this.otherBrand = true;
+      this.searchBrandInput({target: {value: 'outro'}});
+    } else {
+      this.otherBrand = false;
+      this.filteredBrands = this.searchService.getAllBrands();
+    }
+
+    this.showLoader = false;
   }
 
   public selectBrand(brand) {
-    this.utils.setPageTitle(`Busca por modelos de carro da ${brand['name']}`);
+    this.utils.setPageTitle(`Busca por modelos de carro da ${brand['name']}`, `Opiniões reais e sincera dos donos de carros da ${brand['name']}.`, `${brand['name']}`);
     this.selectedBrand = brand;
     this.getModel();
   }
 
   public setInitialTitle(): void {
-    this.utils.setPageTitle('Busca por marcas de carro');
+    this.utils.setPageTitle('Busca por marcas de carro', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.');
   }
 
   public clearBrand() {
     this.setInitialTitle();
-    this.filteredBrands = this.brands;
+    this.filteredBrands = this.searchService.getAllBrands();
     this.selectedBrand = null;
-    const params: NavigationExtras = { queryParams: { brand: null }, queryParamsHandling: 'merge' };
+    const params: NavigationExtras = { queryParams: { brand: null, search: null }, queryParamsHandling: 'merge' };
     this.router.navigate([NAVIGATION.search.route], params);
   }
 
@@ -102,8 +133,8 @@ export class BuscaPage implements ViewWillEnter {
     this.filteredBrands = [];
 
     requestAnimationFrame(() => {
-      this.brands.forEach((item) => {
-        if (item.name.toLowerCase().indexOf(query) > -1) {
+      this.searchService.getAllBrands().forEach((item) => {
+        if (item['name'].toLowerCase().indexOf(query) > -1) {
           this.filteredBrands.push(item);
         }
       });
@@ -111,29 +142,62 @@ export class BuscaPage implements ViewWillEnter {
   }
 
   public getModel(): void {
-    const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
+    const mododelsBybrand = this.searchService.getModelsByBrand(this.selectedBrand['url']);
     this.showLoader = true;
-    const myFilter = { ['brand._id']: this.selectedBrand['_id'] };
-    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
-      res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = [];
-        for (const model of res.models) {
-          if (model.active) {
-            if (!model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
-              this.models.push(model);
-            }
+
+    if (!mododelsBybrand.length) {
+      const myFilter = { ['brand._id']: this.selectedBrand['_id'] };
+      const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+      const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
+        res => {
+          if (!subModels.closed) { subModels.unsubscribe(); }
+          this.getModelSuccess(res);
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    } else {
+      this.models = mododelsBybrand;
+      this.getModelSuccess();
+    }
+  }
+
+  public getModelSuccess(res?): void {
+
+    if (res) {
+    const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
+      this.models = [];
+      for (const model of res.models) {
+        if (model.active) {
+          if (!model.review || (model.review && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
+            this.models.push(model);
           }
         }
-
-        this.filteredModels = this.models;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
       }
-    );
+
+      this.searchService.saveModels(this.models);
+    }
+
+    const urlParams = location.search.replace('?','').split('&');
+    let searchTerm;
+    urlParams.find(param => {
+      const splitted = param.split('=');
+
+      if (splitted[0] === 'search') {
+        searchTerm = splitted[1];
+      }
+    });
+
+    if (searchTerm) {
+      this.otherModel = true;
+      this.searchModelInput({target: {value: 'outro'}});
+    } else {
+      this.otherModel = false;
+      this.filteredModels = this.models;
+    }
+
+    this.showLoader = false;
   }
 
   public searchModelInput($event) {

@@ -1,3 +1,13 @@
 .pending-review {
   background-color: antiquewhite;
 }
+
+.center-col {
+  align-content: center; text-align: center;
+}
+
+ion-item.input-item::part(native) {
+  background: var(--ion-color-light);
+  background: var(--ion-color-light);
+  border-radius: 0.3rem 0.3rem 0 0;
+}

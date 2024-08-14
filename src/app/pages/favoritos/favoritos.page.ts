@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -26,12 +27,20 @@ export class FavoritosPage implements ViewWillEnter {
   ) {}
 
   public ionViewWillEnter(): void {
-    this.utils.setPageTitle('Meus favoritos');
+    this.utils.setPageTitle('Meus favoritos', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.');
     this.getFavoriteModels();
   }
 
   public getFavoriteModels(): void {
-    this.favoriteModels = this.favorite.recoveryFavorites().reverse();
+    const recovered = this.favorite.recoveryFavorites();
+    const lastUser = this.utils.localStorageGetItem('lastUser');
+    const from = lastUser ? lastUser : 'local';
+    const favorites = recovered[from];
+    this.favoriteModels = favorites ? favorites.reverse() : [];
+
+    this.favoriteModels.forEach(fav => {
+      fav['img'] = this.utils.getModelImg(fav['url'], fav['generation']);
+    });
   }
 
   public clickCarItem(page: string, brand: string, model: string) {

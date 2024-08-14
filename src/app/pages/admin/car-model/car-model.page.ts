@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -18,13 +19,17 @@ export class CarModelPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
+  public reviewModels: Array<any>;
   public models: Array<any>;
+  public finalModels: Array<any>;
   public categories: Array<any>;
   public brands: Array<any>;
   public showLoader: boolean;
   public formModels: FormGroup;
   public activeChecked = true;
   public pendingReview = false;
+  public generations = {};
+  public brandFilter: string;
 
   constructor(
     public dbService: DataBaseService,
@@ -39,7 +44,7 @@ export class CarModelPage implements OnInit {
     this.initForm();
     this.getCategories();
     this.getBrands();
-    this.getModels();
+    this.getModels(true);
   }
 
   public initForm() {
@@ -48,9 +53,33 @@ export class CarModelPage implements OnInit {
       newModelName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
       newModelCategory: this.fb.control('', [Validators.required]),
       newModelBrand: this.fb.control('', [Validators.required]),
-      newModelYearStart: this.fb.control('', [Validators.required]),
-      newModelYearEnd: this.fb.control('', [Validators.required])
+      newModelYearStart: this.fb.control(''),
+      newModelYearEnd: this.fb.control('')
     });
+  }
+
+  public getGenAsArray(): object[] {
+    return this.generations ? Object.entries(this.generations) : [];
+  }
+
+  public includeGen() {
+    const genLeng = this.getGenAsArray().length;
+    const obj = {
+      yearStart: parseInt(this.formModels.value.newModelYearStart, 10),
+      yearEnd: parseInt(this.formModels.value.newModelYearEnd, 10)
+    };
+
+    if (genLeng) {
+      this.generations[`g${this.getGenAsArray().length + 1}`] = obj;
+    } else {
+      this.generations = {[`g${this.getGenAsArray().length + 1}`]: obj};
+    }
+    this.formModels.controls.newModelYearStart.reset();
+    this.formModels.controls.newModelYearEnd.reset();
+  }
+
+  public excludeGen(genKey: string) {
+    delete this.generations[genKey];
   }
 
   public getCategories(): void {
@@ -81,18 +110,52 @@ export class CarModelPage implements OnInit {
     );
   }
 
-  public getModels(): void {
+  public getModels(review?: boolean, brandId?: string): void {
     this.showLoader = true;
-    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+    const myFilter = review ? { review: true } : { review: false};
+
+    if (brandId) {
+      myFilter['brand._id'] = brandId;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models.sort((a, b) => (!a['review']) || -1);
+        const myList = review ? 'reviewModels' : 'models';
+        this[myList] = res.models;
+        this[myList].forEach(model => {
+          if (model.generation) {
+            let plainGen = '';
+            Object.entries(model.generation).forEach(ent => {
+              plainGen += `${plainGen.length > 0 ? ', ' : ''}${ent[0]}: ${ent[1]['yearStart']}-${ent[1]['yearEnd']}`;
+            });
+            model['generations'] = plainGen;
+          } else {
+            model['generations'] = '-';
+          }
+        });
+
+        const reviews = this.reviewModels || [];
+        const models = this.models || [];
+        this.finalModels = [...reviews, ...models];
         this.showLoader = false;
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public filterByBrand($event) {
+    this.brandFilter = $event.detail.value;
+    if (this.brandFilter === 'nothing') {
+      this.brandFilter = null;
+      this.models = [];
+      this.finalModels = this.reviewModels;
+    } else {
+      this.getModels(false, this.brandFilter);
+    }
   }
 
   public createModel(action: string) {
@@ -114,8 +177,7 @@ export class CarModelPage implements OnInit {
         active: brand['active'],
         review: brand['review']
       },
-      yearStart: this.formModels.value.newModelYearStart,
-      yearEnd: this.formModels.value.newModelYearEnd,
+      generation: this.generations,
       active: this.activeChecked,
       review: this.pendingReview
     };
@@ -125,13 +187,25 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.createItem(environment.modelsAction, jwtData, modelId).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
+
+        if (this.reviewModels.find(mod => mod['_id'] === modelId) || this.pendingReview) {
+          this.getModels(true);
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
+        } else {
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
+        }
+
         this.formModels.reset();
-        this.models = res.models;
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
+        this.generations = {};
         this.showToast(action, res.saved);
-        this.ngOnInit();
+        this.utils.setShouldUpdate(['opinions', 'models'], true);
       },
       err => {
         this.showErrorToast(err);
@@ -145,10 +219,10 @@ export class CarModelPage implements OnInit {
       newModelName: model.name,
       newModelCategory: model.category ? model.category['_id'] : '',
       newModelBrand: model.brand['_id'],
-      newModelYearStart: model['yearStart'],
-      newModelYearEnd: model['yearEnd'],
+      generation: model['generation'],
     });
 
+    this.generations = model.generation;
     this.activeChecked = model.active;
     this.pendingReview = model.review;
 
@@ -160,7 +234,18 @@ export class CarModelPage implements OnInit {
     const subModels = this.dbService.deleteItem(environment.modelsAction, modelId).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models;
+
+        if (this.reviewModels.find(mod => mod['_id'] === modelId) || this.pendingReview) {
+          this.getModels(true);
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
+        } else {
+          if (this.brandFilter) {
+            this.getModels(false, this.brandFilter);
+          }
+        }
+
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -189,12 +274,14 @@ export class CarModelPage implements OnInit {
           this.formModels.reset();
           this.activeChecked = true;
           this.pendingReview = false;
+          this.generations = {};
           this.showToast('Formulário limpo');
           break;
         case 'descartar':
           this.formModels.reset();
           this.activeChecked = true;
           this.pendingReview = false;
+          this.generations = {};
           this.showToast('Edição descartada');
           break;
       }

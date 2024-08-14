@@ -10,13 +10,15 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
+import { TermAndCookiesComponent } from './components/term-and-cookies/term-and-cookies.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TabMenuComponent,
     SideMenuComponent,
-    HeaderComponent
+    HeaderComponent,
+    TermAndCookiesComponent
   ],
   entryComponents: [],
   imports: [

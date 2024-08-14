@@ -31,6 +31,10 @@ h2 {
 
 .model-image {
   margin: auto;
+  background: URL('assets/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 6rem;
 }
 
 .category-image {
@@ -48,9 +52,8 @@ h2 {
   cursor: pointer;
 
   @media (max-width: 700px) {
-    margin-top: 0.3rem;
-    padding-top: 0.4rem;
     margin-right: -0.6rem;
+    margin-top: 0;
   }
 }
 
@@ -158,7 +161,6 @@ h2 {
   }
 
   .item-col-val {
-    margin: 0.5rem 0;
     padding-right: 1rem;
 
     @media (max-width: 576px) {
@@ -197,7 +199,6 @@ h2 {
   }
 
   ion-segment-button {
-    margin: 0;
     background: var(--ion-color-light);
     margin: 0 2px;
 
@@ -271,6 +272,17 @@ h2 {
         font-size: medium;
       }
     }
+  }
+}
+
+.disclaimer {
+  margin-top: 1.5rem;
+
+  ion-label {
+    padding: 0 0rem 0 0.5rem;
+    margin: 0;
+    font-size: 11px;
+    line-height: 12px;
   }
 }
 

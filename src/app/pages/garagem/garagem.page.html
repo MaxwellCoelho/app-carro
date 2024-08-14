@@ -11,13 +11,13 @@
       <div class="car" *ngFor="let car of myModelOpinions">
         <div class="car-name">
           <img src="assets/brands/{{car.model.brand?.url}}.svg" title="{{car.model.brand?.name}}" alt="{{car.model.brand?.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'">
+          onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'">
           {{car.model.brand?.name}} <strong>{{car.model.name}}</strong>
         </div>
         <div class="car-image">
-          <img src="assets/models/{{car.model.brand?.url}}/{{car.model.url}}/{{car.model.url}}.png"
+          <img src="assets/models/{{car.model.brand?.url}}/{{car.model.url}}/{{car.img}}"
             title="{{car.model.brand?.name + ' ' + car.model.name}}" alt="{{car.model.brand?.name + ' ' + car.model.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'">
         </div>
 
         <ion-title size="large" color="dark" class="car-info">
@@ -31,7 +31,7 @@
           <ion-col size-md="12" size-sm="12" size-xs="12">
             <ion-chip title="Opinar" color="primary" (click)="clickMyOpinion(car)">
               <ion-icon [name]="'ribbon'"></ion-icon>
-              <ion-label><strong>{{car.car_val_average.toFixed(1)}}</strong> - Minha opinião</ion-label>
+              <ion-label><strong>{{car.car_val_average.toFixed(2)}}</strong> - Minha opinião</ion-label>
             </ion-chip>
           </ion-col>
 
@@ -44,9 +44,36 @@
         </ion-row>
       </div>
       <div class="car">
-        <div class="other-models" (click)="clickOtherCars()">
-          <ion-icon [name]="'car-sport-outline'" color="medium"></ion-icon>
-          <ion-label>Buscar novos carros</ion-label>
+        <div class="other-models">
+          <ion-col size-md="12" size-sm="12" size-xs="12">
+            <ion-row>
+              <ion-col size-md="12" size-sm="12" size-xs="12" class="other-title">
+                <ion-icon [name]="'car-sport-outline'" color="medium"></ion-icon>
+                <ion-label *ngIf="myModelOpinions.length">Vamos opinar em outro modelo?</ion-label>
+                <ion-label *ngIf="!myModelOpinions.length">Deixe a sua primeira opinião!</ion-label>
+              </ion-col>
+
+              <ion-col size-md="12" size-sm="12" size-xs="12">
+                <ion-item>
+                  <ion-label position="floating">Marca</ion-label>
+                  <ion-select interface="popover" (ionChange)="chooseBrand($event)" [value]="selectedBrand">
+                    <ion-select-option *ngFor="let brand of searchService.getAllBrands()" [value]="brand.url">{{ brand.name }}</ion-select-option>
+                    <ion-select-option value="anotherBrand">Outra marca</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+
+              <ion-col size-md="12" size-sm="12" size-xs="12">
+                <ion-item>
+                  <ion-label position="floating">Modelo</ion-label>
+                  <ion-select interface="popover" [disabled]="!selectedBrand" (ionChange)="chooseModel($event)" [value]="selectedModel">
+                    <ion-select-option *ngFor="let model of models" [value]="model.url">{{ model.name }}</ion-select-option>
+                    <ion-select-option value="anotherModel">Outro modelo</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
         </div>
       </div>
     </div>

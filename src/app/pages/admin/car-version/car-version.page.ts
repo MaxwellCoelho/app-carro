@@ -22,12 +22,15 @@ export class CarVersionPage implements OnInit {
   public nav = NAVIGATION;
   public fuels = FUEL;
   public gearboxes = GEARBOX;
+  public reviewVersions: Array<any>;
   public versions: Array<any>;
+  public finalVersions: Array<any>;
   public models: Array<any>;
   public showLoader: boolean;
   public formVersions: FormGroup;
   public activeChecked = true;
   public pendingReview = false;
+  public modelFilter: string;
 
   constructor(
     public dbService: DataBaseService,
@@ -40,7 +43,7 @@ export class CarVersionPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getVersions();
+    this.getVersions(true);
     this.getModels();
   }
 
@@ -48,8 +51,6 @@ export class CarVersionPage implements OnInit {
     this.formVersions = this.fb.group({
       editVersionId: this.fb.control(''),
       newVersionModel: this.fb.control('', [Validators.required]),
-      newVersionImage: this.fb.control(''),
-      newVersionThumb: this.fb.control(''),
       newVersionFuel: this.fb.control('', [Validators.required]),
       newVersionYearModel: this.fb.control('', [Validators.required]),
       newVersionEngine: this.fb.control('', [Validators.required]),
@@ -58,18 +59,41 @@ export class CarVersionPage implements OnInit {
     });
   }
 
-  public getVersions(): void {
+  public getVersions(review?: boolean, modelId?: string): void {
     this.showLoader = true;
-    const subVersions = this.dbService.getItens(environment.versionsAction).subscribe(
+    const myFilter = review ? { review: true } : { review: false};
+
+    if (modelId) {
+      myFilter['model._id'] = modelId;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
-        this.versions = res.versions.sort((a, b) => (!a['review']) || -1);
+        const myList = review ? 'reviewVersions' : 'versions';
+        this[myList] = res.versions;
+
+        const reviews = this.reviewVersions || [];
+        const versions = this.versions || [];
+        this.finalVersions = [...reviews, ...versions];
         this.showLoader = false;
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public filterByModel($event) {
+    this.modelFilter = $event.detail.value;
+    if (this.modelFilter === 'nothing') {
+      this.modelFilter = null;
+      this.versions = [];
+      this.finalVersions = this.reviewVersions;
+    } else {
+      this.getVersions(false, this.modelFilter);
+    }
   }
 
   public getModels(): void {
@@ -104,8 +128,6 @@ export class CarVersionPage implements OnInit {
         active: model['active'],
         review: model['review']
       },
-      image: this.formVersions.value.newVersionImage,
-      thumb: this.formVersions.value.newVersionThumb,
       fuel: this.formVersions.value.newVersionFuel,
       years: finalYears,
       engine: this.formVersions.value.newVersionEngine,
@@ -120,14 +142,24 @@ export class CarVersionPage implements OnInit {
     const subVersions = this.dbService.createItem(environment.versionsAction, jwtData, versionId).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
+
+        if (this.reviewVersions.find(mod => mod['_id'] === versionId) || this.pendingReview) {
+          this.getVersions(true);
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
+        } else {
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
+        }
+
         this.formVersions.reset();
-        this.versions = res.versions;
         this.utils.setShouldUpdate(['versions'], true);
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
         this.showToast(action, res.saved);
-        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);
@@ -139,11 +171,9 @@ export class CarVersionPage implements OnInit {
     this.formVersions.reset({
       editVersionId: version['_id'],
       newVersionModel: version.model['_id'],
-      newVersionImage: version.image,
-      newVersionThumb: version.thumb,
       newVersionFuel: version.fuel,
       newVersionYearModel: version.years,
-      newVersionEngine: version.engine.toFixed(1),
+      newVersionEngine: this.utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine : version.engine.toFixed(1),
       newVersionGearbox: version.gearbox,
       newVersionComplement: version.complement,
     });
@@ -159,7 +189,19 @@ export class CarVersionPage implements OnInit {
     const subVersions = this.dbService.deleteItem(environment.versionsAction, versionId).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
-        this.versions = res.versions;
+
+        if (this.reviewVersions.find(mod => mod['_id'] === versionId) || this.pendingReview) {
+          this.getVersions(true);
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
+        } else {
+          if (this.modelFilter) {
+            this.getVersions(false, this.modelFilter);
+          }
+        }
+
+        this.versions = this.utils.sortByReview(res.versions);
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -250,7 +292,7 @@ export class CarVersionPage implements OnInit {
   }
 
   public showToast(action: string, item?: any) {
-    const myItem = `${item.model.brand.name} ${item.model.name} ${item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}`;
+    const myItem = item ? `${item.model.brand.name} ${item.model.name} ${this.utils.sanitizeText(item?.fuel) === 'el-trico' ? item.engine  + ' kW' : item.engine.toFixed(1)} ${item.complement || ''} ${item.gearbox  || ''} ${item.fuel}` : '';
     this.toastController.create({
       header: `${action} com sucesso!`,
       message: item ? `Nome: ${myItem}` : '',

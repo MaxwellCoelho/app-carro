@@ -48,28 +48,28 @@
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formBrands.value.editBrandId }">
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formBrands.value.editBrandId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formBrands.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formBrands.status === 'INVALID'">
                 <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formBrands.value.editBrandId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formBrands.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formBrands.status === 'INVALID'">
                 <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Salvar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formBrands.value.editBrandId && !formBrands.pristine">
-              <ion-button size="default" title="Limpar" expand="block" color="medium" type="button" (click)="showConfirmAlert('limpar', formBrands.value)">
+              <ion-button size="default" title="Limpar" expand="block" color="medium" mode="ios" type="button" (click)="showConfirmAlert('limpar', formBrands.value)">
                 <ion-icon name="backspace-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Limpar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formBrands.value.editBrandId">
-              <ion-button size="default" title="Descartar" expand="block" color="danger" type="button" (click)="showConfirmAlert('descartar', formBrands.value)">
+              <ion-button size="default" title="Descartar" expand="block" color="danger" mode="ios" type="button" (click)="showConfirmAlert('descartar', formBrands.value)">
                 <ion-icon name="close-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Descartar</ion-label>
               </ion-button>
@@ -83,7 +83,7 @@
           <ion-col><h1>Marcas de carro {{brands ? '('+brands.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!brands" class="grid-content">
+        <ion-row *ngIf="!brands || (brands && !brands.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -91,7 +91,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="brands">
+        <div class="table-container" *ngIf="brands && brands.length">
           <table>
             <tr>
               <th>Ativo</th>
@@ -127,10 +127,10 @@
               <td>{{brand.modified || '-'}}</td>
               <td>{{(brand.modified_by?.name ? brand.modified_by?.name : brand.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editBrand(brand)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" mode="ios" (click)="editBrand(brand)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
-                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', brand)">
+                <ion-button size="small" title="Excluir" expand="block" color="danger" mode="ios" (click)="showConfirmAlert('excluir', brand)">
                   <ion-icon name="trash-outline"></ion-icon>
                 </ion-button>
               </td>

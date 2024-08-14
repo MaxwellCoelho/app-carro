@@ -17,7 +17,7 @@
     </ion-item>
 
     <ion-button size="default" title="Enviar" expand="block" color="success" mode="ios" type="submit" [disabled]="formFeedback.status === 'INVALID' || !valuationItem.value">
-      <ion-icon size="default" name="paper-plane-outline"></ion-icon>
+      <ion-icon size="default" name="paper-plane-outline" slot="start"></ion-icon>
       <ion-label slot="start">Enviar</ion-label>
     </ion-button>
   </form>

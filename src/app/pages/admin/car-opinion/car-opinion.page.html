@@ -16,14 +16,13 @@
 
     <div class="main-body">
       <ion-grid slot="content">
-        <ion-row [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
+        <ion-row *ngIf="formOpinions.value.editOpinionId" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
           <ion-col>
-            <h1 *ngIf="!formOpinions.value.editOpinionId">Criar nova opinião:</h1>
-            <h1 *ngIf="formOpinions.value.editOpinionId">Editar a opinião <strong>{{formOpinions.value.editOpinionId}}</strong>:</h1>
+            <h1>Editar a opinião <strong>{{formOpinions.value.editOpinionId}}</strong>:</h1>
           </ion-col>
         </ion-row>
 
-        <form name="opinions" [formGroup]="formOpinions" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
+        <form name="opinions" [formGroup]="formOpinions" *ngIf="formOpinions.value.editOpinionId" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
             <ion-input type="hidden" formControlName="editOpinionId"></ion-input>
             <ion-col size-md="9" size-sm="12" size-xs="12">
@@ -42,7 +41,7 @@
           </ion-row>
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Modelo</ion-label>
                 <ion-select interface="popover" formControlName="newOpinionModel">
@@ -50,13 +49,26 @@
                 </ion-select>
               </ion-item>
             </ion-col>
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Versão</ion-label>
+                <ion-select interface="popover" formControlName="newOpinarVersao">
+                    <ion-select-option *ngFor="let version of versions" value="{{version._id}}">
+                      {{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine + ' kW' : version.engine?.toFixed(1)}} {{version.complement}} {{version.gearbox}} {{version.fuel}}
+                    </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Ano modelo</ion-label>
                 <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newOpinionYearModel" placeholder="Ex: 2015"></ion-input>
               </ion-item>
             </ion-col>
-            <ion-col size-md="4" size-sm="4" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Ano compra</ion-label>
                 <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newOpinionYearBought" placeholder="Ex: 2017"></ion-input>
@@ -81,28 +93,28 @@
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formOpinions.value.editOpinionId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formOpinions.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinions.status === 'INVALID'">
                 <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formOpinions.value.editOpinionId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formOpinions.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinions.status === 'INVALID'">
                 <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Salvar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formOpinions.value.editOpinionId && !formOpinions.pristine">
-              <ion-button size="default" title="Limpar" expand="block" color="medium" type="button" (click)="showConfirmAlert('limpar', formOpinions.value)">
+              <ion-button size="default" title="Limpar" expand="block" color="medium" mode="ios" type="button" (click)="showConfirmAlert('limpar', formOpinions.value)">
                 <ion-icon name="backspace-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Limpar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formOpinions.value.editOpinionId">
-              <ion-button size="default" title="Descartar" expand="block" color="danger" type="button" (click)="showConfirmAlert('descartar', formOpinions.value)">
+              <ion-button size="default" title="Descartar" expand="block" color="danger" mode="ios" type="button" (click)="showConfirmAlert('descartar', formOpinions.value)">
                 <ion-icon name="close-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Descartar</ion-label>
               </ion-button>
@@ -116,7 +128,7 @@
           <ion-col><h1>Opiniões {{opinions ? '('+opinions.length+')' : ''}}</h1></ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!opinions" class="grid-content">
+        <ion-row *ngIf="!opinions || (opinions && !opinions.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -124,7 +136,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="opinions">
+        <div class="table-container" *ngIf="opinions && opinions.length">
           <table>
             <tr>
               <th>Ativo</th>
@@ -150,7 +162,7 @@
               </td>
               <td>{{opinion._id}}</td>
               <td>{{opinion.model?.brand?.name}} {{opinion.model?.name}}</td>
-              <td>{{opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}}</td>
+              <td>{{utils.sanitizeText(opinion.version?.fuel) === 'el-trico' ? opinion.version?.engine + ' kW' : opinion.version?.engine?.toFixed(1)}} {{opinion.version?.complement}} {{opinion.version?.gearbox}} {{opinion.version?.fuel}}</td>
               <td>{{opinion.year_model}}</td>
               <td>{{opinion.year_bought}}</td>
               <td>{{opinion.km_bought}} 000 Km</td>
@@ -161,10 +173,10 @@
               <td>{{opinion.modified || '-'}}</td>
               <td>{{(opinion.modified_by?.name ? opinion.modified_by?.name : opinion.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editOpinion(opinion)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" mode="ios" (click)="editOpinion(opinion)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
-                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', opinion)">
+                <ion-button size="small" title="Excluir" expand="block" color="danger" mode="ios" (click)="showConfirmAlert('excluir', opinion)">
                   <ion-icon name="trash-outline"></ion-icon>
                 </ion-button>
               </td>

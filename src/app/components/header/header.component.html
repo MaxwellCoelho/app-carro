@@ -5,7 +5,7 @@
           <ion-icon slot="start" [name]="nav.best.icon"></ion-icon>
           {{nav.best.title}}
         </ion-button>
-        <ion-button routerDirection="root" [routerLink]="'/'+ nav.search.route" routerLinkActive="selected" class="desktop-menu">
+        <ion-button routerDirection="root" (click)="goToWithoutParams(nav.search.route)" routerLinkActive="selected" class="desktop-menu">
           <ion-icon slot="start" [name]="nav.search.icon"></ion-icon>
           {{nav.search.title}}
         </ion-button>
@@ -30,11 +30,11 @@
           <ion-icon slot="start" [name]="nav.logout.icon"></ion-icon>
           {{nav.logout.title}}
         </ion-button> -->
-        <ion-button *ngIf="!utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.login.route" routerLinkActive="selected" class="desktop-menu">
+        <ion-button *ngIf="!utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.login.route" routerLinkActive="selected">
           <ion-icon slot="start" [name]="nav.login.icon"></ion-icon>
           {{nav.login.title}}
         </ion-button>
-        <ion-button *ngIf="utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" routerLinkActive="selected" class="desktop-menu">
+        <ion-button *ngIf="utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" routerLinkActive="selected">
           <ion-icon slot="start" [name]="nav.perfil.icon"></ion-icon>
           {{utils.sessionUser.name.split(' ')[0]}}
         </ion-button>

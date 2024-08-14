@@ -11,14 +11,14 @@
       <div class="car" *ngFor="let car of favoriteModels">
         <div class="car-name">
           <img src="assets/brands/{{car.brand?.url}}.svg" title="{{car.brand?.name}}" alt="{{car.brand?.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'">
+            onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'">
             {{car.brand?.name}} <strong>{{car.name}}</strong>
             <ion-icon name="close" color="medium" size="large" class="favorite-image" (click)="showConfirmAlert(car)"></ion-icon>
         </div>
         <div class="car-image">
-          <img src="assets/models/{{car.brand?.url}}/{{car.url}}/{{car.url}}.png"
+          <img src="assets/models/{{car.brand?.url}}/{{car.url}}/{{car.img}}"
             title="{{car.brand?.name + ' ' + car.name}}" alt="{{car.brand?.name + ' ' + car.name}}"
-            onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'">
+            onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'">
         </div>
         <ion-row class="buttons">
           <ion-col size-md="6" size-sm="6" size-xs="12">
@@ -39,7 +39,7 @@
       <div class="car">
         <div class="other-models" (click)="clickOtherCars()">
           <ion-icon [name]="'car-sport-outline'" color="medium"></ion-icon>
-          <ion-label>Buscar novos carros</ion-label>
+          <ion-label style="text-align: center;">Clique para<br>buscar outros modelos</ion-label>
         </div>
       </div>
     </div>

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
-export type UpdateTypes = 'opinions' | 'bests' | 'versions';
+export type UpdateTypes = 'opinions' | 'bests' | 'versions' | 'models';
 
 @Injectable({
   providedIn: 'root'
@@ -149,7 +151,79 @@ export class UtilsService {
     }
   }
 
-  public setPageTitle(newTitle: string): void {
-    document.title = `Krro - ${newTitle} - Opinião dos donos`;
+  public setPageTitle(newTitle: string, newDescription?: string, newKeywords?: string): void {
+    const defaultTitle = 'Opinião dos donos';
+    const defaultDescription = 'Para quem busca mais informação na hora de decidir qual carro comprar.';
+    const defaultKeywords = 'opinião, opiniões, dono, donos, opinar, carro, carros, automóvel, positivo, negativo, marca, fabricante, montadora, garagem, dirigir, conforto, autonomia, ano, motor, krro, krros, karro, karros';
+    const defaultCanonical = 'https://krro.com.br';
+    const currentPath = location.pathname;
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    const linkCanonical = document.querySelector('link[rel="canonical"]');
+
+    document.title = `Krro - ${newTitle} - ${defaultTitle}`;
+    metaDescription['content'] = metaDescription && newDescription ? `${newDescription} ${defaultDescription}` : defaultDescription;
+    metaKeywords['content'] = metaKeywords && newKeywords ? `${newKeywords}, ${defaultKeywords}` : defaultKeywords;
+    linkCanonical['href'] = linkCanonical && !currentPath.includes('melhores') ? `${defaultCanonical}${currentPath}` : defaultCanonical;
+  }
+
+  public getModelImg(modelUrl: string, generations: object, yearModel?: string): string {
+    let imgName = `${modelUrl}.png`;
+
+    if (generations && Object.keys(generations).length) {
+      const myYear = yearModel ? parseInt(yearModel, 10) : null;
+
+      if (myYear) {
+        let foundName;
+        let gen = 0;
+
+        Object.entries(generations).forEach(entrie => {
+          gen++;
+          if (myYear >= parseInt(entrie[1].yearStart, 10) && myYear <= parseInt(entrie[1].yearEnd, 10)) {
+            foundName = `${modelUrl}-${entrie[0]}.png`;
+          }
+        });
+
+        imgName = foundName ? foundName : `${modelUrl}-g${gen}.png`;
+      } else {
+        imgName = `${modelUrl}-${Object.keys(generations)[Object.keys(generations).length - 1]}.png`;
+      }
+    }
+
+    return imgName;
+  }
+
+  public sortByReview(itens: any): any {
+    return itens && itens.length ? itens.sort((a, b) => (!a['review']) || -1) : itens;
+  }
+
+  public findActiveModel(models: object[], brandUrl: string): object {
+    const foundModels = models.filter(mod => mod['brand'].url === brandUrl && mod['active']);
+    let foundModel;
+
+    if (!foundModels.length) {
+      return null;
+    }
+
+    foundModels.forEach(model => {
+      const recoveredReviewBrands = this.recoveryCreatedItem('createdBrand');
+      const recoveredReviewModel = this.recoveryCreatedItem('createdModel');
+      let checkReviewBrand = false;
+      let checkReviewModel = false;
+
+      if (!model['brand'].review || (model['brand'].review && recoveredReviewBrands.find(item => item['_id'] === model['brand']['_id']))) {
+        checkReviewBrand = true;
+      }
+
+      if (!model['review'] || (model['review'] && recoveredReviewModel.find(item => item['_id'] === model['_id']))) {
+        checkReviewModel = true;
+      }
+
+      if (checkReviewBrand && checkReviewModel) {
+        foundModel = model;
+      }
+    });
+
+    return foundModel;
   }
 }

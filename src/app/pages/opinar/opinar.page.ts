@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
@@ -7,7 +9,7 @@ import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { ToastController, ViewWillEnter } from '@ionic/angular';
+import { ToastController, ViewWillEnter, ViewDidEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router, Event, NavigationEnd } from '@angular/router';
 import { FavoriteService } from 'src/app/services/favorite/favorite.service';
@@ -17,7 +19,7 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
   templateUrl: 'opinar.page.html',
   styleUrls: ['opinar.page.scss'],
 })
-export class OpinarPage implements OnInit, ViewWillEnter {
+export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
 
   @ViewChild('IonContent') content;
 
@@ -54,6 +56,11 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.adjustImgContainer();
+  }
+
   public ionViewWillEnter(): void {
     if (this.utils.getShouldUpdate('versions')) {
       this.utils.setShouldUpdate(['versions'], false);
@@ -66,10 +73,15 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     }
   }
 
+  public ionViewDidEnter(): void {
+    this.adjustImgContainer();
+  }
+
   public loadModelInfo(): void {
     this.selectedModel = this.searchService.getModel();
 
     if (this.selectedModel) {
+      this.setModelImage();
       this.searchService.clearModel();
       this.loadFinalPayload();
     } else {
@@ -86,20 +98,11 @@ export class OpinarPage implements OnInit, ViewWillEnter {
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
-        if (!foundModel) {
-          this.showErrorToast({status: 404});
-          return;
-        }
-        const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
-        const checkReviewBrand = foundModel && !foundModel.brand.review
-          || (foundModel.brand.review && recoveredReviewBrands.find(item => item['_id'] === foundModel.brand['_id']));
-        const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
-        const checkReviewModel = foundModel && !foundModel.review
-          || (foundModel.review && recoveredReviewModel.find(item => item['_id'] === foundModel['_id']));
+        const foundModel = this.utils.findActiveModel(res.models, urlParams['brand']);
 
-        if (foundModel && checkReviewBrand && checkReviewModel) {
+        if (foundModel) {
           this.selectedModel = foundModel;
+          this.setModelImage();
           this.showLoader = false;
           this.loadFinalPayload();
         } else {
@@ -110,6 +113,19 @@ export class OpinarPage implements OnInit, ViewWillEnter {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public setModelImage($event?) {
+    this.selectedModel['img'] = null;
+    setTimeout(() => {
+      this.selectedModel['img'] = this.utils.getModelImg(this.selectedModel['url'], this.selectedModel['generation'], $event);
+    }, 50);
+  }
+
+  public adjustImgContainer() {
+    if (document.querySelector('.opinar-container').querySelector('.model-image-container')) {
+      document.querySelector('.opinar-container').querySelector('.model-image-container')['style'].minHeight = `${document.querySelector('.opinar-container').querySelector('.model-image')['height']}px`;
+    }
   }
 
   public getUrlParams(): object {
@@ -156,7 +172,9 @@ export class OpinarPage implements OnInit, ViewWillEnter {
       color: 'danger'
     }).then(toast => {
       toast.present();
-      // this.router.navigate([NAVIGATION.search.route]);
+      if (err.status !== 409) {
+       this.router.navigate([NAVIGATION.search.route]);
+      }
     });
   }
 
@@ -191,7 +209,7 @@ export class OpinarPage implements OnInit, ViewWillEnter {
 
   public loadFinalPayload() {
     this.isFavorite = this.favorite.isFavorite(this.selectedModel);
-    this.utils.setPageTitle(`Opinar ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
+    this.utils.setPageTitle(`Opinar sobre ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`, `Deixe sua opinião real e sincera sobre o ${this.selectedModel['brand'].name} ${this.selectedModel['name']}.`, `${this.selectedModel['brand'].name} ${this.selectedModel['name']}, ${this.selectedModel['brand'].name}, ${this.selectedModel['name']}`);
     const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
 
     if (encoded) {

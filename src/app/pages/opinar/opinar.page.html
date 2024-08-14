@@ -1,9 +1,9 @@
 <ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
   <app-loader [showLoader]="showLoader"></app-loader>
 
-  <div class="main-container">
+  <div class="main-container opinar-container">
     <ion-title size="large" color="primary" class="main-title">
-      <ion-icon [name]="'clipboard-outline'" color="secondary"></ion-icon>
+      <ion-icon [name]="'paper-plane-outline'" color="secondary"></ion-icon>
       <ion-label>Opinar</ion-label>
     </ion-title>
 
@@ -12,7 +12,7 @@
         <ion-row>
           <ion-col size-lg="1.2" size-md="1.7" size-sm="1.5" size-xs="12" class="model-logo">
             <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-              onerror="if (this.src != 'error.jpg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+              onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
           </ion-col>
           <ion-col size-lg="8.1" size-md="7.3" size-sm="6.8" size-xs="12" class="model-name">
             <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
@@ -32,14 +32,14 @@
         </ion-row>
       </ion-grid>
 
-      <ion-item lines="none" *ngIf="currentStep < 4">
-        <img src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.url}}.png" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-          onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+      <ion-item lines="none" *ngIf="currentStep < 4" class="model-image-container">
+        <img *ngIf="selectedModel.img" src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.img}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+          onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (load)="adjustImgContainer()" class="model-image">
       </ion-item>
 
       <app-opinar-steps [currentStep]="currentStep" *ngIf="currentStep < 4"></app-opinar-steps>
 
-      <app-about-car *ngIf="currentStep === 1" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutCar"
+      <app-about-car *ngIf="currentStep === 1" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutCar" (yearSelected)="setModelImage($event)"
         (aboutCar)="setAboutCarPayload($event)" (loadedVersions)="saveLoadedVersions($event)" (clickForeward)="goBack()"></app-about-car>
 
       <app-about-brand *ngIf="currentStep === 2" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutBrand"
@@ -52,9 +52,9 @@
       <ion-grid slot="content" *ngIf="currentStep === 4 && !showLoader" style="margin-top: 1rem">
         <ion-row class="success-container">
           <ion-col size-lg="5" size-md="5" size-sm="12" size-xs="12" class="col-model">
-            <ion-item lines="none">
-              <img src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.url}}.png" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-                onerror="if (this.src != 'error.jpg') this.src = 'assets/models/no-model.png'" class="model-image">
+            <ion-item lines="none" class="model-image-container">
+              <img src="assets/models/{{selectedModel.brand?.url}}/{{selectedModel.url}}/{{selectedModel.img}}" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+                onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (load)="adjustImgContainer()" class="model-image">
             </ion-item>
           </ion-col>
 
@@ -65,6 +65,13 @@
               </ion-col>
               <ion-col size-lg="9.5" size-md="9" size-sm="9" size-xs="12" class="sent-item-text">
                 <ion-label class="ion-text-wrap">
+                  <!-- Google tag (gtag.js) event -->
+                  <script>
+                    gtag('event', 'conversion_event_page_view_2', {
+                      // <event_parameters>
+                    });
+                  </script>
+
                   <h1 class="form-title">
                     <span class="success">Parabéns {{user?.name.split(' ')[0]}}!</span>
                     <br>Sua opinião sobre o <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span> foi enviada com sucesso!

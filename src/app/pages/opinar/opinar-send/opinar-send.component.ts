@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -140,6 +141,7 @@ export class OpinarSendComponent implements OnInit {
 
         this.formLogin.reset();
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+        this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
         this.utils.returnLoggedUser();
         this.favorite.syncFavorites();
         this.sessionUser = res.authorized;

@@ -45,7 +45,7 @@
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formModels.value.editModelId }">
 
-            <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-col size-md="6" size-sm="6" size-xs="12">
               <ion-item>
                 <ion-label position="floating">Categoria</ion-label>
                 <ion-select interface="popover" formControlName="newModelCategory">
@@ -54,29 +54,13 @@
               </ion-item>
             </ion-col>
 
-            <ion-col size-md="2" size-sm="3" size-xs="12">
-              <ion-item class="input-item">
-                <ion-label position="floating">Ano início</ion-label>
-                <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newModelYearStart"
-                  placeholder="Ex: 2015"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size-md="2" size-sm="3" size-xs="12">
-              <ion-item class="input-item">
-                <ion-label position="floating">Ano fim</ion-label>
-                <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newModelYearEnd"
-                  placeholder="Ex: 2017"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size-md="2" size-sm="12" size-xs="12">
+            <ion-col size-md="3" size-sm="3" size-xs="12">
               <ion-item lines="none" color="none">
                 <ion-label>Ativo</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="activeChecked"  [ngModelOptions]="{standalone: true}"></ion-toggle>
               </ion-item>
             </ion-col>
-            <ion-col size-md="2" size-sm="12" size-xs="12">
+            <ion-col size-md="3" size-sm="3" size-xs="12">
               <ion-item lines="none" color="none">
                 <ion-label>Revisão</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="pendingReview"  [ngModelOptions]="{standalone: true}"></ion-toggle>
@@ -84,30 +68,80 @@
             </ion-col>
           </ion-row>
 
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formModels.value.editModelId }" *ngFor="let gen of getGenAsArray(); let i = index">
+            <ion-col size-md="1" size-sm="1" size-xs="1.5" class="center-col">
+              <ion-label><strong>{{gen[0].toUpperCase()}}</strong></ion-label>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="4.5" size-xs="4.25" class="center-col">
+              <ion-label>Ano início: <strong>{{gen[1].yearStart}}</strong></ion-label>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="4.5" size-xs="4.25" class="center-col">
+              <ion-label>Ano fim: <strong>{{gen[1].yearEnd}}</strong></ion-label>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="2" size-xs="2" class="center-col">
+              <ion-button size="small" title="Excluir" color="danger" mode="ios" (click)="excludeGen(gen[0])"
+                *ngIf="i === getGenAsArray().length - 1">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formModels.value.editModelId }">
+            <ion-col size-md="1" size-sm="1" size-xs="12" class="center-col">
+                <ion-label><strong>G{{getGenAsArray().length + 1}}</strong></ion-label>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="4.5" size-xs="6">
+              <ion-item>
+                <ion-label position="floating">Ano início da geração</ion-label>
+                <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newModelYearStart"
+                  placeholder="Ex: 2015"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="4" size-sm="4.5" size-xs="6">
+              <ion-item>
+                <ion-label position="floating">Ano fim da geração</ion-label>
+                <ion-input type="tel" (ionInput)="utils.onlyNumbers($event)" maxlength="4" formControlName="newModelYearEnd"
+                  placeholder="Ex: 2017"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="2" size-xs="12" class="center-col">
+              <ion-button size="default" title="Incluir" color="primary" mode="ios" (click)="includeGen()"
+                [disabled]="!formModels.value.newModelYearStart || !formModels.value.newModelYearEnd">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formModels.value.editModelId }">
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formModels.value.editModelId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formModels.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" mode="ios" [disabled]="formModels.status === 'INVALID'">
                 <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formModels.value.editModelId">
-              <ion-button size="default" title="Salvar" expand="block" color="success" type="submit" [disabled]="formModels.status === 'INVALID'">
+              <ion-button size="default" title="Salvar" expand="block" color="success" type="submit" mode="ios" [disabled]="formModels.status === 'INVALID'">
                 <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Salvar</ion-label>
               </ion-button>
             </ion-col>
 
-            <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formModels.value.editModelId && !formModels.pristine">
-              <ion-button size="default" expand="block" title="Limpar" color="medium" type="button" (click)="showConfirmAlert('limpar', formModels.value)">
+            <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formModels.value.editModelId && (!formModels.pristine || getGenAsArray().length)">
+              <ion-button size="default" expand="block" title="Limpar" color="medium" type="button" mode="ios" (click)="showConfirmAlert('limpar', formModels.value)">
                 <ion-icon name="backspace-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Limpar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formModels.value.editModelId">
-              <ion-button size="default" title="Descartar" expand="block" color="danger" type="button" (click)="showConfirmAlert('descartar', formModels.value)">
+              <ion-button size="default" title="Descartar" expand="block" color="danger" type="button" mode="ios" (click)="showConfirmAlert('descartar', formModels.value)">
                 <ion-icon name="close-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Descartar</ion-label>
               </ion-button>
@@ -118,18 +152,33 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Modelos de carros {{models ? '('+models.length+')' : ''}}</h1></ion-col>
-        </ion-row>
+          <ion-col size-md="8" size-sm="6" size-xs="12">
+            <h1>Modelos de carros {{finalModels ? '('+finalModels.length+')' : ''}}</h1>
+          </ion-col>
 
-        <ion-row *ngIf="!models" class="grid-content">
-          <ion-col style="text-align: center; margin: 2rem 0">
-            <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
-            <br>
-            <ion-label color="medium">Não há nada por aqui ainda!</ion-label>
+          <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-item class="input-item">
+              <ion-label position="floating">Filtrar por marca</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByBrand($event)" [value]="'nothing'">
+                <ion-select-option value="nothing">Nenhuma</ion-select-option>
+                <ion-select-option value="">Todas</ion-select-option>
+                <ion-select-option *ngFor="let brand of brands" [value]="brand._id">{{ brand.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="models">
+        <ion-row><ion-col><br></ion-col></ion-row>
+
+        <ion-row *ngIf="!finalModels || (finalModels && !finalModels.length)" class="grid-content">
+          <ion-col style="text-align: center; margin: 2rem 0">
+            <ion-icon name="happy-outline" color="medium" size="large"></ion-icon>
+            <br>
+            <ion-label color="medium">Nada de novo por aqui ainda!</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div class="table-container" *ngIf="finalModels && finalModels.length">
           <table>
             <tr>
               <th>Ativo</th>
@@ -138,8 +187,7 @@
               <th>Marca</th>
               <th>Nome</th>
               <th>Categoria</th>
-              <th>Ano início</th>
-              <th>Ano fim</th>
+              <th>Gerações</th>
               <th>URL</th>
               <th>Média</th>
               <th>Qtd opiniões</th>
@@ -150,7 +198,7 @@
               <th>Ação</th>
             </tr>
 
-            <tr *ngFor="let model of models" [ngClass]="{'pending-review': model.review }">
+            <tr *ngFor="let model of finalModels" [ngClass]="{'pending-review': model.review }">
               <td>
                 <ion-icon *ngIf="model.active" size="large" color="success" name="checkmark-circle"></ion-icon>
                 <ion-icon *ngIf="!model.active" size="large" color="danger" name="close-circle"></ion-icon>
@@ -163,8 +211,7 @@
               <td>{{model.brand?.name}}</td>
               <td>{{model.name}}</td>
               <td>{{model.category?.name || '-'}}</td>
-              <td>{{model.yearStart}}</td>
-              <td>{{model.yearEnd}}</td>
+              <td>{{model.generations}}</td>
               <td>{{model.url}}</td>
               <td>{{model.average.toFixed(4)}}</td>
               <td>{{model.val_length}}</td>
@@ -173,16 +220,19 @@
               <td>{{model.modified || '-'}}</td>
               <td>{{(model.modified_by?.name ? model.modified_by?.name : model.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editModel(model)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" mode="ios" (click)="editModel(model)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
-                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', model)">
+                <ion-button size="small" title="Excluir" expand="block" color="danger" mode="ios" (click)="showConfirmAlert('excluir', model)">
                   <ion-icon name="trash-outline"></ion-icon>
                 </ion-button>
               </td>
             </tr>
           </table>
         </div>
+
+        <ion-row><ion-col><br></ion-col></ion-row>
+        <ion-row><ion-col><br></ion-col></ion-row>
       </ion-grid>
     </div>
 

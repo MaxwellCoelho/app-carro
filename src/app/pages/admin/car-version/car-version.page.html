@@ -36,7 +36,7 @@
             </ion-col>
 
             <ion-col size-md="4" size-sm="4" size-xs="12">
-              <ion-item class="input-item">
+              <ion-item>
                 <ion-label position="floating">Combustível</ion-label>
                 <ion-select interface="popover" formControlName="newVersionFuel">
                   <ion-select-option *ngFor="let fuel of fuels" value="{{fuel.value}}">{{fuel.name}}</ion-select-option>
@@ -45,62 +45,49 @@
             </ion-col>
 
             <ion-col size-md="4" size-sm="4" size-xs="12">
-              <ion-item class="input-item">
-                <ion-label position="floating">Anos versão</ion-label>
-                <ion-input type="text" formControlName="newVersionYearModel"
-                  placeholder="Ex: 2015,2016,2017"></ion-input>
+              <ion-item>
+                <ion-label position="floating">Motor</ion-label>
+                <ion-input type="text" pattern="[0-9]{3} || [0-9]{1}[\.]?[0-9]{1}"
+                  minlength="2" maxlength="3" formControlName="newVersionEngine"
+                  placeholder="Ex: 1.6"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
-            <ion-col size-md="2" size-sm="2" size-xs="12">
-              <ion-item class="input-item">
-                <ion-label position="floating">Motor</ion-label>
-                <ion-input type="text" pattern="[0-9]{1}[\.]?[0-9]{1}" minlength="3" maxlength="3" formControlName="newVersionEngine"
-                  placeholder="Ex: 1.6"></ion-input>
+            <ion-col size-md="8" size-sm="7" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Detalhes da versão</ion-label>
+                <ion-input type="text" formControlName="newVersionComplement" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col size-md="4" size-sm="4" size-xs="12">
-              <ion-item class="input-item">
+            <ion-col size-md="4" size-sm="5" size-xs="12">
+              <ion-item>
                 <ion-label position="floating">Câmbio</ion-label>
                 <ion-select interface="popover" formControlName="newVersionGearbox">
                   <ion-select-option *ngFor="let gearbox of gearboxes" value="{{gearbox.value}}">{{gearbox.name}}</ion-select-option>
                 </ion-select>
               </ion-item>
             </ion-col>
-
-            <ion-col size-md="6" size-sm="6" size-xs="12">
-              <ion-item class="input-item">
-                <ion-label position="floating">Detalhes da versão</ion-label>
-                <ion-input type="text" formControlName="newVersionComplement" (ionInput)="utils.capitalize($event)" placeholder="Ex: 16V, Turbo, 4x4, AWD, V8"></ion-input>
-              </ion-item>
-            </ion-col>
           </ion-row>
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
-            <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-col size-md="6" size-sm="12" size-xs="12">
               <ion-item>
-                <ion-label position="floating">Imagem</ion-label>
-                <ion-input type="text" formControlName="newVersionImage"></ion-input>
+                <ion-label position="floating">Anos versão</ion-label>
+                <ion-input type="text" formControlName="newVersionYearModel"
+                  placeholder="Ex: 2015,2016,2017"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col size-md="4" size-sm="6" size-xs="12">
-              <ion-item>
-                <ion-label position="floating">Thumbnail</ion-label>
-                <ion-input type="text" formControlName="newVersionThumb"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size-md="2" size-sm="6" size-xs="6">
+            <ion-col size-md="3" size-sm="6" size-xs="6">
               <ion-item lines="none" color="none">
                 <ion-label>Ativo</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="activeChecked"  [ngModelOptions]="{standalone: true}"></ion-toggle>
               </ion-item>
             </ion-col>
-            <ion-col size-md="2" size-sm="6" size-xs="6">
+            <ion-col size-md="3" size-sm="6" size-xs="6">
               <ion-item lines="none" color="none">
                 <ion-label>Revisão</ion-label>
                 <ion-toggle color="primary" [(ngModel)]="pendingReview"  [ngModelOptions]="{standalone: true}"></ion-toggle>
@@ -110,28 +97,28 @@
 
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formVersions.value.editVersionId }">
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formVersions.value.editVersionId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formVersions.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formVersions.status === 'INVALID'">
                 <ion-icon name="add-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formVersions.value.editVersionId">
-              <ion-button size="default" title="Criar" expand="block" color="success" type="submit" [disabled]="formVersions.status === 'INVALID'">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formVersions.status === 'INVALID'">
                 <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Salvar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formVersions.value.editVersionId && !formVersions.pristine">
-              <ion-button size="default" title="Limpar" expand="block" color="medium" type="button" (click)="showConfirmAlert('limpar', formVersions.value)">
+              <ion-button size="default" title="Limpar" expand="block" color="medium" mode="ios" type="button" (click)="showConfirmAlert('limpar', formVersions.value)">
                 <ion-icon name="backspace-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Limpar</ion-label>
               </ion-button>
             </ion-col>
 
             <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formVersions.value.editVersionId">
-              <ion-button size="default" title="Descartar" expand="block" color="danger" type="button" (click)="showConfirmAlert('descartar', formVersions.value)">
+              <ion-button size="default" title="Descartar" expand="block" color="danger" mode="ios" type="button" (click)="showConfirmAlert('descartar', formVersions.value)">
                 <ion-icon name="close-circle-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Descartar</ion-label>
               </ion-button>
@@ -142,18 +129,33 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Versões de carro {{versions ? '('+versions.length+')' : ''}}</h1></ion-col>
-        </ion-row>
+          <ion-col size-md="8" size-sm="6" size-xs="12">
+            <h1>Versões de carro {{finalVersions ? '('+finalVersions.length+')' : ''}}</h1>
+          </ion-col>
 
-        <ion-row *ngIf="!versions" class="grid-content">
-          <ion-col style="text-align: center; margin: 2rem 0">
-            <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
-            <br>
-            <ion-label color="medium">Não há nada por aqui ainda!</ion-label>
+          <ion-col size-md="4" size-sm="6" size-xs="12">
+            <ion-item class="input-item">
+              <ion-label position="floating">Filtrar por modelo</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByModel($event)" [value]="'nothing'">
+                <ion-select-option value="nothing">Nenhum</ion-select-option>
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option *ngFor="let model of models" [value]="model._id">{{ model.brand?.name }} {{ model.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="versions">
+        <ion-row><ion-col><br></ion-col></ion-row>
+
+        <ion-row *ngIf="!finalVersions || (finalVersions && !finalVersions.length)" class="grid-content">
+          <ion-col style="text-align: center; margin: 2rem 0">
+            <ion-icon name="happy-outline" color="medium" size="large"></ion-icon>
+            <br>
+            <ion-label color="medium">Nada de novo por aqui ainda!</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div class="table-container" *ngIf="finalVersions && finalVersions.length">
           <table>
             <tr>
               <th>Ativo</th>
@@ -165,8 +167,6 @@
               <th>Câmbio</th>
               <th>Combustível</th>
               <th>Anos versão</th>
-              <th>Imagem</th>
-              <th>Thumbnail</th>
               <th>Criado em</th>
               <th>Criado por</th>
               <th>Modificado em</th>
@@ -174,7 +174,7 @@
               <th>Ação</th>
             </tr>
 
-            <tr *ngFor="let version of versions" [ngClass]="{'pending-review': version.review }">
+            <tr *ngFor="let version of finalVersions" [ngClass]="{'pending-review': version.review }">
               <td>
                 <ion-icon *ngIf="version.active" size="large" color="success" name="checkmark-circle"></ion-icon>
                 <ion-icon *ngIf="!version.active" size="large" color="danger" name="close-circle"></ion-icon>
@@ -185,28 +185,29 @@
               </td>
               <td>{{version._id}}</td>
               <td>{{version.model?.brand?.name}} {{version.model?.name}}</td>
-              <td>{{version.engine?.toFixed(1)}}</td>
+              <td>{{utils.sanitizeText(version?.fuel) === 'el-trico' ? version.engine + ' kW' : version.engine?.toFixed(1)}}</td>
               <td>{{version.complement}}</td>
               <td>{{version.gearbox}}</td>
               <td>{{version.fuel}}</td>
               <td>{{version.years}}</td>
-              <td>{{version.image}}</td>
-              <td>{{version.thumb}}</td>
               <td>{{version.created || '-'}}</td>
               <td>{{(version.created_by?.name ? version.created_by.name  : version.created_by) || '-'}}</td>
               <td>{{version.modified || '-'}}</td>
               <td>{{(version.modified_by?.name ? version.modified_by?.name : version.modified_by) || '-'}}</td>
               <td style="display: flex">
-                <ion-button size="small" title="Editar" expand="block" color="warning" (click)="editVersion(version)">
+                <ion-button size="small" title="Editar" expand="block" color="warning" mode="ios" (click)="editVersion(version)">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
-                <ion-button size="small" title="Excluir" expand="block" color="danger" (click)="showConfirmAlert('excluir', version)">
+                <ion-button size="small" title="Excluir" expand="block" color="danger" mode="ios" (click)="showConfirmAlert('excluir', version)">
                   <ion-icon name="trash-outline"></ion-icon>
                 </ion-button>
               </td>
             </tr>
           </table>
         </div>
+
+        <ion-row><ion-col><br></ion-col></ion-row>
+        <ion-row><ion-col><br></ion-col></ion-row>
       </ion-grid>
     </div>
 

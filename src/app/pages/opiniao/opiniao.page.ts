@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
-import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { NAVIGATION, DISCLAIMER } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
@@ -21,6 +22,7 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
 export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
+  public disclaimer = DISCLAIMER;
   public selectedModel: object;
   public modelOpinions: object;
   public showLoader: boolean;
@@ -51,6 +53,9 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public ionViewWillEnter(): void {
+    if (this.selectedModel) {
+      this.setPageTitle();
+    }
     if (this.utils.getShouldUpdate('opinions')) {
       this.utils.setShouldUpdate(['opinions'], false);
       this.selectedModel = null;
@@ -66,10 +71,15 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     }
   }
 
+  public setPageTitle() {
+    this.utils.setPageTitle(`${this.selectedModel['brand'].name} ${this.selectedModel['name']}`, `Opiniões reais e sincera dos donos de ${this.selectedModel['brand'].name} ${this.selectedModel['name']}.`, `${this.selectedModel['brand'].name} ${this.selectedModel['name']}, ${this.selectedModel['brand'].name}, ${this.selectedModel['name']}`);
+  }
+
   public loadModelInfo(): void {
     this.selectedModel = this.searchService.getModel();
 
     if (this.selectedModel) {
+      this.setModelImage();
       this.searchService.clearModel();
       this.getModelOpinions();
     } else {
@@ -86,20 +96,11 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        const foundModel = res.models.find(mod => mod.brand.url === urlParams['brand'] && mod.active);
-        if (!foundModel) {
-          this.showErrorToast({status: 404});
-          return;
-        }
-        const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
-        const checkReviewBrand = foundModel && !foundModel.brand.review
-          || (foundModel.brand.review && recoveredReviewBrands.find(item => item['_id'] === foundModel.brand['_id']));
-        const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
-        const checkReviewModel = foundModel && !foundModel.review
-          || (foundModel.review && recoveredReviewModel.find(item => item['_id'] === foundModel['_id']));
+        const foundModel = this.utils.findActiveModel(res.models, urlParams['brand']);
 
-        if (foundModel && checkReviewBrand && checkReviewModel) {
+        if (foundModel) {
           this.selectedModel = foundModel;
+          this.setModelImage();
           this.getModelOpinions();
         } else {
           this.showErrorToast({status: 404});
@@ -111,9 +112,13 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     );
   }
 
+  public setModelImage() {
+    this.selectedModel['img'] = this.utils.getModelImg(this.selectedModel['url'], this.selectedModel['generation']);
+  }
+
   public getModelOpinions(): void {
     this.isFavorite = this.favorite.isFavorite(this.selectedModel);
-    this.utils.setPageTitle(`${this.selectedModel['brand'].name} ${this.selectedModel['name']}`);
+    this.setPageTitle();
     const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
       res => {
@@ -178,7 +183,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public getValuationItemByValue(value: any): any {
-    const int = value ? value.toFixed(1) : 0;
+    const int = value ? value.toFixed(2) : 0;
     const foundVal = this.valuation.filter(val => val.value <= int);
     return foundVal.length ? foundVal[foundVal.length - 1] : VALUATION_NOT_FOUND;
   }

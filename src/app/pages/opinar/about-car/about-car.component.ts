@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { NAVIGATION, DISCLAIMER } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
@@ -25,14 +25,17 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   @Output() aboutCar = new EventEmitter<any>();
   @Output() loadedVersions = new EventEmitter<any>();
   @Output() clickForeward = new EventEmitter<any>();
+  @Output() yearSelected = new EventEmitter<any>();
 
   public nav = NAVIGATION;
+  public disclaimer = DISCLAIMER;
   public fuels = FUEL;
   public gearboxes = GEARBOX;
   public years = [];
   public anotherYear = false;
   public showLoader: boolean;
   public formOpinarCarro: FormGroup;
+  public isElectric = false;
 
   public valuation = VALUATION.slice().filter(val => val.id.includes(' r'));
   public valuationItens = VALUATION_ITENS_CAR.slice();
@@ -89,12 +92,17 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   }
 
   public getYears(): void {
-    const start = parseInt(this.selectedModel['yearStart'], 10);
-    const end = parseInt(this.selectedModel['yearEnd'], 10);
-    const diff = end - start;
+    const generations = this.selectedModel['generation'];
+    if (generations && Object.keys(generations).length) {
+      Object.values(generations).forEach(gen => {
+        const start = parseInt(gen['yearStart'], 10);
+        const end = parseInt(gen['yearEnd'], 10);
+        const diff = end - start;
 
-    for (let i = 0; i <= diff; i++) {
-      this.years.unshift(start + i);
+        for (let i = 0; i <= diff; i++) {
+          this.years.unshift(start + i);
+        }
+      });
     }
   }
 
@@ -149,6 +157,9 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       return;
     }
     const myYear = parseInt(year, 10);
+    if (myYear.toString().length >= 4) {
+      this.yearSelected.emit(myYear);
+    }
     this.carVersionsToShow = this.carVersions.filter(version => version.years.includes(myYear));
     if (!this.carVersionsToShow.length) {
       this.carVersionsToShow = this.carVersions;
@@ -179,7 +190,25 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public changeOpinarMotor($event) {
     const value = $event.detail.value;
 
-    this.opinarMotor = value.toFixed(1);
+    this.opinarMotor = this.formOpinarCarro && this.utils.sanitizeText(this.formOpinarCarro.controls.opinarCombustivel.value) === 'el-trico'
+      ? value : value.toFixed(1);
+  }
+
+  public chooseFuel() {
+    let val: number;
+    const currentEletric = this.isElectric;
+
+    if (this.utils.sanitizeText(this.formOpinarCarro.controls.opinarCombustivel.value) === 'el-trico') {
+      this.isElectric = true;
+      val = 25;
+    } else {
+      this.isElectric = false;
+      val = 1;
+    }
+
+    if (currentEletric !== this.isElectric) {
+      this.changeOpinarMotor({detail: { value: val}});
+    }
   }
 
   public changeOpinarPeriodo($event) {
@@ -225,6 +254,9 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
     const versionComplement = this.formOpinarCarro.value.opinarComplemento;
     const selectedGearBox = this.formOpinarCarro.value.opinarCambio;
     const selectedYearModel =  this.formOpinarCarro.value.opinarAnoModelo;
+    const choosenVersion = selectedCarVersion !== 'anotherVersion'
+      ? this.carVersions.find(v => v['_id'] === selectedCarVersion)
+      : selectedCarVersion;
 
     const aboutCarData = {
       carBrand: {
@@ -234,11 +266,12 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
         active: this.selectedModel['brand']['active'],
         review: this.selectedModel['brand']['review']
       },
-      carVersion: selectedCarVersion,
+      carVersion: choosenVersion,
       carModel: {
         _id: this.selectedModel['_id'],
         name: this.selectedModel['name'],
         url: this.selectedModel['url'],
+        generation: this.selectedModel['generation'],
         active: this.selectedModel['active'],
         review: this.selectedModel['review']
       },
@@ -260,18 +293,17 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
       }
     };
 
-    const choosenVersion = selectedCarVersion ? this.carVersions.find(v => v['_id'] === selectedCarVersion.value) : null;
-    this.aboutCar.emit({aboutCar: aboutCarData, years: choosenVersion ? choosenVersion.years : []});
+    this.aboutCar.emit({aboutCar: aboutCarData, years: selectedCarVersion !== 'anotherVersion' ? choosenVersion.years : []});
     this.loadedVersions.emit(this.carVersions);
   }
 
   public autoFillInfo() {
     if (this.autoFill) {
-      this.formOpinarCarro.controls.opinarVersao.patchValue(this.autoFill['carVersion']);
-      this.chooseVersion();
-
       this.formOpinarCarro.controls.opinarAnoModelo.patchValue(this.autoFill['yearModel']);
       this.chooseYear(this.autoFill['yearModel']);
+
+      this.formOpinarCarro.controls.opinarVersao.patchValue(this.autoFill['carVersion']['_id']);
+      this.chooseVersion();
 
       if (this.newVersion) {
         this.formOpinarCarro.controls.opinarCombustivel.patchValue(this.autoFill['fuel']);
