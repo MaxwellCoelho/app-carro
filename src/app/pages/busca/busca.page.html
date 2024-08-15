@@ -11,8 +11,8 @@
       <h1 class="form-title" *ngIf="!selectedBrand && !otherBrand">Primeiro escolha uma das marca listadas abaixo ou digite no campo de busca.</h1>
       <ion-searchbar *ngIf="!selectedBrand && !otherBrand" mode="ios" placeholder="Digite o nome da marca" (ionInput)="searchBrandInput($event)"></ion-searchbar>
 
-      <ion-list *ngIf="!selectedBrand && !otherBrand">
-        <ion-item *ngIf="!filteredBrands?.length && !showLoader" lines="none">
+      <ion-list *ngIf="!selectedBrand && !otherBrand" class="brand-list">
+        <ion-item *ngIf="filteredBrands && !filteredBrands?.length && !showLoader" lines="none">
           <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">A marca que você procura ainda não existe em nossa base.</ion-label>
@@ -42,8 +42,8 @@
       </h1>
       <ion-searchbar *ngIf="selectedBrand  && !otherModel" mode="ios" placeholder="Digite o nome do modelo" (ionInput)="searchModelInput($event)"></ion-searchbar>
 
-      <ion-list *ngIf="selectedBrand  && !otherModel">
-        <ion-item *ngIf="!filteredModels?.length && !showLoader" lines="none">
+      <ion-list *ngIf="selectedBrand  && !otherModel" class="model-list">
+        <ion-item *ngIf="filteredModels && !filteredModels?.length && !showLoader" lines="none">
           <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">O modelo que você procura ainda não existe em nossa base.</ion-label>

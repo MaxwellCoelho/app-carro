@@ -101,7 +101,7 @@
       </ion-grid>
     </div>
 
-    <ion-grid slot="content" *ngIf="!selectedModel" style="margin-top: 1rem">
+    <ion-grid slot="content" *ngIf="loadedModel && !selectedModel" style="margin-top: 1rem">
       <ion-row class="success-container">
         <ion-col size-lg="5" size-md="5" size-sm="12" size-xs="12" class="col-model">
           <ion-item lines="none" class="model-image-container">
@@ -117,8 +117,8 @@
             <ion-col size-lg="9.5" size-md="9" size-sm="9" size-xs="12" class="sent-item-text">
               <ion-label class="ion-text-wrap">
                 <h1 class="form-title">
-                  <span class="warning">Atenção!</span>
-                  <br>O modelo de carro que você procura não existe ou foi removido!
+                  <span class="warning">Oops...</span>
+                  <br>Parece que o modelo de carro que você procura não existe ou foi removido!
                 </h1>
               </ion-label>
             </ion-col>

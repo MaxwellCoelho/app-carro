@@ -19,10 +19,10 @@ import { Router, ActivatedRoute, NavigationExtras, ParamMap } from '@angular/rou
 export class BuscaPage implements ViewWillEnter {
 
   public nav = NAVIGATION;
-  public filteredBrands = [];
+  public filteredBrands = null;
   public selectedBrand: object;
   public models = [];
-  public filteredModels = [];
+  public filteredModels = null;
   public selectedModel: object;
   public showLoader: boolean;
   public otherBrand = false;
@@ -45,9 +45,9 @@ export class BuscaPage implements ViewWillEnter {
   public ionViewWillEnter(): void {
     this.setInitialTitle();
 
-    this.filteredBrands = [];
+    this.filteredBrands = null;
     this.selectedBrand = null;
-    this.filteredModels = [];
+    this.filteredModels = null;
     this.selectedModel = null;
     this.models = [];
 

@@ -25,6 +25,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
 
   public nav = NAVIGATION;
   public selectedModel: object;
+  public loadedModel = false;
   public showLoader: boolean;
   public finalPayload = {};
   public currentStep = 1;
@@ -104,6 +105,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
           this.selectedModel = foundModel;
           this.setModelImage();
           this.showLoader = false;
+          this.loadedModel = true;
           this.loadFinalPayload();
         } else {
           this.showErrorToast({status: 404});
@@ -161,6 +163,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
     }
 
     this.showLoader = false;
+    this.loadedModel = true;
     console.error(err);
 
     if (err.status !== 404) {

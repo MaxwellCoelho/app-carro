@@ -26,6 +26,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   public selectedModel: object;
   public modelOpinions: object;
   public showLoader: boolean;
+  public loadedModelAndOpinions = false;
   public modelAverage: object;
 
   public valuation = VALUATION.slice();
@@ -131,6 +132,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
         this.setModelAverages(res.averages);
         this.setOpinionValuation();
         this.showLoader = false;
+        this.loadedModelAndOpinions = true;
         this.page++;
       },
       err => {
@@ -218,6 +220,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     }
 
     this.showLoader = false;
+    this.loadedModelAndOpinions = true;
     console.error(err);
 
     // this.toastController.create({
