@@ -2,24 +2,24 @@
   <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
-    <ion-title size="large" color="primary" class="main-title garage">
+    <ion-title size="large" color="primary" class="main-title garage" *ngIf="userData">
       <ion-icon [name]="nav.garage.icon + '-outline'" color="secondary"></ion-icon>
-      <ion-label>{{nav.garage.title}}</ion-label>
+      <ion-label>{{userData?.role ? 'Minha ' + nav.garage.title : nav.garage.title + ' do '}}<strong *ngIf="!userData?.role">{{userData?.name}}</strong></ion-label>
     </ion-title>
 
-    <div class="personal-data">
+    <div class="personal-data" *ngIf="userData?.role">
       <ion-row>
-        <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar" *ngIf="utils.sessionUser">
+        <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar">
           <ion-icon name="person-circle-outline" color="dark"></ion-icon>
         </ion-col>
 
-        <ion-col size-lg="5.2" size-md="4" size-sm="10.5" size-xs="9.5" class="customer-info" *ngIf="utils.sessionUser">
-          <ion-label color="dark" class="item-title"><p><strong>{{utils.sessionUser.name}}</strong></p></ion-label>
-          <ion-label class="ion-text-wrap"><p>{{utils.sessionUser.email}}</p></ion-label>
-          <ion-label class="ion-text-wrap" *ngIf="utils.sessionUser.created"><p class="member">Membro desde {{utils.sessionUser.created.split(' ')[0]}}</p></ion-label>
+        <ion-col size-lg="5.2" size-md="4" size-sm="10.5" size-xs="9.5" class="customer-info">
+          <ion-label color="dark" class="item-title"><p><strong>{{userData.name}}</strong></p></ion-label>
+          <ion-label class="ion-text-wrap" *ngIf="userData.email"><p>{{userData.email}}</p></ion-label>
+          <ion-label class="ion-text-wrap" *ngIf="userData.created"><p class="member">Membro desde {{userData.created.split(' ')[0]}}</p></ion-label>
         </ion-col>
 
-        <ion-col size-lg="6" size-md="7" size-sm="12" size-xs="12" class="column-div">
+        <ion-col size-lg="6" size-md="7" size-sm="12" size-xs="12" class="column-div" *ngIf="userData.role">
           <ion-grid style="padding: 0">
             <ion-row>
               <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3">
@@ -40,7 +40,7 @@
                 </ion-card>
               </ion-col>
 
-              <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3" *ngIf="utils.sessionUser && utils.sessionUser.role?.level <= 1">
+              <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3" *ngIf="userData.role?.level <= 1">
                 <ion-card color="primary" [routerLink]="'/' + nav.admin.route">
                   <ion-card-header>
                     <ion-icon size="small" [name]="nav.admin.icon"></ion-icon>
@@ -87,11 +87,26 @@
           <ion-col size-md="12" size-sm="12" size-xs="12">
             <ion-chip title="Opinar" color="primary" (click)="clickMyOpinion(car)">
               <ion-icon [name]="'ribbon'"></ion-icon>
-              <ion-label><strong>{{car.car_val_average.toFixed(2)}}</strong> - Minha opinião</ion-label>
+              <ion-label *ngIf="userData?.role"><strong>{{car.car_val_average.toFixed(2)}}</strong> - Minha opinião</ion-label>
+              <ion-label *ngIf="!userData?.role"><strong>{{car.car_val_average.toFixed(2)}}</strong> - Opinião do {{userData?.name.split(' ')[0]}}</ion-label>
             </ion-chip>
           </ion-col>
 
-          <ion-col size-md="12" size-sm="12" size-xs="12">
+          <ion-col size-md="6" size-sm="6" size-xs="12" *ngIf="!userData?.role">
+            <ion-chip outline title="Opinar" color="primary" (click)="clickCarItem('opinar', car.model.brand?.url, car.model.url)">
+              <ion-icon [name]="'paper-plane-outline'"></ion-icon>
+              <ion-label>Opinar</ion-label>
+            </ion-chip>
+          </ion-col>
+
+          <ion-col size-md="6" size-sm="6" size-xs="12" *ngIf="!userData?.role">
+            <ion-chip outline title="Opiniões" color="primary" (click)="clickCarItem('opiniao', car.model.brand?.url, car.model.url)">
+              <ion-icon [name]="'reader-outline'"></ion-icon>
+              <ion-label>Opiniões</ion-label>
+            </ion-chip>
+          </ion-col>
+
+          <ion-col size-md="12" size-sm="12" size-xs="12" *ngIf="userData?.role">
             <ion-chip outline title="Ver opiniões" color="primary" (click)="clickCarItem('opiniao', car.model.brand?.url, car.model.url)">
               <ion-icon [name]="'reader-outline'"></ion-icon>
               <ion-label>Todas as opiniões</ion-label>
@@ -99,7 +114,7 @@
           </ion-col>
         </ion-row>
       </div>
-      <div class="car">
+      <div class="car" *ngIf="userData?.role">
         <div class="other-models">
           <ion-col size-md="12" size-sm="12" size-xs="12">
             <ion-row>
@@ -133,15 +148,67 @@
         </div>
       </div>
     </div>
+
+    <ion-title size="large" color="primary" class="main-title garage" *ngIf="loadedOpinions && !userData">
+      <ion-icon [name]="nav.garage.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.garage.title}}</ion-label>
+    </ion-title>
+
+    <ion-grid slot="content" *ngIf="loadedOpinions && !userData" style="margin-top: 1rem">
+      <ion-row class="success-container">
+        <ion-col size-lg="5" size-md="5" size-sm="12" size-xs="12" class="col-model">
+          <ion-item lines="none" class="model-image-container">
+            <img src="assets/models/model-404.png" title="Modelo não encontrado" alt="Modelo não encontrado" class="model-image">
+          </ion-item>
+        </ion-col>
+
+        <ion-col size-lg="7" size-md="7" size-sm="12" size-xs="12" class="col-congrats">
+          <ion-row>
+            <ion-col size-lg="2.5" size-md="3" size-sm="3" size-xs="12" class="sent-item-icon">
+              <ion-icon name="warning-outline" color="secondary" size="large"></ion-icon>
+            </ion-col>
+            <ion-col size-lg="9.5" size-md="9" size-sm="9" size-xs="12" class="sent-item-text">
+              <ion-label class="ion-text-wrap">
+                <h1 class="form-title">
+                  <span class="warning">Oops...</span>
+                  <br>Parece que o usuário que você procura não existe ou foi removido!
+                </h1>
+              </ion-label>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="suggestions">
+            <ion-col size-lg="9.5" size-lg="2.5" size-md="3" size-sm="12" size-xs="12"></ion-col>
+
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-chip title="Outras opiniões" mode="ios" color="primary" (click)="goSearch()">
+                <ion-icon [name]="nav.search.icon + '-outline'"></ion-icon>
+                <ion-label>Outras opiniões</ion-label>
+              </ion-chip>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 
   <ion-modal [isOpen]="!!modalContent">
     <ng-template>
         <ion-toolbar>
+          <div class="car-image-modal">
+            <img src="assets/models/{{modalContent.model.brand?.url}}/{{modalContent.model.url}}/{{modalContent.img}}"
+              title="{{modalContent.model.brand?.name + ' ' + modalContent.model.name}}" alt="{{modalContent.model.brand?.name + ' ' + modalContent.model.name}}"
+              onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'">
+          </div>
+          <div class="car-name modal">
+            <img src="assets/brands/{{modalContent.model.brand?.url}}.svg" title="{{modalContent.model.brand?.name}}" alt="{{modalContent.model.brand?.name}}"
+            onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'">
+            <span>{{modalContent.model.brand?.name}}</span> <strong>{{modalContent.model.name}}</strong>
+          </div>
           <ion-buttons slot="end" >
-            <ion-chip title="Fechar" color="primary" (click)="closeModal()" style="border: 1px solid rgba(27, 117, 187, 0.32); margin: 1rem 1rem 0 0;">
-              <ion-icon [name]="'close-outline'"></ion-icon>
-              <ion-label >Fechar</ion-label>
+            <ion-chip title="Fechar" color="primary" (click)="closeModal()" style="border: 1px solid rgba(27, 117, 187, 0.32); margin: 0.5rem 1rem 0 0;">
+              <ion-icon [name]="'close-outline'" style="margin: 0"></ion-icon>
+              <!-- <ion-label >Fechar</ion-label> -->
             </ion-chip>
           </ion-buttons>
         </ion-toolbar>

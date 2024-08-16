@@ -28,6 +28,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
+    path: `${NAVIGATION.garage.route}/:usuario`,
+    loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
+  },
+  {
     path: NAVIGATION.term.route,
     loadChildren: () => import('./pages/termo-de-uso/termo-de-uso.module').then( m => m.TermoDeUsoPageModule)
   },

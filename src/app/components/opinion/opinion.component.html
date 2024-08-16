@@ -30,7 +30,7 @@
   </ion-row>
 
   <ion-title size="large" color="dark" class="car-info">
-    <div>
+    <div class="user-link" (click)="goToUserGarage(opinion.created_by?.url)" [title]="'Ver garagem de ' + opinion.created_by?.name">
       <ion-label class="ion-text-wrap customer-name mobile">
         <ion-icon size="large" [name]="'person-circle-outline'" color="dark"></ion-icon>
         <strong class="">{{opinion.created_by?.name?.split(' ')[0]}}</strong> <span>{{opinion.created?.split(' ')[0]}}</span>

@@ -9,7 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, AlertController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
-import { NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 import { SearchService } from 'src/app/services/search/search.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -35,6 +35,8 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public currentPasswordType = 'password';
   public newPasswordType = 'password';
   public repeatNewPasswordType = 'password';
+  public userData: object;
+  public loadedOpinions = false;
 
   constructor(
     public utils: UtilsService,
@@ -44,13 +46,14 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     public alertController: AlertController,
     public cryptoService: CryptoService,
     public router: Router,
+    public route: ActivatedRoute,
     public searchService: SearchService,
     public fb: FormBuilder,
   ) {}
 
   public ngOnInit(): void {
     if (!this.utils.getShouldUpdate('opinions')) {
-      this.getModelOpinions();
+      this.checkUser();
     }
   }
 
@@ -59,11 +62,8 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     if (this.utils.getShouldUpdate('opinions')) {
       this.utils.setShouldUpdate(['opinions'], false);
       this.myModelOpinions = [];
-      this.getModelOpinions();
+      this.checkUser();
     }
-
-    this.getBrands();
-    this.initForm();
   }
 
   public initForm() {
@@ -72,6 +72,33 @@ export class GaragemPage implements OnInit, ViewWillEnter {
       newPassword: this.fb.control('', [Validators.required, Validators.minLength(4)]),
       repeatNewPassword: this.fb.control('', [Validators.required, Validators.minLength(4)])
     });
+  }
+
+  public getUrlParams(): string {
+    let userParam;
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      userParam = params.get('usuario');
+    });
+
+    return userParam;
+  }
+
+  public checkUser(): void {
+    const searchUser = this.getUrlParams();
+
+    if (searchUser) {
+      this.getModelOpinions(searchUser);
+    } else {
+      if (this.utils.sessionUser) {
+        this.userData = this.utils.sessionUser;
+        this.getModelOpinions();
+        this.getBrands();
+        this.initForm();
+      } else {
+        this.router.navigate([`/${this.nav.login.route}`]);
+      }
+    }
   }
 
   public logoutUser() {
@@ -195,9 +222,9 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     );
   }
 
-  public getModelOpinions(): void {
+  public getModelOpinions(userUrl?: string): void {
     this.showLoader = true;
-    const myFilter = { ['created_by._id']: this.utils.sessionUser['_id'] };
+    const myFilter = userUrl ? { ['created_by.url']: userUrl } : { ['created_by._id']: this.utils.sessionUser['_id'] };
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
     const subModels = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData).subscribe(
       res => {
@@ -208,6 +235,13 @@ export class GaragemPage implements OnInit, ViewWillEnter {
           model.img = this.utils.getModelImg(model.model.url, model.model.generation, model.year_model);
         });
 
+        if (this.myModelOpinions.length && userUrl) {
+          this.userData = {
+            name: this.myModelOpinions[0].created_by.name
+          };
+        }
+
+        this.loadedOpinions = true;
         this.showLoader = false;
       },
       err => {
@@ -230,6 +264,7 @@ export class GaragemPage implements OnInit, ViewWillEnter {
         response = GENERIC;
     }
 
+    this.loadedOpinions = true;
     this.showLoader = false;
     console.error(err);
 
@@ -375,5 +410,9 @@ export class GaragemPage implements OnInit, ViewWillEnter {
 
     this.selectedModel = null;
     this.selectedBrand = null;
+  }
+
+  public goSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
   }
 }

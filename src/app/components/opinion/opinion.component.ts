@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
   selector: 'app-opinion',
@@ -13,7 +15,8 @@ export class OpinionComponent implements OnInit, AfterViewInit {
   @Input() expanded = true;
 
   constructor(
-    public utils: UtilsService
+    public utils: UtilsService,
+    public router: Router,
   ) { }
 
   ngOnInit() { }
@@ -27,5 +30,11 @@ export class OpinionComponent implements OnInit, AfterViewInit {
   public expandDetials(opinionId: string): void {
     document.getElementById(opinionId).querySelector('.details').classList.add('expand-details');
     document.getElementById(opinionId).querySelector('.details-button').classList.add('hide-button');
+  }
+
+  public goToUserGarage(userUrl: string) {
+    if (userUrl) {
+      this.router.navigate([`${NAVIGATION.garage.route}/${userUrl}`]);
+    }
   }
 }

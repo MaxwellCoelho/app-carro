@@ -125,10 +125,12 @@
           </ion-row>
 
           <ion-row class="suggestions">
+            <ion-col size-lg="9.5" size-lg="2.5" size-md="3" size-sm="12" size-xs="12"></ion-col>
+
             <ion-col size-md="6" size-sm="12" size-xs="12">
-              <ion-chip title="Buscar outro modelo" mode="ios" color="primary" (click)="goSearch()">
-                <ion-icon name="search-outline"></ion-icon>
-                <ion-label>Buscar outro modelo</ion-label>
+              <ion-chip title="Outras opiniões" mode="ios" color="primary" (click)="goSearch()">
+                <ion-icon [name]="nav.search.icon + '-outline'"></ion-icon>
+                <ion-label>Outras opiniões</ion-label>
               </ion-chip>
             </ion-col>
           </ion-row>
