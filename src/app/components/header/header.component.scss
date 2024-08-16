@@ -21,15 +21,15 @@
     border-right: 1px dashed var(--ion-color-primary-tint);
     padding-right: 0.25rem;
 
-    // &:nth-last-child(-n+2) {
-    //   border-right: 0px;
-    // }
-
-    @media (max-width: 880px) {
-      ion-icon {
-        display: none;
+    &:not(:nth-last-child(-n+2)) {
+      @media (max-width: 880px) {
+        ion-icon {
+          display: none;
+        }
       }
     }
+
+
   }
 
   ion-toolbar {

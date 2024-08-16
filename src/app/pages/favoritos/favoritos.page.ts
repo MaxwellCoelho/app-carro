@@ -88,7 +88,7 @@ export class FavoritosPage implements ViewWillEnter {
       message: `${car['brand']['name']} ${car['name']} removido com sucesso!`,
       duration: 4000,
       position: 'middle',
-      icon: 'heart-outline',
+      icon: `${this.nav.favorite.icon}-outline`,
       color: 'success'
     }).then(toast => {
       toast.present();

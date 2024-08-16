@@ -395,7 +395,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
       message: `${this.selectedModel['brand']['name']} ${this.selectedModel['name']} ${type} com sucesso!`,
       duration: 4000,
       position: 'middle',
-      icon: type === 'adicionado' ? 'heart' : 'heart-outline',
+      icon: type === 'adicionado' ? this.nav.favorite.icon : `${this.nav.favorite.icon}-outline`,
       color: 'success'
     }).then(toast => {
       toast.present();

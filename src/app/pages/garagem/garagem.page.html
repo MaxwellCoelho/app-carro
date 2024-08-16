@@ -7,6 +7,62 @@
       <ion-label>{{nav.garage.title}}</ion-label>
     </ion-title>
 
+    <div class="personal-data">
+      <ion-row>
+        <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar" *ngIf="utils.sessionUser">
+          <ion-icon name="person-circle-outline" color="dark"></ion-icon>
+        </ion-col>
+
+        <ion-col size-lg="5.2" size-md="4" size-sm="10.5" size-xs="9.5" class="customer-info" *ngIf="utils.sessionUser">
+          <ion-label color="dark" class="item-title"><p><strong>{{utils.sessionUser.name}}</strong></p></ion-label>
+          <ion-label class="ion-text-wrap"><p>{{utils.sessionUser.email}}</p></ion-label>
+          <ion-label class="ion-text-wrap" *ngIf="utils.sessionUser.created"><p class="member">Membro desde {{utils.sessionUser.created.split(' ')[0]}}</p></ion-label>
+        </ion-col>
+
+        <ion-col size-lg="6" size-md="7" size-sm="12" size-xs="12" class="column-div">
+          <ion-grid style="padding: 0">
+            <ion-row>
+              <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3">
+                <ion-card color="primary" (click)="clickPasswordChange()">
+                  <ion-card-header>
+                    <ion-icon size="small" [name]="'key'"></ion-icon>
+                    <ion-card-title>Senha</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3">
+                <ion-card color="primary" [routerLink]="'/' + nav.favorite.route">
+                  <ion-card-header>
+                    <ion-icon size="small" [name]="nav.favorite.icon"></ion-icon>
+                    <ion-card-title>{{nav.favorite.title}}</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3" *ngIf="utils.sessionUser && utils.sessionUser.role?.level <= 1">
+                <ion-card color="primary" [routerLink]="'/' + nav.admin.route">
+                  <ion-card-header>
+                    <ion-icon size="small" [name]="nav.admin.icon"></ion-icon>
+                    <ion-card-title>{{nav.admin.title}}</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size-lg="3" size-md="3" size-sm="3" size-xs="3">
+                <ion-card color="primary" (click)="showConfirmAlert()">
+                  <ion-card-header>
+                    <ion-icon size="small" [name]="nav.logout.icon"></ion-icon>
+                    <ion-card-title>{{nav.logout.title}}</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </div>
+
     <div class="garage-container">
       <div class="car" *ngFor="let car of myModelOpinions">
         <div class="car-name">
@@ -91,6 +147,80 @@
         </ion-toolbar>
       <ion-content class="ion-padding" *ngIf="modalContent">
         <app-opinion [expanded]="true" [opinions]="[modalContent]"></app-opinion>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="showPasswordChange">
+    <ng-template>
+        <ion-toolbar>
+          <ion-buttons slot="end" >
+            <ion-chip title="Fechar" color="primary" (click)="closePasswordChange()" style="border: 1px solid rgba(27, 117, 187, 0.32); margin: 1rem 1rem 0 0;">
+              <ion-icon [name]="'close-outline'"></ion-icon>
+              <ion-label >Fechar</ion-label>
+            </ion-chip>
+          </ion-buttons>
+        </ion-toolbar>
+      <ion-content class="ion-padding" *ngIf="showPasswordChange">
+        <ion-row>
+          <ion-col>
+            <h2 style="margin: 0 0.2rem 1rem 0.2rem">Altere sua atual senha de acesso:</h2>
+          </ion-col>
+        </ion-row>
+        <form name="login" [formGroup]="formPassword" (submit)="submitChangePassword()">
+          <ion-row>
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Senha atual</ion-label>
+                <ion-input [type]="currentPasswordType" maxlength="80" formControlName="currentPassword"></ion-input>
+                <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('currentPasswordType')">
+                  <ion-icon slot="icon-only" name="eye{{currentPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formPassword.controls.currentPassword.touched">
+                <span *ngIf="formPassword.controls.currentPassword.errors?.required">Necessário preencher sua senha atual!</span>
+                <span *ngIf="formPassword.controls.currentPassword.errors?.invalid">Senha inválida!</span>
+              </ion-note>
+            </ion-col>
+
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Nova senha</ion-label>
+                <ion-input [type]="newPasswordType" maxlength="80" formControlName="newPassword"></ion-input>
+                <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('newPasswordType')">
+                  <ion-icon slot="icon-only" name="eye{{newPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formPassword.controls.newPassword.touched">
+                <span *ngIf="formPassword.controls.newPassword.errors?.required">Necessário preencher sua nova senha!</span>
+              </ion-note>
+            </ion-col>
+
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-item class="input-item">
+                <ion-label position="floating">Repita a nova senha</ion-label>
+                <ion-input [type]="repeatNewPasswordType" minlength="{{formPassword.controls.newPassword.value?.length}}" maxlength="80" formControlName="repeatNewPassword"></ion-input>
+                <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('repeatNewPasswordType')">
+                  <ion-icon slot="icon-only" name="eye{{repeatNewPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-note color="danger" *ngIf="formPassword.controls.repeatNewPassword.touched">
+                <span *ngIf="formPassword.controls.repeatNewPassword.errors?.required">Necessário repetir sua nova senha!</span>
+              </ion-note>
+              <ion-note color="danger" *ngIf="formPassword.controls.repeatNewPassword.value">
+                <span *ngIf="formPassword.controls.repeatNewPassword.value !== formPassword.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
+              </ion-note>
+            </ion-col>
+
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-button size="default" title="Entrar" expand="block" color="success" type="submit" mode="ios"
+                [disabled]="formPassword.controls.repeatNewPassword.value !== formPassword.controls.newPassword.value || formPassword.status === 'INVALID'">
+                <ion-icon name="key-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Alterar senha</ion-label>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </form>
       </ion-content>
     </ng-template>
   </ion-modal>

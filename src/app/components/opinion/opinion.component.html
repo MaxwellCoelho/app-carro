@@ -64,10 +64,10 @@
 
     <ion-row *ngFor="let item of opinion.valuationItens; let i = index" class="average-row average-small"
       [ngClass]="item.valuation ? item.valuation.id : ''">
-      <ion-col size-md="6" size-sm="6" size-xs="6.5">
+      <ion-col size-md="5" size-sm="6" size-xs="6.5">
         <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
       </ion-col>
-      <ion-col size-md="6" size-sm="6" size-xs="5.5">
+      <ion-col size-md="7" size-sm="6" size-xs="5.5">
         <app-valuation-bar [small]="true" [valuationId]="item.valuation ? item.valuation.id : ''"></app-valuation-bar>
       </ion-col>
       <!-- <ion-col size-md="6" size-sm="7" size-xs="12" class="col-subtitle" [ngStyle]="{'border-bottom-width': i === opinion.valuationItens.length - 1 ? '0px' : '1px'}">

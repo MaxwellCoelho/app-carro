@@ -16,8 +16,8 @@
           </ion-col>
           <ion-col size-lg="8.1" size-md="7.3" size-sm="6.8" size-xs="12" class="model-name">
             <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
-            <ion-icon *ngIf="isFavorite" name="heart" color="secondary" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
-            <ion-icon *ngIf="!isFavorite" name="heart-outline" color="medium" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
+            <ion-icon *ngIf="isFavorite" [name]="nav.favorite.icon" color="secondary" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
+            <ion-icon *ngIf="!isFavorite" [name]="nav.favorite.icon + '-outline'" color="medium" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
           </ion-col>
           <ion-col size-lg="2.5" size-md="3" size-sm="3.7" size-xs="12" class="model-change">
             <ion-chip outline title="Alterar modelo" color="primary" (click)="changeModel()">

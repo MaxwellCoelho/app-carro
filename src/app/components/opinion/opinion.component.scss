@@ -195,6 +195,10 @@
           margin: 5px 0;
         }
       }
+
+      @media (min-width: 800px) {
+        width: 48%;
+      }
     }
 
     .opinion-title {
@@ -258,7 +262,8 @@
 
       &.expand-details {
         height: initial;
-        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+        border-left: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
       }
 
       app-valuation-bar ::ng-deep {
