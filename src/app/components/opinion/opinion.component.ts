@@ -2,7 +2,6 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 
 @Component({
   selector: 'app-opinion',
@@ -13,6 +12,7 @@ export class OpinionComponent implements OnInit, AfterViewInit {
 
   @Input() opinions: object[];
   @Input() expanded = true;
+  @Input() clickUser = true;
 
   constructor(
     public utils: UtilsService,
@@ -33,8 +33,8 @@ export class OpinionComponent implements OnInit, AfterViewInit {
   }
 
   public goToUserGarage(userUrl: string) {
-    if (userUrl) {
-      this.router.navigate([`${NAVIGATION.garage.route}/${userUrl}`]);
+    if (userUrl && this.clickUser) {
+      this.router.navigate([`garagem/${userUrl}`]);
     }
   }
 }

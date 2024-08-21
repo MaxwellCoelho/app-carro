@@ -415,4 +415,14 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public goSearch() {
     this.router.navigate([NAVIGATION.search.route]);
   }
+
+  public isUserPage(): boolean {
+    const currentUrl = location.pathname;
+    const clientUrl = this.modalContent && this.modalContent['created_by'] && this.modalContent['created_by']['url'];
+    const result = currentUrl.includes(NAVIGATION.garage.route) || (clientUrl && currentUrl.includes(clientUrl));
+    if (this.modalContent && !result) {
+      this.closeModal();
+    }
+    return result;
+  }
 }

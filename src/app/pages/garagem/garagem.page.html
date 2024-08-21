@@ -192,18 +192,18 @@
     </ion-grid>
   </div>
 
-  <ion-modal [isOpen]="!!modalContent">
+  <ion-modal [isOpen]="!!modalContent && isUserPage()">
     <ng-template>
         <ion-toolbar>
           <div class="car-image-modal">
-            <img src="assets/models/{{modalContent.model.brand?.url}}/{{modalContent.model.url}}/{{modalContent.img}}"
-              title="{{modalContent.model.brand?.name + ' ' + modalContent.model.name}}" alt="{{modalContent.model.brand?.name + ' ' + modalContent.model.name}}"
+            <img src="assets/models/{{modalContent?.model?.brand?.url}}/{{modalContent?.model?.url}}/{{modalContent?.img}}"
+              title="{{modalContent?.model?.brand?.name + ' ' + modalContent?.model?.name}}" alt="{{modalContent?.model?.brand?.name + ' ' + modalContent?.model?.name}}"
               onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'">
           </div>
           <div class="car-name modal">
-            <img src="assets/brands/{{modalContent.model.brand?.url}}.svg" title="{{modalContent.model.brand?.name}}" alt="{{modalContent.model.brand?.name}}"
+            <img src="assets/brands/{{modalContent?.model?.brand?.url}}.svg" title="{{modalContent?.model?.brand?.name}}" alt="{{modalContent?.model?.brand?.name}}"
             onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'">
-            <span>{{modalContent.model.brand?.name}}</span> <strong>{{modalContent.model.name}}</strong>
+            <span>{{modalContent?.model?.brand?.name}}</span> <strong>{{modalContent?.model?.name}}</strong>
           </div>
           <ion-buttons slot="end" >
             <ion-chip title="Fechar" color="primary" (click)="closeModal()" style="border: 1px solid rgba(27, 117, 187, 0.32); margin: 0.5rem 1rem 0 0;">
@@ -213,7 +213,7 @@
           </ion-buttons>
         </ion-toolbar>
       <ion-content class="ion-padding" *ngIf="modalContent">
-        <app-opinion [expanded]="true" [opinions]="[modalContent]"></app-opinion>
+        <app-opinion [clickUser]="false" [expanded]="true" [opinions]="[modalContent]"></app-opinion>
       </ion-content>
     </ng-template>
   </ion-modal>

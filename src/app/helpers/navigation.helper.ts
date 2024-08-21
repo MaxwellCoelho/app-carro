@@ -5,7 +5,7 @@ export const NAVIGATION = {
   compare: { title: 'Comparar', icon: 'git-compare', route: 'comparar' },
   settings: { title: 'Configurações', icon: 'settings', route: 'configuracoes' },
   favorite: { title: 'Favoritos', icon: 'star', route: 'favoritos' },
-  garage: { title: 'Garagem', icon: 'car-sport', route: 'garagem' },
+  garage: { title: 'Garagem', icon: 'car-sport', route: 'minha-garagem' },
   best: { title: 'Melhores', icon: 'trophy', route: 'melhores' },
   perfil: { title: 'Meus dados', icon: 'person-circle', route: 'garagem' },
   term: { title: 'Política de Privacidade', icon: 'finger-print', route: 'politica-de-privacidade' },

@@ -28,7 +28,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
-    path: `${NAVIGATION.garage.route}/:usuario`,
+    path: 'garagem/:usuario',
     loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
