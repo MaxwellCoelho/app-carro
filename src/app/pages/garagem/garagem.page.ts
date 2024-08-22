@@ -51,19 +51,12 @@ export class GaragemPage implements OnInit, ViewWillEnter {
     public fb: FormBuilder,
   ) {}
 
-  public ngOnInit(): void {
-    if (!this.utils.getShouldUpdate('opinions')) {
-      this.checkUser();
-    }
-  }
+  public ngOnInit(): void { }
 
   public ionViewWillEnter(): void {
     this.utils.setPageTitle('Minha garagem', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'minha garagem, garagem, meus carros, meu carro');
-    if (this.utils.getShouldUpdate('opinions')) {
-      this.utils.setShouldUpdate(['opinions'], false);
-      this.myModelOpinions = [];
-      this.checkUser();
-    }
+    this.myModelOpinions = [];
+    this.checkUser();
   }
 
   public initForm() {

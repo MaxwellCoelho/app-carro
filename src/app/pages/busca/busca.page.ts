@@ -124,7 +124,9 @@ export class BuscaPage implements ViewWillEnter {
       this.filteredBrands = this.searchService.getAllBrands();
     }
 
-    this.showLoader = false;
+    setTimeout(() => {
+      this.showLoader = false;
+    }, 500);
   }
 
   public selectBrand(brand) {
@@ -214,7 +216,9 @@ export class BuscaPage implements ViewWillEnter {
       this.filteredModels = this.models;
     }
 
-    this.showLoader = false;
+    setTimeout(() => {
+      this.showLoader = false;
+    }, 500);
   }
 
   public searchModelInput($event) {

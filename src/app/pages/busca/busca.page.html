@@ -7,7 +7,7 @@
       <ion-label>{{nav.search.title}}</ion-label>
     </ion-title>
 
-    <div class="main-body">
+    <div class="main-body" style="padding-bottom: 3rem">
       <h1 class="form-title" *ngIf="!selectedBrand && !otherBrand">Primeiro escolha uma das marca listadas abaixo ou digite no campo de busca.</h1>
       <ion-searchbar *ngIf="!selectedBrand && !otherBrand" mode="ios" placeholder="Digite o nome da marca" (ionInput)="searchBrandInput($event)"></ion-searchbar>
 
@@ -25,7 +25,7 @@
         </ion-item>
       </ion-list>
 
-      <app-model-not-found *ngIf="searchService.getAllBrands().length && !selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
+      <app-model-not-found *ngIf="searchService.getAllBrands().length && !selectedBrand && !showLoader" [brandList]="searchService.getAllBrands()"></app-model-not-found>
 
       <ion-item lines="none" *ngIf="selectedBrand" class="selected-brand">
         <img src="assets/brands/{{selectedBrand.url}}.svg" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}" loading="lazy"
@@ -71,7 +71,7 @@
         </ion-item>
       </ion-list>
 
-      <app-model-not-found *ngIf="searchService.getAllBrands().length && selectedBrand" [selectedBrand]="selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
+      <app-model-not-found *ngIf="searchService.getAllBrands().length && selectedBrand && !showLoader" [selectedBrand]="selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
     </div>
   </div>
 </ion-content>

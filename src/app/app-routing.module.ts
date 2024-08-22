@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { LoggedGuard } from 'src/app/guard/logged.guard';
 
 const routes: Routes = [
   {
@@ -25,7 +26,8 @@ const routes: Routes = [
   },
   {
     path: NAVIGATION.garage.route,
-    loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
+    loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule),
+    canActivate: [LoggedGuard]
   },
   {
     path: 'garagem/:usuario',
