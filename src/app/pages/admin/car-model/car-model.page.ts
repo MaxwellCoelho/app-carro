@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -22,6 +23,9 @@ export class CarModelPage implements OnInit {
   public reviewModels: Array<any>;
   public models: Array<any>;
   public finalModels: Array<any>;
+  public finalModelsDefault: Array<any>;
+  public finalModelsRecent: Array<any>;
+  public orderBy = 'default';
   public categories: Array<any>;
   public brands: Array<any>;
   public showLoader: boolean;
@@ -112,7 +116,11 @@ export class CarModelPage implements OnInit {
 
   public getModels(review?: boolean, brandId?: string): void {
     this.showLoader = true;
-    const myFilter = review ? { review: true } : { review: false};
+    const myFilter = {};
+
+    if (review) {
+      myFilter['review'] = true;
+    }
 
     if (brandId) {
       myFilter['brand._id'] = brandId;
@@ -136,9 +144,10 @@ export class CarModelPage implements OnInit {
           }
         });
 
-        const reviews = this.reviewModels || [];
-        const models = this.models || [];
-        this.finalModels = [...reviews, ...models];
+        this.finalModelsDefault = review ? this.reviewModels || [] : this.models.sort((a, b) => Number(b['review']) - Number(a['review'])) || [];
+        const copyOfDefault = [...this.finalModelsDefault];
+        this.finalModelsRecent = [...copyOfDefault.sort((a, b) => Number(b['_id'] > a['_id']) || -1)];
+        this.finalModels = this.orderBy === 'default' ? [...this.finalModelsDefault] : [...this.finalModelsRecent];
         this.showLoader = false;
       },
       err => {
@@ -152,10 +161,19 @@ export class CarModelPage implements OnInit {
     if (this.brandFilter === 'nothing') {
       this.brandFilter = null;
       this.models = [];
-      this.finalModels = this.reviewModels;
+      this.getModels(true);
     } else {
       this.getModels(false, this.brandFilter);
     }
+  }
+
+  public orderBrand($event) {
+    this.orderBy = $event.detail.value;
+    this.finalModels = null;
+
+    setTimeout(() => {
+      this.finalModels = this.orderBy === 'default' ? [...this.finalModelsDefault] : [...this.finalModelsRecent];
+    }, 50);
   }
 
   public createModel(action: string) {
@@ -188,17 +206,7 @@ export class CarModelPage implements OnInit {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
 
-        if (this.reviewModels.find(mod => mod['_id'] === modelId) || this.pendingReview) {
-          this.getModels(true);
-          if (this.brandFilter) {
-            this.getModels(false, this.brandFilter);
-          }
-        } else {
-          if (this.brandFilter) {
-            this.getModels(false, this.brandFilter);
-          }
-        }
-
+        this.reloadModels();
         this.formModels.reset();
         this.showLoader = false;
         this.activeChecked = true;
@@ -235,17 +243,7 @@ export class CarModelPage implements OnInit {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
 
-        if (this.reviewModels.find(mod => mod['_id'] === modelId) || this.pendingReview) {
-          this.getModels(true);
-          if (this.brandFilter) {
-            this.getModels(false, this.brandFilter);
-          }
-        } else {
-          if (this.brandFilter) {
-            this.getModels(false, this.brandFilter);
-          }
-        }
-
+        this.reloadModels();
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -253,6 +251,14 @@ export class CarModelPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public reloadModels() {
+    if (!this.models || (this.models && !this.models.length)) {
+      this.getModels(true);
+    } else {
+      this.getModels(false, this.brandFilter);
+    }
   }
 
   public showConfirmAlert(action: string, model: any) {
