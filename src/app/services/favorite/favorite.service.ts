@@ -126,7 +126,7 @@ export class FavoriteService {
     return itens;
   }
 
-  public syncFavorites(): void {
+  public syncFavorites(notAdd?: boolean): void {
     if (this.utils.sessionUser) {
       const userId = this.utils.sessionUser['_id'];
       const baseFavorites = this.utils.sessionUser['favorites'] || [];
@@ -151,6 +151,7 @@ export class FavoriteService {
       }
 
       if (localFavorites && localFavorites[userId] && localFavorites[userId].length) {
+        let count = 0;
         localFavorites[userId].forEach(fav => {
           if (fav['removed']) {
             const foundIdx = baseFavorites.findIndex(item => item._id === fav['_id']);
@@ -162,9 +163,14 @@ export class FavoriteService {
             const found = baseFavorites.find(item => item._id === fav['_id']);
 
             if (!found) {
-              baseFavorites.push(fav);
+              if (notAdd) {
+                localFavorites[userId].splice(count, 1);
+              } else {
+                baseFavorites.push(fav);
+              }
             }
           }
+          count++;
         });
       }
 
@@ -177,6 +183,7 @@ export class FavoriteService {
         res => {
           if (!subCustomers.closed) { subCustomers.unsubscribe(); }
           this.utils.sessionUser['favorites'] = res['saved']['favorites'];
+          this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(this.utils.sessionUser));
           this.saveFavorites(res['saved']['favorites'], this.utils.sessionUser._id);
         }
       );

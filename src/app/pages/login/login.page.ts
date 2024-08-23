@@ -98,7 +98,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
           : this.utils.localStorageRemoveItem('userEmail');
         this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
         this.utils.returnLoggedUser();
-        this.favorite.syncFavorites();
+        this.favorite.syncFavorites(true);
         this.router.navigate([`/${this.nav.garage.route}`]);
 
         setTimeout(() => {

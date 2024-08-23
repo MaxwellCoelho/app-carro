@@ -143,7 +143,7 @@ export class OpinarSendComponent implements OnInit {
         this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
         this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
         this.utils.returnLoggedUser();
-        this.favorite.syncFavorites();
+        this.favorite.syncFavorites(true);
         this.sessionUser = res.authorized;
         this.saveFormOpinarSend(true);
       },
