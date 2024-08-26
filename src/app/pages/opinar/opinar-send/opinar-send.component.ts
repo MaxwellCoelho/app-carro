@@ -84,7 +84,9 @@ export class OpinarSendComponent implements OnInit {
 
       this.stepSend.emit(userInfoData);
     } else {
-      this.showConfirmEmailAlert();
+      if (this.formOpinarSend.status !== 'INVALID') {
+        this.showConfirmEmailAlert();
+      }
     }
   }
 
@@ -125,32 +127,34 @@ export class OpinarSendComponent implements OnInit {
   }
 
   public authUser(): void {
-    this.showLoader = true;
+    if (this.formLogin.status !== 'INVALID') {
+      this.showLoader = true;
 
-    const data = {
-      email: this.formLogin.value.userEmail,
-      password: this.formLogin.value.userPassword
-    };
+      const data = {
+        email: this.formLogin.value.userEmail,
+        password: this.formLogin.value.userPassword
+      };
 
-    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+      const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
-    const subCustomers = this.authService.authUser(jwtData).subscribe(
-      res => {
-        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.showLoader = false;
+      const subCustomers = this.authService.authUser(jwtData).subscribe(
+        res => {
+          if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+          this.showLoader = false;
 
-        this.formLogin.reset();
-        this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
-        this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
-        this.utils.returnLoggedUser();
-        this.favorite.syncFavorites(true);
-        this.sessionUser = res.authorized;
-        this.saveFormOpinarSend(true);
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+          this.formLogin.reset();
+          this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+          this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
+          this.utils.returnLoggedUser();
+          this.favorite.syncFavorites(true);
+          this.sessionUser = res.authorized;
+          this.saveFormOpinarSend(true);
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
   }
 
   public showErrorToast(err) {
@@ -188,30 +192,32 @@ export class OpinarSendComponent implements OnInit {
   }
 
   public sendRecovery(): void {
-    this.showLoader = true;
+    if (this.formRecovery.status !== 'INVALID') {
+      this.showLoader = true;
 
-    const data = {
-      email: this.formRecovery.value.userEmail
-    };
+      const data = {
+        email: this.formRecovery.value.userEmail
+      };
 
-    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+      const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
-    const submit = () => {
-      if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-      this.showLoader = false;
+      const submit = () => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
 
-      this.showRecoveryToast();
-      this.backToLogin();
-    };
+        this.showRecoveryToast();
+        this.backToLogin();
+      };
 
-    const subCustomers = this.authService.recoveryPassword(jwtData).subscribe(
-      res => {
-        submit();
-      },
-      err => {
-        submit();
-      }
-    );
+      const subCustomers = this.authService.recoveryPassword(jwtData).subscribe(
+        res => {
+          submit();
+        },
+        err => {
+          submit();
+        }
+      );
+    }
   }
 
   public showRecoveryToast() {
@@ -233,5 +239,24 @@ export class OpinarSendComponent implements OnInit {
     this.initRecoveryForm();
     this.formRecovery.controls.userEmail.patchValue(this.formLogin.controls.userEmail.value);
     this.showForgotPassword = true;
+  }
+
+  checkKey($event) {
+    const id = $event.target.offsetParent.id;
+    const keyCode = $event.keyCode;
+
+    if (keyCode === 13) {
+      switch (id) {
+        case 'userPassword':
+          this.authUser();
+          break;
+        case 'userEmail':
+          this.sendRecovery();
+          break;
+        case 'repeatNewPassword':
+          this.saveFormOpinarSend();
+          break;
+      }
+    }
   }
 }
