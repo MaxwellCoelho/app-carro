@@ -20,11 +20,7 @@ export class CarModelPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public reviewModels: Array<any>;
-  public models: Array<any>;
-  public finalModels: Array<any>;
-  public finalModelsDefault: Array<any>;
-  public finalModelsRecent: Array<any>;
+  public finalModels: Array<any> = [];
   public orderBy = 'default';
   public categories: Array<any>;
   public brands: Array<any>;
@@ -33,7 +29,10 @@ export class CarModelPage implements OnInit {
   public activeChecked = true;
   public pendingReview = false;
   public generations = {};
-  public brandFilter: string;
+  public page = 1;
+  public pagination = 20;
+  public brandFilter = 'nothing';
+  public excludedItem = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -48,7 +47,7 @@ export class CarModelPage implements OnInit {
     this.initForm();
     this.getCategories();
     this.getBrands();
-    this.getModels(true);
+    this.getModels();
   }
 
   public initForm() {
@@ -87,68 +86,72 @@ export class CarModelPage implements OnInit {
   }
 
   public getCategories(): void {
-    this.showLoader = true;
-    const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
-      res => {
-        if (!subCategories.closed) { subCategories.unsubscribe(); }
-        this.categories = res.categories;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+    if (!this.categories) {
+      this.showLoader = true;
+      const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
+        res => {
+          if (!subCategories.closed) { subCategories.unsubscribe(); }
+          this.categories = res.categories;
+          this.showLoader = false;
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
   }
 
   public getBrands(): void {
-    this.showLoader = true;
-    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
-      res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = res.brands;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+    if (!this.brands) {
+      this.showLoader = true;
+      const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+        res => {
+          if (!subBrands.closed) { subBrands.unsubscribe(); }
+          this.brands = res.brands;
+          this.showLoader = false;
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
   }
 
-  public getModels(review?: boolean, brandId?: string): void {
+  public getModels(): void {
     this.showLoader = true;
-    const myFilter = {};
 
-    if (review) {
+    const isReview = this.brandFilter === 'nothing';
+    const myFilter = {};
+    const page = isReview ? '1' : this.page.toString();
+    const pagination = isReview ? '5' : this.pagination.toString();
+    let sort;
+
+    if (this.orderBy !== 'default') {
+      sort = {name: '_id', value: 'desc'};
+    }
+
+    if (isReview) {
       myFilter['review'] = true;
     }
 
-    if (brandId) {
-      myFilter['brand._id'] = brandId;
+    if (!isReview && this.brandFilter) {
+      myFilter['brand._id'] = this.brandFilter;
     }
 
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData).subscribe(
+    const subModels = this.dbService.filterItem(environment.filterModelsAction, jwtData, page, pagination, sort).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        const myList = review ? 'reviewModels' : 'models';
-        this[myList] = res.models;
-        this[myList].forEach(model => {
-          if (model.generation) {
-            let plainGen = '';
-            Object.entries(model.generation).forEach(ent => {
-              plainGen += `${plainGen.length > 0 ? ', ' : ''}${ent[0]}: ${ent[1]['yearStart']}-${ent[1]['yearEnd']}`;
-            });
-            model['generations'] = plainGen;
-          } else {
-            model['generations'] = '-';
-          }
+
+        const myList = res.models;
+
+        myList.forEach(model => {
+          model['generations'] = this.formatGeneration(model.generation);
         });
 
-        this.finalModelsDefault = review ? this.reviewModels || [] : this.models.sort((a, b) => Number(b['review']) - Number(a['review'])) || [];
-        const copyOfDefault = [...this.finalModelsDefault];
-        this.finalModelsRecent = [...copyOfDefault.sort((a, b) => Number(b['_id'] > a['_id']) || -1)];
-        this.finalModels = this.orderBy === 'default' ? [...this.finalModelsDefault] : [...this.finalModelsRecent];
+        this.finalModels = [...this.finalModels, ...myList];
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
@@ -156,24 +159,32 @@ export class CarModelPage implements OnInit {
     );
   }
 
-  public filterByBrand($event) {
-    this.brandFilter = $event.detail.value;
-    if (this.brandFilter === 'nothing') {
-      this.brandFilter = null;
-      this.models = [];
-      this.getModels(true);
+  public formatGeneration(generations: any[]): string {
+    if (generations && generations.length) {
+      let plainGen = '';
+      Object.entries(generations).forEach(ent => {
+        plainGen += `${plainGen.length > 0 ? ', ' : ''}${ent[0]}: ${ent[1]['yearStart']}-${ent[1]['yearEnd']}`;
+      });
+      return plainGen;
     } else {
-      this.getModels(false, this.brandFilter);
+      return '-';
     }
   }
 
-  public orderBrand($event) {
-    this.orderBy = $event.detail.value;
-    this.finalModels = null;
+  public filterByBrand($event, type: 'filter' | 'order') {
+    switch (type) {
+      case 'filter':
+        this.brandFilter = $event.detail.value;
+        break;
+      case 'order':
+        this.orderBy = $event.detail.value;
+        break;
+    }
 
-    setTimeout(() => {
-      this.finalModels = this.orderBy === 'default' ? [...this.finalModelsDefault] : [...this.finalModelsRecent];
-    }, 50);
+    this.finalModels = [];
+    this.page = 1;
+    this.excludedItem = false;
+    this.getModels();
   }
 
   public createModel(action: string) {
@@ -206,7 +217,7 @@ export class CarModelPage implements OnInit {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
 
-        this.reloadModels();
+        this.updateItem(res.saved, 'update');
         this.formModels.reset();
         this.showLoader = false;
         this.activeChecked = true;
@@ -219,6 +230,40 @@ export class CarModelPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public updateItem(item: any, type: 'update' | 'delete'): void {
+    const finalModelsCopy = [...this.finalModels];
+    let foundItem = false;
+    this.finalModels = [];
+
+    for (let i = 0; i < finalModelsCopy.length; i++) {
+      if (item['_id'] === finalModelsCopy[i]['_id']) {
+        foundItem = true;
+
+        if (type === 'delete') {
+          finalModelsCopy.splice(i, 1);
+        } else {
+          finalModelsCopy[i]['active'] = item['active'];
+          finalModelsCopy[i]['review'] = item['review'];
+          finalModelsCopy[i]['name'] = item['name'];
+          finalModelsCopy[i]['brand'] = item['brand'];
+          finalModelsCopy[i]['url'] = item['url'];
+          finalModelsCopy[i]['modified'] = item['modified'];
+          finalModelsCopy[i]['modified_by'] = item['modified_by'];
+          finalModelsCopy[i]['category'] = item['category'];
+          finalModelsCopy[i]['generations'] = this.formatGeneration(item['generation']);
+        }
+      }
+    }
+
+    if (type === 'update' && !foundItem) {
+      finalModelsCopy.unshift(item);
+    }
+
+    setTimeout(() => {
+      this.finalModels = finalModelsCopy;
+    }, 50);
   }
 
   public editModel(model) {
@@ -243,7 +288,8 @@ export class CarModelPage implements OnInit {
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
 
-        this.reloadModels();
+        this.updateItem(res.removed, 'delete');
+        this.excludedItem = true;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },
@@ -251,14 +297,6 @@ export class CarModelPage implements OnInit {
         this.showErrorToast(err);
       }
     );
-  }
-
-  public reloadModels() {
-    if (!this.models || (this.models && !this.models.length)) {
-      this.getModels(true);
-    } else {
-      this.getModels(false, this.brandFilter);
-    }
   }
 
   public showConfirmAlert(action: string, model: any) {

@@ -29,6 +29,7 @@ export class CustomerPage implements OnInit {
   public page = 1;
   public pagination = 20;
   public customerFilter = 'nothing';
+  public excludedItem = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -110,6 +111,7 @@ export class CustomerPage implements OnInit {
 
     this.finalUsers = [];
     this.page = 1;
+    this.excludedItem = false;
     this.getCustomers();
   }
 
@@ -179,13 +181,6 @@ export class CustomerPage implements OnInit {
     }, 50);
   }
 
-  public resetParams(): void {
-    this.orderBy = 'default';
-    this.customerFilter = 'nothing';
-    this.page = 1;
-    this.pagination = 20;
-  }
-
   public editCustomer(user) {
     this.formCustomers.reset({
       editUserId: user['_id'],
@@ -206,6 +201,7 @@ export class CustomerPage implements OnInit {
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
         this.updateItem(res.removed, 'delete');
+        this.excludedItem = true;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

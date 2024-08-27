@@ -159,7 +159,7 @@
           <ion-col size-md="3" size-sm="3" size-xs="6">
             <ion-item class="input-item">
               <ion-label position="floating">Filtro</ion-label>
-              <ion-select interface="popover" (ionChange)="filterByBrand($event)" [value]="'nothing'">
+              <ion-select interface="popover" (ionChange)="filterByBrand($event, 'filter')" [value]="'nothing'">
                 <ion-select-option value="nothing">Em revisão</ion-select-option>
                 <ion-select-option value="">Todas as marcas</ion-select-option>
                 <ion-select-option *ngFor="let brand of brands" [value]="brand._id">{{ brand.name }}</ion-select-option>
@@ -170,7 +170,7 @@
           <ion-col size-md="3" size-sm="3" size-xs="6">
             <ion-item class="input-item">
               <ion-label position="floating">Ordem</ion-label>
-              <ion-select interface="popover" (ionChange)="orderBrand($event)" [value]="'default'" [disabled]="!finalModels?.length">
+              <ion-select interface="popover" (ionChange)="filterByBrand($event, 'order')" [value]="'default'" [disabled]="!finalModels?.length || brandFilter === 'nothing'">
                 <ion-select-option value="default">Alfabética</ion-select-option>
                 <ion-select-option value="recent">Mais recente</ion-select-option>
               </ion-select>
@@ -239,6 +239,12 @@
               </td>
             </tr>
           </table>
+          <ion-button size="default" title="Carregar mais" color="light" mode="ios"
+            type="button" (click)="getModels()" *ngIf="brandFilter !== 'nothing'
+              && (finalModels.length >= ((page - 1)*pagination) || (finalModels.length === ((page - 1)*pagination) - 1 && excludedItem))">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label slot="end">Carregar mais</ion-label>
+          </ion-button>
         </div>
 
         <ion-row><ion-col><br></ion-col></ion-row>

@@ -172,7 +172,8 @@
             </tr>
           </table>
           <ion-button size="default" title="Carregar mais" color="light" mode="ios"
-            type="button" (click)="getCustomers()" *ngIf="customerFilter !== 'nothing' && finalUsers.length === ((page - 1)*pagination)">
+            type="button" (click)="getCustomers()" *ngIf="customerFilter !== 'nothing'
+              && (finalUsers.length === ((page - 1)*pagination) || (finalUsers.length === ((page - 1)*pagination) - 1 && excludedItem))">
             <ion-icon name="refresh" slot="start"></ion-icon>
             <ion-label slot="end">Carregar mais</ion-label>
           </ion-button>
