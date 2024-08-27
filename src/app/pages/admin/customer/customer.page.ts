@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -18,12 +19,16 @@ export class CustomerPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public users: Array<any>;
+  public finalUsers: Array<any> = [];
+  public orderBy = 'default';
   public roles: Array<any>;
   public showLoader: boolean;
   public formCustomers: FormGroup;
   public activeChecked = true;
   public passwordLastContent: string;
+  public page = 1;
+  public pagination = 20;
+  public customerFilter = 'nothing';
 
   constructor(
     public dbService: DataBaseService,
@@ -51,12 +56,41 @@ export class CustomerPage implements OnInit {
   }
 
   public getRoles(): void {
+    if (!this.roles) {
+      this.showLoader = true;
+      const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
+        res => {
+          if (!subRoles.closed) { subRoles.unsubscribe(); }
+          this.roles = res.roles;
+          this.showLoader = false;
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
+  }
+
+  public getCustomers(): void {
     this.showLoader = true;
-    const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
+
+    const isRecent = this.customerFilter === 'nothing';
+    const myFilter = {};
+    const page = isRecent ? '1' : this.page.toString();
+    const pagination = isRecent ? '5' : this.pagination.toString();
+    const sort = !isRecent && this.orderBy === 'default' ? {name: 'name', value: 'asc'} : {name: '_id', value: 'desc'};
+
+    if (!isRecent && this.customerFilter) {
+      myFilter['role._id'] = this.customerFilter;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subCustomers = this.dbService.filterItem(environment.filterCustomersAction, jwtData, page, pagination, sort).subscribe(
       res => {
-        if (!subRoles.closed) { subRoles.unsubscribe(); }
-        this.roles = res.roles;
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.finalUsers = [...this.finalUsers, ...res.customers];
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
@@ -64,18 +98,19 @@ export class CustomerPage implements OnInit {
     );
   }
 
-  public getCustomers(): void {
-    this.showLoader = true;
-    const subCustomers = this.dbService.getItens(environment.customersAction).subscribe(
-      res => {
-        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.users = res.customers;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+  public filterByLevel($event, type: 'filter' | 'order') {
+    switch (type) {
+      case 'filter':
+        this.customerFilter = $event.detail.value;
+        break;
+      case 'order':
+        this.orderBy = $event.detail.value;
+        break;
+    }
+
+    this.finalUsers = [];
+    this.page = 1;
+    this.getCustomers();
   }
 
   public createCustomer(action: string) {
@@ -101,16 +136,54 @@ export class CustomerPage implements OnInit {
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
         this.formCustomers.reset();
-        this.users = res.customers;
+        this.updateItem(res.saved, 'update');
         this.showLoader = false;
         this.activeChecked = true;
         this.showToast(action, res.saved);
-        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public updateItem(item: any, type: 'update' | 'delete'): void {
+    const finalUsersCopy = [...this.finalUsers];
+    let foundItem = false;
+    this.finalUsers = [];
+
+    for (let i = 0; i < finalUsersCopy.length; i++) {
+      if (item['_id'] === finalUsersCopy[i]['_id']) {
+        foundItem = true;
+
+        if (type === 'delete') {
+          finalUsersCopy.splice(i, 1);
+        } else {
+          finalUsersCopy[i]['active'] = item['active'];
+          finalUsersCopy[i]['name'] = item['name'];
+          finalUsersCopy[i]['email'] = item['email'];
+          finalUsersCopy[i]['url'] = item['url'];
+          finalUsersCopy[i]['modified'] = item['modified'];
+          finalUsersCopy[i]['modified_by'] = item['modified_by'];
+          finalUsersCopy[i]['role'] = item['role'];
+        }
+      }
+    }
+
+    if (type === 'update' && !foundItem) {
+      finalUsersCopy.unshift(item);
+    }
+
+    setTimeout(() => {
+      this.finalUsers = finalUsersCopy;
+    }, 50);
+  }
+
+  public resetParams(): void {
+    this.orderBy = 'default';
+    this.customerFilter = 'nothing';
+    this.page = 1;
+    this.pagination = 20;
   }
 
   public editCustomer(user) {
@@ -132,7 +205,7 @@ export class CustomerPage implements OnInit {
     const subCustomers = this.dbService.deleteItem(environment.customersAction, userId).subscribe(
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-        this.users = res.customers;
+        this.updateItem(res.removed, 'delete');
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

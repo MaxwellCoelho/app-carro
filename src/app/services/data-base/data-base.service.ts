@@ -3,6 +3,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
+export class SortModel {
+  name: string;
+  value: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,12 +40,16 @@ export class DataBaseService {
     return this.http.post(url, data, { withCredentials: true });
   }
 
-  public filterItem(action: string, data: any, page?: string, perPage?: string): any {
+  public filterItem(action: string, data: any, page?: string, perPage?: string, sortBy?: SortModel): any {
     const url = `${environment.middlewareEndpoint}/${action}`;
     const params = {};
     if (page && perPage) {
       params['page'] = page;
       params['perpage'] = perPage;
+    }
+
+    if (sortBy) {
+      params[`sort.${sortBy.name}`] = sortBy.value;
     }
     return this.http.post(url, data, { params, withCredentials: true });
   }

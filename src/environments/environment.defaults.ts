@@ -9,6 +9,7 @@ export const environment = {
   middlewareEndpoint: 'http://localhost:3001/api',
   rolesAction: 'roles',
   customersAction: 'customers',
+  filterCustomersAction: 'customers/filter',
   categoriesAction: 'cars/categories',
   brandsAction: 'cars/brands',
   modelsAction: 'cars/models',
