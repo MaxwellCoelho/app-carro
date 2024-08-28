@@ -42,8 +42,8 @@ export class CustomerPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getRoles();
     this.getCustomers();
+    this.getRoles();
   }
 
   public initForm() {
@@ -58,12 +58,10 @@ export class CustomerPage implements OnInit {
 
   public getRoles(): void {
     if (!this.roles) {
-      this.showLoader = true;
       const subRoles = this.dbService.getItens(environment.rolesAction).subscribe(
         res => {
           if (!subRoles.closed) { subRoles.unsubscribe(); }
           this.roles = res.roles;
-          this.showLoader = false;
         },
         err => {
           this.showErrorToast(err);
@@ -86,7 +84,7 @@ export class CustomerPage implements OnInit {
     }
 
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subCustomers = this.dbService.filterItem(environment.filterCustomersAction, jwtData, page, pagination, sort).subscribe(
+    const subCustomers = this.dbService.filterItem(environment.filterCustomersAction, jwtData, page, pagination, [sort]).subscribe(
       res => {
         if (!subCustomers.closed) { subCustomers.unsubscribe(); }
         this.finalUsers = [...this.finalUsers, ...res.customers];

@@ -18,12 +18,11 @@
       <ion-grid slot="content">
         <ion-row [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
           <ion-col>
-            <h1 *ngIf="!formOpinions.value.editOpinionId">Criar nova opinião:</h1>
             <h1 *ngIf="formOpinions.value.editOpinionId">Editar a opinião <strong>{{formOpinions.value.editOpinionId}}</strong>:</h1>
           </ion-col>
         </ion-row>
 
-        <form name="opinions" [formGroup]="formOpinions" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
+        <form name="opinions" [formGroup]="formOpinions" *ngIf="formOpinions.value.editOpinionId" (submit)="showConfirmAlert(formOpinions.value.editOpinionId ? 'editar' : 'criar', formOpinions.value)">
           <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formOpinions.value.editOpinionId }">
             <ion-input type="hidden" formControlName="editOpinionId"></ion-input>
             <ion-col size-md="6" size-sm="12" size-xs="12">
@@ -99,7 +98,30 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Opiniões {{opinions ? '('+opinions.length+')' : ''}}</h1></ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <h1>{{brandFilter === 'nothing' ? 'Opiniões recentes' : 'Opiniões'}} {{opinions ? '('+opinions.length+')' : ''}}</h1>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Filtro</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByBrand($event, 'filter')" [value]="'nothing'">
+                <ion-select-option value="nothing">Últimos 5</ion-select-option>
+                <ion-select-option value="">Todas as marcas</ion-select-option>
+                <ion-select-option *ngFor="let brand of brands" [value]="brand._id">{{ brand.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Ordem</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByBrand($event, 'order')" [value]="'default'" [disabled]="!opinions?.length || brandFilter === 'nothing'">
+                <ion-select-option value="default">Alfabética</ion-select-option>
+                <ion-select-option value="recent">Mais recente</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
         </ion-row>
 
         <ion-row *ngIf="!opinions || (opinions && !opinions.length)" class="grid-content">
@@ -146,6 +168,12 @@
               </td>
             </tr>
           </table>
+          <ion-button size="default" title="Carregar mais" color="light" mode="ios"
+            type="button" (click)="getOpinions()" *ngIf="brandFilter !== 'nothing'
+              && (opinions.length === ((page - 1)*pagination) || (opinions.length === ((page - 1)*pagination) - 1 && excludedItem))">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label slot="end">Carregar mais</ion-label>
+          </ion-button>
         </div>
       </ion-grid>
     </div>

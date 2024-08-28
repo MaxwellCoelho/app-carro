@@ -45,9 +45,9 @@ export class CarModelPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.getModels();
     this.getCategories();
     this.getBrands();
-    this.getModels();
   }
 
   public initForm() {
@@ -87,12 +87,10 @@ export class CarModelPage implements OnInit {
 
   public getCategories(): void {
     if (!this.categories) {
-      this.showLoader = true;
       const subCategories = this.dbService.getItens(environment.categoriesAction).subscribe(
         res => {
           if (!subCategories.closed) { subCategories.unsubscribe(); }
           this.categories = res.categories;
-          this.showLoader = false;
         },
         err => {
           this.showErrorToast(err);
@@ -103,12 +101,10 @@ export class CarModelPage implements OnInit {
 
   public getBrands(): void {
     if (!this.brands) {
-      this.showLoader = true;
       const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
         res => {
           if (!subBrands.closed) { subBrands.unsubscribe(); }
           this.brands = res.brands;
-          this.showLoader = false;
         },
         err => {
           this.showErrorToast(err);
@@ -122,12 +118,14 @@ export class CarModelPage implements OnInit {
 
     const isReview = this.brandFilter === 'nothing';
     const myFilter = {};
-    const page = isReview ? '1' : this.page.toString();
-    const pagination = isReview ? '5' : this.pagination.toString();
+    const page = this.page.toString();
+    const pagination = this.pagination.toString();
     let sort;
 
     if (this.orderBy !== 'default') {
-      sort = {name: '_id', value: 'desc'};
+      sort = [
+        {name: '_id', value: 'desc'}
+      ];
     }
 
     if (isReview) {

@@ -21,11 +21,16 @@ export class BrandOpinionPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public opinions: Array<any>;
+  public opinions: Array<any> = [];
+  public orderBy = 'default';
   public brands: Array<any>;
   public showLoader: boolean;
   public formOpinions: FormGroup;
   public activeChecked = true;
+  public page = 1;
+  public pagination = 20;
+  public brandFilter = 'nothing';
+  public excludedItem = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -53,12 +58,46 @@ export class BrandOpinionPage implements OnInit {
   }
 
   public getBrands(): void {
+    if (!this.brands) {
+      const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+        res => {
+          if (!subBrands.closed) { subBrands.unsubscribe(); }
+          this.brands = this.utils.sortByReview(res.brands);
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
+  }
+
+
+  public getOpinions(): void {
     this.showLoader = true;
-    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+
+    const isRecent = this.brandFilter === 'nothing';
+    const myFilter = {};
+    const page = isRecent ? '1' : this.page.toString();
+    const pagination = isRecent ? '5' : this.pagination.toString();
+    let sort;
+
+    if (isRecent || this.orderBy !== 'default') {
+      sort = [
+        {name: '_id', value: 'desc'}
+      ];
+    }
+
+    if (!isRecent && this.brandFilter) {
+      myFilter['brand._id'] = this.brandFilter;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subOpinions = this.dbService.filterItem(environment.filterOpinionBrandAction, jwtData, page, pagination, sort).subscribe(
       res => {
-        if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = this.utils.sortByReview(res.brands);
+        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
+        this.opinions = [...this.opinions, ...res.opinions];
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
@@ -66,19 +105,20 @@ export class BrandOpinionPage implements OnInit {
     );
   }
 
+  public filterByBrand($event, type: 'filter' | 'order') {
+    switch (type) {
+      case 'filter':
+        this.brandFilter = $event.detail.value;
+        break;
+      case 'order':
+        this.orderBy = $event.detail.value;
+        break;
+    }
 
-  public getOpinions(): void {
-    this.showLoader = true;
-    const subOpinions = this.dbService.getItens(environment.opinionBrandAction).subscribe(
-      res => {
-        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
-        this.opinions = res.opinions;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+    this.opinions = [];
+    this.page = 1;
+    this.excludedItem = false;
+    this.getOpinions();
   }
 
   public createOpinion(action: string) {
@@ -109,7 +149,7 @@ export class BrandOpinionPage implements OnInit {
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
         this.formOpinions.reset();
-        this.opinions = res.opinions;
+        this.updateItem(res.saved, 'update');
         this.showLoader = false;
         this.activeChecked = true;
         this.showToast(action, res.saved);
@@ -119,6 +159,35 @@ export class BrandOpinionPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public updateItem(item: any, type: 'update' | 'delete'): void {
+    const opinionsCopy = [...this.opinions];
+    let foundItem = false;
+    this.opinions = [];
+
+    for (let i = 0; i < opinionsCopy.length; i++) {
+      if (item['_id'] === opinionsCopy[i]['_id']) {
+        foundItem = true;
+
+        if (type === 'delete') {
+          opinionsCopy.splice(i, 1);
+        } else {
+          opinionsCopy[i]['active'] = item['active'];
+          opinionsCopy[i]['brand'] = item['brand'];
+          opinionsCopy[i]['modified'] = item['modified'];
+          opinionsCopy[i]['modified_by'] = item['modified_by'];
+        }
+      }
+    }
+
+    if (type === 'update' && !foundItem) {
+      opinionsCopy.unshift(item);
+    }
+
+    setTimeout(() => {
+      this.opinions = opinionsCopy;
+    }, 50);
   }
 
   public editOpinion(opinion) {
@@ -140,7 +209,8 @@ export class BrandOpinionPage implements OnInit {
     const subOpinions = this.dbService.deleteItem(environment.opinionBrandAction, opinionId).subscribe(
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
-        this.opinions = res.opinions;
+        this.updateItem(res.removed, 'delete');
+        this.excludedItem = true;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

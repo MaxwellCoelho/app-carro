@@ -21,12 +21,17 @@ export class CarOpinionPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public opinions: Array<any>;
+  public opinions: Array<any> = [];
+  public orderBy = 'default';
   public showLoader: boolean;
   public formOpinions: FormGroup;
   public activeChecked = true;
   public models: Array<any>;
   public versions: Array<any>;
+  public page = 1;
+  public pagination = 20;
+  public modelFilter = 'nothing';
+  public excludedItem = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -57,12 +62,45 @@ export class CarOpinionPage implements OnInit {
   }
 
   public getModels(): void {
+    if (!this.models) {
+      const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+        res => {
+          if (!subModels.closed) { subModels.unsubscribe(); }
+          this.models = res.models.sort((a, b) => (a['brand']['name'] > b['brand']['name']) || -1);
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
+  }
+
+  public getOpinions(): void {
     this.showLoader = true;
-    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+
+    const isRecent = this.modelFilter === 'nothing';
+    const myFilter = {};
+    const page = isRecent ? '1' : this.page.toString();
+    const pagination = isRecent ? '5' : this.pagination.toString();
+    let sort;
+
+    if (isRecent || this.orderBy !== 'default') {
+      sort = [
+        {name: '_id', value: 'desc'}
+      ];
+    }
+
+    if (!isRecent && this.modelFilter) {
+      myFilter['model._id'] = this.modelFilter;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subOpinions = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData, page, pagination, sort).subscribe(
       res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models.sort((a, b) => (a['brand']['name'] > b['brand']['name']) || -1);
+        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
+        this.opinions = [...this.opinions, ...res.opinions];
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
@@ -70,18 +108,20 @@ export class CarOpinionPage implements OnInit {
     );
   }
 
-  public getOpinions(): void {
-    this.showLoader = true;
-    const subOpinions = this.dbService.getItens(environment.opinionModelAction).subscribe(
-      res => {
-        if (!subOpinions.closed) { subOpinions.unsubscribe(); }
-        this.opinions = res.opinions;
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+  public filterByModel($event, type: 'filter' | 'order') {
+    switch (type) {
+      case 'filter':
+        this.modelFilter = $event.detail.value;
+        break;
+      case 'order':
+        this.orderBy = $event.detail.value;
+        break;
+    }
+
+    this.opinions = [];
+    this.page = 1;
+    this.excludedItem = false;
+    this.getOpinions();
   }
 
   public createOpinion(action: string) {
@@ -123,7 +163,7 @@ export class CarOpinionPage implements OnInit {
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
         this.formOpinions.reset();
-        this.opinions = res.opinions;
+        this.updateItem(res.saved, 'update');
         this.showLoader = false;
         this.activeChecked = true;
         this.showToast(action, res.saved);
@@ -133,6 +173,38 @@ export class CarOpinionPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public updateItem(item: any, type: 'update' | 'delete'): void {
+    const opinionsCopy = [...this.opinions];
+    let foundItem = false;
+    this.opinions = [];
+
+    for (let i = 0; i < opinionsCopy.length; i++) {
+      if (item['_id'] === opinionsCopy[i]['_id']) {
+        foundItem = true;
+
+        if (type === 'delete') {
+          opinionsCopy.splice(i, 1);
+        } else {
+          opinionsCopy[i]['active'] = item['active'];
+          opinionsCopy[i]['model'] = item['model'];
+          opinionsCopy[i]['version'] = item['version'];
+          opinionsCopy[i]['year_model'] = item['year_model'];
+          opinionsCopy[i]['year_bought'] = item['year_bought'];
+          opinionsCopy[i]['modified'] = item['modified'];
+          opinionsCopy[i]['modified_by'] = item['modified_by'];
+        }
+      }
+    }
+
+    if (type === 'update' && !foundItem) {
+      opinionsCopy.unshift(item);
+    }
+
+    setTimeout(() => {
+      this.opinions = opinionsCopy;
+    }, 50);
   }
 
   public editOpinion(opinion) {
@@ -157,7 +229,8 @@ export class CarOpinionPage implements OnInit {
     const subOpinions = this.dbService.deleteItem(environment.opinionModelAction, opinionId).subscribe(
       res => {
         if (!subOpinions.closed) { subOpinions.unsubscribe(); }
-        this.opinions = res.opinions;
+        this.updateItem(res.removed, 'delete');
+        this.excludedItem = true;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

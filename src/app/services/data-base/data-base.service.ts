@@ -40,7 +40,7 @@ export class DataBaseService {
     return this.http.post(url, data, { withCredentials: true });
   }
 
-  public filterItem(action: string, data: any, page?: string, perPage?: string, sortBy?: SortModel): any {
+  public filterItem(action: string, data: any, page?: string, perPage?: string, sortBy?: SortModel[]): any {
     const url = `${environment.middlewareEndpoint}/${action}`;
     const params = {};
     if (page && perPage) {
@@ -48,8 +48,10 @@ export class DataBaseService {
       params['perpage'] = perPage;
     }
 
-    if (sortBy) {
-      params[`sort.${sortBy.name}`] = sortBy.value;
+    if (sortBy && sortBy.length) {
+      sortBy.forEach(sortItem => {
+        params[`sort.${sortItem.name}`] = sortItem.value;
+      });
     }
     return this.http.post(url, data, { params, withCredentials: true });
   }

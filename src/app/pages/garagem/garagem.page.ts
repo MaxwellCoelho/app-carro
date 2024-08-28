@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/dot-notation */
@@ -218,11 +219,15 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public getModelOpinions(userUrl?: string): void {
     this.showLoader = true;
     const myFilter = userUrl ? { ['created_by.url']: userUrl } : { ['created_by._id']: this.utils.sessionUser['_id'] };
+    const sort = [
+      {name: 'year_bought', value: 'desc'},
+      {name: 'kept_period', value: 'desc'}
+    ];
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subModels = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData).subscribe(
+    const subModels = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData, null, null, sort).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.myModelOpinions = res.models && res.models.opinions && res.models.opinions.length ? res.models.opinions : [];
+        this.myModelOpinions = res.opinions && res.opinions.length ? res.opinions : [];
 
         this.myModelOpinions.forEach(model => {
           model.img = this.utils.getModelImg(model.model.url, model.model.generation, model.year_model);
