@@ -19,11 +19,16 @@ export class CarBrandPage implements OnInit {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public brands: Array<any>;
+  public brands: Array<any> = [];
   public showLoader: boolean;
   public formBrands: FormGroup;
   public activeChecked = true;
   public pendingReview = false;
+  public page = 1;
+  public pagination = 20;
+  public brandFilter = 'nothing';
+  public excludedItem = false;
+  public orderBy = 'default';
 
   constructor(
     public dbService: DataBaseService,
@@ -49,16 +54,51 @@ export class CarBrandPage implements OnInit {
 
   public getBrands(): void {
     this.showLoader = true;
-    const subBrands = this.dbService.getItens(environment.brandsAction).subscribe(
+
+    const isReview = this.brandFilter === 'nothing';
+    const myFilter = {};
+    const page = this.page.toString();
+    const pagination = this.pagination.toString();
+    let sort;
+
+    if (this.orderBy !== 'default') {
+      sort = [
+        {name: '_id', value: 'desc'}
+      ];
+    }
+
+    if (isReview) {
+      myFilter['review'] = true;
+    }
+
+    const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+    const subBrands = this.dbService.filterItem(environment.filterBrandsAction, jwtData, page, pagination, sort).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = this.utils.sortByReview(res.brands);
+        this.brands = [...this.brands, ...res.brands];
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public filterByBrand($event, type: 'filter' | 'order') {
+    switch (type) {
+      case 'filter':
+        this.brandFilter = $event.detail.value;
+        break;
+      case 'order':
+        this.orderBy = $event.detail.value;
+        break;
+    }
+
+    this.brands = [];
+    this.page = 1;
+    this.excludedItem = false;
+    this.getBrands();
   }
 
   public createBrand(action: string) {
@@ -75,19 +115,50 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.createItem(environment.brandsAction, jwtData, brandId).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
+
+        this.updateItem(res.saved, 'update');
         this.formBrands.reset();
-        this.brands = this.utils.sortByReview(res.brands);
         this.showLoader = false;
         this.activeChecked = true;
         this.pendingReview = false;
         this.showToast(action, res.saved);
         this.searchService.clearAllBrands();
-        this.ngOnInit();
       },
       err => {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public updateItem(item: any, type: 'update' | 'delete'): void {
+    const brandsCopy = [...this.brands];
+    let foundItem = false;
+    this.brands = [];
+
+    for (let i = 0; i < brandsCopy.length; i++) {
+      if (item['_id'] === brandsCopy[i]['_id']) {
+        foundItem = true;
+
+        if (type === 'delete') {
+          brandsCopy.splice(i, 1);
+        } else {
+          brandsCopy[i]['active'] = item['active'];
+          brandsCopy[i]['review'] = item['review'];
+          brandsCopy[i]['name'] = item['name'];
+          brandsCopy[i]['url'] = item['url'];
+          brandsCopy[i]['modified'] = item['modified'];
+          brandsCopy[i]['modified_by'] = item['modified_by'];
+        }
+      }
+    }
+
+    if (type === 'update' && !foundItem) {
+      brandsCopy.unshift(item);
+    }
+
+    setTimeout(() => {
+      this.brands = brandsCopy;
+    }, 50);
   }
 
   public editBrand(brand) {
@@ -107,7 +178,9 @@ export class CarBrandPage implements OnInit {
     const subBrands = this.dbService.deleteItem(environment.brandsAction, brandId).subscribe(
       res => {
         if (!subBrands.closed) { subBrands.unsubscribe(); }
-        this.brands = this.utils.sortByReview(res.brands);
+
+        this.updateItem(res.removed, 'delete');
+        this.excludedItem = true;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

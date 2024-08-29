@@ -2,7 +2,7 @@
 <ion-grid slot="content" class="valuation-itens">
   <ion-row>
     <ion-col>
-      <h1 class="form-title">Primeiro informe as características de seu carro</h1>
+      <h1 class="form-title">Primeiro informe as características de seu <span>{{selectedModel.name}}</span></h1>
     </ion-col>
   </ion-row>
 
@@ -133,7 +133,7 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">O que você tem a dizer sobre seu <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span>?</h1>
+        <h1 class="form-title">O que você tem a dizer sobre seu <span>{{selectedModel.name}}</span>?</h1>
       </ion-col>
     </ion-row>
 
@@ -156,7 +156,7 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">Agora as Considerações finais.</h1>
+        <h1 class="form-title">Agora escreva as considerações finais sobre seu veículo</h1>
       </ion-col>
     </ion-row>
 

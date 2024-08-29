@@ -1,7 +1,7 @@
 <ion-grid slot="content" class="valuation-itens">
   <ion-row>
     <ion-col>
-      <h1 class="form-title">O que você tem a dizer sobre o pós-venda da <span>{{selectedModel.brand.name}}</span>?</h1>
+      <h1 class="form-title">Agora conte-nos como foi o pós-venda prestado pela <span>{{selectedModel.brand.name}}</span></h1>
     </ion-col>
   </ion-row>
 
@@ -37,14 +37,14 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">Considerações finais sobre a <span>{{selectedModel.brand.name}}</span></h1>
+        <h1 class="form-title">Escreva suas considerações finais sobre o pós-venda da <span>{{selectedModel.brand.name}}</span></h1>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
         <ion-item class="input-item">
-          <ion-label position="floating">Título da sua avaliação</ion-label>
+          <ion-label position="floating">Título da sua avaliação sobre</ion-label>
           <ion-input type="text" minlength="4" maxlength="150" formControlName="opinarTitulo" (ionInput)="utils.capitalize($event)"
             placeholder="Ex: Melhor carro da categoria"></ion-input>
         </ion-item>

@@ -12,6 +12,7 @@ export const environment = {
   filterCustomersAction: 'customers/filter',
   categoriesAction: 'cars/categories',
   brandsAction: 'cars/brands',
+  filterBrandsAction: 'cars/brands/filter',
   modelsAction: 'cars/models',
   filterModelsAction: 'cars/models/filter',
   versionsAction: 'cars/versions',

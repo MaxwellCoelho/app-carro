@@ -37,7 +37,7 @@
           onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" (load)="adjustImgContainer()" class="model-image">
       </ion-item>
 
-      <app-opinar-steps [currentStep]="currentStep" *ngIf="currentStep < 4"></app-opinar-steps>
+      <!-- <app-opinar-steps [currentStep]="currentStep" *ngIf="currentStep < 4"></app-opinar-steps> -->
 
       <app-about-car *ngIf="currentStep === 1" [selectedModel]="selectedModel" [autoFill]="finalPayload?.aboutCar" (yearSelected)="setModelImage($event)"
         (aboutCar)="setAboutCarPayload($event)" (loadedVersions)="saveLoadedVersions($event)" (clickForeward)="goBack()"></app-about-car>
