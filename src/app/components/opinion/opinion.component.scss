@@ -304,6 +304,10 @@
         height: initial;
         margin-top: 0.5rem;
         border-left: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
+
+        @media (max-width: 575px) {
+          border-left: 0;
+        }
       }
 
       app-valuation-bar ::ng-deep {
