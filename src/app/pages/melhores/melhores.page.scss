@@ -334,16 +334,45 @@
   ion-label {
     display: flex;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: small;
 
-    strong {
-      margin-right: 0.5rem;
-      padding-right: 0.5rem;
-      border-right: 1px solid #000;
+    span {
+      margin-left: 0.4rem;
+      padding-left: 0.4rem;
+      border-left: 1px solid var(--ion-color-medium);
+      height: 15px;
+
+      &.no-border {
+        border: 0;
+        margin: 0;
+        padding-left: 0.2rem;
+      }
     }
 
     ion-icon {
-      margin-right: 0.3rem;
+      margin-right: 0.1rem;
+      transform: scale(0.8);
+    }
+  }
+
+  @media (max-width: 430px) {
+    ion-col {
+      padding: 0.2rem;
+    }
+
+    ion-label {
+      font-size: x-small;
+
+      ion-icon {
+        margin-right: 0;
+        transform: scale(0.7);
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    ion-col:not(:last-child) span {
+      display: none;
     }
   }
 }
