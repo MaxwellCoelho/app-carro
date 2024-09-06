@@ -2,35 +2,32 @@
   <app-loader [showLoader]="showLoader"></app-loader>
 
   <div class="main-container">
-    <!-- <ion-title size="large" color="primary" class="main-title">
-      <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
-      <ion-label>Opinião</ion-label>
-    </ion-title> -->
-
     <div class="main-body" *ngIf="selectedModel && modelOpinions">
       <ion-grid slot="content" class="selected-model-grid">
-        <ion-row>
-          <ion-col size-lg="1.2" size-md="1.7" size-sm="1.5" size-xs="12" class="model-logo">
-            <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
-              onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+        <ion-row class="change-model-mobile">
+          <ion-col size-lg="9.5" size-md="9" size-sm="8.3" size-xs="1" class="model-change">
           </ion-col>
-          <ion-col size-lg="8.1" size-md="7.3" size-sm="6.8" size-xs="12" class="model-name">
-            <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
-            <ion-icon *ngIf="isFavorite" [name]="nav.favorite.icon" color="secondary" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
-            <ion-icon *ngIf="!isFavorite" [name]="nav.favorite.icon + '-outline'" color="medium" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
-          </ion-col>
-          <ion-col size-lg="2.5" size-md="3" size-sm="3.7" size-xs="12" class="model-change">
+          <ion-col size-lg="2.5" size-md="3" size-sm="3.7" size-xs="11" class="model-change">
             <ion-chip outline title="Alterar modelo" color="primary" (click)="changeModel()">
               <ion-icon [name]="'chevron-back-outline'"></ion-icon>
               <ion-label >Alterar modelo</ion-label>
             </ion-chip>
           </ion-col>
-          <!-- COMPARAR -->
-          <!-- <ion-col size-lg="1.5" size-md="2" size-sm="2.6" size-xs="12" class="model-category">
-            <ion-icon name="git-compare-outline" color="dark" size="large" class="category-image"></ion-icon>
-            <ion-label color="dark"> | </ion-label>
-            <ion-icon name="heart-outline" color="dark" size="large" class="category-image"></ion-icon>
-          </ion-col> -->
+        </ion-row>
+        <ion-row>
+          <ion-col size-lg="12" size-md="12" size-sm="12" size-xs="12" class="model-change">
+            <ion-item lines="none" class="selected-brand">
+              <img src="assets/brands/{{selectedModel.brand.url}}.svg" title="{{selectedModel.brand.name}} {{selectedModel.name}}" alt="{{selectedModel.brand.name}} {{selectedModel.name}}"
+                onerror="if (this.src != 'assets/brands/no-brand.svg') this.src = 'assets/brands/no-brand.svg'" class="brand-image-title">
+              <ion-label class="brand-label-title">{{selectedModel.brand.name}} <span>{{selectedModel.name}}</span></ion-label>
+              <ion-icon *ngIf="isFavorite" [name]="nav.favorite.icon" color="secondary" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
+              <ion-icon *ngIf="!isFavorite" [name]="nav.favorite.icon + '-outline'" color="medium" size="large" class="favorite-image" (click)="addOrRemoveFavorite()"></ion-icon>
+              <ion-chip outline title="Alterar modelo" color="primary" (click)="changeModel()" class="change-model-desk">
+                <ion-icon [name]="'chevron-back-outline'"></ion-icon>
+                <ion-label >Alterar modelo</ion-label>
+              </ion-chip>
+            </ion-item>
+          </ion-col>
         </ion-row>
       </ion-grid>
 
@@ -40,15 +37,37 @@
       </ion-item>
 
       <ion-grid slot="content" class="selected-model-grid">
-        <ion-row>
+        <ion-row class="line-info">
           <ion-col size-md="6" size-sm="6" size-xs="5">
-            <ion-icon *ngIf="selectedModel.category" name="car" color="medium" size="large" class="category-image"></ion-icon>
-            <ion-label color="medium">{{selectedModel.category?.name}}</ion-label>
+            <ion-icon name="thumbs-up-sharp" color="primary" class="up react-animation" [ngClass]="like ? 'anime' : ''"></ion-icon>
+            <ion-icon name="thumbs-up-sharp" color="medium" class="category-image"></ion-icon>
+            <ion-label color="medium">{{selectedModel.likes_length || 0}}</ion-label>
+            <ion-icon name="thumbs-down-sharp" color="danger" class="down react-animation" [ngClass]="dislike ? 'anime' : ''"></ion-icon>
+            <ion-icon name="thumbs-down-sharp" color="medium" class="category-image divisor"></ion-icon>
+            <ion-label color="medium">{{selectedModel.dislikes_length || 0}}</ion-label>
           </ion-col>
           <ion-col size-md="6" size-sm="6" size-xs="7" class="model-opinions">
-            <ion-icon name="reader" color="medium" size="large" class="category-image"></ion-icon>
+            <ion-icon name="reader" color="medium" class="category-image"></ion-icon>
             <ion-label color="medium" *ngIf="modelOpinions.qtd > 0">{{selectedModel.val_length}} opini{{selectedModel.val_length < 2 ? 'ão' : 'ões'}}</ion-label>
             <ion-label color="medium" *ngIf="modelOpinions.qtd === 0">Nenhuma opinião</ion-label>
+            <ion-icon *ngIf="selectedModel.category" name="car" color="medium" class="category-image divisor"></ion-icon>
+            <ion-label color="medium">{{selectedModel.category?.name}}</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row class="line-buttons">
+          <ion-col size-md="12" size-sm="12" size-xs="12">
+            <ion-chip outline title="Gosto" [color]="like ? 'primary' : 'medium'" (click)="reactButton('like')" [disabled]="like || dislike">
+              <ion-icon [name]="'thumbs-up-sharp'"></ion-icon>
+              <ion-label>Gosto</ion-label>
+            </ion-chip>
+            <ion-chip outline title="Odeio" [color]="dislike ? 'danger' : 'medium'" (click)="reactButton('dislike')" [disabled]="like || dislike">
+              <ion-icon [name]="'thumbs-down-sharp'"></ion-icon>
+              <ion-label>Odeio</ion-label>
+            </ion-chip>
+            <ion-chip outline title="Compartilhar" color="medium" [id]="'open-modal-'+selectedModel._id">
+              <ion-icon [name]="'share-social'"></ion-icon>
+              <ion-label>Compartilhar</ion-label>
+            </ion-chip>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -159,4 +178,42 @@
       </ion-row>
     </ion-grid>
   </div>
+
+  <ion-modal *ngIf="selectedModel && modelOpinions" [trigger]="'open-modal-'+selectedModel._id" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5]">
+    <ng-template>
+      <div class="modal-content" >
+        <ion-row>
+          <ion-col size-md="12" size-sm="12" size-xs="12">
+            <p>Compartilhe as opiniões do <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span> com seus amigos e nas redes sociais</p>
+          </ion-col>
+          <ion-col size-md="12" size-sm="12" size-xs="12">
+            <ion-chip outline title="Whatsapp" color="success" (click)="shareSocialMedia('whatsapp')">
+              <ion-icon [name]="'logo-whatsapp'"></ion-icon>
+            </ion-chip>
+            <ion-chip outline title="Telegram" color="tertiary" (click)="shareSocialMedia('telegram')">
+              <ion-icon [name]="'paper-plane'" color="tertiary"></ion-icon>
+            </ion-chip>
+            <ion-chip outline title="Facebook" color="primary" (click)="shareSocialMedia('facebook')">
+              <ion-icon [name]="'logo-facebook'"></ion-icon>
+            </ion-chip>
+            <!-- <ion-chip outline title="Instagram" color="danger" (click)="shareSocialMedia('instagram')">
+              <ion-icon [name]="'logo-instagram'"></ion-icon>
+            </ion-chip> -->
+            <ion-chip outline title="Twitter" color="tertiary" (click)="shareSocialMedia('twitter')">
+              <ion-icon [name]="'logo-twitter'" color="tertiary"></ion-icon>
+            </ion-chip>
+            <ion-chip outline title="Pinterest" color="danger" (click)="shareSocialMedia('pinterest')">
+              <ion-icon [name]="'logo-pinterest'"></ion-icon>
+            </ion-chip>
+            <ion-chip outline title="LinkedIn" color="primary" (click)="shareSocialMedia('linkedin')">
+              <ion-icon [name]="'logo-linkedin'"></ion-icon>
+            </ion-chip>
+            <ion-chip outline title="Email" color="secondary" (click)="shareSocialMedia('email')">
+              <ion-icon [name]="'mail'"></ion-icon>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
@@ -33,6 +34,8 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   public valuationItens = [];
   public page = 1;
   public pagination = 20;
+  public like = false;
+  public dislike = false;
 
   public isFavorite: boolean;
 
@@ -69,6 +72,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
       this.loadModelInfo();
     } else if (this.selectedModel) {
       this.isFavorite = this.favorite.isFavorite(this.selectedModel);
+      this.checkReactions();
     }
   }
 
@@ -119,6 +123,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public getModelOpinions(): void {
     this.isFavorite = this.favorite.isFavorite(this.selectedModel);
+    this.checkReactions();
     this.setPageTitle();
     const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
@@ -276,5 +281,91 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public goSearch() {
     this.router.navigate([NAVIGATION.search.route]);
+  }
+
+  public shareSocialMedia(media: string): void {
+    let linkMedia;
+    const treatedLink = location.href.replace('http://localhost:4200', 'https://krro.com.br');
+
+    switch (media) {
+      case 'whatsapp':
+        linkMedia = `https://api.whatsapp.com/send?text=${treatedLink}`;
+        break;
+      case 'facebook':
+        linkMedia = `https://www.facebook.com/sharer/sharer.php?u=${treatedLink}`;
+        break;
+      case 'instagram':
+        linkMedia = '';
+        break;
+      case 'linkedin':
+        linkMedia = `https://www.linkedin.com/shareArticle?mini=true&url=${treatedLink}`;
+        break;
+      case 'telegram':
+        linkMedia = `https://telegram.me/share/url?url=${treatedLink}`;
+        break;
+      case 'twitter':
+        linkMedia = `https://twitter.com/intent/tweet?url=${treatedLink}&text=Opiniões%20reais%20dos%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}`;
+        break;
+      case 'pinterest':
+        linkMedia = `https://pinterest.com/pin/create/button/?url=${treatedLink}&description=Opiniões%20reais%20dos%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}`;
+        break;
+      case 'email':
+        linkMedia = `mailto:?subject=Alguém%20compartilhou%20as%20opiniões%20reais%20dos%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}%20com%20você&body=Veja%20o%20que%20os%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}%20estão%20falando%20dele%3A%20${treatedLink}`;
+        break;
+    }
+
+    window.open(linkMedia, '_blank');
+  }
+
+  public reactButton(type: string): void {
+    const likesQtd = this.selectedModel['likes_length'] || 0;
+    const dislikesQtd = this.selectedModel['dislikes_length'] || 0;
+    const data = {};
+
+    switch (type) {
+      case 'like':
+        this.like = !this.like;
+        this.dislike = false;
+        data['likes_length'] = likesQtd + 1;
+        data['dislikes_length'] = dislikesQtd;
+        break;
+      case 'dislike':
+        this.dislike = !this.dislike;
+        this.like = false;
+        data['likes_length'] = likesQtd;
+        data['dislikes_length'] = dislikesQtd + 1;
+        break;
+    }
+
+    const recovered = this.recoveryReactions();
+    const modelId = this.selectedModel['_id'];
+    recovered.push({modelId, reaction: type});
+    const jwtData = this.cryptoService.encondeJwt(recovered);
+    this.utils.localStorageSetItem('reactions', jwtData);
+
+    const jwtApiData = { data: this.cryptoService.encondeJwt(data)};
+    const subModels = this.dbService.createItem(environment.modelsAction, jwtApiData, modelId).subscribe(
+      res => {
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.selectedModel['likes_length'] = res['saved']['likes_length'];
+        this.selectedModel['dislikes_length'] = res['saved']['dislikes_length'];
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public recoveryReactions(): any[] {
+    const jwtData = this.utils.localStorageGetItem('reactions');
+    const decoded = this.cryptoService.decodeJwt(jwtData) || [];
+    return decoded;
+  }
+
+  public checkReactions(): void {
+    const recovered = this.recoveryReactions().find(item => item.modelId === this.selectedModel['_id']);
+    if (recovered) {
+      this[recovered.reaction] = true;
+    }
   }
 }
