@@ -136,11 +136,6 @@
       </ion-infinite-scroll>
     </div>
 
-    <ion-title *ngIf="!selectedModel || !modelOpinions" size="large" color="primary" class="main-title">
-      <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
-      <ion-label>Opinião</ion-label>
-    </ion-title>
-
     <ion-grid slot="content" *ngIf="loadedModelAndOpinions && (!selectedModel || !modelOpinions)" style="margin-top: 1rem">
       <ion-row class="success-container">
         <ion-col size-lg="5" size-md="5" size-sm="12" size-xs="12" class="col-model">

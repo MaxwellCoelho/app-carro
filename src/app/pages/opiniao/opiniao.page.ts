@@ -147,7 +147,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public setModelAverages(averages: any) {
-    const average = averages.average;
+    const average = this.selectedModel['average'];
     this.modelAverage = this.getValuationItemByValue(average);
 
     const valItens = [...VALUATION_ITENS_CAR];

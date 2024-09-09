@@ -247,6 +247,7 @@ export class CarModelPage implements OnInit {
           finalModelsCopy[i]['name'] = item['name'];
           finalModelsCopy[i]['brand'] = item['brand'];
           finalModelsCopy[i]['url'] = item['url'];
+          finalModelsCopy[i]['average'] = item['average'];
           finalModelsCopy[i]['modified'] = item['modified'];
           finalModelsCopy[i]['modified_by'] = item['modified_by'];
           finalModelsCopy[i]['category'] = item['category'];
