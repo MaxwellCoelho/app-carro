@@ -127,7 +127,8 @@
                 <span *ngIf="formCreateUser.controls.repeatNewPassword.value !== formCreateUser.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
               </ion-note>
               <br>
-              <ion-button size="default" title="Criar meu cadastro" expand="block" color="success" mode="ios" type="submit" [disabled]="formCreateUser.status === 'INVALID'">
+              <ion-button size="default" title="Criar meu cadastro" expand="block" color="success" mode="ios" type="submit"
+                [disabled]="formCreateUser.status === 'INVALID' || formCreateUser.controls.repeatNewPassword.value !== formCreateUser.controls.newPassword.value">
                 <ion-icon name="person-add-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar meu cadastro</ion-label>
               </ion-button>

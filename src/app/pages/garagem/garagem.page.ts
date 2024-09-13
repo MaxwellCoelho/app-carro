@@ -80,10 +80,12 @@ export class GaragemPage implements OnInit, ViewWillEnter {
 
   public checkUser(): void {
     const searchUser = this.getUrlParams();
+    this.userData = null;
 
     if (searchUser) {
       this.getModelOpinions(searchUser);
     } else {
+      this.utils.returnLoggedUser();
       if (this.utils.sessionUser) {
         this.userData = this.utils.sessionUser;
         this.getModelOpinions();
@@ -422,5 +424,25 @@ export class GaragemPage implements OnInit, ViewWillEnter {
       this.closeModal();
     }
     return result;
+  }
+
+  public submitNewAvatar($event) {
+    this.showLoader = true;
+    const userId = this.utils.sessionUser['_id'];
+    const jwtData = { data: this.cryptoService.encondeJwt({avatar: $event})};
+    this.userData['avatar'] = null;
+
+    const subCustomers = this.dbService.createItem(environment.customersAction, jwtData, userId).subscribe(
+      res => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
+        this.userData['avatar'] = res['saved'].avatar;
+      },
+      err => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
+        this.userData['avatar'] = this.utils.sessionUser['avatar'];
+      }
+    );
   }
 }

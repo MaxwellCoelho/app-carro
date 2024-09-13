@@ -31,12 +31,11 @@
 
   <ion-title size="large" color="dark" class="car-info">
     <div [ngClass]="clickUser ? 'user-link' : ''" (click)="goToUserGarage(opinion.created_by?.url)" [title]="'Ver garagem de ' + opinion.created_by?.name">
+      <app-avatar [imgId]="opinion.created_by?.avatar?.id" [colorId]="opinion.created_by?.avatar?.color" [name]="opinion.created_by?.name"></app-avatar>
       <ion-label class="ion-text-wrap customer-name mobile">
-        <ion-icon size="large" [name]="'person-circle-outline'" color="dark"></ion-icon>
         <strong class="">{{opinion.created_by?.name?.split(' ')[0]}}</strong> <span>{{opinion.created?.split(' ')[0]}}</span>
       </ion-label>
       <ion-label class="ion-text-wrap customer-name desktop">
-        <ion-icon size="large" [name]="'person-circle-outline'" color="dark"></ion-icon>
         <strong class="">{{opinion.created_by?.name}}</strong> <span>{{opinion.created?.split(' ')[0]}} às {{opinion.created.split(' ')[1].substring(0, 5).replace(':', 'h')}}</span>
       </ion-label>
     </div>

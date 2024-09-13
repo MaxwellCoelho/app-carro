@@ -122,6 +122,7 @@ export class CustomerPage implements OnInit {
       name: this.formCustomers.value.newUserName,
       email: this.formCustomers.value.newUserEmail,
       password: this.formCustomers.value.newUserPassword,
+      avatar: this.utils.getRandomAvatar(),
       role: {
         _id: role['_id'],
         name: role['name'],

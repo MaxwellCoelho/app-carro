@@ -10,7 +10,8 @@
     <div class="personal-data" *ngIf="userData?.role">
       <ion-row>
         <ion-col size-lg="0.8" size-md="1" size-sm="1.5" size-xs="2.5" class="customer-avatar">
-          <ion-icon name="person-circle-outline" color="dark"></ion-icon>
+          <app-avatar *ngIf="userData?.avatar" [imgId]="userData?.avatar?.id" [colorId]="userData?.avatar?.color"
+            [name]="userData?.name" [editable]="true" (newAvatarSelected)="submitNewAvatar($event)"></app-avatar>
         </ion-col>
 
         <ion-col size-lg="5.2" size-md="4" size-sm="10.5" size-xs="9.5" class="customer-info">

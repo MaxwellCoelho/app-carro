@@ -220,6 +220,7 @@ export class LoginPage implements OnInit, ViewWillEnter {
         name: this.formCreateUser.value.createNome,
         email: this.formCreateUser.value.createEmail,
         password: this.formCreateUser.value.repeatNewPassword,
+        avatar: this.utils.getRandomAvatar(),
         active: true
       };
 

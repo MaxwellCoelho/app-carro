@@ -1,5 +1,15 @@
 #main-header {
 
+  app-avatar {
+    margin-left: -5px;
+    margin-right: 5px;
+
+    ::ng-deep .img-container {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
   .mobile-menu {
     display: block;
 

@@ -113,7 +113,8 @@
           <span *ngIf="formOpinarSend.controls.repeatNewPassword.value !== formOpinarSend.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
         </ion-note>
         <br>
-        <ion-button size="default" title="Próximo" expand="block" color="success" mode="ios" type="submit" [disabled]="formOpinarSend.status === 'INVALID'">
+        <ion-button size="default" title="Próximo" expand="block" color="success" mode="ios" type="submit"
+          [disabled]="formOpinarSend.status === 'INVALID' || formOpinarSend.controls.repeatNewPassword.value !== formOpinarSend.controls.newPassword.value">
           <ion-icon size="default" name="paper-plane-outline" slot="start"></ion-icon>
           <ion-label slot="start">Enviar Opinião</ion-label>
         </ion-button>

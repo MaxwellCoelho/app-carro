@@ -165,6 +165,17 @@
         }
       }
 
+      app-avatar {
+        margin: auto;
+
+        @media (max-width: 630px) {
+          ::ng-deep .img-container {
+            width: 40px;
+            height: 40px;
+          }
+        }
+      }
+
       .customer-name.mobile {
         display: flex;
         margin: 0;
@@ -200,12 +211,14 @@
             width: 80px;
             margin-bottom: 1rem;
             border-bottom: 1px dashed rgba(var(--ion-color-medium-rgb), 0.3);
-            padding: 0.2rem 0 0.5rem 0.5rem;
+            padding: 0.2rem 0 0.5rem 0;
             border-right: 0;
           }
         }
 
         .customer-name {
+          vertical-align: middle;
+
           strong {
             font-size: large;
             text-align: left;
@@ -223,12 +236,18 @@
           }
         }
 
+        app-avatar {
+          display: inline-flex;
+          vertical-align: middle;
+        }
+
         .customer-name.mobile {
           display: none;
         }
 
         .customer-name.desktop {
-          display: flex;
+          display: inline-flex;
+          padding-left: 0.5rem;
         }
 
         ion-label {

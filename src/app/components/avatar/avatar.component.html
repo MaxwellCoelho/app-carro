@@ -1,0 +1,42 @@
+<div *ngIf="imgId" class="img-container"
+  [style.background]="colors[colorId]
+    ? 'radial-gradient(circle, rgba('+colors[colorId].rgb+', 1) 0%, rgba('+colors[colorId].rgb+', 1) 55%, rgba('+colors[colorId].rgb+', 0) 57%)'
+    : 'radial-gradient(circle, rgba('+colors[1].rgb+', 1) 0%, rgba('+colors[1].rgb+', 1) 55%, rgba('+colors[1].rgb+', 0) 57%)'">
+  <div class="edit-label" (click)="setOpen(true)" [id]="'open-modal-avatar'" *ngIf="editable">
+    <ion-icon size="large" name="create-outline"></ion-icon>
+  </div>
+  <img [src]="'assets/avatares/avatar-'+imgId+'.png'" [alt]="name" [title]="name"
+    onerror="if (this.imageName != 'avatar-1.png') this.src = 'assets/avatares/avatar-1.png'">
+</div>
+
+<ion-modal *ngIf="imgId && editable" [isOpen]="isModalOpen" [trigger]="'open-modal-avatar'" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85]">
+  <div class="modal-content" >
+    <ion-row>
+      <ion-col size-md="12" size-sm="12" size-xs="12" style="margin-top: 1rem">
+        <p>Escolha uma cor de fundo</p>
+      </ion-col>
+      <ion-col size-md="12" size-sm="12" size-xs="12" class="content-divider">
+        <div *ngFor="let color of colors | keyvalue" (click)="select('color', color.key)"  class="color-pick"
+          [ngStyle]="{'background': color.value.hexa}" [ngClass]="colorSelected === color.key ? 'selected' : ''">
+        </div>
+      </ion-col>
+
+      <ion-col size-md="12" size-sm="12" size-xs="12">
+        <p>Escolha um avatar</p>
+      </ion-col>
+      <ion-col size-md="12" size-sm="12" size-xs="12" class="content-divider">
+        <img *ngFor="let avatar of [].constructor(avatares[0].to); let i = index" (click)="select('avatar', i)"
+          class="avatar-pick" [src]="'assets/avatares/avatar-'+i+'.png'" [ngClass]="avatarSelected === i ? 'selected' : ''">
+      </ion-col>
+
+      <ion-col size-md="12" size-sm="12" size-xs="12">
+        <ion-button size="default" title="Salvar" color="primary" mode="ios" type="button" (click)="submitChangeAvatar()"
+            [disabled]="!avatarSelected || !colorSelected">
+          <ion-icon size="default" name="cloud-done-outline" slot="start"></ion-icon>
+          <ion-label slot="start">Salvar</ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-modal>
+

@@ -94,7 +94,8 @@ export class OpinarSendComponent implements OnInit {
     const userInfoData = {
       name: this.formOpinarSend.value.opinarNome,
       email: this.formOpinarSend.value.opinarEmail,
-      password: this.formOpinarSend.value.repeatNewPassword
+      password: this.formOpinarSend.value.repeatNewPassword,
+      avatar: this.utils.getRandomAvatar()
     };
 
     const confirmHandler = () => {
