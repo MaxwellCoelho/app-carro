@@ -1,4 +1,4 @@
-<div *ngIf="imgId" class="img-container"
+<div *ngIf="imgId !== undefined && imgId !== null" class="img-container"
   [style.background]="colors[colorId]
     ? 'radial-gradient(circle, rgba('+colors[colorId].rgb+', 1) 0%, rgba('+colors[colorId].rgb+', 1) 55%, rgba('+colors[colorId].rgb+', 0) 57%)'
     : 'radial-gradient(circle, rgba('+colors[1].rgb+', 1) 0%, rgba('+colors[1].rgb+', 1) 55%, rgba('+colors[1].rgb+', 0) 57%)'">
@@ -9,7 +9,7 @@
     onerror="if (this.imageName != 'avatar-1.png') this.src = 'assets/avatares/avatar-1.png'">
 </div>
 
-<ion-modal *ngIf="imgId && editable" [isOpen]="isModalOpen" [trigger]="'open-modal-avatar'" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85]">
+<ion-modal *ngIf="imgId !== undefined && imgId !== null && editable" [isOpen]="isModalOpen" [trigger]="'open-modal-avatar'" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85]">
   <div class="modal-content" >
     <ion-row>
       <ion-col size-md="12" size-sm="12" size-xs="12" style="margin-top: 1rem">
@@ -31,7 +31,7 @@
 
       <ion-col size-md="12" size-sm="12" size-xs="12">
         <ion-button size="default" title="Salvar" color="primary" mode="ios" type="button" (click)="submitChangeAvatar()"
-            [disabled]="!avatarSelected || !colorSelected">
+            [disabled]="avatarSelected === null || avatarSelected === undefined || colorSelected === null|| colorSelected === undefined">
           <ion-icon size="default" name="cloud-done-outline" slot="start"></ion-icon>
           <ion-label slot="start">Salvar</ion-label>
         </ion-button>
