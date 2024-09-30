@@ -62,6 +62,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/opinar/opinar.module').then( m => m.OpinarPageModule)
   },
   {
+    path: 'opinar/sucesso',
+    loadChildren: () => import('./pages/opinar-success/opinar-success.module').then( m => m.OpinarSuccessPageModule)
+  },
+  {
     path: 'opinar/:marca',
     pathMatch: 'full',
     redirectTo: `${NAVIGATION.search.route}/:marca`

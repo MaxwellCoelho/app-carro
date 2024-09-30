@@ -12,6 +12,8 @@ export class SearchService {
   public allBrands = [];
   public allModels = [];
   public allCategories = [];
+  public opinarSelectedModel: object;
+  public opinarUser: object;
 
   constructor() { }
 
