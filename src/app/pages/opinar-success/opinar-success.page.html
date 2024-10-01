@@ -49,6 +49,14 @@
 
         <app-feedback *ngIf="searchService.opinarUser" [user]="searchService.opinarUser"></app-feedback>
       </ion-grid>
+
+      <!-- Google tag (gtag.js) event -->
+      <script>
+        gtag('event', 'conversion_event_page_view_3', {
+          // <event_parameters>
+        });
+      </script>
+
     </div>
 
     <ion-grid slot="content" *ngIf="!searchService.opinarSelectedModel" style="margin-top: 1rem">

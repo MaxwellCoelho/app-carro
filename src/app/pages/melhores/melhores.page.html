@@ -119,6 +119,8 @@
     </div>
 
     <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
+    <app-adsense [type]="'banner'"></app-adsense>
+
     <br>
     <ion-title size="large" color="primary" class="main-title" style="margin-bottom: 0">
       <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
@@ -187,18 +189,18 @@
     </div>
 
     <div class="main-body">
-      <ion-list>
-        <ion-item *ngIf="!bestModelsToShow?.length" lines="none" style="margin: 1rem 0 4rem 0">
+      <ion-list *ngFor="let list of pageList">
+        <ion-item *ngIf="list === 1 && !bestModelsToShow[list]?.length" lines="none" style="margin: 1rem 0 4rem 0">
           <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">Não encontramos nada no momento. Volte mais tarde!</ion-label>
         </ion-item>
 
-        <ion-item *ngFor="let model of bestModelsToShow; let i = index" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand?.url, model?.url)" button>
+        <ion-item *ngFor="let model of bestModelsToShow[list]; let i = index" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand?.url, model?.url)" button>
           <ion-grid>
             <ion-row>
               <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5" class="model-position">
-                <div class="position">{{i + 1}}</div>
+                <div class="position position-{{model.position}}">{{model.position}}</div>
               </ion-col>
               <ion-col size-lg="11" size-md="10" size-sm="10" size-xs="9" class="model-name">
                 {{model.brand?.name}} <strong>{{model.name}}</strong>
@@ -250,6 +252,16 @@
                     </ion-label>
                   </ion-col>
                 </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+
+        <ion-item class="item-button" *ngIf="(list === 1 && !bestModelsToShow[list]?.length) || bestModelsToShow[list]?.length">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <app-adsense [type]="'feed'"></app-adsense>
               </ion-col>
             </ion-row>
           </ion-grid>
