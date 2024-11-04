@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AdsenseComponent } from './adsense.component';
+import { BannerNativeComponent } from './banner-native.component';
 
-describe('AdsenseComponent', () => {
-  let component: AdsenseComponent;
-  let fixture: ComponentFixture<AdsenseComponent>;
+describe('BannerNativeComponent', () => {
+  let component: BannerNativeComponent;
+  let fixture: ComponentFixture<BannerNativeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdsenseComponent ],
+      declarations: [ BannerNativeComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdsenseComponent);
+    fixture = TestBed.createComponent(BannerNativeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

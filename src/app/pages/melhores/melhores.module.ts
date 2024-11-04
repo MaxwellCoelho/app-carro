@@ -6,8 +6,10 @@ import { MelhoresPage } from './melhores.page';
 import { SharedModule } from '../../shared/shared.module';
 
 import { MelhoresPageRoutingModule } from './melhores-routing.module';
-import { BannerHomeComponent } from 'src/app/components/banner-home/banner-home/banner-home.component';
+import { BannerHomeComponent } from 'src/app/components/banner-home/banner-home.component';
 import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuation-bar.component';
+import { BannerNativeComponent } from 'src/app/components/ads/banner-native/banner-native.component';
+import { BannerRowComponent } from 'src/app/components/ads/banner-row/banner-row.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuatio
   declarations: [
     MelhoresPage,
     BannerHomeComponent,
-    ValuationBarComponent
+    ValuationBarComponent,
+    BannerNativeComponent,
+    BannerRowComponent
   ]
 })
 export class MelhoresPageModule {}
