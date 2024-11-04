@@ -117,7 +117,7 @@
         </ion-row>
       </ion-grid>
 
-      <app-banner-native *ngIf="showAds"></app-banner-native>
+      <app-banner-native [id]="'op'" [url]="'opiniao'"></app-banner-native>
       <br>
       <ion-title size="large" color="primary" class="main-title" *ngIf="modelOpinions.qtd > 0">
         <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>

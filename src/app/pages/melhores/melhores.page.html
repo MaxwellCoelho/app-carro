@@ -119,7 +119,7 @@
     </div>
 
     <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
-    <app-banner-native *ngIf="showAds"></app-banner-native>
+    <app-banner-native [id]="'me'" [url]="'melhores'"></app-banner-native>
 
     <br>
     <ion-title size="large" color="primary" class="main-title" style="margin-bottom: 0">
@@ -261,7 +261,7 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <app-banner-row></app-banner-row>
+                <app-banner-row [id]="list" [url]="'melhores'"></app-banner-row>
               </ion-col>
             </ion-row>
           </ion-grid>

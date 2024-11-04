@@ -1,5 +1,6 @@
-import { Component, AfterViewInit, OnInit, Renderer2, Inject, HostListener } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Renderer2, Inject, HostListener, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { AdsService } from 'src/app/services/ads/ads.service';
 
 @Component({
   selector: 'app-banner-native',
@@ -8,11 +9,15 @@ import { DOCUMENT } from '@angular/common';
 })
 export class BannerNativeComponent implements OnInit, AfterViewInit {
 
+  @Input() id;
+  @Input() url;
+
   public screenWidth;
   public loaded = [];
   public wMobile = 350;
 
   constructor(
+    public ads: AdsService,
     @Inject(DOCUMENT) private document,
     public renderer: Renderer2
   ) { }
@@ -22,34 +27,42 @@ export class BannerNativeComponent implements OnInit, AfterViewInit {
     this.screenWidth = window.innerWidth;
 
     if (this.screenWidth > this.wMobile) {
-      if (!this.loaded.includes('desk')) { this.setBannerScript(); }
+      if (!this.loaded.includes('desk')) {
+        if (!this.ads.nativeBannerDesk) {
+          this.setBannerScript();
+        } else {
+          this.document.getElementById('banner-native-desk-'+this.id).innerHTML = this.ads.nativeBannerDesk;
+        }
+      }
     } else {
-      if (!this.loaded.includes('mobile')) { this.setBannerMobile(); }
+      if (!this.loaded.includes('mobile') && location.pathname.includes(this.url)) { this.setBannerMobile(); }
     }
   }
 
   public ngOnInit(): void {
-    console.log('disparou init');
     this.screenWidth = window.innerWidth;
   }
 
   public ngAfterViewInit(): void {
-    console.log('disparou');
     this.onResize();
   }
 
   setBannerScript(): HTMLScriptElement {
     const d = this.renderer.createElement('div');
     d.id = 'container-4f4897cc4290b7ccb706f0b5dea440d5';
-    this.renderer.appendChild(this.document.getElementById('banner-native-desk'), d);
+    this.renderer.appendChild(this.document.getElementById('banner-native-desk-'+this.id), d);
 
     const s = this.renderer.createElement('script');
     s.async = 'async';
     s['data-cfasync'] = false;
     s.src = '//pl24870383.profitablecpmrate.com/4f4897cc4290b7ccb706f0b5dea440d5/invoke.js';
-    this.renderer.appendChild(this.document.getElementById('banner-native-desk'), s);
-
+    this.renderer.appendChild(this.document.getElementById('banner-native-desk-'+this.id), s);
     this.loaded.push('desk');
+
+    setTimeout(() => {
+      this.ads.nativeBannerDesk = document.getElementById('banner-native-desk-'+this.id).innerHTML;
+    }, 2000);
+
     return s;
   }
 
@@ -64,12 +77,12 @@ export class BannerNativeComponent implements OnInit, AfterViewInit {
                   'params' : {}
                 };`;
 
-    this.renderer.appendChild(this.document.getElementById('banner-native-mobile'), sn);
+    this.renderer.appendChild(this.document.getElementById('banner-native-mobile-'+this.id), sn);
 
     const s = this.renderer.createElement('script');
     s.type = 'text/javascript';
     s.src = '//www.highperformanceformat.com/850ee7b92379f000ef00be2e741aa702/invoke.js';
-    this.renderer.appendChild(this.document.getElementById('banner-native-mobile'), s);
+    this.renderer.appendChild(this.document.getElementById('banner-native-mobile-'+this.id), s);
 
     this.loaded.push('mobile');
     return s;

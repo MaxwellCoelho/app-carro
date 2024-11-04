@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Renderer2, Inject, HostListener } from '@angular/core';
+import { Component, AfterViewInit, Renderer2, Inject, HostListener, Input, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -6,7 +6,10 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './banner-row.component.html',
   styleUrls: ['./banner-row.component.scss'],
 })
-export class BannerRowComponent implements AfterViewInit {
+export class BannerRowComponent implements OnInit, AfterViewInit {
+
+  @Input() id;
+  @Input() url;
 
   public screenWidth;
   public loaded = [];
@@ -23,12 +26,16 @@ export class BannerRowComponent implements AfterViewInit {
     this.screenWidth = window.innerWidth;
 
     if (this.screenWidth > this.wDesk) {
-      if (!this.loaded.includes('desk')) { this.setFeedScriptDesk(); }
+      if (!this.loaded.includes('desk') && location.pathname.includes(this.url)) { this.setFeedScriptDesk(); }
     } else if (this.screenWidth > this.wTablet && this.screenWidth <= this.wDesk) {
-      if (!this.loaded.includes('tablet')) { this.setFeedScriptTablet(); }
+      if (!this.loaded.includes('tablet') && location.pathname.includes(this.url)) { this.setFeedScriptTablet(); }
     } else {
-      if (!this.loaded.includes('mobile')) { this.setFeedScriptMobile(); }
+      if (!this.loaded.includes('mobile') && location.pathname.includes(this.url)) { this.setFeedScriptMobile(); }
     }
+  }
+
+  public ngOnInit(): void {
+    this.screenWidth = window.innerWidth;
   }
 
   public ngAfterViewInit(): void {
@@ -46,12 +53,12 @@ export class BannerRowComponent implements AfterViewInit {
                   'params' : {}
                 };`;
 
-    this.renderer.appendChild(this.document.getElementById('banner-row-desk'), sn);
+    this.renderer.appendChild(this.document.getElementById('banner-row-desk-'+this.id), sn);
 
     const s = this.renderer.createElement('script');
     s.type = 'text/javascript';
     s.src = '//www.highperformanceformat.com/d5414c7a695fb35e2fc3602474d08e85/invoke.js';
-    this.renderer.appendChild(this.document.getElementById('banner-row-desk'), s);
+    this.renderer.appendChild(this.document.getElementById('banner-row-desk-'+this.id), s);
 
     this.loaded.push('desk');
     return s;
@@ -68,12 +75,12 @@ export class BannerRowComponent implements AfterViewInit {
                   'params' : {}
                 };`;
 
-    this.renderer.appendChild(this.document.getElementById('banner-row-tablet'), sn);
+    this.renderer.appendChild(this.document.getElementById('banner-row-tablet-'+this.id), sn);
 
     const s = this.renderer.createElement('script');
     s.type = 'text/javascript';
     s.src = '//www.highperformanceformat.com/fef15c58284844789112c1d4c5165da1/invoke.js';
-    this.renderer.appendChild(this.document.getElementById('banner-row-tablet'), s);
+    this.renderer.appendChild(this.document.getElementById('banner-row-tablet-'+this.id), s);
 
     this.loaded.push('tablet');
     return s;
@@ -90,12 +97,12 @@ export class BannerRowComponent implements AfterViewInit {
                   'params' : {}
                 };`;
 
-    this.renderer.appendChild(this.document.getElementById('banner-row-mobile'), sn);
+    this.renderer.appendChild(this.document.getElementById('banner-row-mobile-'+this.id), sn);
 
     const s = this.renderer.createElement('script');
     s.type = 'text/javascript';
     s.src = '//www.highperformanceformat.com/d1a97a78ebab1e8c8fc3c3271c5b61ce/invoke.js';
-    this.renderer.appendChild(this.document.getElementById('banner-row-mobile'), s);
+    this.renderer.appendChild(this.document.getElementById('banner-row-mobile-'+this.id), s);
 
     this.loaded.push('mobile');
     return s;

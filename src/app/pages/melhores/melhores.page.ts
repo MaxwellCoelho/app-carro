@@ -4,7 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
-import { InfiniteScrollCustomEvent, ToastController, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { VALUATION, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
   templateUrl: 'melhores.page.html',
   styleUrls: ['melhores.page.scss'],
 })
-export class MelhoresPage implements OnInit, ViewWillEnter, ViewWillLeave {
+export class MelhoresPage implements OnInit, ViewWillEnter {
 
   @ViewChild('IonContent') content;
 
@@ -37,7 +37,6 @@ export class MelhoresPage implements OnInit, ViewWillEnter, ViewWillLeave {
   public showDateFilter = false;
   public podium: Array<any> = [];
   public isClearAllFilters = false;
-  public showAds = true;
 
   constructor(
     public dbService: DataBaseService,
@@ -59,8 +58,6 @@ export class MelhoresPage implements OnInit, ViewWillEnter, ViewWillLeave {
   }
 
   public ionViewWillEnter(): void {
-    this.showAds = location.pathname.includes('melhores');
-    console.log('entrando', location.pathname);
     this.utils.setPageTitle('Melhores avaliados', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'melhor, melhores, ranking');
     if (this.utils.getShouldUpdate('bests')) {
       this.utils.setShouldUpdate(['bests'], false);
@@ -70,11 +67,6 @@ export class MelhoresPage implements OnInit, ViewWillEnter, ViewWillLeave {
 
     this.getBrands();
     this.getCategories();
-  }
-
-  ionViewWillLeave() {
-    this.showAds = location.pathname.includes('melhores');
-    console.log('saindo', location.pathname);
   }
 
   public clearBestModels(): void {

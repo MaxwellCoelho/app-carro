@@ -2,13 +2,13 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { NAVIGATION, DISCLAIMER } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { SearchService } from 'src/app/services/search/search.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { InfiniteScrollCustomEvent, ToastController, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
@@ -20,7 +20,7 @@ import { FavoriteService } from 'src/app/services/favorite/favorite.service';
   templateUrl: 'opiniao.page.html',
   styleUrls: ['opiniao.page.scss'],
 })
-export class OpiniaoPage implements OnInit, ViewWillEnter, ViewWillLeave {
+export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
   public disclaimer = DISCLAIMER;
@@ -38,7 +38,6 @@ export class OpiniaoPage implements OnInit, ViewWillEnter, ViewWillLeave {
   public dislike = false;
 
   public isFavorite: boolean;
-  public showAds = true;
 
   constructor(
     public dbService: DataBaseService,
@@ -57,14 +56,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter, ViewWillLeave {
     }
   }
 
-  ionViewWillLeave() {
-    this.showAds = location.pathname.includes('opiniao');
-    console.log('saindo', location.pathname);
-  }
-
   public ionViewWillEnter(): void {
-    this.showAds = location.pathname.includes('opiniao');
-    console.log('entrando', location.pathname);
     if (this.selectedModel) {
       this.setPageTitle();
     }
