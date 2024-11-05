@@ -16,6 +16,8 @@ export class AppComponent implements OnInit {
 
   public nav = NAVIGATION;
   public showLoader: boolean;
+  public showFirstBanner = false;
+  public showSecondBanner = false;
 
   constructor(
     public authService: AuthService,
@@ -27,6 +29,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkUser();
+
+    setTimeout(() => {
+      this.showFirstBanner = true;
+    }, 2000);
+
+    setTimeout(() => {
+      this.showSecondBanner = true;
+    }, 4000);
   }
 
   public checkUser(): void {

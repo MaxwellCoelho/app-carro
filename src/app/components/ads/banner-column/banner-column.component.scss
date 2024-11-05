@@ -3,8 +3,8 @@
   height: 600px;
   position: fixed;
   z-index: 1;
-  left: 2rem;
-  right: auto;
+  left: auto;
+  right: calc(50% + 610px);
   margin-top: 1rem;
   display: none;
 }
@@ -14,6 +14,6 @@
 }
 
 .direita {
-  left: auto;
-  right: 2rem;
+  right: auto;
+  left:  calc(50% + 600px);
 }
