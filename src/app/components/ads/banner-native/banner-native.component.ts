@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, OnInit, Renderer2, Inject, HostListener, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { AdsService } from 'src/app/services/ads/ads.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-banner-native',
@@ -14,10 +14,10 @@ export class BannerNativeComponent implements OnInit, AfterViewInit {
 
   public screenWidth;
   public loaded = [];
-  public wMobile = 350;
+  public wMobile = 500;
 
   constructor(
-    public ads: AdsService,
+    public utils: UtilsService,
     @Inject(DOCUMENT) private document,
     public renderer: Renderer2
   ) { }
@@ -28,10 +28,10 @@ export class BannerNativeComponent implements OnInit, AfterViewInit {
 
     if (this.screenWidth > this.wMobile) {
       if (!this.loaded.includes('desk')) {
-        if (!this.ads.nativeBannerDesk) {
+        if (!this.utils.nativeBannerDesk) {
           this.setBannerScript();
         } else {
-          this.document.getElementById('banner-native-desk-'+this.id).innerHTML = this.ads.nativeBannerDesk;
+          this.document.getElementById('banner-native-desk-'+this.id).innerHTML = this.utils.nativeBannerDesk;
         }
       }
     } else {
@@ -60,7 +60,7 @@ export class BannerNativeComponent implements OnInit, AfterViewInit {
     this.loaded.push('desk');
 
     setTimeout(() => {
-      this.ads.nativeBannerDesk = document.getElementById('banner-native-desk-'+this.id).innerHTML;
+      this.utils.nativeBannerDesk = document.getElementById('banner-native-desk-'+this.id).innerHTML;
     }, 2000);
 
     return s;

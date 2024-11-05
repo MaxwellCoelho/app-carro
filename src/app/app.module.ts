@@ -11,6 +11,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { TermAndCookiesComponent } from './components/term-and-cookies/term-and-cookies.component';
+import { BannerColumnComponent } from './components/ads/banner-column/banner-column.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TermAndCookiesComponent } from './components/term-and-cookies/term-and-
     TabMenuComponent,
     SideMenuComponent,
     HeaderComponent,
-    TermAndCookiesComponent
+    TermAndCookiesComponent,
+    BannerColumnComponent
   ],
   entryComponents: [],
   imports: [

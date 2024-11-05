@@ -1,0 +1,4 @@
+<div class="anuncio-desk" id="banner-column-high-{{id}}"
+  [ngClass]="[screenWidth > wDesk && screenHeight > wHigh ? 'show' : '', right ? 'direita' : '']"></div>
+<div class="anuncio-desk" id="banner-column-low-{{id}}"
+[ngClass]="[screenWidth > wDesk && screenHeight <= wHigh ? 'show' : '', right ? 'direita' : '']"></div>

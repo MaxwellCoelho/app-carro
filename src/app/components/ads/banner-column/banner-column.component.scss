@@ -1,0 +1,19 @@
+.anuncio-desk {
+  width: 160px;
+  height: 600px;
+  position: fixed;
+  z-index: 1;
+  left: 2rem;
+  right: auto;
+  margin-top: 1rem;
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.direita {
+  left: auto;
+  right: 2rem;
+}

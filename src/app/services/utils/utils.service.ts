@@ -13,6 +13,7 @@ export type UpdateTypes = 'opinions' | 'bests' | 'versions' | 'models';
 export class UtilsService {
 
   public sessionUser;
+  public nativeBannerDesk;
 
   public update = {
     opinions: false,

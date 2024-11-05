@@ -27,7 +27,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   public showLoader: boolean;
   public page = 1;
   public pageList = [1];
-  public pagination = 20;
+  public pagination = 10;
   public showTopButton = false;
   public brandIdFilter: object;
   public categoryIdFilter: object;

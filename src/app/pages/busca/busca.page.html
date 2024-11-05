@@ -72,6 +72,8 @@
       </ion-list>
 
       <app-model-not-found *ngIf="searchService.getAllBrands().length && selectedBrand && !showLoader" [selectedBrand]="selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
+
+      <app-banner-native [id]="'bu'" [url]="'busca'"></app-banner-native>
     </div>
   </div>
 </ion-content>
