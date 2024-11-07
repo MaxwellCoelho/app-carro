@@ -1,4 +1,4 @@
-FROM node:14.17.0
+FROM node
 COPY package.json .
 RUN npm install -g typescript@4.1.6
 RUN npm install -g @ionic/cli
