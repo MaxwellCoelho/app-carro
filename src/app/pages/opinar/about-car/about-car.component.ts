@@ -169,7 +169,7 @@ export class AboutCarComponent implements OnInit, AfterViewInit {
   public segmentChanged($event) {
     this.valuationItens.find(item => {
         if ($event.target.value && item.value === $event.target.id) {
-          const val = this.valuation.find(valItem => valItem.value.toString() === $event.target.value.toString());
+          const val = this.valuation.find(valItem => valItem.value.toString() === ($event.target.value - 0.49).toString());
           item.valuation = { id: val ? val.id : $event.target.id, value: $event.target.value};
         }
       }

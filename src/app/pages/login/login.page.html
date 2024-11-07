@@ -26,7 +26,7 @@
               <br>
               <ion-item class="input-item">
                 <ion-label position="floating">Senha</ion-label>
-                <ion-input [type]="userPasswordType" maxlength="80" formControlName="userPassword"></ion-input>
+                <ion-input [type]="userPasswordType" maxlength="80" formControlName="userPassword" id="userPassword" (keyup)="checkKey($event)"></ion-input>
                 <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('userPasswordType')">
                   <ion-icon slot="icon-only" name="eye{{userPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
                 </ion-button>
@@ -54,7 +54,7 @@
             <form *ngIf="showForgotPassword" name="login" [formGroup]="formRecovery" (submit)="sendRecovery()">
               <ion-item class="input-item">
                 <ion-label position="floating">Email</ion-label>
-                <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail"></ion-input>
+                <ion-input type="email" pattern=".+@.+\..+" maxlength="50" formControlName="userEmail" id="userEmail" (keyup)="checkKey($event)"></ion-input>
               </ion-item>
               <ion-note color="danger" *ngIf="formRecovery.controls.userEmail.touched">
                 <span *ngIf="formRecovery.controls.userEmail.errors?.required">Necessário preencher seu email!</span>
@@ -115,7 +115,7 @@
               <br>
               <ion-item class="input-item">
                 <ion-label position="floating">Repita a nova senha</ion-label>
-                <ion-input [type]="repeatNewPasswordType" minlength="{{formCreateUser.controls.newPassword.value?.length}}" maxlength="80" formControlName="repeatNewPassword"></ion-input>
+                <ion-input [type]="repeatNewPasswordType" minlength="{{formCreateUser.controls.newPassword.value?.length}}" maxlength="80" formControlName="repeatNewPassword" id="repeatNewPassword" (keyup)="checkKey($event)"></ion-input>
                 <ion-button fill="clear" slot="end" color="medium" (click)="showOrHideField('repeatNewPasswordType')">
                   <ion-icon slot="icon-only" name="eye{{repeatNewPasswordType === 'text' ? '-off' : ''}}"></ion-icon>
                 </ion-button>
@@ -127,7 +127,8 @@
                 <span *ngIf="formCreateUser.controls.repeatNewPassword.value !== formCreateUser.controls.newPassword.value">Digite exatamente o que você digitou no campo Nova Senha!</span>
               </ion-note>
               <br>
-              <ion-button size="default" title="Criar meu cadastro" expand="block" color="success" mode="ios" type="submit" [disabled]="formCreateUser.status === 'INVALID'">
+              <ion-button size="default" title="Criar meu cadastro" expand="block" color="success" mode="ios" type="submit"
+                [disabled]="formCreateUser.status === 'INVALID' || formCreateUser.controls.repeatNewPassword.value !== formCreateUser.controls.newPassword.value">
                 <ion-icon name="person-add-outline" slot="start"></ion-icon>
                 <ion-label slot="end">Criar meu cadastro</ion-label>
               </ion-button>

@@ -22,15 +22,17 @@ export class CarVersionPage implements OnInit {
   public nav = NAVIGATION;
   public fuels = FUEL;
   public gearboxes = GEARBOX;
-  public reviewVersions: Array<any>;
-  public versions: Array<any>;
-  public finalVersions: Array<any>;
+  public finalVersions: Array<any> = [];
+  public orderBy = 'default';
   public models: Array<any>;
   public showLoader: boolean;
   public formVersions: FormGroup;
   public activeChecked = true;
   public pendingReview = false;
-  public modelFilter: string;
+  public page = 1;
+  public pagination = 20;
+  public modelFilter = 'nothing';
+  public excludedItem = false;
 
   constructor(
     public dbService: DataBaseService,
@@ -43,7 +45,7 @@ export class CarVersionPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getVersions(true);
+    this.getVersions();
     this.getModels();
   }
 
@@ -59,25 +61,37 @@ export class CarVersionPage implements OnInit {
     });
   }
 
-  public getVersions(review?: boolean, modelId?: string): void {
+  public getVersions(): void {
     this.showLoader = true;
-    const myFilter = review ? { review: true } : { review: false};
 
-    if (modelId) {
-      myFilter['model._id'] = modelId;
+    const isReview = this.modelFilter === 'nothing';
+    const myFilter = {};
+    const page = this.page.toString();
+    const pagination = this.pagination.toString();
+    let sort;
+
+    if (this.orderBy !== 'default') {
+      sort = [
+        {name: '_id', value: 'desc'}
+      ];
+    }
+
+    if (isReview) {
+      myFilter['review'] = true;
+    }
+
+    if (!isReview && this.modelFilter) {
+      myFilter['model._id'] = this.modelFilter;
     }
 
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData).subscribe(
+    const subVersions = this.dbService.filterItem(environment.filterVersionsAction, jwtData, page, pagination, sort).subscribe(
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
-        const myList = review ? 'reviewVersions' : 'versions';
-        this[myList] = res.versions;
 
-        const reviews = this.reviewVersions || [];
-        const versions = this.versions || [];
-        this.finalVersions = [...reviews, ...versions];
+        this.finalVersions = [...this.finalVersions, ...res.versions];
         this.showLoader = false;
+        this.page++;
       },
       err => {
         this.showErrorToast(err);
@@ -85,29 +99,36 @@ export class CarVersionPage implements OnInit {
     );
   }
 
-  public filterByModel($event) {
-    this.modelFilter = $event.detail.value;
-    if (this.modelFilter === 'nothing') {
-      this.modelFilter = null;
-      this.versions = [];
-      this.finalVersions = this.reviewVersions;
-    } else {
-      this.getVersions(false, this.modelFilter);
+  public filterByModel($event, type: 'filter' | 'order') {
+   switch (type) {
+      case 'filter':
+        this.modelFilter = $event.detail.value;
+        break;
+      case 'order':
+        this.orderBy = $event.detail.value;
+        break;
     }
+
+    this.finalVersions = [];
+    this.page = 1;
+    this.excludedItem = false;
+    this.getVersions();
   }
 
   public getModels(): void {
     this.showLoader = true;
-    const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
-      res => {
-        if (!subModels.closed) { subModels.unsubscribe(); }
-        this.models = res.models.sort((a, b) => (a['brand']['name'] > b['brand']['name']) || -1);
-        this.showLoader = false;
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+    if (!this.models) {
+      const subModels = this.dbService.getItens(environment.modelsAction).subscribe(
+        res => {
+          if (!subModels.closed) { subModels.unsubscribe(); }
+          this.models = res.models.sort((a, b) => (a['brand']['name'] > b['brand']['name']) || -1);
+          this.showLoader = false;
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
   }
 
   public createVersion(action: string) {
@@ -143,17 +164,7 @@ export class CarVersionPage implements OnInit {
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
 
-        if (this.reviewVersions.find(mod => mod['_id'] === versionId) || this.pendingReview) {
-          this.getVersions(true);
-          if (this.modelFilter) {
-            this.getVersions(false, this.modelFilter);
-          }
-        } else {
-          if (this.modelFilter) {
-            this.getVersions(false, this.modelFilter);
-          }
-        }
-
+        this.updateItem(res.saved, 'update');
         this.formVersions.reset();
         this.utils.setShouldUpdate(['versions'], true);
         this.showLoader = false;
@@ -165,6 +176,42 @@ export class CarVersionPage implements OnInit {
         this.showErrorToast(err);
       }
     );
+  }
+
+  public updateItem(item: any, type: 'update' | 'delete'): void {
+    const finalVersionsCopy = [...this.finalVersions];
+    let foundItem = false;
+    this.finalVersions = [];
+
+    for (let i = 0; i < finalVersionsCopy.length; i++) {
+      if (item['_id'] === finalVersionsCopy[i]['_id']) {
+        foundItem = true;
+
+        if (type === 'delete') {
+          finalVersionsCopy.splice(i, 1);
+        } else {
+          finalVersionsCopy[i]['active'] = item['active'];
+          finalVersionsCopy[i]['review'] = item['review'];
+          finalVersionsCopy[i]['model'] = item['model'];
+          finalVersionsCopy[i]['fuel'] = item['fuel'];
+          finalVersionsCopy[i]['engine'] = item['engine'];
+          finalVersionsCopy[i]['complement'] = item['complement'];
+          finalVersionsCopy[i]['gearbox'] = item['gearbox'];
+          finalVersionsCopy[i]['years'] = item['years'];
+          finalVersionsCopy[i]['modified'] = item['modified'];
+          finalVersionsCopy[i]['modified_by'] = item['modified_by'];
+          finalVersionsCopy[i]['category'] = item['category'];
+        }
+      }
+    }
+
+    if (type === 'update' && !foundItem) {
+      finalVersionsCopy.unshift(item);
+    }
+
+    setTimeout(() => {
+      this.finalVersions = finalVersionsCopy;
+    }, 50);
   }
 
   public editVersion(version) {
@@ -190,18 +237,8 @@ export class CarVersionPage implements OnInit {
       res => {
         if (!subVersions.closed) { subVersions.unsubscribe(); }
 
-        if (this.reviewVersions.find(mod => mod['_id'] === versionId) || this.pendingReview) {
-          this.getVersions(true);
-          if (this.modelFilter) {
-            this.getVersions(false, this.modelFilter);
-          }
-        } else {
-          if (this.modelFilter) {
-            this.getVersions(false, this.modelFilter);
-          }
-        }
-
-        this.versions = this.utils.sortByReview(res.versions);
+        this.updateItem(res.removed, 'delete');
+        this.excludedItem = true;
         this.showLoader = false;
         this.showToast(action, res.removed);
       },

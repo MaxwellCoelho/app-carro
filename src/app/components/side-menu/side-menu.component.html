@@ -3,7 +3,8 @@
   <ion-toolbar color="primary">
     <ion-menu-toggle auto-hide="false">
       <ion-item *ngIf="utils.sessionUser" (click)="clickItem(nav.perfil.route)" color="primary" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" lines="none" detail="false">
-        <ion-icon slot="start" [name]="nav.perfil.icon + '-outline'"></ion-icon>
+        <app-avatar [imgId]="utils.sessionUser.avatar?.id" [colorId]="utils.sessionUser.avatar?.color" [name]="utils.sessionUser.name"></app-avatar>
+        <!-- <ion-icon slot="start" [name]="nav.perfil.icon + '-outline'"></ion-icon> -->
         <ion-label>{{utils.sessionUser.name}}</ion-label>
       </ion-item>
 

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { FavoritosPage } from './favoritos.page';
 
 import { FavoritosPageRoutingModule } from './favoritos-routing.module';
+import { BannerRowComponent } from 'src/app/components/ads/banner-row/banner-row.component';
 
 
 @NgModule({
@@ -14,6 +15,9 @@ import { FavoritosPageRoutingModule } from './favoritos-routing.module';
     IonicModule,
     FavoritosPageRoutingModule
   ],
-  declarations: [FavoritosPage]
+  declarations: [
+    FavoritosPage,
+    BannerRowComponent
+  ]
 })
 export class FavoritosPageModule {}

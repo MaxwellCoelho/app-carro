@@ -2,7 +2,7 @@
 <ion-grid slot="content" class="valuation-itens">
   <ion-row>
     <ion-col>
-      <h1 class="form-title">Primeiro informe as características de seu carro</h1>
+      <h1 class="form-title">Primeiro informe as características de seu <span>{{selectedModel.name}}</span></h1>
     </ion-col>
   </ion-row>
 
@@ -133,7 +133,7 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">O que você tem a dizer sobre seu <span>{{selectedModel.brand.name}} {{selectedModel.name}}</span>?</h1>
+        <h1 class="form-title">O que você tem a dizer sobre seu <span>{{selectedModel.name}}</span>?</h1>
       </ion-col>
     </ion-row>
 
@@ -144,7 +144,7 @@
       </ion-col>
       <ion-col size-md="9" size-sm="8" size-xs="12" class="item-col-val-itens">
         <ion-segment (ionChange)="segmentChanged($event)" mode="ios" color="light" [id]="item.value" [value]="item.valuation?.value">
-          <ion-segment-button *ngFor="let val of valuation" [id]="item.value+'-'+val.id" value="{{val.value}}" [ngClass]="val.id">
+          <ion-segment-button *ngFor="let val of valuation" [id]="item.value+'-'+val.id" value="{{val.value + 0.49}}" [ngClass]="val.id">
             <ion-label>{{val.name}}</ion-label>
           </ion-segment-button>
         </ion-segment>
@@ -156,7 +156,7 @@
 
     <ion-row>
       <ion-col>
-        <h1 class="form-title">Agora as Considerações finais.</h1>
+        <h1 class="form-title">Agora escreva as considerações finais sobre seu veículo</h1>
       </ion-col>
     </ion-row>
 

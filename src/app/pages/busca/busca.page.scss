@@ -66,12 +66,28 @@
 
   @media (min-width: 980px) {
     width: calc(50% - 2rem);
-    display: inline-flex;
+    display: contents;
     margin-right: 4rem;
 
     &:nth-child(2n) {
       margin-right: 0;
     }
+  }
+}
+
+.model-list {
+  @media (min-width: 980px) {
+    columns: 2;
+  }
+}
+
+.brand-list {
+  @media (min-width: 700px) {
+    columns: 2;
+  }
+
+  @media (min-width: 980px) {
+    columns: 3;
   }
 }
 

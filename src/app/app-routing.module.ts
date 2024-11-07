@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
+import { LoggedGuard } from 'src/app/guard/logged.guard';
 
 const routes: Routes = [
   {
@@ -9,6 +10,10 @@ const routes: Routes = [
   },
   {
     path: NAVIGATION.search.route,
+    loadChildren: () => import('./pages/busca/busca.module').then( m => m.BuscaPageModule)
+  },
+  {
+    path: `${NAVIGATION.search.route}/:marca`,
     loadChildren: () => import('./pages/busca/busca.module').then( m => m.BuscaPageModule)
   },
   {
@@ -21,6 +26,11 @@ const routes: Routes = [
   },
   {
     path: NAVIGATION.garage.route,
+    loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule),
+    canActivate: [LoggedGuard]
+  },
+  {
+    path: 'garagem/:usuario',
     loadChildren: () => import('./pages/garagem/garagem.module').then( m => m.GaragemPageModule)
   },
   {
@@ -34,10 +44,6 @@ const routes: Routes = [
   {
     path: NAVIGATION.settings.route,
     loadChildren: () => import('./pages/configuracoes/configuracoes.module').then( m => m.ConfiguracoesPageModule)
-  },
-  {
-    path: NAVIGATION.perfil.route,
-    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
     path: NAVIGATION.admin.route,
@@ -54,6 +60,20 @@ const routes: Routes = [
   {
     path: 'opinar/:marca/:modelo',
     loadChildren: () => import('./pages/opinar/opinar.module').then( m => m.OpinarPageModule)
+  },
+  {
+    path: 'opinar/sucesso',
+    loadChildren: () => import('./pages/opinar-success/opinar-success.module').then( m => m.OpinarSuccessPageModule)
+  },
+  {
+    path: 'opinar/:marca',
+    pathMatch: 'full',
+    redirectTo: `${NAVIGATION.search.route}/:marca`
+  },
+  {
+    path: 'opiniao/:marca',
+    pathMatch: 'full',
+    redirectTo: `${NAVIGATION.search.route}/:marca`
   },
   {
     path: 'opinar',

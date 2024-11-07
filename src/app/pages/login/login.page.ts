@@ -77,38 +77,40 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public authUser(): void {
-    this.showLoader = true;
+    if (this.formLogin.status !== 'INVALID') {
+      this.showLoader = true;
 
-    const data = {
-      email: this.formLogin.value.userEmail,
-      password: this.formLogin.value.userPassword
-    };
+      const data = {
+        email: this.formLogin.value.userEmail,
+        password: this.formLogin.value.userPassword
+      };
 
-    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+      const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
-    const subCustomers = this.authService.authUser(jwtData).subscribe(
-      res => {
-        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+      const subCustomers = this.authService.authUser(jwtData).subscribe(
+        res => {
+          if (!subCustomers.closed) { subCustomers.unsubscribe(); }
 
-        this.formLogin.reset();
-        this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
-        this.utils.setShouldUpdate(['opinions'], true);
-        this.remindChecked
-          ? this.utils.localStorageSetItem('userEmail', res.authorized.email)
-          : this.utils.localStorageRemoveItem('userEmail');
-        this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
-        this.utils.returnLoggedUser();
-        this.favorite.syncFavorites();
-        this.router.navigate([`/${this.nav.garage.route}`]);
+          this.formLogin.reset();
+          this.utils.localStorageSetItem('userSession', this.cryptoService.encondeJwt(res.authorized));
+          this.utils.setShouldUpdate(['opinions'], true);
+          this.remindChecked
+            ? this.utils.localStorageSetItem('userEmail', res.authorized.email)
+            : this.utils.localStorageRemoveItem('userEmail');
+          this.utils.localStorageSetItem('lastUser', res.authorized['_id']);
+          this.utils.returnLoggedUser();
+          this.favorite.syncFavorites(true);
+          this.router.navigate([`/${this.nav.garage.route}`]);
 
-        setTimeout(() => {
-          this.showLoader = false;
-        }, 1000);
-      },
-      err => {
-        this.showErrorToast(err);
-      }
-    );
+          setTimeout(() => {
+            this.showLoader = false;
+          }, 1000);
+        },
+        err => {
+          this.showErrorToast(err);
+        }
+      );
+    }
   }
 
   public recoveryUserEmail(): void {
@@ -127,30 +129,32 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public sendRecovery(): void {
-    this.showLoader = true;
+    if (this.formRecovery.status !== 'INVALID') {
+      this.showLoader = true;
 
-    const data = {
-      email: this.formRecovery.value.userEmail
-    };
+      const data = {
+        email: this.formRecovery.value.userEmail
+      };
 
-    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+      const jwtData = { data: this.cryptoService.encondeJwt(data)};
 
-    const submit = () => {
-      if (!subCustomers.closed) { subCustomers.unsubscribe(); }
-      this.showLoader = false;
+      const submit = () => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
 
-      this.showRecoveryToast();
-      this.backToLogin();
-    };
+        this.showRecoveryToast();
+        this.backToLogin();
+      };
 
-    const subCustomers = this.authService.recoveryPassword(jwtData).subscribe(
-      res => {
-        submit();
-      },
-      err => {
-        submit();
-      }
-    );
+      const subCustomers = this.authService.recoveryPassword(jwtData).subscribe(
+        res => {
+          submit();
+        },
+        err => {
+          submit();
+        }
+      );
+    }
   }
 
   public backToLogin(): void {
@@ -211,36 +215,39 @@ export class LoginPage implements OnInit, ViewWillEnter {
   }
 
   public showConfirmEmailAlert() {
-    const userInfoData = {
-      name: this.formCreateUser.value.createNome,
-      email: this.formCreateUser.value.createEmail,
-      password: this.formCreateUser.value.repeatNewPassword,
-      active: true
-    };
+    if (this.formCreateUser.status !== 'INVALID') {
+      const userInfoData = {
+        name: this.formCreateUser.value.createNome,
+        email: this.formCreateUser.value.createEmail,
+        password: this.formCreateUser.value.repeatNewPassword,
+        avatar: this.utils.getRandomAvatar(),
+        active: true
+      };
 
-    const confirmHandler = () => {
-      this.createCustomer(userInfoData);
-    };
+      const confirmHandler = () => {
+        this.createCustomer(userInfoData);
+      };
 
-    const alertObj = {
-      header: `Confirme seu email!`,
-      message: `<strong>${userInfoData.email}</strong><br><br>Está correto?<br>Ele será usado para login e recuperação de senha.`,
-      buttons: [
-        {
-          text: 'Corrigir',
-          role: 'cancel',
-          id: 'cancel-button'
-        }, {
-          text: 'Está correto',
-          id: 'confirm-button',
-          handler: confirmHandler
-        }
-      ]
-    };
+      const alertObj = {
+        header: `Confirme seu email!`,
+        message: `<strong>${userInfoData.email}</strong><br><br>Está correto?<br>Ele será usado para login e recuperação de senha.`,
+        buttons: [
+          {
+            text: 'Corrigir',
+            role: 'cancel',
+            id: 'cancel-button'
+          }, {
+            text: 'Está correto',
+            id: 'confirm-button',
+            handler: confirmHandler
+          }
+        ]
+      };
 
-    this.alertController.create(alertObj).then(alert => {
-      alert.present();
-    });
+      this.alertController.create(alertObj).then(alert => {
+        alert.present();
+      });
+    }
   }
 
   public createCustomer(userInfoData) {
@@ -274,5 +281,24 @@ export class LoginPage implements OnInit, ViewWillEnter {
     }).then(toast => {
       toast.present();
     });
+  }
+
+  checkKey($event) {
+    const id = $event.target.offsetParent.id;
+    const keyCode = $event.keyCode;
+
+    if (keyCode === 13) {
+      switch (id) {
+        case 'userPassword':
+          this.authUser();
+          break;
+        case 'userEmail':
+          this.sendRecovery();
+          break;
+        case 'repeatNewPassword':
+          this.showConfirmEmailAlert();
+          break;
+      }
+    }
   }
 }

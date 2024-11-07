@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { NAVIGATION, DISCLAIMER } from 'src/app/helpers/navigation.helper';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
@@ -26,12 +27,15 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   public selectedModel: object;
   public modelOpinions: object;
   public showLoader: boolean;
+  public loadedModelAndOpinions = false;
   public modelAverage: object;
 
   public valuation = VALUATION.slice();
   public valuationItens = [];
   public page = 1;
   public pagination = 20;
+  public like = false;
+  public dislike = false;
 
   public isFavorite: boolean;
 
@@ -68,6 +72,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
       this.loadModelInfo();
     } else if (this.selectedModel) {
       this.isFavorite = this.favorite.isFavorite(this.selectedModel);
+      this.checkReactions();
     }
   }
 
@@ -118,6 +123,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
 
   public getModelOpinions(): void {
     this.isFavorite = this.favorite.isFavorite(this.selectedModel);
+    this.checkReactions();
     this.setPageTitle();
     const action = `${environment.opinionModelAction}/${this.selectedModel['brand']['_id']}/${this.selectedModel['_id']}`;
     const subModelOpinions = this.dbService.getItens(action, this.page.toString(), this.pagination.toString()).subscribe(
@@ -131,6 +137,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
         this.setModelAverages(res.averages);
         this.setOpinionValuation();
         this.showLoader = false;
+        this.loadedModelAndOpinions = true;
         this.page++;
       },
       err => {
@@ -140,7 +147,7 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   public setModelAverages(averages: any) {
-    const average = averages.average;
+    const average = this.selectedModel['average'];
     this.modelAverage = this.getValuationItemByValue(average);
 
     const valItens = [...VALUATION_ITENS_CAR];
@@ -218,19 +225,20 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
     }
 
     this.showLoader = false;
+    this.loadedModelAndOpinions = true;
     console.error(err);
 
-    this.toastController.create({
-      header: 'Atenção!',
-      message: response,
-      duration: 4000,
-      position: 'middle',
-      icon: 'warning-outline',
-      color: 'danger'
-    }).then(toast => {
-      toast.present();
-      this.router.navigate([NAVIGATION.search.route]);
-    });
+    // this.toastController.create({
+    //   header: 'Atenção!',
+    //   message: response,
+    //   duration: 4000,
+    //   position: 'middle',
+    //   icon: 'warning-outline',
+    //   color: 'danger'
+    // }).then(toast => {
+    //   toast.present();
+    //   this.router.navigate([NAVIGATION.search.route]);
+    // });
   }
 
   public goToOpinar() {
@@ -248,8 +256,8 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
   }
 
   changeModel() {
-    const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
-    this.router.navigate([NAVIGATION.search.route], params);
+    const buscaUrl = `${NAVIGATION.search.route}/${this.selectedModel['brand'].url}`;
+    this.router.navigate([buscaUrl]);
   }
 
   addOrRemoveFavorite() {
@@ -264,10 +272,100 @@ export class OpiniaoPage implements OnInit, ViewWillEnter {
       message: `${this.selectedModel['brand']['name']} ${this.selectedModel['name']} ${type} com sucesso!`,
       duration: 4000,
       position: 'middle',
-      icon: type === 'adicionado' ? 'heart' : 'heart-outline',
+      icon: type === 'adicionado' ? this.nav.favorite.icon : `${this.nav.favorite.icon}-outline`,
       color: 'success'
     }).then(toast => {
       toast.present();
     });
+  }
+
+  public goSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
+  }
+
+  public shareSocialMedia(media: string): void {
+    let linkMedia;
+    const treatedLink = location.href.replace('http://localhost:4200', 'https://krro.com.br');
+
+    switch (media) {
+      case 'whatsapp':
+        linkMedia = `https://api.whatsapp.com/send?text=${treatedLink}`;
+        break;
+      case 'facebook':
+        linkMedia = `https://www.facebook.com/sharer/sharer.php?u=${treatedLink}`;
+        break;
+      case 'instagram':
+        linkMedia = '';
+        break;
+      case 'linkedin':
+        linkMedia = `https://www.linkedin.com/shareArticle?mini=true&url=${treatedLink}`;
+        break;
+      case 'telegram':
+        linkMedia = `https://telegram.me/share/url?url=${treatedLink}`;
+        break;
+      case 'twitter':
+        linkMedia = `https://twitter.com/intent/tweet?url=${treatedLink}&text=Opiniões%20reais%20dos%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}`;
+        break;
+      case 'pinterest':
+        linkMedia = `https://pinterest.com/pin/create/button/?url=${treatedLink}&description=Opiniões%20reais%20dos%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}`;
+        break;
+      case 'email':
+        linkMedia = `mailto:?subject=Alguém%20compartilhou%20as%20opiniões%20reais%20dos%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}%20com%20você&body=Veja%20o%20que%20os%20donos%20de%20${this.selectedModel['brand'].name}%20${this.selectedModel['name']}%20estão%20falando%20dele%3A%20${treatedLink}`;
+        break;
+    }
+
+    window.open(linkMedia, '_blank');
+  }
+
+  public reactButton(type: string): void {
+    const likesQtd = this.selectedModel['likes_length'] || 0;
+    const dislikesQtd = this.selectedModel['dislikes_length'] || 0;
+    const data = {};
+
+    switch (type) {
+      case 'like':
+        this.like = !this.like;
+        this.dislike = false;
+        data['likes_length'] = likesQtd + 1;
+        data['dislikes_length'] = dislikesQtd;
+        break;
+      case 'dislike':
+        this.dislike = !this.dislike;
+        this.like = false;
+        data['likes_length'] = likesQtd;
+        data['dislikes_length'] = dislikesQtd + 1;
+        break;
+    }
+
+    const recovered = this.recoveryReactions();
+    const modelId = this.selectedModel['_id'];
+    recovered.push({modelId, reaction: type});
+    const jwtData = this.cryptoService.encondeJwt(recovered);
+    this.utils.localStorageSetItem('reactions', jwtData);
+
+    const jwtApiData = { data: this.cryptoService.encondeJwt(data)};
+    const subModels = this.dbService.createItem(environment.modelsAction, jwtApiData, modelId).subscribe(
+      res => {
+        if (!subModels.closed) { subModels.unsubscribe(); }
+        this.selectedModel['likes_length'] = res['saved']['likes_length'];
+        this.selectedModel['dislikes_length'] = res['saved']['dislikes_length'];
+      },
+      err => {
+        this.showErrorToast(err);
+      }
+    );
+  }
+
+  public recoveryReactions(): any[] {
+    const jwtData = this.utils.localStorageGetItem('reactions');
+    const decoded = this.cryptoService.decodeJwt(jwtData) || [];
+    return decoded;
+  }
+
+  public checkReactions(): void {
+    const recovered = this.recoveryReactions().find(item => item.modelId === this.selectedModel['_id']);
+    if (recovered) {
+      this[recovered.reaction] = true;
+    }
   }
 }

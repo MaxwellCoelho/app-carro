@@ -1,14 +1,14 @@
 export const VALUATION = [
-  { name: 'Péssimo', id: 'pessimo l', value: 0.5 },
-  { name: 'Péssimo', id: 'pessimo r', value: 1 },
-  { name: 'Ruim', id: 'ruim l', value: 1.5 },
-  { name: 'Ruim', id: 'ruim r', value: 2 },
-  { name: 'Regular', id: 'regular l', value: 2.5 },
-  { name: 'Regular', id: 'regular r', value: 3 },
-  { name: 'Bom', id: 'bom l', value: 3.5 },
-  { name: 'Bom', id: 'bom r', value: 4 },
-  { name: 'Ótimo', id: 'otimo l', value: 4.5 },
-  { name: 'Ótimo', id: 'otimo r', value: 5 }
+  { name: 'Péssimo', id: 'pessimo l', value: 0.01 },
+  { name: 'Péssimo', id: 'pessimo r', value: 0.51 },
+  { name: 'Ruim', id: 'ruim l', value: 1.01 },
+  { name: 'Ruim', id: 'ruim r', value: 1.51 },
+  { name: 'Regular', id: 'regular l', value: 2.01 },
+  { name: 'Regular', id: 'regular r', value: 2.51 },
+  { name: 'Bom', id: 'bom l', value: 3.01 },
+  { name: 'Bom', id: 'bom r', value: 3.51 },
+  { name: 'Ótimo', id: 'otimo l', value: 4.01 },
+  { name: 'Ótimo', id: 'otimo r', value: 4.51 }
 ];
 
 export const VALUATION_NOT_FOUND = { name: 'Indisponível', id: 'indisponivel', value: 0 };

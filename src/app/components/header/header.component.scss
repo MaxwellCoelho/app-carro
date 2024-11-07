@@ -1,5 +1,15 @@
 #main-header {
 
+  app-avatar {
+    margin-left: -5px;
+    margin-right: 5px;
+
+    ::ng-deep .img-container {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
   .mobile-menu {
     display: block;
 
@@ -21,15 +31,15 @@
     border-right: 1px dashed var(--ion-color-primary-tint);
     padding-right: 0.25rem;
 
-    // &:nth-last-child(-n+2) {
-    //   border-right: 0px;
-    // }
-
-    @media (max-width: 880px) {
-      ion-icon {
-        display: none;
+    &:not(:nth-last-child(-n+2)) {
+      @media (max-width: 880px) {
+        ion-icon {
+          display: none;
+        }
       }
     }
+
+
   }
 
   ion-toolbar {
@@ -59,7 +69,7 @@
   &.header-md::after {
     height: 10px;
     background: #fff;
-    box-shadow: 0px 5px 10px 8px #fff;
+    box-shadow: 0px 0px 8px 8px #fff;
   }
 
   .logo-container {

@@ -97,10 +97,33 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Usuários {{users ? '('+users.length+')' : ''}}</h1></ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <h1>{{customerFilter === 'nothing' ? 'Usuários recentes' : 'Usuários'}} {{finalUsers ? '('+finalUsers.length+')' : ''}}</h1>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Filtro</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByLevel($event, 'filter')" [value]="'nothing'">
+                <ion-select-option value="nothing">Últimos 5</ion-select-option>
+                <ion-select-option value="">Todos os níveis</ion-select-option>
+                <ion-select-option *ngFor="let role of roles" [value]="role._id">{{ role.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Ordem</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByLevel($event, 'order')" [value]="'default'" [disabled]="!finalUsers?.length || customerFilter === 'nothing'">
+                <ion-select-option value="default">Alfabética</ion-select-option>
+                <ion-select-option value="recent">Mais recente</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!users || (users && !users.length)" class="grid-content">
+        <ion-row *ngIf="!finalUsers || (finalUsers && !finalUsers.length)" class="grid-content">
           <ion-col style="text-align: center; margin: 2rem 0">
             <ion-icon name="alert-circle" color="medium" size="large"></ion-icon>
             <br>
@@ -108,7 +131,7 @@
           </ion-col>
         </ion-row>
 
-        <div class="table-container" *ngIf="users && users.length">
+        <div class="table-container" *ngIf="finalUsers && finalUsers.length">
           <table>
             <tr>
               <th>Ativo</th>
@@ -124,7 +147,7 @@
               <th>Ação</th>
             </tr>
 
-            <tr *ngFor="let user of users">
+            <tr *ngFor="let user of finalUsers">
               <td>
                 <ion-icon *ngIf="user.active" size="large" color="success" name="checkmark-circle"></ion-icon>
                 <ion-icon *ngIf="!user.active" size="large" color="danger" name="close-circle"></ion-icon>
@@ -148,6 +171,12 @@
               </td>
             </tr>
           </table>
+          <ion-button size="default" title="Carregar mais" color="light" mode="ios"
+            type="button" (click)="getCustomers()" *ngIf="customerFilter !== 'nothing'
+              && (finalUsers.length === ((page - 1)*pagination) || (finalUsers.length === ((page - 1)*pagination) - 1 && excludedItem))">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label slot="end">Carregar mais</ion-label>
+          </ion-button>
         </div>
       </ion-grid>
     </div>

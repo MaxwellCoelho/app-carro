@@ -119,8 +119,10 @@
     </div>
 
     <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
+    <app-banner-native [id]="'me'" [url]="'melhores'"></app-banner-native>
+
     <br>
-    <ion-title size="large" color="primary" class="main-title">
+    <ion-title size="large" color="primary" class="main-title" style="margin-bottom: 0">
       <ion-icon [name]="'list-outline'" color="secondary"></ion-icon>
       <ion-label>Ranking</ion-label>
     </ion-title>
@@ -187,18 +189,18 @@
     </div>
 
     <div class="main-body">
-      <ion-list>
-        <ion-item *ngIf="!bestModelsToShow?.length" lines="none" style="margin: 1rem 0 4rem 0">
+      <ion-list *ngFor="let list of pageList">
+        <ion-item *ngIf="list === 1 && !bestModelsToShow[list]?.length" lines="none" style="margin: 1rem 0 4rem 0">
           <ion-icon name="alert-circle" color="medium" size="large" class="warning"></ion-icon>
           <br>
           <ion-label color="medium" class="ion-text-wrap">Não encontramos nada no momento. Volte mais tarde!</ion-label>
         </ion-item>
 
-        <ion-item *ngFor="let model of bestModelsToShow; let i = index" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand?.url, model?.url)" button>
+        <ion-item *ngFor="let model of bestModelsToShow[list]; let i = index" class="item-button" routerDirection="root" (click)="clickCarItem($event, model.brand?.url, model?.url)" button>
           <ion-grid>
             <ion-row>
               <ion-col size-lg="0.5" size-md="1" size-sm="1" size-xs="1.5" class="model-position">
-                <div class="position">{{i + 1}}</div>
+                <div class="position position-{{model.position}}">{{model.position}}</div>
               </ion-col>
               <ion-col size-lg="11" size-md="10" size-sm="10" size-xs="9" class="model-name">
                 {{model.brand?.name}} <strong>{{model.name}}</strong>
@@ -210,31 +212,56 @@
             </ion-row>
 
             <ion-row>
-              <ion-col size-lg="7" size-md="5.5" size-sm="4.25" size-xs="6">
+              <ion-col size-lg="7" size-md="5.5" size-sm="4.25" size-xs="4.5">
                 <img [id]="'item-img-'+model.name" src="assets/models/{{model.brand?.url}}/{{model.url}}/{{model.url}}-thumb.png" loading="lazy"
                   title="{{model.brand?.name + ' ' + model.name}}" alt="{{model.brand?.name + ' ' + model.name}}"
                   onerror="if (this.src != 'assets/models/no-model.png') this.src = 'assets/models/no-model.png'" class="model-image">
                </ion-col>
-              <ion-col size-lg="5" size-md="6.5" size-sm="7.75" size-xs="6" class="car-data">
+              <ion-col size-lg="5" size-md="6.5" size-sm="7.75" size-xs="7.5" class="car-data">
                 <ion-row class="average-row average-small" [ngClass]="model.average?.id">
                   <ion-col size-md="12" size-sm="12" size-xs="12">
                     <app-valuation-bar [small]="true" [valuationId]="model.average?.id"></app-valuation-bar>
                   </ion-col>
                 </ion-row>
                 <ion-row class="car-info">
-                  <ion-col size-lg="5" size-md="5" size-sm="6" size-xs="12">
-                    <ion-label [id]="'item-label-average-'+model.brand?.name+model.name">
-                      <ion-icon name="ribbon" color="dark"></ion-icon>
-                      <strong>{{model.model_average?.toFixed(2)}}</strong>{{model.average?.name}}<br>
+                  <ion-col size-lg="4" size-md="4" size-sm="3.75" size-xs="3.25">
+                    <ion-label color="medium" [id]="'item-label-average-'+model.brand?.name+model.name">
+                      <ion-icon size="small" name="ribbon" color="medium"></ion-icon>
+                      {{model.model_average?.toFixed(2)}}<span>{{model.average?.name}}</span>
                     </ion-label>
                   </ion-col>
-                  <ion-col size-lg="7" size-md="7" size-sm="6" size-xs="12">
-                    <ion-label [id]="'item-label-length-'+model.brand?.name+model.name">
-                      <ion-icon name="reader" color="dark"></ion-icon>
-                      {{model.val_length}} {{model.val_length === 1 ? 'opinião' : 'opiniões' }}
+
+                  <ion-col size-lg="4" size-md="4" size-sm="3.75" size-xs="3.25">
+                    <ion-label color="medium" [id]="'item-label-length-'+model.brand?.name+model.name">
+                      <ion-icon size="small" name="reader" color="medium"></ion-icon>
+                      {{model.val_length}} <span class="no-border">{{model.val_length === 1 ? 'opinião' : 'opiniões' }}</span>
+                    </ion-label>
+                  </ion-col>
+
+                  <ion-col size-lg="2" size-md="2" size-sm="2.25" size-xs="2.75">
+                    <ion-label color="medium">
+                      <ion-icon size="small"  name="thumbs-up-sharp" color="medium"></ion-icon>
+                      {{model.likes_length || 0}}
+                    </ion-label>
+                  </ion-col>
+
+                  <ion-col size-lg="2" size-md="2" size-sm="2.25" size-xs="2.75">
+                    <ion-label color="medium">
+                      <ion-icon size="small"  name="thumbs-down-sharp" color="medium"></ion-icon>
+                      {{model.dislikes_length || 0}}
                     </ion-label>
                   </ion-col>
                 </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+
+        <ion-item class="item-button" *ngIf="(list === 1 && !bestModelsToShow[list]?.length) || bestModelsToShow[list]?.length">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <app-banner-row [id]="list" [url]="'melhores'"></app-banner-row>
               </ion-col>
             </ion-row>
           </ion-grid>

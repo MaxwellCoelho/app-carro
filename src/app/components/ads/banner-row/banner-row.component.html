@@ -1,0 +1,3 @@
+<div class="anuncio" id="banner-row-desk-{{id}}" [ngClass]="screenWidth > wDesk ? 'show' : ''"></div>
+<div class="anuncio" id="banner-row-tablet-{{id}}" [ngClass]="screenWidth > wTablet && screenWidth <= wDesk ? 'show' : ''"></div>
+<div class="anuncio" id="banner-row-mobile-{{id}}" [ngClass]="screenWidth <= wTablet ? 'show' : ''"></div>

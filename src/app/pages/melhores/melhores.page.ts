@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { element } from 'protractor';
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NAVIGATION } from 'src/app/helpers/navigation.helper';
@@ -24,10 +23,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
 
   public nav = NAVIGATION;
   public bestModels: Array<any> = [];
-  public bestModelsToShow: Array<any> = [];
+  public bestModelsToShow: object = {1: []};
   public showLoader: boolean;
   public page = 1;
-  public pagination = 20;
+  public pageList = [1];
+  public pagination = 10;
   public showTopButton = false;
   public brandIdFilter: object;
   public categoryIdFilter: object;
@@ -44,7 +44,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     public router: Router,
     public utils: UtilsService,
     public searchService: SearchService,
-    public cryptoService: CryptoService,
+    public cryptoService: CryptoService
   ) {}
 
   handleScroll(event) {
@@ -70,8 +70,10 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   }
 
   public clearBestModels(): void {
+    this.bestModelsToShow = this.bestModelsToShow['1'];
     this.bestModels = [];
     this.page = 1;
+    this.pageList = [1];
     this.pagination = 20;
   }
 
@@ -142,10 +144,11 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
           }
         }
 
-        this.bestModelsToShow = this.bestModels;
+        this.bestModelsToShow[this.page] = modelWithAverage;
 
         if (this.page === 1) { this.showLoader = false; }
         this.page++;
+        this.pageList.push(this.page);
       },
       err => {
         this.showErrorToast(err);
@@ -207,6 +210,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
     const modelWithAverage = [];
     const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
     const recoveredReviewModel = this.utils.recoveryCreatedItem('createdModel');
+    let position = this.bestModels.length + 1;
 
     models.forEach(model => {
       const checkBrandReview = !model.brand.review
@@ -222,6 +226,9 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
         model['model_average'] = average;
         modelWithAverage.push(model);
       }
+
+      model['position'] = position;
+      position++;
     });
 
     return modelWithAverage;

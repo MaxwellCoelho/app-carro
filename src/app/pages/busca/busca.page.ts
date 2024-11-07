@@ -9,7 +9,7 @@ import { CryptoService } from 'src/app/services/crypto/crypto.service';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-busca',
@@ -19,10 +19,10 @@ import { NavigationExtras, Router } from '@angular/router';
 export class BuscaPage implements ViewWillEnter {
 
   public nav = NAVIGATION;
-  public filteredBrands = [];
+  public filteredBrands = null;
   public selectedBrand: object;
   public models = [];
-  public filteredModels = [];
+  public filteredModels = null;
   public selectedModel: object;
   public showLoader: boolean;
   public otherBrand = false;
@@ -34,6 +34,7 @@ export class BuscaPage implements ViewWillEnter {
     public cryptoService: CryptoService,
     public searchService: SearchService,
     public router: Router,
+    public route: ActivatedRoute,
     public utils: UtilsService,
   ) {
     this.searchService.clearSearch$.subscribe(
@@ -44,9 +45,9 @@ export class BuscaPage implements ViewWillEnter {
   public ionViewWillEnter(): void {
     this.setInitialTitle();
 
-    this.filteredBrands = [];
+    this.filteredBrands = null;
     this.selectedBrand = null;
-    this.filteredModels = [];
+    this.filteredModels = null;
     this.selectedModel = null;
     this.models = [];
 
@@ -69,6 +70,18 @@ export class BuscaPage implements ViewWillEnter {
     }
   }
 
+  public getUrlParams(): object {
+    let brandParam;
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      brandParam = params.get('marca');
+    });
+
+    return {
+      brand: brandParam
+    };
+  }
+
   public getBrandSuccess(res?) {
     if (res) {
       const recoveredReviewBrands = this.utils.recoveryCreatedItem('createdBrand');
@@ -85,15 +98,19 @@ export class BuscaPage implements ViewWillEnter {
     }
 
     const urlParams = location.search.replace('?','').split('&');
+    const searchBrand = this.getUrlParams();
     let currentBrand;
     let searchTerm;
-    urlParams.find(param => {
-      const splitted = param.split('=');
-      if (splitted[0] === 'brand') {
-        currentBrand = this.searchService.getAllBrands().find(brand => brand['url'] === splitted[1]);
+
+    if (searchBrand['brand']) {
+      currentBrand = this.searchService.getAllBrands().find(brand => brand['url'] === searchBrand['brand']);
+      if (currentBrand) {
         this.selectBrand(currentBrand);
       }
+    }
 
+    urlParams.find(param => {
+      const splitted = param.split('=');
       if (splitted[0] === 'search') {
         searchTerm = splitted[1];
       }
@@ -107,7 +124,9 @@ export class BuscaPage implements ViewWillEnter {
       this.filteredBrands = this.searchService.getAllBrands();
     }
 
-    this.showLoader = false;
+    setTimeout(() => {
+      this.showLoader = false;
+    }, 500);
   }
 
   public selectBrand(brand) {
@@ -197,7 +216,9 @@ export class BuscaPage implements ViewWillEnter {
       this.filteredModels = this.models;
     }
 
-    this.showLoader = false;
+    setTimeout(() => {
+      this.showLoader = false;
+    }, 500);
   }
 
   public searchModelInput($event) {

@@ -30,13 +30,12 @@
   </ion-row>
 
   <ion-title size="large" color="dark" class="car-info">
-    <div>
+    <div [ngClass]="clickUser ? 'user-link' : ''" (click)="goToUserGarage(opinion.created_by?.url)" [title]="'Ver garagem de ' + opinion.created_by?.name">
+      <app-avatar [imgId]="opinion.created_by?.avatar?.id" [colorId]="opinion.created_by?.avatar?.color" [name]="opinion.created_by?.name"></app-avatar>
       <ion-label class="ion-text-wrap customer-name mobile">
-        <ion-icon size="large" [name]="'person-circle-outline'" color="dark"></ion-icon>
         <strong class="">{{opinion.created_by?.name?.split(' ')[0]}}</strong> <span>{{opinion.created?.split(' ')[0]}}</span>
       </ion-label>
       <ion-label class="ion-text-wrap customer-name desktop">
-        <ion-icon size="large" [name]="'person-circle-outline'" color="dark"></ion-icon>
         <strong class="">{{opinion.created_by?.name}}</strong> <span>{{opinion.created?.split(' ')[0]}} às {{opinion.created.split(' ')[1].substring(0, 5).replace(':', 'h')}}</span>
       </ion-label>
     </div>
@@ -64,10 +63,10 @@
 
     <ion-row *ngFor="let item of opinion.valuationItens; let i = index" class="average-row average-small"
       [ngClass]="item.valuation ? item.valuation.id : ''">
-      <ion-col size-md="6" size-sm="6" size-xs="6.5">
+      <ion-col size-md="5" size-sm="6" size-xs="6.5">
         <ion-label color="dark" class="item-title"><h1>{{item.title}}</h1></ion-label>
       </ion-col>
-      <ion-col size-md="6" size-sm="6" size-xs="5.5">
+      <ion-col size-md="7" size-sm="6" size-xs="5.5">
         <app-valuation-bar [small]="true" [valuationId]="item.valuation ? item.valuation.id : ''"></app-valuation-bar>
       </ion-col>
       <!-- <ion-col size-md="6" size-sm="7" size-xs="12" class="col-subtitle" [ngStyle]="{'border-bottom-width': i === opinion.valuationItens.length - 1 ? '0px' : '1px'}">
@@ -79,7 +78,7 @@
   <ion-row class="points">
     <ion-col size-md="6" size-sm="6" size-xs="12">
       <ion-title size="small" color="dark" class="positive-points" size-md="6" size-sm="6" size-xs="12">
-        <ion-icon [name]="'thumbs-up'" color="dark"></ion-icon>
+        <ion-icon [name]="'happy-outline'" color="dark" ></ion-icon>
         <ion-label class="ion-text-wrap">
           Pontos positivos:<br>
           <span>{{opinion.car_positive}}</span>
@@ -89,7 +88,7 @@
 
     <ion-col size-md="6" size-sm="6" size-xs="12">
       <ion-title size="small" color="dark" class="negative-points" size-md="6" size-sm="6" size-xs="12">
-        <ion-icon [name]="'thumbs-down'" color="dark"></ion-icon>
+        <ion-icon [name]="'sad-outline'" color="dark"></ion-icon>
         <ion-label class="ion-text-wrap">
           Pontos negativos:<br>
           <span>{{opinion.car_negative}}</span>

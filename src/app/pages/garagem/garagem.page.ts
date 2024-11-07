@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/dot-notation */
@@ -6,12 +7,14 @@ import { NAVIGATION } from 'src/app/helpers/navigation.helper';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { DataBaseService } from 'src/app/services/data-base/data-base.service';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
-import { ToastController, ViewWillEnter } from '@ionic/angular';
+import { ToastController, AlertController, ViewWillEnter } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { GENERIC, NOT_FOUND, UNAUTHORIZED } from 'src/app/helpers/error.helper';
-import { NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { VALUATION, VALUATION_ITENS_CAR, VALUATION_NOT_FOUND } from 'src/app/helpers/valuation.helper';
 import { SearchService } from 'src/app/services/search/search.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-garagem',
@@ -28,46 +31,217 @@ export class GaragemPage implements OnInit, ViewWillEnter {
   public models: Array<any>;
   public selectedBrand: string;
   public selectedModel: string;
+  public showPasswordChange = false;
+  public formPassword: FormGroup;
+  public currentPasswordType = 'password';
+  public newPasswordType = 'password';
+  public repeatNewPasswordType = 'password';
+  public userData: object;
+  public loadedOpinions = false;
 
   constructor(
     public utils: UtilsService,
+    public authService: AuthService,
     public dbService: DataBaseService,
     public toastController: ToastController,
+    public alertController: AlertController,
     public cryptoService: CryptoService,
     public router: Router,
+    public route: ActivatedRoute,
     public searchService: SearchService,
+    public fb: FormBuilder,
   ) {}
 
-  public ngOnInit(): void {
-    if (!this.utils.getShouldUpdate('opinions')) {
-      this.getModelOpinions();
-    }
-  }
+  public ngOnInit(): void { }
 
   public ionViewWillEnter(): void {
     this.utils.setPageTitle('Minha garagem', 'Opiniões reais e sincera dos donos de carros de todas as marcas e modelos.', 'minha garagem, garagem, meus carros, meu carro');
-    if (this.utils.getShouldUpdate('opinions')) {
-      this.utils.setShouldUpdate(['opinions'], false);
-      this.myModelOpinions = [];
-      this.getModelOpinions();
-    }
-
-    this.getBrands();
+    this.myModelOpinions = [];
+    this.checkUser();
   }
 
-  public getModelOpinions(): void {
+  public initForm() {
+    this.formPassword = this.fb.group({
+      currentPassword: this.fb.control('', [Validators.required, Validators.minLength(4)]),
+      newPassword: this.fb.control('', [Validators.required, Validators.minLength(4)]),
+      repeatNewPassword: this.fb.control('', [Validators.required, Validators.minLength(4)])
+    });
+  }
+
+  public getUrlParams(): string {
+    let userParam;
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      userParam = params.get('usuario');
+    });
+
+    return userParam;
+  }
+
+  public checkUser(): void {
+    const searchUser = this.getUrlParams();
+    this.userData = null;
+
+    if (searchUser) {
+      this.getModelOpinions(searchUser);
+    } else {
+      this.utils.returnLoggedUser();
+      if (this.utils.sessionUser) {
+        this.userData = this.utils.sessionUser;
+        this.getModelOpinions();
+        this.getBrands();
+        this.initForm();
+      } else {
+        this.router.navigate([`/${this.nav.login.route}`]);
+      }
+    }
+  }
+
+  public logoutUser() {
     this.showLoader = true;
-    const myFilter = { ['created_by._id']: this.utils.sessionUser['_id'] };
+
+    this.authService.logoutUser().subscribe(
+      res => {
+        this.utils.localStorageRemoveItem('userSession');
+        this.utils.returnLoggedUser();
+        this.router.navigate([`/`]);
+        this.showLoader = false;
+        this.showToast('success', 'logout');
+      },
+      err => {
+        this.showLoader = false;
+        this.showToast('danger', 'logout');
+      }
+    );
+  }
+
+  public showToast(status: string, type: string): void {
+    let title;
+    let msg;
+    let icon;
+
+    if (status === 'success') {
+      title = 'Tudo certo!';
+      icon = 'checkmark';
+      msg = type === 'password'
+        ? 'Sua senha foi alterada com sucesso!'
+        : 'Você saiu da área logada com sucesso!';
+    } else {
+      title = 'Atenção!';
+      icon = 'warning';
+      msg = type === 'password' ? 'Ocorreu um erro! Tente novamente mais tarde.' : 'Erro durando logout! Tente novamente mais tarde.';
+    }
+
+    this.toastController.create({
+      header: title,
+      message: msg,
+      duration: 4000,
+      position: 'middle',
+      icon: `${icon}-outline`,
+      color: status
+    }).then(toast => {
+      toast.present();
+    });
+  }
+
+  public showConfirmAlert() {
+    const alertMessage = `Deseja realmente sair da área logada?`;
+
+    const confirmHandler = () => {
+      this.logoutUser();
+    };
+
+    const alertObj = {
+      header: 'Atenção!',
+      message: alertMessage,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          id: 'cancel-button'
+        }, {
+          text: 'Confirmar',
+          id: 'confirm-button',
+          handler: confirmHandler
+        }
+      ]
+    };
+
+    this.alertController.create(alertObj).then(alert => {
+      alert.present();
+    });
+  }
+
+  public clickPasswordChange(): void {
+    this.showPasswordChange = true;
+  }
+
+  public closePasswordChange(): void {
+    this.showPasswordChange = false;
+    this.formPassword.reset();
+    this.currentPasswordType = this.newPasswordType = this.repeatNewPasswordType = 'password';
+  }
+
+  public showOrHideField(field: string): void {
+    this[field] = this[field] === 'password' ? 'text' : 'password';
+  }
+
+  public submitChangePassword(): void {
+    this.showLoader = true;
+    const userId = this.utils.sessionUser['_id'];
+
+    const data = {
+      currentPassword: this.formPassword.value.currentPassword,
+      password: this.formPassword.value.repeatNewPassword
+    };
+
+    const jwtData = { data: this.cryptoService.encondeJwt(data)};
+
+    const subCustomers = this.dbService.createItem(environment.customersAction, jwtData, userId).subscribe(
+      res => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
+        this.closePasswordChange();
+        this.showToast('success', 'password');
+      },
+      err => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
+
+        if (err.status === 401) {
+          this.formPassword.controls.currentPassword.setErrors({invalid: true});
+        } else {
+          this.closePasswordChange();
+          this.showToast('danger', 'password');
+        }
+      }
+    );
+  }
+
+  public getModelOpinions(userUrl?: string): void {
+    this.showLoader = true;
+    const myFilter = userUrl ? { ['created_by.url']: userUrl } : { ['created_by._id']: this.utils.sessionUser['_id'] };
+    const sort = [
+      {name: 'year_bought', value: 'desc'},
+      {name: 'kept_period', value: 'desc'}
+    ];
     const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-    const subModels = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData).subscribe(
+    const subModels = this.dbService.filterItem(environment.filterOpinionModelAction, jwtData, null, null, sort).subscribe(
       res => {
         if (!subModels.closed) { subModels.unsubscribe(); }
-        this.myModelOpinions = res.models && res.models.opinions && res.models.opinions.length ? res.models.opinions : [];
+        this.myModelOpinions = res.opinions && res.opinions.length ? res.opinions : [];
 
         this.myModelOpinions.forEach(model => {
           model.img = this.utils.getModelImg(model.model.url, model.model.generation, model.year_model);
         });
 
+        if (this.myModelOpinions.length && userUrl) {
+          this.userData = {
+            name: this.myModelOpinions[0].created_by.name
+          };
+        }
+
+        this.loadedOpinions = true;
         this.showLoader = false;
       },
       err => {
@@ -90,6 +264,7 @@ export class GaragemPage implements OnInit, ViewWillEnter {
         response = GENERIC;
     }
 
+    this.loadedOpinions = true;
     this.showLoader = false;
     console.error(err);
 
@@ -225,8 +400,9 @@ export class GaragemPage implements OnInit, ViewWillEnter {
       const params: NavigationExtras = { queryParams: { search: 'outro' }, queryParamsHandling: 'merge' };
       this.router.navigate([NAVIGATION.search.route], params);
     } else if (this.selectedModel === 'anotherModel') {
-      const params: NavigationExtras = { queryParams: { brand: this.selectedBrand, search: 'outro' }, queryParamsHandling: 'merge' };
-      this.router.navigate([NAVIGATION.search.route], params);
+      const params: NavigationExtras = { queryParams: { search: 'outro' }, queryParamsHandling: 'merge' };
+      const buscaUrl = `${NAVIGATION.search.route}/${this.selectedBrand}`;
+      this.router.navigate([buscaUrl], params);
     } else if (this.selectedBrand && this.selectedModel) {
       const opinarUrl = `opinar/${this.selectedBrand}/${this.selectedModel}`;
       this.router.navigate([opinarUrl]);
@@ -234,5 +410,39 @@ export class GaragemPage implements OnInit, ViewWillEnter {
 
     this.selectedModel = null;
     this.selectedBrand = null;
+  }
+
+  public goSearch() {
+    this.router.navigate([NAVIGATION.search.route]);
+  }
+
+  public isUserPage(): boolean {
+    const currentUrl = location.pathname;
+    const clientUrl = this.modalContent && this.modalContent['created_by'] && this.modalContent['created_by']['url'];
+    const result = currentUrl.includes(NAVIGATION.garage.route) || (clientUrl && currentUrl.includes(clientUrl));
+    if (this.modalContent && !result) {
+      this.closeModal();
+    }
+    return result;
+  }
+
+  public submitNewAvatar($event) {
+    this.showLoader = true;
+    const userId = this.utils.sessionUser['_id'];
+    const jwtData = { data: this.cryptoService.encondeJwt({avatar: $event})};
+    this.userData['avatar'] = null;
+
+    const subCustomers = this.dbService.createItem(environment.customersAction, jwtData, userId).subscribe(
+      res => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
+        this.userData['avatar'] = res['saved'].avatar;
+      },
+      err => {
+        if (!subCustomers.closed) { subCustomers.unsubscribe(); }
+        this.showLoader = false;
+        this.userData['avatar'] = this.utils.sessionUser['avatar'];
+      }
+    );
   }
 }

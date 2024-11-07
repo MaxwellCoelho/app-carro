@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Injectable } from '@angular/core';
 import { CryptoService } from 'src/app/services/crypto/crypto.service';
+import { COLORS, AVATARES } from 'src/app/helpers/forms.helper';
 
 export type UpdateTypes = 'opinions' | 'bests' | 'versions' | 'models';
 
@@ -12,6 +13,7 @@ export type UpdateTypes = 'opinions' | 'bests' | 'versions' | 'models';
 export class UtilsService {
 
   public sessionUser;
+  public nativeBannerDesk;
 
   public update = {
     opinions: false,
@@ -225,5 +227,23 @@ export class UtilsService {
     });
 
     return foundModel;
+  }
+
+  public getRandomAvatar(): object {
+    const qtdCores = Object.keys(COLORS).length;
+    let qtdAvatares = 0;
+
+    AVATARES.forEach(category => {
+      qtdAvatares += category.to;
+    });
+
+    const randomColorId = this.getRandomNumber(qtdCores, 0);
+    const randomAvatarId = this.getRandomNumber(qtdAvatares, 0);
+
+    return { id: randomAvatarId, color: randomColorId };
+  }
+
+  public getRandomNumber(max: number, min: number): number {
+    return Math.floor(Math.random() * (max - min) + min);
   }
 }

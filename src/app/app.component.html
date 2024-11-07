@@ -8,6 +8,8 @@
       <app-loader [showLoader]="showLoader"></app-loader>
       <app-header (clickedItem)="checkClickedItem($event)"></app-header>
       <app-term-and-cookies></app-term-and-cookies>
+      <app-banner-column [id]="'esq'" [right]="false"  *ngIf="showFirstBanner"></app-banner-column>
+      <app-banner-column [id]="'dir'" [right]="true" *ngIf="showSecondBanner"></app-banner-column>
 
       <ion-router-outlet></ion-router-outlet>
 

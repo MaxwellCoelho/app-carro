@@ -5,7 +5,7 @@
       <ion-label>{{nav.favorite.title}}</ion-label>
     </ion-title>
 
-    <h2 class="favorite-subtitle" *ngIf="!favoriteModels?.length">Para adicionar um favorito basta clicar no <ion-icon [name]="'heart-outline'" color="medium"></ion-icon> quando encontrar um!</h2>
+    <h2 class="favorite-subtitle" *ngIf="!favoriteModels?.length">Para adicionar um favorito basta clicar no ícone <ion-icon [name]="nav.favorite.icon + '-outline'" color="medium"></ion-icon> quando encontrar um!</h2>
 
     <div class="favorite-container">
       <div class="car" *ngFor="let car of favoriteModels">
@@ -43,5 +43,7 @@
         </div>
       </div>
     </div>
+    <br><br>
+    <app-banner-row [id]="'fav'" [url]="'favoritos'"></app-banner-row>
   </div>
 </ion-content>

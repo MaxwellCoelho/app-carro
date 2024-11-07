@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { BuscaPageRoutingModule } from './busca-routing.module';
 import { ModelNotFoundComponent } from 'src/app/components/model-not-found/model-not-found.component';
+import { BannerRowComponent } from 'src/app/components/ads/banner-row/banner-row.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ModelNotFoundComponent } from 'src/app/components/model-not-found/model
   ],
   declarations: [
     BuscaPage,
-    ModelNotFoundComponent
+    ModelNotFoundComponent,
+    BannerRowComponent
   ]
 })
 export class BuscaPageModule {}

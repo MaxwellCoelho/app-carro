@@ -125,7 +125,30 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col><h1>Opiniões {{opinions ? '('+opinions.length+')' : ''}}</h1></ion-col>
+          <ion-col size-md="6" size-sm="6" size-xs="12">
+            <h1>{{modelFilter === 'nothing' ? 'Opiniões recentes' : 'Opiniões'}} {{opinions ? '('+opinions.length+')' : ''}}</h1>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Filtro</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByModel($event, 'filter')" [value]="'nothing'">
+                <ion-select-option value="nothing">Últimos 5</ion-select-option>
+                <ion-select-option value="">Todos os modelos</ion-select-option>
+                <ion-select-option *ngFor="let model of models" [value]="model._id">{{ model.brand?.name }} {{ model.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Ordem</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByModel($event, 'order')" [value]="'default'" [disabled]="!opinions?.length || modelFilter === 'nothing'">
+                <ion-select-option value="default">Alfabética</ion-select-option>
+                <ion-select-option value="recent">Mais recente</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
         </ion-row>
 
         <ion-row *ngIf="!opinions || (opinions && !opinions.length)" class="grid-content">
@@ -182,6 +205,12 @@
               </td>
             </tr>
           </table>
+          <ion-button size="default" title="Carregar mais" color="light" mode="ios"
+            type="button" (click)="getOpinions()" *ngIf="modelFilter !== 'nothing'
+              && (opinions.length === ((page - 1)*pagination) || (opinions.length === ((page - 1)*pagination) - 1 && excludedItem))">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label slot="end">Carregar mais</ion-label>
+          </ion-button>
         </div>
       </ion-grid>
     </div>

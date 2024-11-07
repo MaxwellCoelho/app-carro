@@ -35,7 +35,8 @@
           {{nav.login.title}}
         </ion-button>
         <ion-button *ngIf="utils.sessionUser" routerDirection="root" [routerLink]="'/'+ nav.perfil.route" routerLinkActive="selected">
-          <ion-icon slot="start" [name]="nav.perfil.icon"></ion-icon>
+          <app-avatar [imgId]="utils.sessionUser.avatar?.id" [colorId]="utils.sessionUser.avatar?.color" [name]="utils.sessionUser.name"></app-avatar>
+          <!-- <ion-icon slot="start" [name]="nav.perfil.icon"></ion-icon> -->
           {{utils.sessionUser.name.split(' ')[0]}}
         </ion-button>
         <ion-menu-button auto-hide="false" class="mobile-menu"></ion-menu-button>

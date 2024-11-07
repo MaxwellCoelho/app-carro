@@ -24,14 +24,13 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   @ViewChild('IonContent') content;
 
   public nav = NAVIGATION;
-  public selectedModel: object;
+  public loadedModel = false;
   public showLoader: boolean;
   public finalPayload = {};
   public currentStep = 1;
   public years = [];
   public carVersions = [];
   public isFavorite: boolean;
-  public user;
 
   constructor(
     public dbService: DataBaseService,
@@ -52,7 +51,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
 
   ngOnInit(): void {
     if (!this.utils.getShouldUpdate('versions')) {
-    this.loadModelInfo();
+      this.loadModelInfo();
     }
   }
 
@@ -64,12 +63,12 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   public ionViewWillEnter(): void {
     if (this.utils.getShouldUpdate('versions')) {
       this.utils.setShouldUpdate(['versions'], false);
-      this.selectedModel = null;
-      this.searchService.saveModel(this.selectedModel);
+      this.searchService.opinarSelectedModel = null;
+      this.searchService.saveModel(this.searchService.opinarSelectedModel);
       this.years = [];
       this.loadModelInfo();
-    } else if (this.selectedModel) {
-      this.isFavorite = this.favorite.isFavorite(this.selectedModel);
+    } else if (this.searchService.opinarSelectedModel) {
+      this.isFavorite = this.favorite.isFavorite(this.searchService.opinarSelectedModel);
     }
   }
 
@@ -78,9 +77,9 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   }
 
   public loadModelInfo(): void {
-    this.selectedModel = this.searchService.getModel();
+    this.searchService.opinarSelectedModel = this.searchService.getModel();
 
-    if (this.selectedModel) {
+    if (this.searchService.opinarSelectedModel) {
       this.setModelImage();
       this.searchService.clearModel();
       this.loadFinalPayload();
@@ -101,9 +100,10 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
         const foundModel = this.utils.findActiveModel(res.models, urlParams['brand']);
 
         if (foundModel) {
-          this.selectedModel = foundModel;
+          this.searchService.opinarSelectedModel = foundModel;
           this.setModelImage();
           this.showLoader = false;
+          this.loadedModel = true;
           this.loadFinalPayload();
         } else {
           this.showErrorToast({status: 404});
@@ -116,14 +116,15 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   }
 
   public setModelImage($event?) {
-    this.selectedModel['img'] = null;
+    this.searchService.opinarSelectedModel['img'] = null;
     setTimeout(() => {
-      this.selectedModel['img'] = this.utils.getModelImg(this.selectedModel['url'], this.selectedModel['generation'], $event);
+      this.searchService.opinarSelectedModel['img'] = this.utils.getModelImg(this.searchService.opinarSelectedModel['url'], this.searchService.opinarSelectedModel['generation'], $event);
     }, 50);
   }
 
   public adjustImgContainer() {
-    if (document.querySelector('.opinar-container').querySelector('.model-image-container')) {
+    if (document.querySelector('.opinar-container').querySelector('.model-image-container')
+        && document.querySelector('.opinar-container').querySelector('.model-image')) {
       document.querySelector('.opinar-container').querySelector('.model-image-container')['style'].minHeight = `${document.querySelector('.opinar-container').querySelector('.model-image')['height']}px`;
     }
   }
@@ -161,21 +162,24 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
     }
 
     this.showLoader = false;
+    this.loadedModel = true;
     console.error(err);
 
-    this.toastController.create({
-      header: 'Atenção!',
-      message: response,
-      duration: 4000,
-      position: 'middle',
-      icon: 'warning-outline',
-      color: 'danger'
-    }).then(toast => {
-      toast.present();
-      if (err.status !== 409) {
-       this.router.navigate([NAVIGATION.search.route]);
-      }
-    });
+    if (err.status !== 404) {
+      this.toastController.create({
+        header: 'Atenção!',
+        message: response,
+        duration: 4000,
+        position: 'middle',
+        icon: 'warning-outline',
+        color: 'danger'
+      }).then(toast => {
+        toast.present();
+        if (err.status !== 409) {
+        this.router.navigate([NAVIGATION.search.route]);
+        }
+      });
+    }
   }
 
   public setAboutCarPayload($event) {
@@ -204,13 +208,13 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
 
   public saveFinalPayload() {
     const encoded = this.cryptoService.encondeJwt(this.finalPayload);
-    this.utils.localStorageSetItem(`opinar_${this.selectedModel['url']}`, encoded);
+    this.utils.localStorageSetItem(`opinar_${this.searchService.opinarSelectedModel['url']}`, encoded);
   }
 
   public loadFinalPayload() {
-    this.isFavorite = this.favorite.isFavorite(this.selectedModel);
-    this.utils.setPageTitle(`Opinar sobre ${this.selectedModel['brand'].name} ${this.selectedModel['name']}`, `Deixe sua opinião real e sincera sobre o ${this.selectedModel['brand'].name} ${this.selectedModel['name']}.`, `${this.selectedModel['brand'].name} ${this.selectedModel['name']}, ${this.selectedModel['brand'].name}, ${this.selectedModel['name']}`);
-    const encoded = this.utils.localStorageGetItem(`opinar_${this.selectedModel['url']}`);
+    this.isFavorite = this.favorite.isFavorite(this.searchService.opinarSelectedModel);
+    this.utils.setPageTitle(`Opinar sobre ${this.searchService.opinarSelectedModel['brand'].name} ${this.searchService.opinarSelectedModel['name']}`, `Deixe sua opinião real e sincera sobre o ${this.searchService.opinarSelectedModel['brand'].name} ${this.searchService.opinarSelectedModel['name']}.`, `${this.searchService.opinarSelectedModel['brand'].name} ${this.searchService.opinarSelectedModel['name']}, ${this.searchService.opinarSelectedModel['brand'].name}, ${this.searchService.opinarSelectedModel['name']}`);
+    const encoded = this.utils.localStorageGetItem(`opinar_${this.searchService.opinarSelectedModel['url']}`);
 
     if (encoded) {
       this.finalPayload = this.cryptoService.decodeJwt(encoded);
@@ -242,7 +246,8 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
           this.content.scrollToTop(700);
           this.utils.setShouldUpdate(['opinions', 'bests'], true);
           this.showLoader = false;
-          this.user = res['saved']['created_by'];
+          this.searchService.opinarUser = res['saved']['created_by'];
+          this.router.navigate(['opinar/sucesso']);
         },
         err => {
           this.showErrorToast(err);
@@ -349,7 +354,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
 
   public clearFinalPayload() {
     this.finalPayload = {};
-    this.utils.localStorageRemoveItem(`opinar_${this.selectedModel['url']}`);
+    this.utils.localStorageRemoveItem(`opinar_${this.searchService.opinarSelectedModel['url']}`);
     this.currentStep = 1;
   }
 
@@ -362,7 +367,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   }
 
   public goOpinions() {
-    this.router.navigate([`opiniao/${this.selectedModel['brand']['url']}/${this.selectedModel['url']}`]);
+    this.router.navigate([`opiniao/${this.searchService.opinarSelectedModel['brand']['url']}/${this.searchService.opinarSelectedModel['url']}`]);
   }
 
   public goSearch() {
@@ -370,8 +375,8 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   }
 
   changeModel() {
-    const params: NavigationExtras = { queryParams: { brand: this.selectedModel['brand'].url }, queryParamsHandling: 'merge' };
-    this.router.navigate([NAVIGATION.search.route], params);
+    const buscaUrl = `${NAVIGATION.search.route}/${this.searchService.opinarSelectedModel['brand'].url}`;
+    this.router.navigate([buscaUrl]);
   }
 
   saveLoadedVersions($event) {
@@ -379,7 +384,7 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   }
 
   addOrRemoveFavorite() {
-    this.isFavorite = this.favorite.addOrRemoveFavorite(this.selectedModel);
+    this.isFavorite = this.favorite.addOrRemoveFavorite(this.searchService.opinarSelectedModel);
     const type = this.isFavorite ? 'adicionado' : 'removido';
     this.showFavoriteToast(type);
   }
@@ -387,10 +392,10 @@ export class OpinarPage implements OnInit, ViewWillEnter, ViewDidEnter {
   public showFavoriteToast(type: string): void {
     this.toastController.create({
       header: 'Favoritos:',
-      message: `${this.selectedModel['brand']['name']} ${this.selectedModel['name']} ${type} com sucesso!`,
+      message: `${this.searchService.opinarSelectedModel['brand']['name']} ${this.searchService.opinarSelectedModel['name']} ${type} com sucesso!`,
       duration: 4000,
       position: 'middle',
-      icon: type === 'adicionado' ? 'heart' : 'heart-outline',
+      icon: type === 'adicionado' ? this.nav.favorite.icon : `${this.nav.favorite.icon}-outline`,
       color: 'success'
     }).then(toast => {
       toast.present();

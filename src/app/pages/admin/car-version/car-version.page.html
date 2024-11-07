@@ -129,17 +129,27 @@
         <ion-row><ion-col><br></ion-col></ion-row>
 
         <ion-row>
-          <ion-col size-md="8" size-sm="6" size-xs="12">
+          <ion-col size-md="6" size-sm="6" size-xs="12">
             <h1>Versões de carro {{finalVersions ? '('+finalVersions.length+')' : ''}}</h1>
           </ion-col>
 
-          <ion-col size-md="4" size-sm="6" size-xs="12">
+          <ion-col size-md="3" size-sm="3" size-xs="6">
             <ion-item class="input-item">
-              <ion-label position="floating">Filtrar por modelo</ion-label>
-              <ion-select interface="popover" (ionChange)="filterByModel($event)" [value]="'nothing'">
-                <ion-select-option value="nothing">Nenhum</ion-select-option>
-                <ion-select-option value="">Todos</ion-select-option>
+              <ion-label position="floating">Filtro</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByModel($event, 'filter')" [value]="'nothing'">
+                <ion-select-option value="nothing">Em revisão</ion-select-option>
+                <ion-select-option value="">Todas as versões</ion-select-option>
                 <ion-select-option *ngFor="let model of models" [value]="model._id">{{ model.brand?.name }} {{ model.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size-md="3" size-sm="3" size-xs="6">
+            <ion-item class="input-item">
+              <ion-label position="floating">Ordem</ion-label>
+              <ion-select interface="popover" (ionChange)="filterByModel($event, 'order')" [value]="'default'" [disabled]="!finalVersions?.length || modelFilter === 'nothing'">
+                <ion-select-option value="default">Alfabética</ion-select-option>
+                <ion-select-option value="recent">Mais recente</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -204,6 +214,11 @@
               </td>
             </tr>
           </table>
+          <ion-button size="default" title="Carregar mais" color="light" mode="ios"
+            type="button" (click)="getVersions()" *ngIf="finalVersions.length >= ((page - 1)*pagination) || (finalVersions.length === ((page - 1)*pagination) - 1 && excludedItem)">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label slot="end">Carregar mais</ion-label>
+          </ion-button>
         </div>
 
         <ion-row><ion-col><br></ion-col></ion-row>

@@ -24,7 +24,7 @@ export class TabMenuComponent implements OnInit {
 
   goToWithoutParams(url: string) {
     this.searchService.clearSearch();
-    const params: NavigationExtras = { queryParams: { brand: null, search: null }, queryParamsHandling: 'merge' };
+    const params: NavigationExtras = { queryParams: { search: null }, queryParamsHandling: 'merge' };
     this.router.navigate([url], params);
   }
 }

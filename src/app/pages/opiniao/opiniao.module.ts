@@ -8,6 +8,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { OpiniaoPageRoutingModule } from './opiniao-routing.module';
 import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuation-bar.component';
 import { OpinionComponent } from 'src/app/components/opinion/opinion.component';
+import { BannerNativeComponent } from 'src/app/components/ads/banner-native/banner-native.component';
+import { BannerRowComponent } from 'src/app/components/ads/banner-row/banner-row.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { OpinionComponent } from 'src/app/components/opinion/opinion.component';
   declarations: [
     OpiniaoPage,
     ValuationBarComponent,
-    OpinionComponent
+    OpinionComponent,
+    BannerNativeComponent,
+    BannerRowComponent
   ]
 })
 export class OpiniaoPageModule {}
