@@ -1,4 +1,4 @@
-FROM node:15.14.0
+FROM node:14.17.3 as build
 COPY package.json .
 RUN npm install -g @angular/cli
 RUN npm install -g typescript@4.1.6
