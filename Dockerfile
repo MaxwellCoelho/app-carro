@@ -1,0 +1,9 @@
+FROM node:14.17.0
+COPY package.json .
+RUN npm install -g typescript@4.1.6
+RUN npm install -g @ionic/cli
+RUN npm install
+COPY . ./
+RUN npm run build
+CMD ["sh", "-c", "npm run start"]
+EXPOSE 3001
