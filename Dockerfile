@@ -1,5 +1,6 @@
 FROM node:18.20.4 as build
 COPY package.json .
+COPY angular.json .
 RUN npm install -g typescript@4.4.4
 RUN npm install -g @ionic/cli
 RUN npm install --legacy-peer-deps
