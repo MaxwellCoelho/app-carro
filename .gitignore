@@ -31,4 +31,3 @@ npm-debug.log*
 /plugins
 /www
 /android
-/src/environments/environment.private.ts
