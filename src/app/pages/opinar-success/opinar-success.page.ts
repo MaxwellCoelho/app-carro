@@ -42,11 +42,22 @@ export class OpinarSuccessPage implements AfterViewInit, ViewWillEnter, ViewDidE
   }
 
   public setTagEvent() {
+    const sn1 = this.renderer.createElement('script');
+    sn1.async = 'async';
+    sn1.src = 'https://www.googletagmanager.com/gtag/js?id=G-S9DT43MHJ3';
+    this.renderer.appendChild(this.document.getElementById('eventTag'), sn1);
+
+    const sn2 = this.renderer.createElement('script');
+    sn2.innerHTML = `window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-S9DT43MHJ3');`;
+    this.renderer.appendChild(this.document.getElementById('eventTag'), sn2);
+
     const sn = this.renderer.createElement('script');
     sn.innerHTML = `gtag('event', 'conversion_event_page_view_4', {
           // <event_parameters>
         });`;
-
     this.renderer.appendChild(this.document.getElementById('eventTag'), sn);
   }
 
