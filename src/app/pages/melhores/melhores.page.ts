@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -28,6 +29,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   public page = 1;
   public pageList = [1];
   public pagination = 10;
+  public minValLength = 2;
   public showTopButton = false;
   public brandIdFilter: object;
   public categoryIdFilter: object;
@@ -115,6 +117,7 @@ export class MelhoresPage implements OnInit, ViewWillEnter {
   public filterBestModels(): void {
     if (this.page === 1) { this.showLoader = true; }
     const myFilter = {
+      val_length: { $gte: this.minValLength },
       'generation.g1.yearStart': { $lte: this.filterYearValue.upper },
       'generation.g1.yearEnd': { $gte: this.filterYearValue.lower === this.yearMinValue ? 1900 : this.filterYearValue.lower }
     };
