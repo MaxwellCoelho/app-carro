@@ -10,6 +10,7 @@ import { ValuationBarComponent } from 'src/app/components/valuation-bar/valuatio
 import { OpinionComponent } from 'src/app/components/opinion/opinion.component';
 import { BannerNativeComponent } from 'src/app/components/ads/banner-native/banner-native.component';
 import { BannerRowComponent } from 'src/app/components/ads/banner-row/banner-row.component';
+import { BannerDisplayComponent } from 'src/app/components/ads/banner-display/banner-display.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { BannerRowComponent } from 'src/app/components/ads/banner-row/banner-row
     ValuationBarComponent,
     OpinionComponent,
     BannerNativeComponent,
-    BannerRowComponent
+    BannerRowComponent,
+    BannerDisplayComponent
   ]
 })
 export class OpiniaoPageModule {}

@@ -117,17 +117,7 @@
         </ion-row>
       </ion-grid>
 
-      <div *ngIf="modelOpinions.qtd > 1">
-        <amp-ad width="100vw" height="320"
-            type="adsense"
-            data-ad-client="ca-pub-3048985759640217"
-            data-ad-slot="5864633056"
-            data-auto-format="rspv"
-            data-full-width="">
-          <div overflow=""></div>
-        </amp-ad>
-      </div>
-      <br>
+      <app-banner-display [id]="'opiniao-'+selectedModel.url" *ngIf="modelOpinions.qtd > 1"></app-banner-display>
       <!-- <app-banner-native [id]="'op'" [url]="'opiniao'"></app-banner-native>
       <br> -->
       <ion-title size="large" color="primary" class="main-title" *ngIf="modelOpinions.qtd > 0">
