@@ -117,9 +117,11 @@
         </ion-row>
       </ion-grid>
 
-      <app-banner-display [id]="'opiniao-'+selectedModel.url" *ngIf="modelOpinions.qtd > 1"></app-banner-display>
-      <!-- <app-banner-native [id]="'op'" [url]="'opiniao'"></app-banner-native>
-      <br> -->
+      <!-- <app-banner-display [id]="'opiniao-'+selectedModel.url" *ngIf="modelOpinions.qtd > 1"></app-banner-display> -->
+      <!-- <app-banner-native [id]="'op'" [url]="'opiniao'"></app-banner-native>-->
+
+      <app-affliated ></app-affliated>
+      <br>
       <ion-title size="large" color="primary" class="main-title" *ngIf="modelOpinions.qtd > 0">
         <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
         <ion-label><strong>Opinião dos donos</strong> ({{modelOpinions.qtd}})</ion-label>
@@ -137,6 +139,8 @@
       <ion-infinite-scroll *ngIf="modelOpinions?.opinions.length" (ionInfinite)="onIonInfinite($event)">
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
       </ion-infinite-scroll>
+
+      <app-affliated *ngIf="modelOpinions.qtd > 0"></app-affliated>
     </div>
 
     <ion-grid slot="content" *ngIf="loadedModelAndOpinions && (!selectedModel || !modelOpinions)" style="margin-top: 1rem">
