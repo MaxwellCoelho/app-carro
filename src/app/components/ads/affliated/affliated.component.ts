@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AFFILIATED_ADS_LIST } from './affiliatedAdsList';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { AdsService } from 'src/app/services/ads/ads.service';
 
 @Component({
   selector: 'app-affliated',
@@ -11,11 +10,10 @@ export class AffliatedComponent implements OnInit {
 
   @Input() keywords: string[] = [];
 
-  public adsList = AFFILIATED_ADS_LIST;
   public selectedAd;
 
   constructor(
-    public utils: UtilsService
+    public ads: AdsService
   ) { }
 
   ngOnInit() {
@@ -24,10 +22,7 @@ export class AffliatedComponent implements OnInit {
 
   public selectAd(): void {
     if (!this.keywords.length) {
-      const filteredList = this.adsList.filter(item => !item.keywords.length);
-      const randomNum = this.utils.getRandomNumber(filteredList.length, 0);
-      this.selectedAd = filteredList[randomNum];
-      console.log(this.selectedAd);
+      this.selectedAd = this.ads.setAdsLists(this.keywords);
     }
   }
 }
