@@ -1,0 +1,11 @@
+<a class="aff-container" *ngIf="selectedAd" [href]="selectedAd.url" target="_blank" title="Clique para comprar na Amazon">
+  <div class="images">
+    <img *ngFor="let image of selectedAd.images" [src]="image">
+    <div class="texts">
+      <h1>{{selectedAd.title}}</h1>
+      <p>{{selectedAd.description}}</p>
+      <div class="logo-amazon"></div>
+    </div>
+  </div>
+
+</a>

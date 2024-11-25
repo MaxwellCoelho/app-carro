@@ -1,0 +1,70 @@
+.aff-container {
+  display: flex;
+  margin: 0.5rem;
+  // background-color: #eee;
+  border: 1px solid #000;
+  text-decoration: none;
+  padding: 0.25rem;
+  transition: 0.5s ease;
+
+  &:hover {
+    // background-color: #d3d3d3;
+    background-color: #eee;
+  }
+
+  .images {
+    display: flex;
+    max-height: 200px;
+    overflow: hidden;
+    width: -webkit-fill-available;
+
+    img {
+      width: auto;
+      height: 200px;
+      margin-right: .5rem;
+    }
+  }
+
+  .texts {
+    padding: 1rem;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    background-image: URL('assets/amazon.png');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: 85px;
+
+    h1 {
+      margin-top: 0;
+      font-size: xx-large;
+    }
+
+    p {
+      margin-top: 0;
+      font-size: larger;
+    }
+
+    @media (max-width: 1000px) {
+      h1 {
+        font-size: x-large;
+      }
+
+      p {
+        font-size: medium;
+      }
+    }
+  }
+
+  @media (max-width: 850px) {
+    .images {
+      display: block;
+      max-height: none;
+      text-align: center;
+    }
+
+    .texts {
+      display: block;
+    }
+  }
+}
