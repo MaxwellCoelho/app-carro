@@ -60,6 +60,26 @@ export const AFFILIATED_ADS_LIST = [
     keywords: []
   },
   {
+    url: 'https://amzn.to/415JIfd',
+    title: 'Proteção solar portátil para o para-brisa do carro',
+    description: 'Este guarda-sol dobrável é perfeito para proteger seu carro dos raios solares intensos e do calor excessivo.',
+    images: [
+      'https://m.media-amazon.com/images/I/51C+Ze4GnhL._AC_SX522_.jpg',
+      'https://m.media-amazon.com/images/I/51qr+Da-JyL._AC_SX522_.jpg'
+    ],
+    keywords: []
+  },
+  {
+    url: 'https://amzn.to/4i5q8Wm',
+    title: 'Carregador de Baterias 12v Até 300',
+    description: 'Para baterias chumbo ácidas ou gel seladas de 12 volts de 1,5 até 300 amperes Flutuador. Portátil com alça reforçada.',
+    images: [
+      'https://m.media-amazon.com/images/I/614Ut9YCA-L._AC_SX522_.jpg',
+      'https://m.media-amazon.com/images/I/614snVJADlL._AC_SX522_.jpg'
+    ],
+    keywords: []
+  },
+  {
     url: 'https://amzn.to/3CUDvbN',
     title: 'Capa Protetora Fiat Argo Impermeável Forrada (P295)',
     description: 'Essa capa irá cobrir e proteger contra umidade da chuva, raios UV e poeira o seu FIAT.',
@@ -74,9 +94,38 @@ export const AFFILIATED_ADS_LIST = [
     description: 'Conjunto com 10 peças na cor preta. Forros de porta porta-copos e console.',
     images: [
       'https://m.media-amazon.com/images/I/71SvOu-raUL._AC_SX679_.jpg',
-      'https://m.media-amazon.com/images/I/71fIoyz8o+L._AC_SX679_.jpg',
-      'https://m.media-amazon.com/images/I/71UFZYEgW8L._AC_SX679_.jpg'
+      'https://m.media-amazon.com/images/I/71fIoyz8o+L._AC_SX679_.jpg'
     ],
     keywords: ['jetta', 'volkswagen']
+  },
+  {
+    url: 'https://amzn.to/3CMS4OP',
+    title: 'Bola de Câmbio Manopla Preta 6 Marchas.',
+    description: 'Compatível com os modelos Onix, Prisma, Spin, Cobalt e Sonic, anos 2013 a 2020.',
+    images: [
+      'https://m.media-amazon.com/images/I/51Dysc9VlIL._AC_SX679_.jpg',
+      'https://m.media-amazon.com/images/I/51bqVcY2bmL._AC_SX679_.jpg'
+    ],
+    keywords: ['onix', 'prisma', 'spin', 'cobalt', 'sonic']
+  },
+  {
+    url: 'https://amzn.to/3OqTLEc',
+    title: 'Palheta Limpador Jeep Renegade Dianteiro e Traseiro Bosch',
+    description: 'Encaixe tipo gancho. Compatível com Renegade anos 2015 a 2020.',
+    images: [
+      'https://m.media-amazon.com/images/I/71Nr+hH5kTL._AC_SX522_.jpg',
+      'https://m.media-amazon.com/images/I/41lDqaHPJyL._AC_SX522_.jpg'
+    ],
+    keywords: ['renegade']
+  },
+  {
+    url: 'https://amzn.to/4fJIQBs',
+    title: 'Par de Farol de Milha - Fiat Toro',
+    description: 'Compatível com Fiat Toro anos 2016 a 2019.',
+    images: [
+      'https://m.media-amazon.com/images/I/4174T8PF3NL._AC_.jpg',
+      'https://m.media-amazon.com/images/I/51NPgtfKITL._AC_SX522_.jpg'
+    ],
+    keywords: ['toro']
   }
 ];

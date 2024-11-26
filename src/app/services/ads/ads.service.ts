@@ -25,7 +25,7 @@ export class AdsService {
       this.priorityAdsByTag['generic'] = [...this.byTagsList['generic']];
     }
 
-    const firstTag = keywords.length ? keywords[0] : 'generic';
+    let firstTag = !keywords.length ? 'generic' : keywords[0];
 
     if (keywords.length) {
       if (!this.byTagsList[firstTag]) {
@@ -34,6 +34,10 @@ export class AdsService {
 
       if (!this.priorityAdsByTag[firstTag]) {
         this.priorityAdsByTag[firstTag] = this.adsList.filter(item => item.keywords.includes(firstTag));
+      }
+
+      if (this.priorityAdsByTag[firstTag] && !this.priorityAdsByTag[firstTag].length) {
+        firstTag = 'generic';
       }
     }
 

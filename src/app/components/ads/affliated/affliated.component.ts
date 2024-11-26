@@ -21,8 +21,6 @@ export class AffliatedComponent implements OnInit {
   }
 
   public selectAd(): void {
-    if (!this.keywords.length) {
-      this.selectedAd = this.ads.setAdsLists(this.keywords);
-    }
+    this.selectedAd = this.ads.setAdsLists(this.keywords);
   }
 }
