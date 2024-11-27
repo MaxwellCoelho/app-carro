@@ -16,6 +16,7 @@ export const NAVIGATION = {
   permission: { title: 'Permissões', icon: 'lock-open', route: 'permissao' },
   customer: { title: 'Usuários', icon: 'person', route: 'usuario' },
   feedback: { title: 'Feedbacks', icon: 'megaphone', route: 'feedback' },
+  ads: { title: 'Ads', icon: 'bag-handle', route: 'ads' },
   carcategories: { title: 'Categorias', icon: 'shapes', route: 'carro-categoria' },
   carbrands: { title: 'Marcas', icon: 'pricetag', route: 'carro-marca' },
   carmodels: { title: 'Modelos', icon: 'car', route: 'carro-modelo' },

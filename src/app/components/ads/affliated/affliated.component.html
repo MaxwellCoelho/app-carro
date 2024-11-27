@@ -1,11 +1,10 @@
-<a class="aff-container" *ngIf="selectedAd" [href]="selectedAd.url" target="_blank" title="Clique para comprar na Amazon">
+<a class="aff-container" [id]="id" *ngIf="(ads.selectedTagsById$ | async)[id]" [href]="(ads.selectedTagsById$ | async)[id].url" target="_blank" title="Clique para comprar na Amazon">
   <div class="images">
-    <img *ngFor="let image of selectedAd.images" [src]="image">
+    <img *ngFor="let image of (ads.selectedTagsById$ | async)[id].images" [src]="image">
     <div class="texts">
-      <h1>{{selectedAd.title}}</h1>
-      <p>{{selectedAd.description}}</p>
+      <h1>{{(ads.selectedTagsById$ | async)[id].title}}</h1>
+      <p>{{(ads.selectedTagsById$ | async)[id].description}}</p>
       <div class="logo-amazon"></div>
     </div>
   </div>
-
 </a>

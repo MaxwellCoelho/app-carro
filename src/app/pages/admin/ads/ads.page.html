@@ -1,0 +1,164 @@
+<ion-content #IonContent [fullscreen]="true" [scrollEvents]="true">
+  <app-loader [showLoader]="showLoader"></app-loader>
+
+  <div class="main-container">
+    <ion-title size="large" color="primary" class="main-title">
+      <ion-icon [routerLink]="'/' + nav.admin.route" [name]="'arrow-back'" color="secondary" style="cursor: pointer"></ion-icon>
+      <ion-label [routerLink]="'/' + nav.admin.route" style="cursor: pointer">{{nav.admin.title}}</ion-label>
+
+      <ion-label>
+        <ion-icon [name]="'chevron-forward'" size="small" color="medium"></ion-icon>
+      </ion-label>
+
+      <ion-icon [name]="nav.ads.icon + '-outline'" color="secondary"></ion-icon>
+      <ion-label>{{nav.ads.title}}</ion-label>
+    </ion-title>
+
+    <div class="main-body">
+     <ion-grid slot="content">
+        <ion-row [ngClass]="{'grid-content-edit': formAds.value.editAdId }">
+          <ion-col>
+            <h1 *ngIf="!formAds.value.editCAdId">Criar nova Ad:</h1>
+            <h1 *ngIf="formAds.value.editAdId">Editar o Ad <strong>{{formAds.value.editAdId}}</strong>:</h1>
+          </ion-col>
+        </ion-row>
+
+        <form name="ads" [formGroup]="formAds" (submit)="showConfirmAlert(formAds.value.editAdId ? 'editar' : 'criar', formAds.value)">
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formAds.value.editAdId }">
+            <ion-input type="hidden" formControlName="editAdId"></ion-input>
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Url</ion-label>
+                <ion-input type="text" maxlength="50" formControlName="newAdUrl"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-md="6" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Título</ion-label>
+                <ion-input type="text" maxlength="200" (ionInput)="utils.capitalize($event)" formControlName="newAdTitle"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formAds.value.editAdId }">
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Descrição</ion-label>
+                <ion-input type="text" maxlength="300" (ionInput)="utils.capitalize($event)" formControlName="newAdDescription"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formAds.value.editAdId }">
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Imagens (separar por vírgula)</ion-label>
+                <ion-input type="text" maxlength="5000" formControlName="newAdImages"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formAds.value.editAdId }">
+            <ion-col size-md="12" size-sm="12" size-xs="12">
+              <ion-item>
+                <ion-label position="floating">Palavras-chave (separar por vírgula)</ion-label>
+                <ion-input type="text" maxlength="5000" formControlName="newAdKeywords"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="grid-content" [ngClass]="{'grid-content-edit': formAds.value.editAdId }">
+            <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formAds.value.editAdId">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formAds.status === 'INVALID'">
+                <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Criar</ion-label>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formAds.value.editAdId">
+              <ion-button size="default" title="Criar" expand="block" color="success" mode="ios" type="submit" [disabled]="formAds.status === 'INVALID'">
+                <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Salvar</ion-label>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="!formAds.value.editAdId && !formAds.pristine">
+              <ion-button size="default" title="Limpar" expand="block" color="medium" mode="ios" type="button" (click)="showConfirmAlert('limpar', formAds.value)">
+                <ion-icon name="backspace-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Limpar</ion-label>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size-md="3" size-sm="6" size-xs="12" *ngIf="formAds.value.editAdId">
+              <ion-button size="default" title="Descartar" expand="block" color="danger" mode="ios" type="button" (click)="showConfirmAlert('descartar', formAds.value)">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                <ion-label slot="end">Descartar</ion-label>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </form>
+
+        <ion-row><ion-col><br></ion-col></ion-row>
+
+        <ion-row>
+          <ion-col><h1>Ads {{ads ? '('+ads.length+')' : ''}}</h1></ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="!ads || (ads && !ads.length)" class="grid-content">
+          <ion-col style="text-align: center; margin: 2rem 0">
+            <ion-icon name="happy-outline" color="medium" size="large"></ion-icon>
+            <br>
+            <ion-label color="medium">Nada de novo por aqui ainda!</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div class="table-container" *ngIf="ads && ads.length">
+          <table>
+            <tr>
+              <th>Id</th>
+              <th>Url</th>
+              <th>Título</th>
+              <th>Descrição</th>
+              <th>Imagens</th>
+              <th>Palavras-chave</th>
+              <th>Criado em</th>
+              <th>Criado por</th>
+              <!-- <th>Modificado em</th>
+              <th>Modificado por</th> -->
+              <th>Ação</th>
+            </tr>
+
+            <tr *ngFor="let ad of ads">
+              <td>{{ad._id}}</td>
+              <td>{{ad.url}}</td>
+              <td>{{ad.title}}</td>
+              <td>{{ad.description}}</td>
+              <td>{{ad.images}}</td>
+              <td>{{ad.keywords}}</td>
+              <td>{{ad.created || '-'}}</td>
+              <td>{{(ad.created_by?.name ? ad.created_by.name  : ad.created_by) || '-'}}</td>
+              <!-- <td>{{ad.modified || '-'}}</td>
+              <td>{{(ad.modified_by?.name ? ad.modified_by?.name : ad.modified_by) || '-'}}</td> -->
+              <td style="display: flex">
+                <ion-button size="small" title="Editar" expand="block" color="warning" mode="ios" (click)="editAd(ad)">
+                  <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" title="Excluir" expand="block" color="danger" mode="ios" (click)="showConfirmAlert('excluir', ad)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+          </table>
+          <ion-button size="default" title="Carregar mais" color="light" mode="ios"
+            type="button" (click)="getAds()" *ngIf="modelFilter !== 'nothing'
+              && (ads.length === ((page - 1)*pagination) || (ads.length === ((page - 1)*pagination) - 1 && excludedItem))">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            <ion-label slot="end">Carregar mais</ion-label>
+          </ion-button>
+        </div>
+      </ion-grid>
+    </div>
+
+  </div>
+
+</ion-content>

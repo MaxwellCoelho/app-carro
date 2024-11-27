@@ -120,7 +120,7 @@
       <!-- <app-banner-display [id]="'opiniao-'+selectedModel.url" *ngIf="modelOpinions.qtd > 1"></app-banner-display> -->
       <!-- <app-banner-native [id]="'op'" [url]="'opiniao'"></app-banner-native>-->
 
-      <app-affliated [keywords]="[selectedModel.url, selectedModel.brand.url]"></app-affliated>
+      <app-affliated [id]="'opiniaoBanner'+selectedModel.url" [keywords]="[selectedModel.url, selectedModel.brand.url]"></app-affliated>
       <br><br>
       <ion-title size="large" color="primary" class="main-title" *ngIf="modelOpinions.qtd > 0">
         <ion-icon [name]="'reader-outline'" color="secondary"></ion-icon>
@@ -134,7 +134,7 @@
         </ion-label>
       </ion-item>
 
-      <app-opinion [opinions]="modelOpinions.opinions"></app-opinion>
+      <app-opinion [id]="'opiniaoRodape'+selectedModel.url" [opinions]="modelOpinions.opinions"></app-opinion>
 
       <app-affliated [keywords]="[selectedModel.url, selectedModel.brand.url]" *ngIf="modelOpinions.qtd > 0"></app-affliated>
 

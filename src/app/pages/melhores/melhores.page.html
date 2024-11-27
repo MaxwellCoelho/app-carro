@@ -119,7 +119,7 @@
     </div>
 
     <app-banner-home [brands]="searchService.getAllBrands()"></app-banner-home>
-    <app-affliated></app-affliated>
+    <app-affliated [id]="'melhoresBanner'"></app-affliated>
     <!-- <app-banner-native [id]="'me'" [url]="'melhores'"></app-banner-native> -->
 
     <br>
@@ -263,7 +263,7 @@
             <ion-row>
               <ion-col>
                 <!-- <app-banner-row [id]="list" [url]="'melhores'"></app-banner-row> -->
-                <app-affliated></app-affliated>
+                <app-affliated [id]="'melhoresFeed'+list"></app-affliated>
               </ion-col>
             </ion-row>
           </ion-grid>

@@ -23,6 +23,8 @@ export const environment = {
   bestModelsAction: 'best/models',
   filterBestModelsAction: 'best/models/filter',
   feedbackAction: 'feedback',
+  adsAction: 'ads',
+  filterAdsAction: 'ads/filter',
   resetPassword: 'password/reset',
   jstSecret: '-M@x-#ApP&caRro$*_+',
 };

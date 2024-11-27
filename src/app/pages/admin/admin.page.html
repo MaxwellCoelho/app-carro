@@ -8,7 +8,7 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <h1>Configurações de usuários</h1>
+          <h1>Configurações Gerais</h1>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -35,6 +35,15 @@
             <ion-card-header>
               <ion-icon size="large" [name]="nav.feedback.icon"></ion-icon>
               <ion-card-title>{{nav.feedback.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size-lg="2" size-md="3" size-sm="6" size-xs="6">
+          <ion-card color="primary" [routerLink]="'/' + nav.admin.route + '/' + nav.ads.route">
+            <ion-card-header>
+              <ion-icon size="large" [name]="nav.ads.icon"></ion-icon>
+              <ion-card-title>{{nav.ads.title}}</ion-card-title>
             </ion-card-header>
           </ion-card>
         </ion-col>

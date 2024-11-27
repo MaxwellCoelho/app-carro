@@ -9,8 +9,7 @@ import { AdsService } from 'src/app/services/ads/ads.service';
 export class AffliatedComponent implements OnInit {
 
   @Input() keywords: string[] = [];
-
-  public selectedAd;
+  @Input() id: string;
 
   constructor(
     public ads: AdsService
@@ -21,6 +20,7 @@ export class AffliatedComponent implements OnInit {
   }
 
   public selectAd(): void {
-    this.selectedAd = this.ads.setAdsLists(this.keywords);
+    const keyword = this.keywords.length ? this.keywords[0] : 'generic';
+    this.ads.filterAds(keyword, this.id);
   }
 }

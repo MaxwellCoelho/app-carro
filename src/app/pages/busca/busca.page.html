@@ -27,7 +27,7 @@
 
       <app-model-not-found *ngIf="searchService.getAllBrands().length && !selectedBrand && !showLoader" [brandList]="searchService.getAllBrands()"></app-model-not-found>
       <br>
-      <app-affliated *ngIf="!selectedBrand"></app-affliated>
+      <app-affliated [id]="'buscaMarca'" *ngIf="!selectedBrand"></app-affliated>
 
       <ion-item lines="none" *ngIf="selectedBrand" class="selected-brand">
         <img src="assets/brands/{{selectedBrand.url}}.svg" title="{{selectedBrand.name}}" alt="{{selectedBrand.name}}" loading="lazy"
@@ -75,7 +75,7 @@
 
       <app-model-not-found *ngIf="searchService.getAllBrands().length && selectedBrand && !showLoader" [selectedBrand]="selectedBrand" [brandList]="searchService.getAllBrands()"></app-model-not-found>
       <br>
-      <app-affliated *ngIf="selectedBrand" [keywords]="[selectedBrand.url]"></app-affliated>
+      <app-affliated *ngIf="selectedBrand" [id]="'buscaModelo'+selectedBrand" [keywords]="[selectedBrand.url]"></app-affliated>
       <!-- <app-banner-row [id]="'bu'" [url]="'busca'"></app-banner-row> -->
     </div>
   </div>

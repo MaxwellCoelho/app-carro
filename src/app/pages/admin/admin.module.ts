@@ -8,6 +8,7 @@ import { BrandOpinionPage } from './brand-opinion/brand-opinion.page';
 import { PermissionPage } from './permission/permission.page';
 import { CustomerPage } from './customer/customer.page';
 import { FeedbackPage } from './feedback/feedback.page';
+import { AdsPage } from './ads/ads.page';
 import { CarCategoryPage } from './car-category/car-category.page';
 import { CarBrandPage } from './car-brand/car-brand.page';
 import { CarModelPage } from './car-model/car-model.page';
@@ -35,6 +36,7 @@ import { AdminPageRoutingModule } from './admin-routing.module';
     PermissionPage,
     CustomerPage,
     FeedbackPage,
+    AdsPage,
     CarCategoryPage,
     CarBrandPage,
     CarModelPage,
