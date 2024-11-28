@@ -78,8 +78,8 @@ export class AdsPage implements OnInit {
       url: this.formAds.value.newAdUrl,
       title: this.formAds.value.newAdTitle,
       description: this.formAds.value.newAdDescription,
-      images: this.formAds.value.newAdImages.split(','),
-      keywords: this.formAds.value.newAdKeywords.split(',')
+      images: this.formAds.value.newAdImages ? this.formAds.value.newAdImages.split(',') : [],
+      keywords: this.formAds.value.newAdKeywords ? this.formAds.value.newAdKeywords.split(',') : []
     };
 
     const jwtData = { data: this.cryptoService.encondeJwt(data)};
