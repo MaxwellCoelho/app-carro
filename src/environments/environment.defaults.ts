@@ -27,7 +27,7 @@ export const environment = {
   adsAction: 'ads',
   filterAdsAction: 'ads/filter',
   resetPassword: 'password/reset',
-  jstSecret: process.env['JWT_SECRET']
+  jstSecret: process.env['JWT_SECRET_DEV']
 };
 
 /*
