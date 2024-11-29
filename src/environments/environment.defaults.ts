@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
@@ -26,7 +27,7 @@ export const environment = {
   adsAction: 'ads',
   filterAdsAction: 'ads/filter',
   resetPassword: 'password/reset',
-  jstSecret: '-M@x-#ApP&caRro$*_+',
+  jstSecret: process.env['JWT_SECRET']
 };
 
 /*
