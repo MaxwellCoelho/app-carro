@@ -20,7 +20,7 @@ export class AffliatedComponent implements OnInit {
   }
 
   public selectAd(): void {
-    const keyword = this.keywords.length ? this.keywords[0] : 'generic';
-    this.ads.filterAds(keyword, this.id);
+    const keywords = this.keywords.length ? this.keywords : ['generic'];
+    this.ads.filterAds(keywords, this.id);
   }
 }

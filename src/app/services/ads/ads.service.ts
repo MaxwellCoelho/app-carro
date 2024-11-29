@@ -22,48 +22,61 @@ export class AdsService {
     public dbService: DataBaseService,
   ) { }
 
-  public filterAds(tag: string, id: string): void {
-    if (!this.runningRequest$.value.includes(tag)) {
-      this.setRunningRequest(tag);
+  public filterAds(tags: string[], id: string): void {
+    const tagsLen = tags.length;
+    const filter = (tag, idx) => {
+      if (!this.runningRequest$.value.includes(tag)) {
+        this.setRunningRequest(tag);
+        if (!this.loadedByTagsList[tag]) {
+            const myFilter = { keywords: tag };
+            const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
+            const subAds = this.dbService.filterItem(environment.filterAdsAction, jwtData).subscribe(
+              res => {
+                if (!subAds.closed) { subAds.unsubscribe(); }
+                if (res.ads && res.ads.length) {
+                  this.loadedByTagsList[tag] = [...res.ads];
+                  this.priorityAdsByTag[tag] = [...res.ads];
 
-      if (!this.loadedByTagsList[tag]) {
-          const myFilter = { keywords: tag };
-          const jwtData = { data: this.cryptoService.encondeJwt(myFilter)};
-          const subAds = this.dbService.filterItem(environment.filterAdsAction, jwtData).subscribe(
-            res => {
-              if (!subAds.closed) { subAds.unsubscribe(); }
-              if (res.ads && res.ads.length) {
-                this.loadedByTagsList[tag] = [...res.ads];
-                this.priorityAdsByTag[tag] = [...res.ads];
-
-                this.selectAd(tag, id);
+                  this.selectAd(tag, id);
+                  this.closeRunningRequest(tag);
+                } else {
+                  this.closeRunningRequest(tag);
+                  if (idx + 1 >= tagsLen) {
+                    filter('generic', 0);
+                  } else {
+                    idx++;
+                    filter(tags[idx], idx);
+                  }
+                }
+              },
+              err => {
                 this.closeRunningRequest(tag);
-              } else {
-                this.closeRunningRequest(tag);
-                this.filterAds('generic', id);
               }
-            },
-            err => {
-              this.closeRunningRequest(tag);
-            }
-          );
-      } else {
-        this.changeToGenericTag(tag, id);
-      }
-    } else {
-      let runSub = new Subscription();
-      runSub = this.runningRequest$.subscribe(res => {
-          if (!runSub.closed) {runSub.unsubscribe(); }
-          if (!res.includes(tag)) {
-            this.filterAds(tag, id);
+            );
+        } else {
+          if (this.priorityAdsByTag['generic']){
+            this.changeToGenericTag(tag, id);
+          } else {
+            this.closeRunningRequest(tag);
+            filter('generic', 0);
           }
         }
-      );
-    }
+      } else {
+        let runSub = new Subscription();
+        runSub = this.runningRequest$.subscribe(res => {
+            if (!runSub.closed) {runSub.unsubscribe(); }
+            if (!res.includes(tag)) {
+              filter(tag, idx);
+            }
+          }
+        );
+      }
+    };
+    filter(tags[0], 0);
   }
 
   public changeToGenericTag(tag: string, id: string) {
-    if (!this.priorityAdsByTag['generic'] || !this.priorityAdsByTag['generic'].length) {
+    if (this.priorityAdsByTag['generic'] && !this.priorityAdsByTag['generic'].length) {
       this.priorityAdsByTag['generic'] = [...this.loadedByTagsList['generic']];
     }
 
@@ -71,19 +84,22 @@ export class AdsService {
       tag = 'generic';
     }
 
-    this.selectAd(tag, id);
-    this.closeRunningRequest(tag);
+    if (this.priorityAdsByTag[tag]) {
+      this.selectAd(tag, id);
+    }
+
+    this.closeRunningRequest(id);
   }
 
-  public closeRunningRequest(tag: any) {
+  public closeRunningRequest(id: any) {
     const runArr = this.runningRequest$.value;
-    const idx = runArr.findIndex(item => item === tag);
+    const idx = runArr.findIndex(item => item === id);
     runArr.splice(idx, 1);
     this.runningRequest$.next(runArr);
   }
 
-  public setRunningRequest(tag: any) {
-    const runArr = [...this.runningRequest$.value, tag];
+  public setRunningRequest(id: any) {
+    const runArr = [...this.runningRequest$.value, id];
     this.runningRequest$.next(runArr);
   }
 

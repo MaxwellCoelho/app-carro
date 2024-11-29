@@ -136,7 +136,7 @@
 
       <app-opinion [id]="'opiniaoRodape'+selectedModel.url" [opinions]="modelOpinions.opinions"></app-opinion>
 
-      <app-affliated [keywords]="[selectedModel.url, selectedModel.brand.url]" *ngIf="modelOpinions.qtd > 0"></app-affliated>
+      <app-affliated [id]="'opiniaoFeed'+selectedModel.url" [keywords]="[selectedModel.url, selectedModel.brand.url]" *ngIf="modelOpinions.qtd > 0"></app-affliated>
 
       <ion-infinite-scroll *ngIf="modelOpinions?.opinions.length" (ionInfinite)="onIonInfinite($event)">
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
